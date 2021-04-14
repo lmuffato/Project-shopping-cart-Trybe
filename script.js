@@ -1,5 +1,3 @@
-window.onload = function onload() { };
-
 const cartItemsClass = '.cart__items';
 const totalPrice = '.total-price';
 
@@ -132,7 +130,9 @@ const clearCart = () => {
   });
 };
 
-getItems();
-itemToCart();
-getItemsStorage();
-clearCart();
+window.onload = function onload() {
+  getItems();
+  itemToCart();
+  getItemsStorage();
+  clearCart();
+};
