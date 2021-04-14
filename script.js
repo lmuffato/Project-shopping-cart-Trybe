@@ -14,7 +14,8 @@ function createProductImageElement(imageSource) {
 const loading = () => {
   const loadingElement = document.createElement('p');
   loadingElement.classList.add('loading');
-  loadingElement.innerHTML = 'loading...';
+  loadingElement.innerText = 'loading...';
+  document.body.appendChild(loadingElement);
 };
 
 const stopLoading = () => {
