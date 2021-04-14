@@ -1,5 +1,17 @@
 const API = 'https://api.mercadolibre.com/sites/MLB/search?q=';
 const itemAPI = 'https://api.mercadolibre.com/items/';
+const idCarts = '.cart__items';
+
+const saveCart = () => {
+  const items = document.querySelector(idCarts).innerHTML;
+  localStorage.setItem('cart', items);
+};
+
+const loadCart = () => {
+  const items = document.querySelector(idCarts);
+  const loadedItems = localStorage.getItem('cart');
+  items.innerHTML = loadedItems;
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -28,7 +40,7 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 }
 
 function cartItemClickListener(event) {
-  console.log(event.target);
+  event.target.remove();
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -67,14 +79,15 @@ const getAPIById = (sku) => new Promise((resolve, reject) => {
   }
 });
 
-const getItemById = (event) => {
-  const cart = document.querySelector('.cart__items');
+const getItemById = async (event) => {
+  const cart = document.querySelector(idCarts);
   const sku = event.target.parentNode.querySelector('.item__sku').innerText;
   const el = getAPIById(sku);
-  el.then((data) => {
+  await el.then((data) => {
     const newEl = createCartItemElement(data);
     cart.appendChild(newEl);
   });
+  saveCart();
 };
 
 const addEventListenerButton = () => {
@@ -90,5 +103,6 @@ const addEventListenerButton = () => {
     results.forEach((element) => {
       items.appendChild(createProductItemElement(element));
     });
+    loadCart();
     addEventListenerButton();
   };
