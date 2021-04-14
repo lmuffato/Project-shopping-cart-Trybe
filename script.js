@@ -1,5 +1,5 @@
+/* eslint-disable no-new */
 /* eslint-disable no-unreachable */
-window.onload = function onload() { };
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -44,24 +44,28 @@ function createProductItemElement({ id, title, thumbnail }) {
 // }
 
 // Requisito 1
-async function getComputerPromise() {
-  const endPoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-  const resposta = await fetch(endPoint);
-  const objeto = await resposta.json();
-  const pcs = objeto.results;
-  const item = document.querySelector('.item');
-  
-  pcs.forEach((pc) => {
-    item.appendChild(createProductItemElement(pc));
+// Requisito feito com a referência de código do Felipe Muller
+// Link: https://github.com/tryber/sd-010-a-project-shopping-cart/blob/7186f9c6b920d6ba685a2c87bcb48e7c2488a5ec/script.js
+const getPromiseComputer = (product) => (
+   new Promise((resolve) => {
+    fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
+      .then((response) => {
+        response.json().then((data) => {
+          resolve(data);
+        });
+      });
+  })
+);
+
+const AppendItem = async (data) => {
+  const items = document.querySelector('.items');
+  data.results.forEach((element) => {
+    const result = createProductItemElement(element);
+    items.appendChild(result);
   });
-}
+};
 
-async function getData() {
-  try {
-  await getComputerPromise();
-  } catch (error) {
-    console.log('Falha de Execução');
-  }
-}
-
-getData();
+window.onload = function onload() { 
+  getPromiseComputer('computador')
+    .then((result) => AppendItem(result));
+};
