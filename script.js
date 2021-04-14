@@ -1,4 +1,5 @@
 const erro = 'Não encontrei nada';
+const olComputers = document.querySelector('.cart__items');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -30,48 +31,52 @@ function createProductItemElement({ id, title, thumbnail }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   console.log('cliclei no li');
-// }
+function cartItemClickListener(event) {
+  console.log('cliclei no li');
+  olComputers.removeChild(event.target);
+}
 
-// function createCartItemElement({ id, title, price }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   console.log(li);
-//   return li;
-// }
+function createCartItemElement({ id, title, price }) {
+  console.log(id, price, title);
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  li.addEventListener('click', cartItemClickListener);
+  console.log(li);
+  return li;
+}
 
-// const dadosAPI = async () => {
-//   const dados = await fetch('https://api.mercadolibre.com/items/MLB1341706310');
-//   const dadosValue = await dados.json();
-//   return dadosValue;
-// };
+const dadosAPI = async (id) => {
+  const dados = await fetch(`https://api.mercadolibre.com/items/${id}`);
+  const dadosValue = await dados.json();
+  return dadosValue;
+};
 
-// const createValue = async () => {
-//   try {
-//     createCartItemElement(await dadosAPI());
-//   } catch (error) {
-//     return erro;
-//   }
-// };
+const eventButton = async () => {
+  console.log('clickei no btn');
+  const elementLi = createCartItemElement(await dadosAPI('MLB1341706310'));
+  olComputers.appendChild(elementLi);
+};
 
-// console.log(dadosAPI().then((dados) => console.log(dados)));
-// createValue();
+// Função para limpar toda a lista
+const clearList = () => {
+  olComputers.innerHTML = '';
+};
 
 /*
-Funçoes 'dadosAPI' , 'appendListComputers' , 'createDados' 
+Funçoes 'dadosAPIPcs' , 'appendComputers' , 'createDados' 
 foram criadas atravez de um Code Review do meu colega Renzo Sevilha
 com a ideia de nao utilizar o 'then', mas sim usar funcoes 'async'
 */
 
+// Dados de computadores
 const dadosAPIPcs = async () => {
   const requisicao = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const objDados = await requisicao.json();
   return objDados;
 };
 
+// Funcao que cria computadores na pagina
 const appendComputers = (dados) => {
   dados.results.forEach((result) => {
     const sectionItens = document.querySelector('.items');
@@ -79,6 +84,7 @@ const appendComputers = (dados) => {
   });
 };
 
+// Adiciona computadores na pagina web
 const createDados = async () => {
   try {
     appendComputers(await dadosAPIPcs());
@@ -89,4 +95,6 @@ const createDados = async () => {
 
 window.onload = function onload() {
   createDados();
+  document.querySelector('.btn').addEventListener('click', eventButton);
+  document.querySelector('.empty-cart').addEventListener('click', clearList);
 };
