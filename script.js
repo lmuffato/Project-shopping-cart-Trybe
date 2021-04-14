@@ -25,6 +25,12 @@ const salvandoPagina = () => {
   localStorage.setItem('chaveLista', lista);
 };
 
+function cartItemClickListener(event) {
+  event.target.remove();
+  salvandoPagina();
+  somarPrecos();
+}
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -55,13 +61,6 @@ function createProductItemElement({ sku, name, image }) {
   'Adicionar ao carrinho!'));
   botaoCarrinho.addEventListener('click', () => adicionarCarrinho(sku));
   return section;
-}
-
-function cartItemClickListener(event) {
-  event.target.remove();
-  
-  salvandoPagina();
-  somarPrecos();
 }
 
 const pegarInfFetch = async (produto) => {
