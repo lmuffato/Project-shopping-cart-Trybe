@@ -1,6 +1,9 @@
 const cart = document.querySelector('.cart__items');
 
-window.onload = function onload() { };
+window.onload = function onload() {
+  const saved = localStorage.getItem('cart');
+  if (saved.length !== 0) cart.innerHTML = saved;
+ };
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
