@@ -1,6 +1,6 @@
 window.onload = function onload() { };
 
-const cartItemsClass = '.cart-items';
+const cartItemsClass = '.cart__items';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -20,7 +20,7 @@ function cartItemClickListener(event) {
  }
 
  function getItemsStorage() {
-  const cart = document.querySelector('.cart__items');
+  const cart = document.querySelector(cartItemsClass);
   cart.innerHTML = localStorage.getItem('cart');
   const cartItems = document.getElementsByClassName('cart__item');
   [...cartItems].forEach((item) => item.addEventListener('click', cartItemClickListener));
