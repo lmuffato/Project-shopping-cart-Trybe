@@ -1,11 +1,3 @@
-window.onload = function onload() {
-  document.getElementsByClassName('cart__items')[0].innerHTML = localStorage.getItem('chaveLista');
-  const lista = document.querySelectorAll('.cart__item');
-  lista.forEach((element) => element.addEventListener('click', cartItemClickListener));
-  criarPrecos();
-  somarPrecos();
-};
-
 const somarPrecos = () => {
   const Itens = document.querySelectorAll('.cart__item');
   document.getElementsByClassName('total-price')[0].innerText = Math.round(
@@ -113,3 +105,11 @@ const clearAll = () => {
 
 const limparTudo = document.getElementsByClassName('empty-cart')[0];
 limparTudo.addEventListener('click', clearAll);
+
+window.onload = function onload() {
+  document.getElementsByClassName('cart__items')[0].innerHTML = localStorage.getItem('chaveLista');
+  const lista = document.querySelectorAll('.cart__item');
+  lista.forEach((element) => element.addEventListener('click', cartItemClickListener));
+  criarPrecos();
+  somarPrecos();
+};
