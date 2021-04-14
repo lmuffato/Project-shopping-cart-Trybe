@@ -1,6 +1,7 @@
 const cart = document.querySelector('.cart__items');
 
 window.onload = function onload() { };
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -83,6 +84,7 @@ fetchElements();
 const eraseButton = document.querySelector('.empty-cart');
 eraseButton.addEventListener('click', () => {
   cart.innerHTML = '';
+  localStorage.setItem('cart', cart.innerHTML);
 });
 
 document.body.addEventListener('click', (event) => {
