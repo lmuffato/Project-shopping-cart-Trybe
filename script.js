@@ -85,12 +85,12 @@ function fetchComputers(product) {
 
 function storage() {
   const shoppingCart = document.querySelector('.cart__items');
-  Object.values(localStorage).forEach((item)=> {
+  Object.values(localStorage).forEach((item) => {
     const getLi = document.createElement('li');
     getLi.innerText = `${item}`;
     getLi.addEventListener('click', cartItemClickListener);
     shoppingCart.appendChild(getLi);
-  })
+  });
 }
 
 window.onload = function onload() {
