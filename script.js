@@ -1,8 +1,16 @@
+window.onload = function onload() {
+  document.getElementsByClassName('cart__items')[0].innerHTML = localStorage.getItem('chaveLista');
+  const lista = document.querySelectorAll('.cart__item');
+  lista.forEach((element) => element.addEventListener('click', cartItemClickListener));
+  criarPrecos();
+  somarPrecos();
+};
+
 const somarPrecos = () => {
   const Itens = document.querySelectorAll('.cart__item');
   document.getElementsByClassName('total-price')[0].innerText = Math.round(
     [...Itens].map((item) => item.innerHTML.match(/[\d.\d]+$/))
-    .reduce((acc, add) => acc + parseFloat(add), 0) * 100,
+    .reduce((acc, add) => acc + parseFloat(add),  0) * 100
     ) / 100;
 };
 
@@ -25,27 +33,15 @@ const salvandoPagina = () => {
   localStorage.setItem('chaveLista', lista);
 };
 
-function cartItemClickListener(event) {
-  event.target.remove();
-  salvandoPagina();
-  somarPrecos();
-}
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
-
 async function adicionarCarrinho(sku) {
   const itemId = sku;
   const ol = document.querySelector('.cart__items');
   const product = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
   const json = await product.json()
   .then((element) => createCartItemElement({
-        sku: element.id, name: element.title, salePrice: element.price }));
+        sku: element.id, name: element.title, salePrice: element.price,
+      }),
+    );
   ol.appendChild(json);
   somarPrecos();
   salvandoPagina();
@@ -61,6 +57,17 @@ function createProductItemElement({ sku, name, image }) {
   'Adicionar ao carrinho!'));
   botaoCarrinho.addEventListener('click', () => adicionarCarrinho(sku));
   return section;
+}
+
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
+function cartItemClickListener(event) {
+  event.target.remove();
+  
+  salvandoPagina();
+  somarPrecos();
 }
 
 const pegarInfFetch = async (produto) => {
@@ -79,6 +86,14 @@ const pegarInfFetch = async (produto) => {
   return section;
 };
 
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
 pegarInfFetch('computador');
 
 const criarPrecos = () => {
@@ -96,15 +111,7 @@ const clearAll = () => {
   containerList.innerHTML = '';
   somarPrecos();
   salvandoPagina();
-};
+}
 
 const limparTudo = document.getElementsByClassName('empty-cart')[0];
 limparTudo.addEventListener('click', clearAll);
-
-window.onload = function onload() {
-  document.getElementsByClassName('cart__items')[0].innerHTML = localStorage.getItem('chaveLista');
-  const lista = document.querySelectorAll('.cart__item');
-  lista.forEach((element) => element.addEventListener('click', cartItemClickListener));
-  criarPrecos();
-  somarPrecos();
-};
