@@ -30,38 +30,56 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  // console.log(item.querySelector('span.item__sku'));
+  return item.querySelector('span.item__sku').innerText;
+}
 
 // function cartItemClickListener(event) {
 //   // coloque seu código aqui
 // }
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+function addToShoppingCart(sku) {
+  fetch(`https://api.mercadolibre.com/items/${sku}`)
+    .then((response) => response.json())
+    .then((result) => {
+      const itemCart = createCartItemElement({
+        sku: result.id,
+        name: result.title,
+        salePrice: result.price,
+      });
+      const cartList = document.querySelector('.cart__items');
+      cartList.appendChild(itemCart);
+    });
+}
+
+function getButtons(element) {
+  const addButtons = element.querySelector('.item__add');
+  const sku = getSkuFromProductItem(element);
+  addButtons.addEventListener('click', () => addToShoppingCart(sku));
+}
 
 function productsList() {
-  // Selecionar o elemento a quem vai atribuir um filho
-  // Trabalhar em cima da resposta do fetchApi
-  // Para cada objeto na resposta, renomear as chaves de cada objeto
-  // Dar o appendChild do produto criado no elemento que foi selecionado no início
   const itensSection = document.querySelector('.items');
   const url = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
   fetchApi(url)
     .then((results) => {
       results.forEach((element) => {
         const product = createProductItemElement({
-          sku: element.name,
+          sku: element.id,
           name: element.title,
           image: element.thumbnail,
         });
         itensSection.appendChild(product);
+        getButtons(product);
       });
     });
 }
