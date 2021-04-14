@@ -10,7 +10,7 @@ const somarPrecos = () => {
   const Itens = document.querySelectorAll('.cart__item');
   document.getElementsByClassName('total-price')[0].innerText = Math.round(
     [...Itens].map((item) => item.innerHTML.match(/[\d.\d]+$/))
-    .reduce((acc, add) => acc + parseFloat(add),  0) * 100
+    .reduce((acc, add) => acc + parseFloat(add), 0) * 100,
     ) / 100;
 };
 
@@ -40,7 +40,8 @@ async function adicionarCarrinho(sku) {
   const json = await product.json()
   .then((element) => createCartItemElement({
         sku: element.id, name: element.title, salePrice: element.price,
-      }),
+      }
+     ),
     );
   ol.appendChild(json);
   somarPrecos();
