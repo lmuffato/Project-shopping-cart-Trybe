@@ -50,9 +50,10 @@ function fetchProducts() {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+*/
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  event.target.remove();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -62,8 +63,41 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
-*/
+
+function addItemToCart(product) {
+  const cartListElement = document.querySelector('.cart__items');
+  cartListElement.appendChild(product);
+}
+
+/**
+ * Para fazer o requisito 2, me baseei no código do John Alves
+ * Link: https://github.com/tryber/sd-09-project-shopping-cart/pull/79
+ */
+
+function getProductById(id) {
+  const endpoint = `https://api.mercadolibre.com/items/${id}`;
+  fetch(endpoint)
+  .then((response) => response.json())
+  .then((object) => {
+    const { id: sku, title: name, price: salePrice } = object;
+    const listItem = createCartItemElement({ sku, name, salePrice });
+    addItemToCart(listItem);
+  })
+  .catch((error) => window.alert(error));
+}
+
+function getIdEvent() {
+  const items = document.querySelector('.items');
+  items.addEventListener('click', (event) => {
+    if (event.target.className === 'item__add') {
+      const item = event.target.parentNode;
+      const id = item.firstChild.innerText;
+      getProductById(id);
+    }
+  });
+}
 
 window.onload = function onload() { 
   fetchProducts();
+  getIdEvent();
 };
