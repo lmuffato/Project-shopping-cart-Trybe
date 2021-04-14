@@ -27,9 +27,6 @@ function cartItemClickListener(event) {
   cart.innerHTML = localStorage.getItem('cart');
   const cartItems = document.getElementsByClassName('cart__item');
   [...cartItems].forEach((item) => item.addEventListener('click', cartItemClickListener));
-  const totalPriceText = document.querySelector('.total-price');
-  totalPriceText.innerHTML = localStorage.getItem('price');
-  prices.push(parseInt(localStorage.getItem('price'), 10));
 }
 
 function createCustomElement(element, className, innerText) {
@@ -84,7 +81,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 const totalValue = async (price) => {
   prices.push(price);
   const sum = prices.reduce((acc, curr) => acc + curr, 0);
-  const priceText = document.querySelector('.price');
+  const priceText = document.querySelector('.total-price');
   priceText.innerHTML = `${sum}`;
   };
 
