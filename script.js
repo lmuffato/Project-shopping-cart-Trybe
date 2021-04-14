@@ -103,9 +103,9 @@ const fetchAPI = () => {
     headers: { Accept: 'application/json' },
   };
   
-  fetch(APIUrlComputador, myObject)
+  return fetch(APIUrlComputador, myObject)
   .then((response) => response.json())
-  .then((data) => createItem(data.results));
+  .then((data) => data.results);
 };
 
 // Final resolução ex 1
@@ -123,7 +123,32 @@ const clearCart = () => {
   btn.addEventListener('click', clearList);
 };
 
+// Final resolução exercicio 6
+
+// Inicio resolução exercicio 7
+
+const createloading = () => {
+  const title = document.createElement('H1');
+  title.className = 'loading';
+  title.innerText = 'Loading...';
+
+  return title;
+};
+
+const start = () => {
+  const section = document.querySelector('.items');
+  section.appendChild(createloading());
+  setTimeout(() => { 
+    const promisseList = fetchAPI(); 
+    const loading = document.querySelector('.loading');
+    loading.remove();
+    promisseList.then((array) => createItem(array));
+  });
+};
+
+// Final resolução exercicio 7
+
 window.onload = function onload() { 
-  fetchAPI();
+  start();
   clearCart();
 };
