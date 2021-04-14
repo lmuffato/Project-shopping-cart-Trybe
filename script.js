@@ -39,10 +39,7 @@ async function adicionarCarrinho(sku) {
   const product = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
   const json = await product.json()
   .then((element) => createCartItemElement({
-        sku: element.id, name: element.title, salePrice: element.price,
-      }
-     ),
-    );
+        sku: element.id, name: element.title, salePrice: element.price}));
   ol.appendChild(json);
   somarPrecos();
   salvandoPagina();
