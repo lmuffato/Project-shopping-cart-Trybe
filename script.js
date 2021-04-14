@@ -41,7 +41,7 @@ async function adicionarCarrinho(sku) {
         sku: element.id, name: element.title, salePrice: element.price,
       }),
 
-     )
+     );
   ol.appendChild(json);
   somarPrecos();
   salvandoPagina();
@@ -67,25 +67,24 @@ function cartItemClickListener(event) {
   event.target.remove();
   
   salvandoPagina();
-  somarPrecos()
-};
+  somarPrecos();
+}
 
 const pegarInfFetch = async (produto) => {
-  await new Promise(sucesso => setTimeout(sucesso, 2000));
+  await new Promise((sucesso) => setTimeout(sucesso, 2000));
   const section = document.querySelector('.items');
   fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${produto}`)
   .then((response) => response.json())
   .then((objeto) => {
-     objeto.results.forEach(element => {
-     const dadosDosProdutos = {sku: element.id, name: element.title, image: element.thumbnail}
+     objeto.results.forEach((element) => {
+     const dadosDosProdutos = { sku: element.id, name: element.title, image: element.thumbnail }
      section.appendChild(createProductItemElement(dadosDosProdutos));
     });
   });
   const loading = document.querySelector('.loading');
-  loading.remove()
+  loading.remove();
   return section;
-}
-
+};
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -97,24 +96,22 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 pegarInfFetch('computador');
 
-
 const criarPrecos = () => {
-  const paragrafoTotalPrecos = document.createElement('p')
-  const textoTotalPrecos = document.createElement('span')
+  const paragrafoTotalPrecos = document.createElement('p');
+  const textoTotalPrecos = document.createElement('span');
   const containerPrecos = document.getElementsByClassName('cart')[0];
   paragrafoTotalPrecos.innerText = 'Total Preços: $';
   textoTotalPrecos.className = 'total-price';
-  paragrafoTotalPrecos.appendChild(textoTotalPrecos)
-  containerPrecos.appendChild(paragrafoTotalPrecos)
-}
+  paragrafoTotalPrecos.appendChild(textoTotalPrecos);
+  containerPrecos.appendChild(paragrafoTotalPrecos);
+};
 
 const clearAll = () => {
   const containerList = document.querySelector('.cart__items');
   containerList.innerHTML = '';
   somarPrecos();
   salvandoPagina();
-}
+};
 
 const limparTudo = document.getElementsByClassName('empty-cart')[0];
 limparTudo.addEventListener('click', clearAll);
-  
