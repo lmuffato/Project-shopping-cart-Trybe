@@ -25,6 +25,14 @@ const salvandoPagina = () => {
   localStorage.setItem('chaveLista', lista);
 };
 
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
 async function adicionarCarrinho(sku) {
   const itemId = sku;
   const ol = document.querySelector('.cart__items');
@@ -75,14 +83,6 @@ const pegarInfFetch = async (produto) => {
   loading.remove();
   return section;
 };
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
 
 pegarInfFetch('computador');
 

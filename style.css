@@ -74,3 +74,11 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.loading{
+  margin-left: -950px;
+}
+
+.image {
+ width: 250px;
+}
