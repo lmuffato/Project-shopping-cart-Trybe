@@ -8,6 +8,19 @@ const updateStorage = () => {
   localStorage.setItem('priceCart', pPrice.innerHTML);
 };
 
+const sumPrices = (acc, element) => {
+  const arr = element.innerText.split('$');
+  const price = Number(arr[1]);
+  const total = acc + price;
+  return total;
+};
+
+const updatePrice = async () => {
+  const items = document.querySelectorAll('li.cart__item');
+  const totalPrice = [...items].reduce(sumPrices, 0);
+  pPrice.innerText = totalPrice;
+};
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -40,7 +53,7 @@ function getIdFromProductItem(item) {
 
 function cartItemClickListener({ target }) {
   target.remove();
-  // updatePrice();
+  updatePrice();
   updateStorage();
 }
 
@@ -86,7 +99,7 @@ const clickToCart = async () => {
       try {
         const data = await fetchCart(getIdFromProductItem(e.parentNode));
         ul.appendChild(createCartItemElement(data));
-        // updatePrice();
+        updatePrice();
         updateStorage();
       } catch (error) {
         console.log('Deu ruim :(');
@@ -97,7 +110,7 @@ const clickToCart = async () => {
 const clickToRemove = () => {
   document.querySelector('.empty-cart').addEventListener('click', () => {
     ul.innerHTML = '';
-    // updatePrice();
+    updatePrice();
     updateStorage();
   });
 };
