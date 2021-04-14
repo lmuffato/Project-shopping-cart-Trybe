@@ -94,6 +94,16 @@ const itemToCart = () => {
   });
 };
 
+const clearCart = () => {
+  const btn = document.querySelector('.empty-cart');
+  btn.addEventListener('click', () => {
+    const allItems = document.querySelector('.cart__items');
+    allItems.innerHTML = '';
+    saveItems();
+  });
+};
+
 getItems();
 itemToCart();
 getItemsStorage();
+clearCart();
