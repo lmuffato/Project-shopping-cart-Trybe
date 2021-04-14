@@ -1,5 +1,7 @@
-/*
-window.onload = function onload() { };
+function addProductItem(product) {
+  const items = document.querySelector('.items');
+  items.appendChild(product);
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -24,9 +26,27 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
-  return section;
+  addProductItem(section);
 }
 
+/* Source: https://github.com/tryber/sd-09-project-shopping-cart/tree/37a1f85227593cca8a06045f06c4d6bc72ef7060 */
+function fetchProducts() {
+  const param = 'computador';
+  const endpoint = `https://api.mercadolibre.com/sites/MLB/search?q=${param}`;
+  
+  fetch(endpoint)
+    .then((response) => response.json())
+    .then((object) => object.results)
+    .then((array) => {
+      array.forEach((product) => {
+        const { id: sku, title: name, thumbnail: image } = product;
+        createProductItemElement({ sku, name, image });
+      });
+    })
+    .catch((error) => console.log(error));
+}
+
+/*
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -43,3 +63,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 */
+
+window.onload = function onload() { 
+  fetchProducts();
+};
