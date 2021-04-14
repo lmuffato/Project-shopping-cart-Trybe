@@ -13,7 +13,7 @@ function createProductImageElement(imageSource) {
 function saveItems() {
   const cartList = document.querySelector(cartItemsClass);
   localStorage.setItem('cart', cartList.innerHTML);
-  const totalPriceText = document.querySelector('.price');
+  const totalPriceText = document.querySelector('.total-price');
   localStorage.setItem('price', totalPriceText.innerHTML);
 }
 
@@ -27,7 +27,7 @@ function cartItemClickListener(event) {
   cart.innerHTML = localStorage.getItem('cart');
   const cartItems = document.getElementsByClassName('cart__item');
   [...cartItems].forEach((item) => item.addEventListener('click', cartItemClickListener));
-  const totalPriceText = document.querySelector('.price');
+  const totalPriceText = document.querySelector('.total-price');
   totalPriceText.innerHTML = localStorage.getItem('price');
   prices.push(parseInt(localStorage.getItem('price'), 10));
 }
