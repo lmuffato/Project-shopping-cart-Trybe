@@ -1,6 +1,7 @@
 window.onload = function onload() { };
 
 const cartItemsClass = '.cart__items';
+const totalPrice = '.total-price';
 let prices = [];
 
 function createProductImageElement(imageSource) {
@@ -13,7 +14,7 @@ function createProductImageElement(imageSource) {
 function saveItems() {
   const cartList = document.querySelector(cartItemsClass);
   localStorage.setItem('cart', cartList.innerHTML);
-  const totalPriceText = document.querySelector('.total-price');
+  const totalPriceText = document.querySelector(totalPrice);
   localStorage.setItem('price', totalPriceText.innerHTML);
 }
 
@@ -80,9 +81,9 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 const totalValue = async (price) => {
   prices.push(price);
-  let sum = prices.reduce((acc, curr) => acc + curr, 0);
-  let total = ((Math.round(sum * 100)) / 100)
-  const priceText = document.querySelector('.total-price');
+  const sum = prices.reduce((acc, curr) => acc + curr, 0);
+  const total = ((Math.round(sum * 100)) / 100);
+  const priceText = document.querySelector(totalPrice);
   priceText.innerHTML = `${total}`;
   };
 
@@ -111,9 +112,9 @@ const clearCart = () => {
   btn.addEventListener('click', () => {
     const allItems = document.querySelector(cartItemsClass);
     allItems.innerHTML = '';
-    const priceText = document.querySelector('.total-price');
-    priceText.innerHTML = `${0,00}`;
-    prices = []
+    const priceText = document.querySelector(totalPrice);
+    priceText.innerHTML = `${0}`;
+    prices = [];
     saveItems();
   });
 };
