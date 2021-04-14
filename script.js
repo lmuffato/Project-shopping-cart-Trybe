@@ -10,8 +10,8 @@ const somarPrecos = () => {
   const Itens = document.querySelectorAll('.cart__item');
   document.getElementsByClassName('total-price')[0].innerText = Math.round(
     [...Itens].map((item) => item.innerHTML.match(/[\d.\d]+$/))
-    .reduce((acc, add
-      ) => acc + parseFloat(add), 0) * 100) / 100;
+    .reduce((acc, add) => acc + parseFloat(add),
+     0) * 100) / 100;
 };
 
 function createProductImageElement(imageSource) {
