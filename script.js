@@ -110,6 +110,20 @@ const fetchAPI = () => {
 
 // Final resolução ex 1
 
+// Inicio resolução exercicio 6
+
+const clearList = () => {
+  const list = document.querySelector('.list');
+  const listItems = list.querySelectorAll('.cart__item');
+  listItems.forEach((item) => item.remove());
+};
+
+const clearCart = () => {
+  const btn = document.querySelector('.empty-cart');
+  btn.addEventListener('click', clearList);
+};
+
 window.onload = function onload() { 
   fetchAPI();
+  clearCart();
 };
