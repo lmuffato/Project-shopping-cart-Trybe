@@ -8,8 +8,16 @@ async function addProductsOnList() {
     .then((response) => response.json())
       .then((data) => data.results);
 
-  await apiRequestedItens.forEach(({id, title, thumbnail}) =>  
+  await apiRequestedItens.forEach(({id, title, thumbnail}) =>
     itemsListSection.appendChild(createProductItemElement({sku: id, name: title, image: thumbnail})));
+  
+  const listedProductsButtons = document.querySelectorAll('.item button');
+  listedProductsButtons.forEach(button => button.addEventListener('click', (e) => cartItemClickListener(e)));
+}
+
+async function addProducstOnCart({sku, name, salePrice}) {
+  const cartItemsList = document.querySelector('.cart__items');
+  cartItemsList.appendChild(createCartItemElement({sku, name, salePrice}));
 }
 
 function createProductImageElement(imageSource) {
@@ -42,8 +50,16 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
+async function cartItemClickListener(event) {
+  const cardItemProduct = event.target.parentElement;
+  const cardItemProductId = cardItemProduct.childNodes[0].innerText;
+  
+  const {price, id, title} = await fetch(`https://api.mercadolibre.com/items/${cardItemProductId}`)
+    .then((res) => res.json())
+      .then((item) => item);
+  
+  addProducstOnCart({sku: id, name: title, salePrice:price});
+  // levar os valores do fetch para a addProductsOnTheCart()
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
