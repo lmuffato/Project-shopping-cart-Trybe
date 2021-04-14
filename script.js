@@ -71,7 +71,7 @@ const fetchElements = () => {
     });
   })
   .then(() => {
-    loadingText.style.display = 'none';
+    container.removeChild(loadingText);
   });
 };
 
