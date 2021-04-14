@@ -80,9 +80,10 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 const totalValue = async (price) => {
-  prices.push(price);
+  const priceRound = (Math.round(price * 100)) / 100;
+  prices.push(priceRound);
   const sum = prices.reduce((acc, curr) => acc + curr, 0);
-  const total = ((Math.round(sum * 100)) / 100);
+  const total = (Math.round(sum * 100)) / 100;
   const priceText = document.querySelector(totalPrice);
   priceText.innerHTML = `${total}`;
   };
