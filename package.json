@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json . --ext .js",
     "lint:styles": "stylelint **/*.css --config .stylelintrc.json --ignore-disables --allow-empty-input",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "cypress:run":  "cypress run --headed --no-exit"  
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "mochawesome": "5.0.0",
     "mochawesome-merge": "4.0.3",
     "mochawesome-report-generator": "4.1.0",
+    "node-fetch": "^2.6.1",
     "stylelint": "13.8.0",
     "stylelint-config-standard": "20.0.0"
   }
