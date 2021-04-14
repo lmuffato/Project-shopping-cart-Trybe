@@ -40,16 +40,16 @@ function createProductItemElement({ sku, title, thumbnail }) {
 //   return li;
 // }
 
-const getProductPromise = (product) => {
-  return new Promise((resolve, reject) => {
+const getProductPromise = (product) => (
+  new Promise((resolve) => {
     fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
       .then((response) => {
         response.json().then((data) => {
           resolve(data);
-        })
-      })
-  });
-};
+        });
+      });
+  })
+);
 
 const appendItems = async (data) => {
   const items = document.querySelector('.items');
