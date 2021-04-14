@@ -1,7 +1,3 @@
-window.onload = function onload() {
-  createProductsList();
-};
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -24,8 +20,24 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
+  
   return section;
+}
+
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
+function cartItemClickListener(event) {
+  // código
+}
+
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
 }
 
 function getProducts() {
@@ -37,22 +49,6 @@ function getProducts() {
   });
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
-
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
-
 function appendProducts(data) {
   data.results.forEach(result => {
     const container = document.querySelector('.items');
@@ -60,11 +56,27 @@ function appendProducts(data) {
   });
 }
 
+function appendToCart(data) {
+  const buttons = document.querySelectorAll('.item button');
+  buttons.forEach((button, index) => {
+    button.addEventListener('click', () => {
+      const cartContainer = document.querySelector('.cart__items');
+      const addToCart = createCartItemElement(data[index]);
+      cartContainer.appendChild(addToCart);
+    })
+  });
+}
+
 async function createProductsList() {
   try {
     const data = await getProducts();
-    appendProducts(data);
+    await appendProducts(data);
+    await appendToCart(data.results);
   } catch (error) {
     console.log('Falha na matrix')
   }
 }
+
+window.onload = function onload() {
+  createProductsList();
+};
