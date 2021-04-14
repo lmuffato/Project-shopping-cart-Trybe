@@ -24,33 +24,62 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-const fetchComputers = (product) => {
-  const selectItens = document.querySelector('.items');
-  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
+ function addItens(itemId) {
+   return new Promise((resolve) => {
+    fetch(`https://api.mercadolibre.com/items/${itemId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      const { id: sku, title: name, price: salePrice } = data;
+      const cartShopping = document.querySelector('.cart__items');
+      cartShopping.appendChild( createCartItemElement({ sku, name, salePrice }));
+      resolve();
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+   });
+ };
+
+function fetchComputers(product) {
+  return new Promise((resolve) => {
+    fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
   .then((response) => response.json())
   .then((data) => {
+    if (data.error) {
+      throw new Error(data.error);
+    }
     data.results.forEach((result) => {
       const { id: sku, title: name, thumbnail: image } = result;
-      selectItens.appendChild(createProductItemElement({ sku, name, image }));
+      const createElement = createProductItemElement({ sku, name, image });
+      const listItens = document.querySelector('.items');
+      const button = createElement.querySelector('.item__add');
+      listItens.appendChild(createElement);
+      button.addEventListener('click', () => addItens(sku));
+      resolve();
     });
   });
-};
+  }); 
+}
 
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  event.target.remove();
+  localStorage.removeItem(localStorage.key(event));
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
 window.onload = function onload() {
   fetchComputers('computador');
