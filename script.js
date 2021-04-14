@@ -1,10 +1,7 @@
 window.onload = function onload() {
-  
   document.getElementsByClassName('cart__items')[0].innerHTML = localStorage.getItem('chaveLista');
   const lista = document.querySelectorAll('.cart__item');
-  lista.forEach((element) => {
-    return element.addEventListener('click', cartItemClickListener);
-  });
+  lista.forEach((element) => element.addEventListener('click', cartItemClickListener));
   criarPrecos();
   somarPrecos();
 };
@@ -12,7 +9,7 @@ window.onload = function onload() {
 const somarPrecos = () => {
   const Itens = document.querySelectorAll('.cart__item');
   document.getElementsByClassName('total-price')[0].innerText = Math.round(
-    [...Itens].map(item => item.innerHTML.match(/[\d.\d]+$/))
+    [...Itens].map((item) => item.innerHTML.match(/[\d.\d]+$/))
       .reduce((acc, add) => acc + parseFloat(add), 0) * 100) / 100;
 };
 
@@ -31,8 +28,8 @@ function createCustomElement(element, className, innerText) {
 }
 
 const salvandoPagina = () => {
-  const lista = document.getElementsByClassName('cart__items')[0].innerHTML
-  localStorage.setItem('chaveLista', lista)
+  const lista = document.getElementsByClassName('cart__items')[0].innerHTML;
+  localStorage.setItem('chaveLista', lista);
 }
 
 async function adicionarCarrinho(sku) {
