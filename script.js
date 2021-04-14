@@ -27,6 +27,7 @@ function createProductItemElement({ sku, name, image }) {
 async function fetchComputador() {
   const endpoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
   const response = await fetch(endpoint);
+  removeLoading();
   const obj = await response.json();
   const computers = obj.results;
   const items = document.querySelector('.items');
@@ -57,6 +58,12 @@ async function fetchComputador() {
 //   li.addEventListener('click', cartItemClickListener);
 //   return li;
 // }
+
+// ideia de adicionar o loading no html e só removê-lo via JS vista no repositório do Renzo - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/58
+const removeLoading = () => {
+  let local = document.querySelector('.loading');
+  local.remove();
+}
 
 window.onload = function onload() { 
   fetchComputador();
