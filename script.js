@@ -10,7 +10,7 @@ const somarPrecos = () => {
   const Itens = document.querySelectorAll('.cart__item');
   document.getElementsByClassName('total-price')[0].innerText = Math.round(
     [...Itens].map((item) => item.innerHTML.match(/[\d.\d]+$/))
-      .reduce((acc, add) => acc + parseFloat(add), 0) * 100) / 100;
+    .reduce((acc, add) => acc + parseFloat(add), 0) * 100) / 100;
 };
 
 function createProductImageElement(imageSource) {
@@ -40,8 +40,7 @@ async function adicionarCarrinho(sku) {
   .then((element) => createCartItemElement({
         sku: element.id, name: element.title, salePrice: element.price,
       }),
-
-     );
+    );
   ol.appendChild(json);
   somarPrecos();
   salvandoPagina();
@@ -77,7 +76,7 @@ const pegarInfFetch = async (produto) => {
   .then((response) => response.json())
   .then((objeto) => {
      objeto.results.forEach((element) => {
-     const dadosDosProdutos = { sku: element.id, name: element.title, image: element.thumbnail }
+     const dadosDosProdutos = { sku: element.id, name: element.title, image: element.thumbnail };
      section.appendChild(createProductItemElement(dadosDosProdutos));
     });
   });
