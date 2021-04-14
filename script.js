@@ -1,6 +1,7 @@
 window.onload = function onload() { };
 
 const cartItemsClass = '.cart__items';
+const prices = [];
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -12,6 +13,8 @@ function createProductImageElement(imageSource) {
 function saveItems() {
   const cartList = document.querySelector(cartItemsClass);
   localStorage.setItem('cart', cartList.innerHTML);
+  const totalPriceText = document.querySelector('.price');
+  localStorage.setItem('price', totalPriceText.innerHTML);
 }
 
 function cartItemClickListener(event) {
@@ -24,6 +27,9 @@ function cartItemClickListener(event) {
   cart.innerHTML = localStorage.getItem('cart');
   const cartItems = document.getElementsByClassName('cart__item');
   [...cartItems].forEach((item) => item.addEventListener('click', cartItemClickListener));
+  const totalPriceText = document.querySelector('.price');
+  totalPriceText.innerHTML = localStorage.getItem('price');
+  prices.push(parseInt(localStorage.getItem('price'), 10));
 }
 
 function createCustomElement(element, className, innerText) {
@@ -75,6 +81,13 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+const totalValue = async (price) => {
+  prices.push(price);
+  const sum = prices.reduce((acc, curr) => acc + curr, 0);
+  const priceText = document.querySelector('.price');
+  priceText.innerHTML = `${sum}`;
+  };
+
 const itemToCart = () => {
   const items = document.querySelector('.items');
   items.addEventListener('click', async (event) => {
@@ -90,6 +103,7 @@ const itemToCart = () => {
     const element = createCartItemElement(item);
     const cart = document.querySelector('.cart__items');
     cart.appendChild(element);
+    totalValue(item.salePrice);
     saveItems();
   });
 };
@@ -97,7 +111,7 @@ const itemToCart = () => {
 const clearCart = () => {
   const btn = document.querySelector('.empty-cart');
   btn.addEventListener('click', () => {
-    const allItems = document.querySelector('.cart__items');
+    const allItems = document.querySelector(cartItemsClass);
     allItems.innerHTML = '';
     saveItems();
   });
