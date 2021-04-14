@@ -1,5 +1,3 @@
-window.onload = function onload() { };
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -41,3 +39,41 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+/// Meu código 
+
+// Solução requisito 1: Criar uma listagem de produtos
+async function verifiedFetch(url) {
+  if (url === 'https://api.mercadolibre.com/sites/MLB/search?q=computador') {
+    return fetch(url)
+      .then((response) => response.json())
+      .then((data) => data);
+  }
+  throw new Error('endpoint não existe');
+}
+
+function createProductList(listComputers) {
+  const itemsElement = document.querySelector('.items');
+  const listComputerValues = listComputers.map((computer) => ({
+    sku: computer.id,
+    name: computer.title,
+    image: computer.thumbnail,
+  }));
+  listComputerValues.forEach((computer) => {
+    const item = createProductItemElement(computer);
+    itemsElement.appendChild(item);
+  });
+}
+
+async function fetchProductList(callback) {
+  await verifiedFetch('https://api.mercadolibre.com/sites/MLB/search?q=compuador')
+    .then((response) => {
+      const listComputers = response.results;
+      callback(listComputers);
+    })
+    .catch((err) => err);
+}
+
+window.onload = function onload() { 
+  fetchProductList(createProductList);
+};
