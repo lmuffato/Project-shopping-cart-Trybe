@@ -1,5 +1,7 @@
 window.onload = function onload() { };
 
+const cart = document.querySelector('.cart');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -30,27 +32,25 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener() {
+  // coloque seu código aqui
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
 const items = document.getElementById('test');
-console.log(items);
 
 const fetchElements = () => {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
   .then((data) => data.json())
   .then((data) => {
     const { results } = data;
-    console.log(results);
     results.forEach((item) => {
       const obj = {
         sku: item.id,
@@ -63,4 +63,27 @@ const fetchElements = () => {
   });
 };
 
+const fecthCArItem = (arr) => {
+  fetch(`https://api.mercadolibre.com/items/${arr}`)
+  .then((data) => data.json())
+  .then((item) => {
+    const obj = {
+      sku: arr,
+      name: item.title,
+      salePrice: item.price,
+    };
+   const li = createCartItemElement(obj);
+   cart.appendChild(li);
+  });
+};
+
 fetchElements();
+
+document.body.addEventListener('click', (event) => {
+  if (event.target.nodeName === 'BUTTON') {
+    const parent = event.target.parentElement;
+  const child = parent.firstChild;
+  console.log(child.innerText);
+  fecthCArItem(child.innerText);
+  }
+});
