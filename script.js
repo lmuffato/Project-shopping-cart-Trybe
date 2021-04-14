@@ -30,7 +30,7 @@ function createCustomElement(element, className, innerText) {
 const salvandoPagina = () => {
   const lista = document.getElementsByClassName('cart__items')[0].innerHTML;
   localStorage.setItem('chaveLista', lista);
-}
+};
 
 async function adicionarCarrinho(sku) {
   const itemId = sku;
@@ -39,7 +39,8 @@ async function adicionarCarrinho(sku) {
   const json = await product.json()
   .then((element) => createCartItemElement({
         sku: element.id, name: element.title, salePrice: element.price,
-      })
+      }),
+
      )
   ol.appendChild(json);
   somarPrecos();
@@ -54,12 +55,9 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createProductImageElement(image));
   const botaoCarrinho = section.appendChild(createCustomElement('button', 'item__add', 
   'Adicionar ao carrinho!'));
-  botaoCarrinho.addEventListener('click', () => {
-    return adicionarCarrinho(sku)
-  });
+  botaoCarrinho.addEventListener('click', () => adicionarCarrinho(sku));
   return section;
 }
-
 
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
