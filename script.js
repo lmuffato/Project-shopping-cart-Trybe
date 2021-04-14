@@ -96,6 +96,3 @@ document.body.addEventListener('click', (event) => {
   fecthCArItem(child.innerText);
   }
 });
-
-const saved = localStorage.getItem('cart');
-if (saved.length !== 0) cart.innerHTML = saved;
