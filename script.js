@@ -58,7 +58,8 @@ async function getItems() {
       name: pc.title,
       image: pc.thumbnail,
     };
-    itemsElement.appendChild(createProductItemElement(pcItem));
+    const item = createProductItemElement(pcItem);
+    itemsElement.appendChild(item);
   });
 }
 
@@ -95,5 +96,4 @@ const itemToCart = () => {
 
 getItems();
 itemToCart();
-cartItemClickListener();
 getItemsStorage();
