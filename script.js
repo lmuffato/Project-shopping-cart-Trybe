@@ -17,7 +17,7 @@ function createCustomElement(element, className, innerText) {
 
 function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
-  section.className = 'item';
+  section.className = 'items';
 
   section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
@@ -43,15 +43,10 @@ function createProductItemElement({ id, title, thumbnail }) {
 //   return li;
 // }
 
-function getComputerPromise(url) {
-  return new Promise((resolve, reject) => {
-    if (url === 'https://api.mercadolibre.com/sites/MLB/search?q=computador') {
-      fetch(url)
-        .then((response) => response.json())
-        .then((response) => resolve(response));
-    }
-    reject(new Error('endpoint não existe'));
-  });
+async function getComputerPromise() {
+  const resposta = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
+  const dado = await resposta.json();
+  return dado;
 }
     
  function getComputers({ results }) {
@@ -64,7 +59,7 @@ function getComputerPromise(url) {
 async function getData() {
   try {
   getComputers(await
-    getComputerPromise('https://api.mercadolibre.com/sites/MLB/search?q=computador'));
+    getComputerPromise());
   } catch (error) {
     console.log('Falha de Execução');
   }
