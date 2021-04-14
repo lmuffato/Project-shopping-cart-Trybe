@@ -41,3 +41,10 @@ window.onload = function onload() { };
 //   li.addEventListener('click', cartItemClickListener);
 //   return li;
 // }
+
+const buscaApi = async () => {
+  const resposta = await fetch("https://api.mercadolibre.com/sites/MLB/search?q=computador");
+  const data = resposta.json();
+  return data;
+};
+buscaApi();
