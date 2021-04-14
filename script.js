@@ -48,6 +48,7 @@ function createCartItemElement({ sku, name, salePrice }) {
       const { id: sku, title: name, price: salePrice } = data;
       const element = createCartItemElement({ sku, name, salePrice });
       const cartShopping = document.querySelector('.cart__items');
+      localStorage.setItem(itemId, element.innerHTML);
       cartShopping.appendChild(element);
       resolve();
     })
@@ -82,6 +83,17 @@ function fetchComputers(product) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+function storage() {
+  const shoppingCart = document.querySelector('.cart__items');
+  Object.values(localStorage).forEach((item)=> {
+    const getLi = document.createElement('li');
+    getLi.innerText = `${item}`;
+    getLi.addEventListener('click', cartItemClickListener);
+    shoppingCart.appendChild(getLi);
+  })
+}
+
 window.onload = function onload() {
   fetchComputers('computador');
+  storage();
 };
