@@ -1,4 +1,4 @@
-window.onload = function onload() { };
+
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -17,7 +17,7 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
-
+  document.querySelector('.items').appendChild(section);
   section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
@@ -30,8 +30,7 @@ function fetchItem() {
     .then((response) => {
       response.json().then((data) => {
         data.results.forEach((result) => {
-          const section = createProductItemElement(result);
-          document.querySelector('.items').appendChild(section);
+          createProductItemElement(result);
         });
       });
     });
@@ -60,4 +59,6 @@ function fetchCartItem() {
     });
   });
 } */
-fetchItem();
+window.onload = function onload() { 
+  fetchItem();
+};
