@@ -1,5 +1,3 @@
-window.onload = function onload() {};
-
 // projeto ja pronto
 
 function createProductImageElement(imageSource) {
@@ -61,10 +59,12 @@ function getProduct() {
     });   
 }
 
-getProduct();
-
 // function getItem(id) {
 //   fetch(`https://api.mercadolibre.com/items/${id}`)
 //     .then((response) => response.json())
 //     .then((data) => console.log(data));
 // }
+
+window.onload = function onload() {
+  getProduct();
+};
