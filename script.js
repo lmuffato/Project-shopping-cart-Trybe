@@ -97,7 +97,17 @@ function getIdEvent() {
   });
 }
 
+function clearCart() {
+  const btnEmptyCart = document.querySelector('.empty-cart');
+  const cartListElement = document.querySelector('.cart__items');
+
+  btnEmptyCart.addEventListener('click', () => {
+    cartListElement.innerHTML = '';
+  });
+}
+
 window.onload = function onload() { 
   fetchProducts();
   getIdEvent();
+  clearCart();
 };
