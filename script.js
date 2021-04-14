@@ -25,7 +25,10 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  const element = event.target;
+
+  const cartList = document.getElementsByClassName('cart__items')[0];
+  cartList.removeChild(element);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -46,8 +49,6 @@ const addToCart = (itemId) => {
         name: jsonReponse.title,
         salePrice: jsonReponse.price,
       };
-
-      console.log(item);
 
       const cartItem = createCartItemElement(item);
       const cartList = document.getElementsByClassName('cart__items')[0];
