@@ -1,3 +1,5 @@
+window.onload = function onload() { };
+
 const cartItemsClass = '.cart-items';
 
 function createProductImageElement(imageSource) {
@@ -91,9 +93,7 @@ const itemToCart = () => {
   });
 };
 
-window.onload = () => {
-  getItems();
-  itemToCart();
-  cartItemClickListener();
-  getItemsStorage();
-};
+getItems();
+itemToCart();
+cartItemClickListener();
+getItemsStorage();
