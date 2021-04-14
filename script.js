@@ -2,7 +2,6 @@ window.onload = function onload() { };
 
 const cartItemsClass = '.cart__items';
 const totalPrice = '.total-price';
-let prices = [];
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -10,6 +9,16 @@ function createProductImageElement(imageSource) {
   img.src = imageSource;
   return img;
 }
+
+const totalValue = async () => {
+  const totalPrices = document.querySelector(totalPrice);
+  let total = 0;
+  const cartItems = document.querySelectorAll('.cart__item');
+  [...cartItems].forEach((item) => {
+    total += parseFloat(item.innerHTML.split('$')[1]);
+    totalPrices.innerHTML = ((Math.round(total * 100)) / 100);
+  });
+};
 
 const loading = () => {
   const loadingElement = document.createElement('p');
@@ -32,10 +41,11 @@ function saveItems() {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  totalValue();
   saveItems();
- }
+}
 
- function getItemsStorage() {
+function getItemsStorage() {
   const cart = document.querySelector(cartItemsClass);
   cart.innerHTML = localStorage.getItem('cart');
   const cartItems = document.getElementsByClassName('cart__item');
@@ -93,15 +103,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-const totalValue = async (price) => {
-  const priceRound = (Math.round(price * 100)) / 100;
-  prices.push(priceRound);
-  const sum = prices.reduce((acc, curr) => acc + curr, 0);
-  const total = (Math.round(sum * 100)) / 100;
-  const priceText = document.querySelector(totalPrice);
-  priceText.innerHTML = `${total}`;
-  };
-
 const itemToCart = () => {
   const items = document.querySelector('.items');
   items.addEventListener('click', async (event) => {
@@ -117,7 +118,7 @@ const itemToCart = () => {
     const element = createCartItemElement(item);
     const cart = document.querySelector('.cart__items');
     cart.appendChild(element);
-    totalValue(item.salePrice);
+    totalValue();
     saveItems();
   });
 };
@@ -127,9 +128,6 @@ const clearCart = () => {
   btn.addEventListener('click', () => {
     const allItems = document.querySelector(cartItemsClass);
     allItems.innerHTML = '';
-    const priceText = document.querySelector(totalPrice);
-    priceText.innerHTML = `${0}`;
-    prices = [];
     saveItems();
   });
 };
