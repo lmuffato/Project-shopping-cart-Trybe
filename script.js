@@ -16,7 +16,7 @@ function createCustomElement(element, className, innerText) {
 
 function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
-  section.className = '.item';
+  section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
@@ -31,7 +31,7 @@ function fetchItem() {
       response.json().then((data) => {
         data.results.forEach((result) => {
           const section = createProductItemElement(result);
-          document.getElementsByClassName('items')[0].appendChild(section);
+          document.querySelector('.items').appendChild(section);
         });
       });
     });
