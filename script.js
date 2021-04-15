@@ -96,7 +96,7 @@ const addItensToCart = () => {
       const data = await response.json();
       const cartItem = createCartItemElement(data);
       cart.appendChild(cartItem);
-      updateLocalStorage();
+      // updateLocalStorage();
       console.log(data);
     });
   });
