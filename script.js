@@ -115,5 +115,5 @@ const products = {
 window.onload = async function onload() { 
   const productsFound = await products.getProducts();
   products.create.generateListOfProducts(productsFound);
-  products.loadCart();
+  if (localStorage.getItem('cart')) products.loadCart();
 };
