@@ -1,4 +1,8 @@
-window.onload = function onload() { };
+// Função  Realizada com a ajuda do Mauricio Viegas
+function addLocalStorage() {
+  const ol = document.querySelector('.cart__items');
+  localStorage.setItem('aa', ol.innerHTML);
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -14,30 +18,72 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
-
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
+  
+  section.appendChild(createCustomElement('span', 'item__sku', id));
+  section.appendChild(createCustomElement('span', 'item__title', title));
+  section.appendChild(createProductImageElement(thumbnail));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
+  
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
+// Função  Realizada com a ajuda do zéze durante o plantão
+function getProduct() {
+  return new Promise((resolve) => {
+    fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+      .then((response) => {
+      response.json().then((data) => resolve(data));
+    });
+  });
 }
 
+// Função  Realizada com a ajuda do Mauricio Viegas
+function carregaPagina(data) {
+  data.results.forEach((result) => {
+    const obj = createProductItemElement(result);
+    document.querySelector('.items').appendChild(obj);          
+  });
+}
+
+// Função  Realizada com a ajuda do Mauricio Viegas
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  event.target.remove();
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+// Função  Realizada com a ajuda do Mauricio Viegas
+function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+// Função  Realizada com a ajuda do Mauricio Viegas
+function addItemCard(data) {
+  const buttons = document.querySelectorAll('.item__add');
+  buttons.forEach((button, index) => {
+    button.addEventListener('click', () => {
+      const li = createCartItemElement(data.results[index]);
+      document.querySelector('.cart__items').appendChild(li);
+      addLocalStorage();
+    });
+  });
+}
+
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
+
+async function funcionamento() {
+  const data = await getProduct();
+  carregaPagina(data);
+  addItemCard(data);
+}
+
+window.onload = function onload() {
+  funcionamento();
+ };
