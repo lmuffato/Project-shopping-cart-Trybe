@@ -38,6 +38,13 @@ const product = class Product {
 
 let productsOnCart = 0;
 
+// código da função retirado: https://love2dev.com/blog/javascript-remove-from-array/
+function arrayRemove(arr, value) {
+  return arr.filter(function (ele) {
+    return ele !== value;
+  });
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -69,11 +76,18 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
+  // Remove from array
+  const productRemove = productsOnCart.find((productItem) => productItem.sku === event.target.id);
+  productsOnCart = arrayRemove(productsOnCart, productRemove);
+  console.log(productsOnCart);
+
+  // remove from OL
   event.target.remove();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
+  li.id = sku;
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
@@ -95,6 +109,12 @@ function getButtonItem(item) {
 
 function clearCart() {
   getOlCartItems().innerHTML = '';
+  productsOnCart = [];
+}
+
+async function initClearCartButton() {
+  const buttonClear = document.getElementsByClassName('empty-cart')[0];
+  buttonClear.addEventListener('click', clearCart);
 }
 
 async function addItemToCart(sku) {
@@ -125,11 +145,9 @@ async function init() {
   const products = await product.getProducts();
   await initCatalog(products);
   await initAddCartListener();
+  initClearCartButton().then();
 }
 
 window.onload = function onload() {
   init().then();
-
-  //const buttonClear = document.getElementsByClassName('empty-cart')[0];
-  //buttonClear.addEventListener('click', clearCart);
 };
