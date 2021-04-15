@@ -91,7 +91,6 @@ function appendToCart(data) {
 
 function showTotal() {
   const cartItems = getCartItems();
-  console.log(cartItems);
   let result = 0;
   cartItems.forEach((item) => {
     const priceIndex = item.innerHTML.search('PRICE');
@@ -111,6 +110,14 @@ function updateCart() {
   showTotalPrice();
 }
 
+function clearCart() {
+  const clearCartButton = document.querySelector('.empty-cart');
+  clearCartButton.addEventListener('click', () => {
+    getCartContainer().innerHTML = '';
+    updateCart();
+  });
+}
+
 async function createProductsList() {
   try {
     const data = await getProducts();
@@ -125,4 +132,5 @@ async function createProductsList() {
 window.onload = function onload() {
   createProductsList();
   reloadCart();
+  clearCart();
 };
