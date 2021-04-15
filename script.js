@@ -12,11 +12,11 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-// Requisito 2
-
 function cartItemClickListener(event) {
   // coloque seu código aqui
-  console.log(event.target); // linha inserida apenas para evitar erro atual do lint
+  const li = event.target;
+  const ol = li.parentNode;
+  ol.removeChild(li);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
