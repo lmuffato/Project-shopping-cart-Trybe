@@ -1,4 +1,5 @@
 # O NOME DO ARQUIVO DEVE SER `.gitignore` (ATENTE-SE AO PONTO NO INÍCIO)
+.idea
 
 # VSCode repo settings
 .vscode

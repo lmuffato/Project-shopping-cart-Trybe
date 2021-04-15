@@ -1,8 +1,30 @@
-async function getProductsAPI(url) {
-  const response = await fetch(url);
-  const data = await response.json();
-  return data;
-}
+const product = class Product {
+  constructor(sku, name, price, image) {
+    this.sku = sku;
+    this.name = name;
+    this.price = price;
+    this.image = image;
+  }
+
+  static getUrlProducts() {
+    return 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
+  }
+
+  static async getProducts(url = this.getUrlProducts()) {
+    const products = [];
+    await fetch(url)
+        .then((response) => response.json())
+        .then((data) => data.results.forEach((productItem) => {
+          const { id, title, price, thumbnail } = productItem;
+          products.push(new Product(id, title, price, thumbnail));
+    }));
+    return products;
+  }
+
+  static async getProduct(url, sku) {
+    return fetch(`${url}/${sku}`).then((response) => response.json());
+  }
+};
 
 function getSectionItems() {
   return document.getElementById('__items');
@@ -55,21 +77,15 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function clearCart() {
-  getOlCartItems().innerHTML = '';
-}
-
-async function populatePageProducts(data) {
-  data.results.forEach((product) => {
-    const productObj = {
-      sku: product.id,
-      name: product.title,
-      image: product.thumbnail,
-    };
-
-    const section = createProductItemElement(productObj);
+async function initCatalog(products) {
+  products.forEach((productItem) => {
+    const section = createProductItemElement(productItem);
     getSectionItems().appendChild(section);
   });
+}
+
+function clearCart() {
+  getOlCartItems().innerHTML = '';
 }
 
 async function insertItemToCartListener() {
@@ -90,14 +106,17 @@ async function insertItemToCartListener() {
   }
 }
 
-window.onload = async function onload() {
-  const url = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-  const data = await getProductsAPI(url);
-  const buttonClear = document.getElementsByClassName('empty-cart')[0];
+async function init() {
+  const products = await product.getProducts();
+  await initCatalog(products);
+}
 
-  await populatePageProducts(data);
+window.onload = function onload() {
+  init().then();
 
-  await insertItemToCartListener();
+  //const buttonClear = document.getElementsByClassName('empty-cart')[0];
 
-  buttonClear.addEventListener('click', clearCart);
+  //await insertItemToCartListener();
+
+  //buttonClear.addEventListener('click', clearCart);
 };
