@@ -1,5 +1,6 @@
 const API = 'https://api.mercadolibre.com/sites/MLB/search?q=';
 const itemAPI = 'https://api.mercadolibre.com/items/';
+
 const idCarts = '.cart__items';
 
 const loading = () => {
@@ -50,18 +51,13 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 }
 
-const getProductsPromise = () => new Promise((resolve, reject) => {
-  if (`${API}computador`) {
-    fetch(`${API}computador`)
-      .then((response) => {
-        response.json().then((data) => {
-          resolve(data.results);
-        });
+const getProductsPromise = () => new Promise((resolve) => {
+  fetch(`${API}computador`)
+    .then((response) => {
+      response.json().then((data) => {
+        resolve(data.results);
       });
-  } else {
-    console.log('erro');
-    reject(new Error('error'));
-  }
+    });
 });
 
 const getAPIById = (sku) => new Promise((resolve, reject) => {
@@ -132,10 +128,11 @@ const clearCart = () => {
 };
 
 window.onload = async function onload() {
-  loading();
-  const results = await getProductsPromise();
   const items = document.querySelector('.items');
   const emptyCart = document.querySelector('.empty-cart');
+
+  loading();
+  const results = await getProductsPromise();
   results.forEach((element) => {
     items.appendChild(createProductItemElement(element));
   });
