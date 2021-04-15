@@ -28,9 +28,9 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener() {
+  // coloque seu código aqui
+}
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
@@ -50,13 +50,6 @@ async function getProducts(produto, general = true) {
     .then((r) => r.json());
 }
 
-async function criaOsElementos(buscar, general = true, classe) {
-  const section = document.querySelector(`.${classe}`);
-  getProducts(buscar, general)
-    .then((r) => r.forEach((product) => section.appendChild(createProductItemElement(product))))
-    .then(() => addListeners());
-}
-
 const moveToCart = (e) => {
   const cart = document.querySelector('.cart__items');
   const esteId = e.target.previousSibling.previousSibling.previousSibling.innerText;
@@ -68,6 +61,13 @@ const addListeners = () => {
   const items = document.querySelectorAll('.item__add');
   items.forEach((item) => item.addEventListener('click', (event) => moveToCart(event)));
 };
+
+async function criaOsElementos(buscar, general = true, classe) {
+  const section = document.querySelector(`.${classe}`);
+  getProducts(buscar, general)
+    .then((r) => r.forEach((product) => section.appendChild(createProductItemElement(product))))
+    .then(() => addListeners());
+}
 
 window.onload = function onload() {
   criaOsElementos('computador', true, 'items');
