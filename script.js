@@ -108,8 +108,18 @@ const addItensToCart = () => {
   });
 };
 
+const emptyCart = () => {
+  const cart = document.querySelector(classCartItems);
+  const button = document.querySelector('.empty-cart');
+
+    button.addEventListener('click', () => {
+      cart.innerHTML = '';
+    });
+};
+
 window.onload = () => {
   fetchProtucts();
   addItensToCart();
   loudLocalStorage();
+  emptyCart();
 };
