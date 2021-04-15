@@ -1,5 +1,3 @@
-const FatherList = document.querySelector('.cart__items');
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -63,9 +61,9 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener() {
-  console.log('teste');
-}
+// function cartItemClickListener() {
+//   console.log('teste');
+// }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -84,24 +82,22 @@ async function fetchList(ItemID) {
     const pc = {
       sku: obj.id,
       name: obj.title,
-      salePrice: obj.price
+      salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
     console.log(item);
     fatherElement.appendChild(item);
-  ;
 }
 
-const markingTargets =  () => {
+const markingTargets = () => {
   const addButton = document.querySelectorAll('.item__add');
   addButton.forEach((element) => element.addEventListener('click', async event => {
     const clickedElement = event.target;
     const realTarget = clickedElement.parentNode;
     const ID = getSkuFromProductItem(realTarget);
     fetchList(ID);
-  })
-  );
-}
+  }));
+};
 
 window.onload = function onload() { 
   fetchComputer()
