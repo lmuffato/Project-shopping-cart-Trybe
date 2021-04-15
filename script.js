@@ -1,3 +1,40 @@
+const clearList = () => {
+  const list = document.querySelector('.list');
+  const listItems = list.querySelectorAll('.cart__item');
+  listItems.forEach((item) => item.remove());
+};
+
+// inicio funçoes do local storage
+
+const addLocalStorage = (string) => {
+  let storage;
+  if (localStorage.getItem('cart') !== null) {
+    storage = `${localStorage.getItem('cart')};${string}`;
+  } else storage = string;
+
+  localStorage.setItem('cart', storage);
+};
+
+const removeLocalStorage = (sku) => {
+  const storage = localStorage.getItem('cart');
+  const array = storage.split(';');
+  let removed;
+  array.forEach((element) => {
+    if (element !== sku) {
+      if (removed === undefined) {
+        removed = `${element}`;
+      } else removed = `${removed};${element}`;
+    }
+  });
+  localStorage.setItem('cart', removed);
+};
+
+const clearStorage = () => {
+  localStorage.removeItem('cart');
+};
+
+// fim funções do local storage
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -24,31 +61,47 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
+// Exercicio 3 inicio
 
 function cartItemClickListener(event) {
+  const id = event.target.innerText.split(' ')[1];
+  removeLocalStorage(id);
   event.target.remove();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
-    const li = document.createElement('li');
-    li.className = 'cart__item';
+  const li = document.createElement('li');
+  li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
-// Início resolução exercicio 2
+// Exercicio 3 fim
 
-const createCartObject = (object) => ({
-  sku: object.id,
-  name: object.title,
-  salePrice: object.price,
+// Exercicio 6 inicio
+
+const clearCart = () => {
+  const btn = document.querySelector('.empty-cart');
+  btn.addEventListener('click', () => {
+    clearStorage();
+    clearList();
+  });
+};
+
+// exercicio 6 fim
+
+// begin update cart (exercicio4)
+
+const createCartObject = ({ id, title, price }) => ({
+  sku: id,
+  name: title,
+  salePrice: price,
 });
-
-// const fetch = require('node-fetch');
 
 const appendCartItem = (object) => {
   const cart = document.querySelector('.cart__items');
@@ -67,11 +120,26 @@ const fetchId = (id) => {
   .then((data) => appendCartItem(data));
 };
 
+const updateCart = () => {
+  const storage = localStorage.getItem('cart');
+  if (storage !== null) {
+    const array = storage.split(';');
+    array.forEach((element) => fetchId(element));
+  }
+};
+
+// end update cart (exercicio4)
+
+// Inicio ex 2
+
 const addToCart = () => {
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((item) => {
     item.addEventListener('click', () => {
-      fetchId(item.parentElement.querySelector('.item__sku').innerHTML);
+      const id = getSkuFromProductItem(item.parentElement);
+      addLocalStorage(id);
+      clearList();
+      updateCart();
     });
   });
 };
@@ -110,21 +178,6 @@ const fetchAPI = () => {
 
 // Final resolução ex 1
 
-// Inicio resolução exercicio 6
-
-const clearList = () => {
-  const list = document.querySelector('.list');
-  const listItems = list.querySelectorAll('.cart__item');
-  listItems.forEach((item) => item.remove());
-};
-
-const clearCart = () => {
-  const btn = document.querySelector('.empty-cart');
-  btn.addEventListener('click', clearList);
-};
-
-// Final resolução exercicio 6
-
 // Inicio resolução exercicio 7
 
 const createloading = () => {
@@ -151,4 +204,5 @@ const start = () => {
 window.onload = function onload() { 
   start();
   clearCart();
+  updateCart();
 };
