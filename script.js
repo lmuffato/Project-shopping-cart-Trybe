@@ -41,3 +41,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+// Adicione o elemento retornado da função createProductItemElement(product) como filho do elemento <section class="items">.
+
+// Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
