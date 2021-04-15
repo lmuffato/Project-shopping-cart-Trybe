@@ -13,11 +13,9 @@ function createCustomElement(element, className, innerText) {
 }
 
 const addToCart = async (event) => {
-  const itemID = getSkuFromProductItem(event.target.parentElement);
+  const itemID = getSkuFromProductItem(event.target.parentElement); // Retirei a ideia de pegar o target pai do Miguel Dantas sala 09 
   const response = await fetch(`https://api.mercadolibre.com/items/${itemID}`);
   const data = await response.json();
-
-  console.log(data);
 
   const obj = {
     sku: data.id,
@@ -26,8 +24,6 @@ const addToCart = async (event) => {
   };
 
   document.querySelector('ol.cart__items').appendChild(createCartItemElement(obj));
-  // console.log(event.target);
-  // console.log(event.target.parentElement);
 };
 
 function createProductItemElement({ sku, name, image }) {
@@ -50,16 +46,22 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-
+  const getItemsFromCart = document.querySelector('.cart__items');
+  getItemsFromCart.removeChild(event.target);
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+const removeItem = () => {
+  const getItemsFromCart = document.querySelector('cart__item');
+  getItemsFromCart.addEventListener('click', cartItemClickListener);
+};
+
+const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-}
+};
 
 const getResults = async () => {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
