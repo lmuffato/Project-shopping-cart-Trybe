@@ -28,31 +28,32 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  console.log(li);
+  return li;
+}
 
-/// Meu código 
+/// Minhas implementações
 
 // Implementação requisito 1: Criar uma lista de produtos
-async function verifiedFetch(url) {
+async function verifiedFetchSearch(url) {
   if (url === 'https://api.mercadolibre.com/sites/MLB/search?q=computador') {
     return fetch(url)
       .then((response) => response.json())
       .then((data) => data);
   }
-  throw new Error('endpoint não existe');
+  throw new Error('endpoint not exist');
 }
 
-function createProductList(listComputers) {
+const createProductList = (listComputers) => {
   const itemsElement = document.querySelector('.items');
   const listComputerValues = listComputers.map((computer) => ({
     sku: computer.id,
@@ -63,10 +64,10 @@ function createProductList(listComputers) {
     const item = createProductItemElement(computer);
     itemsElement.appendChild(item);
   });
-}
+};
 
 async function fetchProductList(callback) {
-  await verifiedFetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+  await verifiedFetchSearch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
       const listComputers = response.results;
       callback(listComputers);
@@ -74,6 +75,44 @@ async function fetchProductList(callback) {
     .catch((err) => err);
 }
 
+// Implementação requisito 2: Adicionar o produto ao carrinho de compras
+
+async function verifiedFetchItems(url, itemId) {
+  if (url === `https://api.mercadolibre.com/items/${itemId}`) {
+    return fetch(`https://api.mercadolibre.com/items/${itemId}`)
+    .then((response) => response.json())
+    .then((data) => data);
+  }
+  throw new Error('endpoint not exist');
+}
+
+function addItemCar(response) {
+  const obj = {
+    sku: response.id,
+    name: response.title,
+    salePrice: response.price,
+  };
+  const cartItems = document.querySelector('.cart__items');
+  cartItems.appendChild(createCartItemElement(obj));
+}
+
+async function getItems(event) { 
+  if (event.target.classList.contains('item__add')) {
+    const itemId = event.target.parentNode.firstChild.textContent;
+    await verifiedFetchItems(`https://api.mercadolibre.com/items/${itemId}`, itemId)
+    .then((response) => {
+      addItemCar(response);
+    })
+    .catch((err) => err);
+  }
+}
+
+async function fetchProductItems() {
+  const items = document.querySelector('.items');
+  items.addEventListener('click', getItems);
+}
+
 window.onload = function onload() { 
   fetchProductList(createProductList);
+  fetchProductItems();
 };
