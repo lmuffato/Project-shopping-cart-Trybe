@@ -1,3 +1,5 @@
+const selectOl = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -58,10 +60,19 @@ const shoppingCartValue = () => {
   if (localStorage.length > 0) {
     let acc = 0;
     Object.values(localStorage).forEach((value) => {
-      acc += JSON.parse(value).salePrice;
+      acc += JSON.parse(value).salePrice; /* Json.parse() https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse */
     });
     spanTextPrice.innerText = roundNum(acc);
   }
+};
+
+const clearCardItems = () => {
+  const selectButton = document.querySelector('.empty-cart');
+  selectButton.addEventListener('click', () => {
+    selectOl.innerHTML = '';
+    localStorage.clear();
+    shoppingCartValue();
+});
 };
 
 const createItemsSection = (data) => {
@@ -85,8 +96,7 @@ const cartItemClickListener = (event) => {
     }
   }
   if (localStorage.length === 0) {
-    const cartListItems = document.querySelector('.cart__items');
-    cartListItems.innerHTML = '';
+    selectOl.innerHTML = '';
   }
   event.target.remove();// https://developer.mozilla.org/pt-BR/docs/Web/API/ChildNode/remove
   shoppingCartValue();
@@ -105,7 +115,6 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 
 const itemClickListener = () => {
   const selectButtons = document.querySelectorAll('.item__add');
-  const selectOl = document.querySelector('.cart__items');
   selectButtons.forEach((button) => button.addEventListener('click', async (event) => {
     const itemID = getSkuFromProductItem(event.target.parentNode); /* .parentNode https://developer.mozilla.org/pt-BR/docs/Web/API/Node/parentNode */
     const itemSearched = await foundItemsById(itemID);
@@ -121,9 +130,8 @@ function loadCardItems() {
   keys.sort((a, b) => Number(a[0]) - Number(b[0])); /* Number() https://www.w3schools.com/jsref/jsref_number.asp */
   keys.forEach((value) => {
     const obj = JSON.parse(value[1]);
-    const cartList = document.querySelector('.cart__items');
     const cartObject = { sku: obj.sku, name: obj.name, salePrice: obj.salePrice };
-    cartList.appendChild(createCartItemElement(cartObject));
+    selectOl.appendChild(createCartItemElement(cartObject));
   });
 }
 
@@ -131,8 +139,10 @@ window.onload = async function onload() {
   try {
     await foundItemsByType().then((data) => createItemsSection(data));
     await itemClickListener();
+    clearCardItems();
     loadCardItems();
     shoppingCartValue();
+    document.querySelector('.loading').remove();
   } catch (error) {
     alert(error);
   }
