@@ -1,21 +1,31 @@
 const API_URL_PRODUCTS = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
 const API_URL_ITEM = 'https://api.mercadolibre.com/items/';
 
-function createProductImageElement(imageSource) {
+const getCurrentCartList = () => {
+  const items = document.querySelectorAll('.cart__item');
+  const list = Object.values(items).map((item) => item.id);
+  return list;
+};
+
+const saveCartList = () => {
+  localStorage.setItem('cart_items', getCurrentCartList());
+};
+
+const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
   return img;
-}
+};
 
-function createCustomElement(element, className, innerText) {
+const createCustomElement = (element, className, innerText) => {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
   return e;
-}
+};
 
-function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
+const createProductItemElement = ({ id: sku, title: name, thumbnail: image }) => {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -25,28 +35,28 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
-}
+};
 
 const appendProduct = (product) => {
   const sectionItems = document.querySelector('.items');
   sectionItems.appendChild(createProductItemElement(product));
 };
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-function cartItemClickListener(event) {
+const cartItemClickListener = (event) => {
   event.target.remove();
-}
+  saveCartList();
+};
 
-function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
+  li.id = sku;
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-}
+};
 
 const addCartItem = (item) => {
   const cart = document.querySelector('.cart__items');
@@ -58,14 +68,28 @@ const fetchItem = (sku) => fetch(`${API_URL_ITEM}${sku}`)
   .then((data) => data)
   .catch((error) => console.log(error));
 
+const showItems = (itemsIds) => {
+  itemsIds.split(',').forEach((sku) => {
+    fetchItem(sku)
+    .then((data) => addCartItem(data));
+  });
+};
+
+const getLocalCartList = () => {
+  if (localStorage) showItems(localStorage.getItem('cart_items'));
+};
+
 const cartButtonEvent = () => {
   const buttons = document.querySelectorAll('.item__add');
 
   buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
-      const sku = e.target.parentNode.firstChild.innerHTML;
+      const sku = getSkuFromProductItem(e.target.parentNode);
       fetchItem(sku)
-      .then((data) => addCartItem(data));
+      .then((data) => {
+        addCartItem(data);
+        saveCartList();
+      });
     });
   });
 };
@@ -80,4 +104,5 @@ const fetchProducts = () => {
 
 window.onload = function onload() { 
   fetchProducts();
+  getLocalCartList();
 };
