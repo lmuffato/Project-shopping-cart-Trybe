@@ -64,9 +64,14 @@
 }
 
 .cart {
+  margin-top: 7px;
   display: flex;
   flex-basis: 30%;
   flex-flow: column wrap;
+  border: solid 2px blue;
+  border-radius: 15px;
+  height: fit-content;
+  padding: 10px;
 }
 
 .cart .cart__title {
