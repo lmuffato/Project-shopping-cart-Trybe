@@ -30,11 +30,12 @@ const removeLoading = () => {
 };
 
 const removeAllFromCart = () => {
-  let eraseCart = document.querySelector('.empty-cart');
-  eraseCart.addEventListener('click', removeAllFromCart());
+  const eraseCart = document.querySelector('.empty-cart');
+  eraseCart.addEventListener('click', () => {
   const list = document.querySelectorAll('li');
   list.forEach((element) => element.remove);
-}
+  });
+};
 
 // código melhorado e funcionando corretamente após dica do Patrick Morais - https://files.slack.com/files-pri/TMDDFEPFU-F01U57B6XKQ/image.png
 async function fetchComputador() {
@@ -60,9 +61,26 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+const teste = document.querySelectorAll('.item__add');
+teste.forEach((element) => {
+element.addEventListener('click', fetchList());
+});
+
+function cartItemClickListener() {
+  console.log('teste');
+}
+
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener());
+  return li;
+}
+
 async function fetchList() {
   const ItemID = getSkuFromProductItem();
-  const endpoint = 'https://api.mercadolibre.com/items/${ItemID}';
+  const endpoint = `https://api.mercadolibre.com/items/${ItemID}`;
   const response = await fetch(endpoint);
   const obj = await response.json();
   const computers = obj.results;
@@ -72,24 +90,11 @@ async function fetchList() {
     const pc = {
       sku: computer.id,
       name: computer.title,
-      salePrice: price,
+      salePrice: computer.price,
     };
     const item = createCartItemElement(pc);
     fatherElement.appendChild(item);
-  })
-}
-
-let teste = document.querySelectorAll('.item__add')
-teste.forEach((element) => {
-element.addEventListener('click', fetchList());
-});
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener());
-  return li;
+  });
 }
 
 window.onload = function onload() { 
