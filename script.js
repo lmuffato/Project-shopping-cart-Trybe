@@ -24,9 +24,9 @@ function createProductItemElement({ sku, name, image }) {
 
 const fetchResponse = async (URL) => {
   try {
-  const response = await fetch(URL);
-  const jsonResponse = await response.json();
-  return jsonResponse;
+    const response = await fetch(URL);
+    const jsonResponse = await response.json();
+    return jsonResponse;
   } catch (error) {
     alert(error);
   }
@@ -40,6 +40,28 @@ const foundItemsByType = async (query = 'computador') => {
 const foundItemsById = async (ItemID) => {
   const URL = `https://api.mercadolibre.com/items/${ItemID}`;
   return fetchResponse(URL);
+};
+
+const roundNum = (number) => parseFloat((Math.round(number * 100) / 100).toFixed(2));
+
+const priceSum = async (itemID) => {
+  const data = await foundItemsById(itemID);
+  const spanTextPrice = document.querySelector('.total-price');
+  let sum = parseFloat(spanTextPrice.innerText);
+  sum += data.price;
+  spanTextPrice.innerText = roundNum(sum);
+};
+
+const shoppingCartValue = () => {
+  const spanTextPrice = document.querySelector('.total-price');
+  spanTextPrice.innerText = 0;
+  if (localStorage.length > 0) {
+    let acc = 0;
+    Object.values(localStorage).forEach((value) => {
+      acc += JSON.parse(value).salePrice;
+    });
+    spanTextPrice.innerText = roundNum(acc);
+  }
 };
 
 const createItemsSection = (data) => {
@@ -66,7 +88,8 @@ const cartItemClickListener = (event) => {
     const cartListItems = document.querySelector('.cart__items');
     cartListItems.innerHTML = '';
   }
-    event.target.remove();// https://developer.mozilla.org/pt-BR/docs/Web/API/ChildNode/remove
+  event.target.remove();// https://developer.mozilla.org/pt-BR/docs/Web/API/ChildNode/remove
+  shoppingCartValue();
 };
 
 function getSkuFromProductItem(item) {
@@ -84,17 +107,18 @@ const itemClickListener = () => {
   const selectButtons = document.querySelectorAll('.item__add');
   const selectOl = document.querySelector('.cart__items');
   selectButtons.forEach((button) => button.addEventListener('click', async (event) => {
-    const itemID = getSkuFromProductItem(event.target.parentNode); /* https://developer.mozilla.org/pt-BR/docs/Web/API/Node/parentNode */
+    const itemID = getSkuFromProductItem(event.target.parentNode); /* .parentNode https://developer.mozilla.org/pt-BR/docs/Web/API/Node/parentNode */
     const itemSearched = await foundItemsById(itemID);
     const obj = { sku: itemSearched.id, name: itemSearched.title, salePrice: itemSearched.price };
-    localStorage.setItem(localStorage.length, JSON.stringify(obj)); /* https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify */
+    localStorage.setItem(localStorage.length, JSON.stringify(obj)); /* .stringify() https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify */
     selectOl.appendChild(createCartItemElement(obj));
+    await priceSum(itemSearched.id);
   }));
 };
 
 function loadCardItems() {
   const keys = Object.entries(localStorage);
-  keys.sort((a, b) => Number(a[0]) - Number(b[0]));
+  keys.sort((a, b) => Number(a[0]) - Number(b[0])); /* Number() https://www.w3schools.com/jsref/jsref_number.asp */
   keys.forEach((value) => {
     const obj = JSON.parse(value[1]);
     const cartList = document.querySelector('.cart__items');
@@ -108,6 +132,7 @@ window.onload = async function onload() {
     await foundItemsByType().then((data) => createItemsSection(data));
     await itemClickListener();
     loadCardItems();
+    shoppingCartValue();
   } catch (error) {
     alert(error);
   }
