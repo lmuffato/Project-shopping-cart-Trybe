@@ -1,14 +1,14 @@
 /**
  * REQUIREMENT 4 - Local Storage
  */
- function saveStorage() {
-  const cartItemsElement = document.querySelector('.cart__items');
-  localStorage.setItem('cart', cartItemsElement.innerHTML);
+function saveStorage() {
+  const olItems = document.getElementById('cart__items');
+  localStorage.setItem('cart', olItems.innerHTML);
 }
 
 function loadStorage() {
-  const cartItemsElement = document.querySelector('.cart__items');
-  cartItemsElement.innerHTML = localStorage.getItem('cart');
+  const olItems = document.getElementById('cart__items');
+  olItems.innerHTML = localStorage.getItem('cart');
 }
 
 /**
@@ -49,8 +49,8 @@ function removeSingleProduct(event) {
 }
 
 function cartItemClickListener() {
-  const cartItemsElement = document.querySelector('.cart__items');
-  cartItemsElement.addEventListener('click', removeSingleProduct);
+  const olItems = document.getElementById('cart__items');
+  olItems.addEventListener('click', removeSingleProduct);
 }
 
 /**
