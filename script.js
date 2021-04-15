@@ -38,16 +38,26 @@ const stopLoading = async () => {
   loadingItem.remove();
 };
 
-const fetchMyCartContainer = () => document.querySelector('.cart__items');
-
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   const ol = document.querySelector('.cart__items');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  ol.appendChild(li);
-  return li;
+  return ol.appendChild(li);
 }
+/*
+function cartItemClickListener(event) {
+  event.target.remove();
+}
+*/
+/*
+const removeCartItem = () => {
+  cartItem.forEach((item) => {
+    item.addEventListener('click', cartItemClickListener);
+  });
+};
+*/
+const fetchMyCartContainer = () => document.querySelector('ol.cart__items');
 
 const addToMyCart = (data) => {
   const btns = document.querySelectorAll('.item button');
@@ -59,6 +69,21 @@ const addToMyCart = (data) => {
     });
   });
 };
+
+// Limpar local storage
+// const clearLocalStorage = () => localStorage.clear();
+
+// Remover todos os itens do carrinho
+function eraseAll() {
+  const btnEmptyCart = document.querySelector('.empty-cart');
+  btnEmptyCart.addEventListener('click', () => {
+    const itensDoCarrinho = fetchMyCartContainer();
+    while (itensDoCarrinho.childElementCount > 0) {
+      itensDoCarrinho.firstElementChild.remove();
+    }
+    // clearLocalStorage();
+  });
+}
 
 const productPromise = (productName) => {
   startLoading();
@@ -76,24 +101,7 @@ const productPromise = (productName) => {
       });
     });
 };
-
 // Função productPromise feita com auxílio do plantão do instrutor Eliezer 
-
-// Limpar local storage
-// function clearLocalStorage() {
-//  localStorage.clear();
-// }
-
-// Remover todos os itens do carrinho
-// const itensDoCarrinho = document.querySelector('.cart__items');
-// function eraseAll() {
-//  while (itensDoCarrinho.childElementCount > 0) {
-//  itensDoCarrinho.firstElementChild.remove();
-//  }
-//  clearLocalStorage();
-// }
-// const btnEmptyCart = document.querySelector('.empty-cart');
-// btnEmptyCart.addEventListener('click', eraseAll);
 
 // salva os itens do carrinho no Local Storage
 // function saveMyCart() {
@@ -106,10 +114,6 @@ const productPromise = (productName) => {
 // }
 
 /*
-function cartItemClickListener(event) {
-  event.target.remove();
-  // btn.addEventListener('click', );
-}
 function getSkuFromProductItem(item) {
   return item.querySelector('.item__sku').innerText;
 }
@@ -118,16 +122,6 @@ function getSkuFromProductItem(item) {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
-*/
-
-/*
-const fetchProduct = async () => {
-  try {
-    await productPromise();
-  } catch (error) {
-    console.log(error);
-  }
-};
 */
 
 const fetchProducts = async () => {
@@ -140,4 +134,5 @@ const fetchProducts = async () => {
 
 window.onload = function onload() { 
   fetchProducts();
+  eraseAll();
 };
