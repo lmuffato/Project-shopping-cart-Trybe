@@ -67,11 +67,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-async function recoverId(id) {
-  const response = await fetch(`https://api.mercadolibre.com/items/${id}`);
-  const object = await response.json();
-  return object;
-}
 function addProductToCart() {
   // quando o usuário clicar no botão "Adicionar ao Carrinho!" que está em section class='items' (seção dos produtos)
   // e vai adicionar o produto na ol class='cart__items'
@@ -79,8 +74,13 @@ function addProductToCart() {
   selectItems.addEventListener('click', async (event) => {
     // para retornar o elemento pai:
     const id = getSkuFromProductItem(event.target.parentNode);
-    const endpoint = recoverId(id);
-   const item = { sku: id, name: endpoint.title, salePrice: endpoint.price };
+    const response = await fetch(`https://api.mercadolibre.com/items/${id}`);
+    const object = await response.json();
+   const item = {
+      sku: id,
+      name: object.title,
+      salePrice: object.price,
+    };
     const getItemsCart = document.querySelector('.cart__items');
     const getItemCart = createCartItemElement(item);
     getItemsCart.appendChild(getItemCart); 
