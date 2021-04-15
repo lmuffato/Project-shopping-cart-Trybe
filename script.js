@@ -1,13 +1,26 @@
-function addProductItem(product) {
-  const items = document.querySelector('.items');
-  items.appendChild(product);
+/**
+ * REQUIREMENT 4 - Local Storage
+ */
+ function saveStorage() {
+  const cartItemsElement = document.querySelector('.cart__items');
+  localStorage.setItem('cart', cartItemsElement.innerHTML);
 }
 
-function createProductImageElement(imageSource) {
-  const img = document.createElement('img');
-  img.className = 'item__image';
-  img.src = imageSource;
-  return img;
+function loadStorage() {
+  const cartItemsElement = document.querySelector('.cart__items');
+  cartItemsElement.innerHTML = localStorage.getItem('cart');
+}
+
+/**
+ * REQUIREMENT 1 - Product List
+ * Consultei o repositório do Majevski para resolver esse requisito.
+ * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
+ */
+ function createProductImageElement(imageSource) {
+  const imgElement = document.createElement('img');
+  imgElement.className = 'item__image';
+  imgElement.src = imageSource;
+  return imgElement;
 }
 
 function createCustomElement(element, className, innerText) {
@@ -17,45 +30,84 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const section = document.createElement('section');
   section.className = 'item';
-
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
-  addProductItem(section);
+  return section;
 }
 
-/* Source: https://github.com/tryber/sd-09-project-shopping-cart/tree/37a1f85227593cca8a06045f06c4d6bc72ef7060 */
-function fetchProducts() {
-  const param = 'computador';
-  const endpoint = `https://api.mercadolibre.com/sites/MLB/search?q=${param}`;
-  
+/**
+ * REQUIREMENT 3 - Remove Product Of Cart
+ */
+function removeSingleProduct(event) {
+  event.target.remove();
+  saveStorage();
+}
+
+function cartItemClickListener() {
+  const cartItemsElement = document.querySelector('.cart__items');
+  cartItemsElement.addEventListener('click', removeSingleProduct);
+}
+
+/**
+ * REQUIREMENT 6 - Clear Shopping Cart
+ */
+function emptyElement() {
+  const cartItemsElement = document.querySelector('.cart__items');
+  cartItemsElement.innerHTML = '';
+  saveStorage();
+}
+
+function emptyCart() {
+  const btnClearCartElement = document.querySelector('.empty-cart');
+  btnClearCartElement.addEventListener('click', emptyElement);
+}
+
+/**
+ * REQUIREMENT 7 - Loading
+ * Consultei o repositório do Majevski para resolver esse requisito.
+ * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
+ */
+function loadingTimeout() {
+  const loadingElement = document.querySelector('.loading');
+
+  setTimeout(() => {
+    loadingElement.classList.remove('display');
+  }, 5000);
+}
+
+function loading() {
+  const loadingElement = document.querySelector('.loading');
+  loadingElement.classList.add('display');
+  loadingTimeout();
+}
+
+// Source: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
+const fetchShoppingCart = () => {
+  const product = 'computador';
+  const loader = document.querySelector('.loading');
+  loading();
+  const endpoint = `https://api.mercadolibre.com/sites/MLB/search?q=${product}`;
   fetch(endpoint)
     .then((response) => response.json())
-    .then((object) => object.results)
-    .then((array) => {
-      array.forEach((product) => {
-        const { id: sku, title: name, thumbnail: image } = product;
-        createProductItemElement({ sku, name, image });
-      });
-    })
-    .catch((error) => console.log(error));
-}
+    .then((object) => object.results.forEach((productItem) => {
+      document.querySelector('.items').appendChild(createProductItemElement(productItem));
+      loader.remove();
+    }))
+    .catch((error) => {
+      window.alert(`Error: ${error}`);
+    });
+};
 
-/*
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
-*/
-
-function cartItemClickListener(event) {
-  event.target.remove();
-}
-
+/**
+ * REQUIREMENT 2 - Add Item to Cart
+ * Consultei o repositório do Majevski para resolver esse requisito.
+ * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
+ */
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -64,50 +116,33 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function addItemToCart(product) {
-  const cartListElement = document.querySelector('.cart__items');
-  cartListElement.appendChild(product);
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
 }
 
-/**
- * Para fazer o requisito 2, me baseei no código do John Alves
- * Link: https://github.com/tryber/sd-09-project-shopping-cart/pull/79
- */
-
-function getProductById(id) {
-  const endpoint = `https://api.mercadolibre.com/items/${id}`;
-  fetch(endpoint)
-  .then((response) => response.json())
-  .then((object) => {
-    const { id: sku, title: name, price: salePrice } = object;
-    const listItem = createCartItemElement({ sku, name, salePrice });
-    addItemToCart(listItem);
-  })
-  .catch((error) => window.alert(error));
-}
-
-function getIdEvent() {
+// Source: https://github.com/tryber/sd-010-a-project-shopping-cart/tree/29ce228c9180b050cce515732cbe94a0426deaa1
+function addItemToCart() {
   const items = document.querySelector('.items');
-  items.addEventListener('click', (event) => {
-    if (event.target.className === 'item__add') {
-      const item = event.target.parentNode;
-      const id = item.firstChild.innerText;
-      getProductById(id);
-    }
+
+  items.addEventListener('click', async (event) => {
+    const itemSku = getSkuFromProductItem(event.target.parentNode);
+    const endpoint = `https://api.mercadolibre.com/items/${itemSku}`;
+    const response = await fetch(endpoint)
+      .then((object) => object.json());
+
+    const item = { sku: itemSku, name: response.title, salePrice: response.price };
+    const cartItems = document.querySelector('.cart__items');
+    const cartItem = createCartItemElement(item);
+    cartItems.appendChild(cartItem);
+
+    saveStorage();
   });
 }
 
-function clearCart() {
-  const btnEmptyCart = document.querySelector('.empty-cart');
-  const cartListElement = document.querySelector('.cart__items');
-
-  btnEmptyCart.addEventListener('click', () => {
-    cartListElement.innerHTML = '';
-  });
-}
-
-window.onload = function onload() { 
-  fetchProducts();
-  getIdEvent();
-  clearCart();
+window.onload = function onload() {
+  fetchShoppingCart();
+  emptyCart();
+  cartItemClickListener();
+  loadStorage();
+  addItemToCart();
 };
