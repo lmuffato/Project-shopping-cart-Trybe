@@ -12,7 +12,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -39,7 +39,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
-  console.log(li);
   return li;
 }
 
@@ -57,12 +56,7 @@ async function verifiedFetchSearch(url) {
 
 const createProductList = (listComputers) => {
   const itemsElement = document.querySelector('.items');
-  const listComputerValues = listComputers.map((computer) => ({
-    sku: computer.id,
-    name: computer.title,
-    image: computer.thumbnail,
-  }));
-  listComputerValues.forEach((computer) => {
+  listComputers.forEach((computer) => {
     const item = createProductItemElement(computer);
     itemsElement.appendChild(item);
   });
@@ -87,6 +81,17 @@ async function verifiedFetchItems(url, itemId) {
   }
   throw new Error('endpoint not exist');
 }
+const array = [];
+function addLocalStorage(item) {
+  const itemId = item.textContent.match(/(SKU:\s[A-Z0-9]+)/g);
+  const itemCar = {
+    id: itemId[0],
+    text: item.textContent,
+    class: item.classList.value,
+  };
+  array.push(itemCar);
+  localStorage.setItem('items', JSON.stringify(array));
+}
 
 const addItemCar = (response) => {
   const obj = {
@@ -96,6 +101,8 @@ const addItemCar = (response) => {
   };
   const cartItems = document.querySelector('.cart__items');
   cartItems.appendChild(createCartItemElement(obj));
+  addLocalStorage(createCartItemElement(obj));
+  // console.log(createCartItemElement(obj).innerText);
 };
 
 async function getItems(event) { 
@@ -119,6 +126,12 @@ function carItemRemove(carlistener) {
   const cartItems = document.querySelector('.cart__items');
   cartItems.addEventListener('click', (event) => carlistener(event));
 }
+
+// Implementação requisito 4: Carrinho de compras carregado do localStorage ao iniciar a página
+
+// function itemsCarLocalStorage() {
+
+// }
 
 window.onload = function onload() { 
   fetchProductList(createProductList);
