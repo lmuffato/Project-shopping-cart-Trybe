@@ -32,8 +32,8 @@ const removeLoading = () => {
 const removeAllFromCart = () => {
   const eraseCart = document.querySelector('.empty-cart');
   eraseCart.addEventListener('click', () => {
-  const list = document.querySelectorAll('li');
-  list.forEach((element) => element.remove);
+  const list = document.querySelector('.cart__items');
+  list.innerHTML = '';
   });
 };
 
