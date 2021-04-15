@@ -1,3 +1,5 @@
+const FatherList = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -38,7 +40,7 @@ const removeAllFromCart = () => {
 };
 
 // código melhorado e funcionando corretamente após dica do Patrick Morais - https://files.slack.com/files-pri/TMDDFEPFU-F01U57B6XKQ/image.png
-async function fetchComputador() {
+async function fetchComputer() {
   const endpoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
   const response = await fetch(endpoint);
   removeLoading();
@@ -62,42 +64,47 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener() {
-  return 0;
+  console.log('teste');
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener());
+  // li.addEventListener('click', cartItemClickListener());
   return li;
 }
 
-async function fetchList() {
-  const ItemID = getSkuFromProductItem();
+async function fetchList(ItemID) {
   const endpoint = `https://api.mercadolibre.com/items/${ItemID}`;
   const response = await fetch(endpoint);
   const obj = await response.json();
-  const computers = obj.results;
-  const fatherElement = document.querySelector('.cart_items');
-
-  computers.forEach((computer) => {
+  const fatherElement = document.querySelector('.cart__items');
+  console.log(fatherElement);
     const pc = {
-      sku: computer.id,
-      name: computer.title,
-      salePrice: computer.price,
+      sku: obj.id,
+      name: obj.title,
+      salePrice: obj.price
     };
     const item = createCartItemElement(pc);
+    console.log(item);
     fatherElement.appendChild(item);
-  });
+  ;
 }
 
-const teste = document.querySelectorAll('.item__add');
-teste.forEach((element) => {
-element.addEventListener('click', fetchList());
-});
+const markingTargets =  () => {
+  const addButton = document.querySelectorAll('.item__add');
+  addButton.forEach((element) => element.addEventListener('click', async event => {
+    const clickedElement = event.target;
+    const realTarget = clickedElement.parentNode;
+    const ID = getSkuFromProductItem(realTarget);
+    fetchList(ID);
+  })
+  );
+}
 
 window.onload = function onload() { 
-  fetchComputador();
+  fetchComputer()
+  .then(() => markingTargets());
   removeAllFromCart();
 };
