@@ -1,4 +1,5 @@
-const API_URL = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
+const API_URL_PRODUCTS = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
+const API_URL_ITEM = 'https://api.mercadolibre.com/items/';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -14,7 +15,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -28,12 +29,7 @@ function createProductItemElement({ sku, name, image }) {
 
 const appendProduct = (product) => {
   const sectionItems = document.querySelector('.items');
-  const item = {
-    sku: product.id,
-    name: product.title,
-    image: product.thumbnail,
-  };
-  sectionItems.appendChild(createProductItemElement(item));
+  sectionItems.appendChild(createProductItemElement(product));
 };
 
 function getSkuFromProductItem(item) {
@@ -44,7 +40,7 @@ function cartItemClickListener(event) {
   // coloque seu código aqui
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
@@ -52,10 +48,33 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-const fetchProducts = () => {
-  fetch(API_URL)
+const addCartItem = (item) => {
+  const cart = document.querySelector('.cart');
+  cart.appendChild(createCartItemElement(item));
+};
+
+const fetchItem = (sku) => fetch(`${API_URL_ITEM}${sku}`)
   .then((response) => response.json())
-  .then(({ results }) => results.forEach((product) => appendProduct(product))) 
+  .then((data) => data)
+  .catch((error) => console.log(error));
+
+const cartButtonEvent = () => {
+  const buttons = document.querySelectorAll('.item__add');
+
+  buttons.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      const sku = e.target.parentNode.firstChild.innerHTML;
+      fetchItem(sku)
+      .then((data) => addCartItem(data));
+    });
+  });
+};
+
+const fetchProducts = () => {
+  fetch(API_URL_PRODUCTS)
+  .then((response) => response.json())
+  .then(({ results }) => results.forEach((product) => appendProduct(product)))
+  .then(() => cartButtonEvent()) 
   .catch((error) => console.log(error));
 };
 
