@@ -91,7 +91,7 @@ async function fetchList(ItemID) {
 
 const markingTargets = () => {
   const addButton = document.querySelectorAll('.item__add');
-  addButton.forEach((element) => element.addEventListener('click', async event => {
+  addButton.forEach(element => element.addEventListener('click', async event => {
     const clickedElement = event.target;
     const realTarget = clickedElement.parentNode;
     const ID = getSkuFromProductItem(realTarget);
