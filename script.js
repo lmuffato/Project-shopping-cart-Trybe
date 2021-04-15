@@ -49,7 +49,7 @@ const productList = (data) => {
 const fetchApi = async () => {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const data = await response.json();
-  await productList(data);
+  productList(data);
 };
 
 window.onload = function onload() { fetchApi(); };
