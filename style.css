@@ -1,3 +1,7 @@
+body {
+  background-color: rgb(250, 250, 250);
+}
+
 .top-bar {
   align-items: center;
   display: flex;
@@ -78,4 +82,12 @@
   flex-basis: 1;
   font-size: 16pt;
   text-align: center;
+}
+
+.empty-cart {
+  border-radius: 5px;
+  width: fit-content;
+  margin: 10px auto ;
+  background-color: rgba(15, 128, 0, 0.753);
+  padding: 4px;
 }
