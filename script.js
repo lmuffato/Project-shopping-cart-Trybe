@@ -13,12 +13,13 @@ async function calcTotal() {
     soma += price;
   }
   let total = document.querySelector('.total-price');
-  if (total !== null) document.querySelector(cartItems).removeChild(total);
+  if (total !== null) document.querySelector('.cart').removeChild(total);
   if (soma > 0) {
     total = document.createElement('p');
-    total.innerText = `Preço total: $${soma}`;
+    // total.innerText = `Preço total: $${soma}`;
+    total.innerText = soma;
     total.className = 'total-price';
-    document.querySelector(cartItems).appendChild(total); 
+    document.querySelector('.cart').appendChild(total); 
   }  
 }
 
