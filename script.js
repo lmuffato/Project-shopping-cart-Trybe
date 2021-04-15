@@ -1,5 +1,5 @@
 const erro = 'Não encontrei nada';
-const classOl = '.cart_items';
+// const classOl = '.cart_items';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -34,7 +34,7 @@ function getSkuFromProductItem(item) {
 
 // Função callback para retira um item da lista
 function cartItemClickListener({ target }) {
-  document.querySelector(classOl).removeChild(target);
+  target.remove();
 }
 
 // Cria elementos li para adicionar ao carrinho
@@ -62,7 +62,6 @@ const dadosAPI = async (id) => {
 // Adiciona evento de click em todos "item_add"
 const getListCart = async () => {
   const btnCart = document.querySelectorAll('.item__add');
-  console.log(btnCart);
   btnCart.forEach((btn) => {
     btn.addEventListener('click', async () => {
       // console.log('clikei no btn');
