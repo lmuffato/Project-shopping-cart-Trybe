@@ -31,24 +31,24 @@ function createProductItemElement({ id, title, thumbnail }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
 // Requisito 1
 // Requisito feito com a referência de código do Felipe Muller
 // Link: https://github.com/tryber/sd-010-a-project-shopping-cart/blob/7186f9c6b920d6ba685a2c87bcb48e7c2488a5ec/script.js
-const getPromiseComputer = (product) => (
+const getPromiseComputer = () => (
    new Promise((resolve) => {
-    fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
+    fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
       .then((response) => {
         response.json().then((data) => {
           resolve(data);
@@ -57,7 +57,7 @@ const getPromiseComputer = (product) => (
   })
 );
 
-const AppendItem = async (data) => {
+const AppendItem = (data) => {
   const items = document.querySelector('.items');
   data.results.forEach((element) => {
     const result = createProductItemElement(element);
@@ -65,7 +65,29 @@ const AppendItem = async (data) => {
   });
 };
 
+// Requisito 2
+const AppendIdItem = (data) => {
+  const getButton = document.querySelectorAll('.item button');
+
+  getButton.forEach((button, index) => {
+    button.addEventListener('click', () => {
+      const cart = document.querySelector('.cart__items');
+      const element = createCartItemElement(data[index]);
+      cart.appendChild(element);
+    });
+  });
+};
+
+async function carMarket() {
+  try {
+    const dado = await getPromiseComputer(); // requisito 1
+    await AppendItem(dado); // requisito 1
+    await AppendIdItem(dado.results); // requisito 2
+  } catch (error) {
+    console.log('Falha na pesquisa');
+  }
+}
+
 window.onload = function onload() { 
-  getPromiseComputer('computador')
-    .then((result) => AppendItem(result));
+  carMarket();
 };
