@@ -78,6 +78,13 @@ async function productListItemClickListener(event) {
 
 function cartItemClickListener(event) {
   const itemToBeRemoved = event.target;
+  const infoArray = itemToBeRemoved.innerText.split('|');
+  const sku = infoArray[0].split(':')[1].trim();
+  const matchEl = itemsInfoBackup.find(el => {
+    return el.sku === sku;
+  })
+  itemsInfoBackup.splice(itemsInfoBackup.indexOf(matchEl), 1);
+  localStorage.setItem('cartItems', JSON.stringify(itemsInfoBackup));
   document.querySelector('.cart__items').removeChild(itemToBeRemoved);
 }
 
