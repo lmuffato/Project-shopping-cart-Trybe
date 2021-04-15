@@ -1,10 +1,5 @@
 const cart = document.querySelector('.cart__items');
 
-window.onload = function onload() {
-  const saved = localStorage.getItem('cart');
-  cart.innerHTML = saved;
- };
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -35,9 +30,46 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+const totalPrice = document.querySelector('#spanPrice');
+
+const addSum = (arr) => {
+  totalPrice.innerText = arr;
+  };
+
+const retrieveLiCArt = () => {
+  const listLiCart = document.querySelectorAll('.cart__items li');
+  if (listLiCart.length >= 1) return listLiCart;
+};
+
+const sumLi = (list) => {
+  let sum = 0;
+  list.forEach((item) => {
+    const text = item.innerText;
+    const price = Number(text.split('$')[1]);
+    sum += price;
+  });
+  return `$:${sum.toFixed(2)}`;
+};
+
+const sumTotal = async () => {
+ try {
+  const cartItems = await retrieveLiCArt();
+  const totalSum = await sumLi(cartItems);
+  await addSum(totalSum);
+ } catch (error) {
+   addSum('$: 0');
+ }
+};
+
+window.onload = function onload() {
+  const saved = localStorage.getItem('cart');
+  cart.innerHTML = saved;
+ };
+
 function cartItemClickListener(event) {
   cart.removeChild(event.target);
   localStorage.setItem('cart', cart.innerHTML);
+  sumTotal();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -87,6 +119,7 @@ const fecthCArItem = (arr) => {
    const li = createCartItemElement(obj);
    cart.appendChild(li);
    localStorage.setItem('cart', cart.innerHTML);
+   sumTotal();
   });  
 };
 
@@ -96,6 +129,7 @@ const eraseButton = document.querySelector('.empty-cart');
 eraseButton.addEventListener('click', () => {
   cart.innerHTML = '';
   localStorage.setItem('cart', cart.innerHTML);
+  sumTotal();
 });
 
 document.body.addEventListener('click', (event) => {
@@ -103,9 +137,6 @@ document.body.addEventListener('click', (event) => {
   if (list.includes('item__add')) {
   const parent = event.target.parentElement;
   const child = parent.firstChild;
-  console.log(child.innerText);
-  fecthCArItem(child.innerText);
+  fecthCArItem(child.innerText);  
   }
 });
-
-// const sumTotal = async () => {};
