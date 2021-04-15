@@ -12,14 +12,18 @@ async function calcTotal() {
     const price = parseFloat(liCart[index].innerText.split('$')[1], 10);
     soma += price;
   }
-  let total = document.querySelector('.total-price');
-  if (total !== null) document.querySelector('.cart').removeChild(total);
+  let total = document.querySelector('.intro-total');
+  console.log(total, soma);
+  if (total !== null) total.parentElement.removeChild(total);
   if (soma > 0) {
-    total = document.createElement('p');
-    // total.innerText = `Preço total: $${soma}`;
+    const intro = document.createElement('p');
+    intro.innerText = 'Preço total: ';
+    intro.className = 'intro-total';
+    total = document.createElement('span');
     total.innerText = soma;
     total.className = 'total-price';
-    document.querySelector('.cart').appendChild(total); 
+    intro.appendChild(total);
+    document.querySelector('.cart').appendChild(intro); 
   }  
 }
 
@@ -93,6 +97,7 @@ window.onload = function onload() {
   const listContent = localStorage.getItem('cartList');
   buttonEmpty.addEventListener('click', () => {
     document.querySelector('ol.cart__items').innerHTML = '';
+    calcTotal();
     saveCart();
   });
   if (listContent !== null) listCart.innerHTML = listContent;
