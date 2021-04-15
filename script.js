@@ -28,8 +28,22 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// Requisito 4
+const classCartItems = '.cart__items';
+
+const loudLocalStorage = () => {
+  const cart = document.querySelector(classCartItems);
+  cart.innerHTML = JSON.parse(localStorage.getItem('cartList'));
+};
+
+const updateLocalStorage = () => {
+  const cart = document.querySelector(classCartItems);
+  localStorage.setItem('cartList', JSON.stringify(cart.innerHTML));
+};
+
 function cartItemClickListener(event) {
   event.target.remove();
+  updateLocalStorage();
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -73,7 +87,7 @@ const fetchProtucts = async () => {
 // Requisito 2
 const addItensToCart = () => {
   const itemAdd = document.querySelectorAll('.items');
-  const cart = document.querySelector('.cart__items');
+  const cart = document.querySelector(classCartItems);
 
   itemAdd.forEach((item) => {
     item.addEventListener('click', async (event) => {
@@ -82,6 +96,7 @@ const addItensToCart = () => {
       const data = await response.json();
       const cartItem = createCartItemElement(data);
       cart.appendChild(cartItem);
+      updateLocalStorage();
       console.log(data);
     });
   });
@@ -90,4 +105,5 @@ const addItensToCart = () => {
 window.onload = () => {
   fetchProtucts();
   addItensToCart();
+  loudLocalStorage();
 };
