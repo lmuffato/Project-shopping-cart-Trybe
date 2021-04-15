@@ -5,6 +5,8 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
+const arrayToStorage = [];
+
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
@@ -51,16 +53,27 @@ async function getProducts(produto, general = true) {
     .then((r) => r.json());
 }
 
+const saveItems = (e) => {
+  arrayToStorage.push(e.innerHTML);
+  localStorage.setItem('toBuy', JSON.stringify(arrayToStorage));
+};
+
 const moveToCart = (e) => {
   const cart = document.querySelector('.cart__items');
   const esteId = e.target.previousSibling.previousSibling.previousSibling.innerText;
   getProducts(esteId, false)
-    .then((r) => cart.appendChild(createCartItemElement(r)));
+    .then((r) => {
+      const li = createCartItemElement(r);
+      cart.appendChild(li);
+      saveItems(li);
+    });
 };
 
 const addListeners = () => {
   const items = document.querySelectorAll('.item__add');
-  items.forEach((item) => item.addEventListener('click', (event) => moveToCart(event)));
+  items.forEach((item) => {
+    item.addEventListener('click', (event) => moveToCart(event));
+  });
 };
 
 async function criaOsElementos(buscar, general = true, classe) {
@@ -70,6 +83,17 @@ async function criaOsElementos(buscar, general = true, classe) {
     .then(() => addListeners());
 }
 
+const getItemsFromLocal = () => {
+  const cart = document.querySelector('.cart__items');
+  const items = JSON.parse(localStorage.getItem('toBuy'));
+  items.forEach((element) => {
+    const son = document.createElement('li');
+    son.innerHTML = element;
+    cart.appendChild(son);
+  });
+};
+
 window.onload = function onload() {
   criaOsElementos('computador', true, 'items');
+  getItemsFromLocal();
 };
