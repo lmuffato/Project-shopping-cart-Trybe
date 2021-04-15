@@ -47,17 +47,32 @@ function createCartItemElement({ id, title, price }) {
 }
 /*
 function cartItemClickListener(event) {
-  event.target.remove();
+  return event.target.remove();
 }
 */
+const fetchMyCartContainer = () => document.querySelector('ol.cart__items');
+
 /*
 const removeCartItem = () => {
-  cartItem.forEach((item) => {
-    item.addEventListener('click', cartItemClickListener);
+  const cartItem = fetchMyCartContainer();
+  cartItem.childNodes.forEach((child) => {
+    child.addEventListener('click', cartItemClickListener);
   });
 };
 */
-const fetchMyCartContainer = () => document.querySelector('ol.cart__items');
+// Salva o carrinho no local Storage
+const saveMyCart = () => {
+  const cart = fetchMyCartContainer();
+  localStorage.cart = cart.innerHTML;
+};
+
+// Recupera o carrinho do local Storage
+const getMyCart = () => {
+  const cart = fetchMyCartContainer();
+  if (typeof Storage !== 'undefined' && localStorage.cart) {
+    cart.innerHTML = localStorage.cart;
+  }
+};
 
 const addToMyCart = (data) => {
   const btns = document.querySelectorAll('.item button');
@@ -66,14 +81,15 @@ const addToMyCart = (data) => {
       const cartContainer = fetchMyCartContainer();
       const addItemstoCart = createCartItemElement(data[index]);
       cartContainer.appendChild(addItemstoCart);
+      saveMyCart();
     });
   });
 };
 
-// Limpar local storage
-// const clearLocalStorage = () => localStorage.clear();
+// Limpa local Storage
+const clearLocalStorage = () => localStorage.clear();
 
-// Remover todos os itens do carrinho
+// Remove todos os itens do carrinho
 function eraseAll() {
   const btnEmptyCart = document.querySelector('.empty-cart');
   btnEmptyCart.addEventListener('click', () => {
@@ -81,7 +97,7 @@ function eraseAll() {
     while (itensDoCarrinho.childElementCount > 0) {
       itensDoCarrinho.firstElementChild.remove();
     }
-    // clearLocalStorage();
+    clearLocalStorage();
   });
 }
 
@@ -103,16 +119,19 @@ const productPromise = (productName) => {
 };
 // Função productPromise feita com auxílio do plantão do instrutor Eliezer 
 
-// salva os itens do carrinho no Local Storage
-// function saveMyCart() {
-//   localStorage.itensDoCarrinho = itensDoCarrinho.innerHTML;
-// }
-// const btnAddToCart = document.querySelector('.item__add');
-
-// if (typeof Storage !== 'undefined' && localStorage.itensDoCarrinho) {
-//  itensDoCarrinho.innerHTML = localStorage.itensDoCarrinho;
-// }
-
+/*
+const soma = async () => {
+  const totalPrice = document.querySelector('.total-price');
+  const itensCarrinho = document.querySelectorAll('.cart__item');
+  const valorTotal = itensCarrinho.reduce((prev, value) => {
+    prev.price.split('$');
+    value.price.split('$');
+    return parseFloat(prev.price + value.price);
+  });
+  totalPrice.innerText = ((Math.round(valorTotal * 100)) / 100);
+  return totalPrice;
+};
+*/
 /*
 function getSkuFromProductItem(item) {
   return item.querySelector('.item__sku').innerText;
@@ -135,4 +154,5 @@ const fetchProducts = async () => {
 window.onload = function onload() { 
   fetchProducts();
   eraseAll();
+  getMyCart();
 };

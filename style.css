@@ -83,3 +83,10 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.total-price {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-content: center;
+}
