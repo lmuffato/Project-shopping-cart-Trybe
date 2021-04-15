@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -28,7 +29,7 @@ const addItens = (itensApi) => {
   itensApi.forEach((item) => {
     const classItems = document.querySelectorAll('.items');
     classItems[0].appendChild(createProductItemElement(item));
-  }); 
+  });
 };
 
 const receiveApi = () => {
@@ -42,22 +43,41 @@ const receiveApi = () => {
     });
 }; // Obtive ajuda da Carolina Vasconcelos na finalização deste requisito, obrigado :)
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function createCartItemElement({ id, title, price }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+const itemID = (id) => {
+  const cartItems = document.querySelector('.cart__items');
+  fetch(`https://api.mercadolibre.com/items/${id}`)
+    .then((response) => {
+      response.json()
+        .then((data) => {
+          const itensCart = data;
+          cartItems.appendChild(createCartItemElement(itensCart));
+        });
+    });
+};
+
+const sendItens = (event) => {
+  const buttons = event.target.parentNode;
+  const idItens = getSkuFromProductItem(buttons);
+  itemID(idItens);
+};
+
+const addEvent = () => document
+  .querySelector('.items')
+  .addEventListener('click', sendItens);
 
 window.onload = function onload() {
   receiveApi();
+  addEvent();
 };
