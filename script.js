@@ -8,7 +8,7 @@ const itemsInfoBackup = JSON.parse(localStorage.getItem('cartItems')) || [];
 function totalPrice() {
   const total = itemsInfoBackup.reduce((acc, curr) => acc + curr.salePrice, 0);
   
-  document.querySelector('.total-price').innerHTML = `Total: $${parseFloat(total).toFixed(2)}`;
+  document.querySelector('.total-price').innerHTML = total;
 }
 
 function loadCartFromStorage() {
