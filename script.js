@@ -45,11 +45,6 @@ const appendProduct = (product) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const cartItemClickListener = (event) => {
-  event.target.remove();
-  saveCartList();
-};
-
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -59,10 +54,33 @@ const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
   return li;
 };
 
+const sumPrice = async (price) => {
+  totalPrice += price;
+  return totalPrice;
+};
+
+const subPrice = async (price) => {
+  totalPrice -= price;
+  return totalPrice;
+};
+
+const showTotalPrice = async (price, operation) => {
+  const finalPrice = await operation(price);
+  const totalPriceConteiner = document.querySelector('.total-price');
+  totalPriceConteiner.innerHTML = finalPrice;
+};
+
+const cartItemClickListener = (event) => {
+  const price = Number(event.target.innerHTML.split('PRICE: $')[1]);
+  showTotalPrice(price, subPrice);
+  event.target.remove();
+  saveCartList();
+};
+
 const addCartItem = (item) => {
   const cart = document.querySelector('.cart__items');
   cart.appendChild(createCartItemElement(item));
-  totalPrice += item.price;
+  showTotalPrice(item.price, sumPrice);
 };
 
 const fetchItem = (sku) => fetch(`${API_URL_ITEM}${sku}`)
