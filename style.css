@@ -74,3 +74,9 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.loading {
+  font-size: 1.75em;
+  align-self: center;
+  color: blue;
+}
