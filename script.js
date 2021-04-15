@@ -1,28 +1,30 @@
-function createProductImageElement(imageSource) {
+const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
   img.src = imageSource;
   return img;
-}
+};
 
-function createCustomElement(element, className, innerText) {
+const createCustomElement = (element, className, innerText) => {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
   return e;
-}
+};
 
-function createProductItemElement({ sku, name, image }) {
+const createProductItemElement = ({ sku, name, image }) => {
   const section = document.createElement('section');
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(
+    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
+  );
 
   return section;
-}
+};
 
 const sumTotal = () => {
   const totalPriceElement = document.getElementsByClassName('total-price')[0];
@@ -31,7 +33,7 @@ const sumTotal = () => {
 
   for (let index = 0; index < cartList.length; index += 1) {
     const splited = cartList[index].innerHTML.split(' ');
-    const price = Number((splited[splited.length - 1]).split('$')[1]);
+    const price = Number(splited[splited.length - 1].split('$')[1]);
     total += price;
   }
 
@@ -39,27 +41,27 @@ const sumTotal = () => {
   localStorage.setItem('total', JSON.stringify(total));
 };
 
-async function cartItemClickListener(event) {
+const cartItemClickListener = (event) => {
   const element = event.target;
 
   const cartList = document.getElementsByClassName('cart__items')[0];
   cartList.removeChild(element);
-  await sumTotal();
-}
+  sumTotal();
+};
 
-function createCartItemElement({ sku, name, salePrice }) {
+const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-}
+};
 
 const saveItemStorage = (item) => {
   const storageValue = JSON.parse(localStorage.getItem('cart'));
 
-  if (!storageValue) { 
-    localStorage.setItem('cart', JSON.stringify([item])); 
+  if (!storageValue) {
+    localStorage.setItem('cart', JSON.stringify([item]));
     return;
   }
 
@@ -82,8 +84,9 @@ const addToCart = async (itemId) => {
       const cartList = document.getElementsByClassName('cart__items')[0];
       cartList.appendChild(cartItem);
       saveItemStorage(item);
-    }).then(async () => {
-      await sumTotal();
+    })
+    .then(() => {
+      sumTotal();
     });
 };
 
@@ -94,15 +97,14 @@ const clearLoading = () => {
 };
 
 const getList = () => {
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-    .then(async (response) => {
+  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador').then(
+    async (response) => {
       const jsonReponse = await response.json();
       const products = jsonReponse.results.map((product) => ({
-          sku: product.id, 
-          name: product.title, 
-          image: product.thumbnail,
+        sku: product.id,
+        name: product.title,
+        image: product.thumbnail,
       }));
-      
       await products.forEach((product) => {
         const newItem = createProductItemElement(product);
         newItem.onclick = () => addToCart(product.sku);
@@ -111,7 +113,8 @@ const getList = () => {
         items.appendChild(newItem);
       });
       clearLoading();
-    });
+    },
+  );
 };
 
 const getCartItems = () => {
@@ -147,7 +150,7 @@ window.onload = function onload() {
 
   const emptyButton = document.getElementsByClassName('empty-cart')[0];
   emptyButton.onclick = clearCarts;
- };
+};
 
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
