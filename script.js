@@ -37,6 +37,10 @@ function createProductItemElement({ sku, name, image }) {
 const createProductObject = (item) => ({ sku: item.id, name: item.title, image: item.thumbnail });
 
 function cartItemClickListener(event) {
+  const text = event.target.innerText;
+  const indexOf = text.indexOf('|');
+  console.log(text.slice(5, indexOf - 1));
+  localStorage.removeItem(text.slice(5, indexOf - 1));
   return event.target.remove();
 }
 
@@ -58,6 +62,7 @@ const itemClick = () => {
       const salePrice = await fetchAPI(`${API_URL_ID}${sku}`, 'price');
       const li = createCartItemElement({ sku, name, salePrice });
       ol.appendChild(li);
+      localStorage.setItem(`${sku}`, li.innerText);
     });
   });
 };
@@ -72,9 +77,28 @@ const appendProductsObject = async () => {
   itemClick();
 };
 
+const createLiItem = (text) => {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = text;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+};
+
+const setItemsToList = () => {
+  const itemsSize = localStorage.length;
+  console.log(localStorage);
+  for (let index = 0; index < itemsSize; index += 1) {
+    const key = localStorage.key(index);
+    const li = createLiItem(localStorage.getItem(key));
+    const ol = document.querySelector('.cart__items');
+    ol.appendChild(li);
+  }
+};
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 window.onload = function onload() {
   appendProductsObject();
+  setItemsToList();
 };
