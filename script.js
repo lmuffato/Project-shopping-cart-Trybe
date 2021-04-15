@@ -45,6 +45,14 @@ function loading() {
   selectCart.appendChild(load);
 }
 
+function loadingItens() {
+  const load = document.createElement('p');
+  const selectItems = document.querySelector('.items');
+  load.innerText = 'loading...';
+  load.className = 'loading';
+  selectItems.appendChild(load);
+}
+
 function removeLoading() {
   const selectLoading = document.querySelector('.loading');
   selectLoading.remove();
@@ -72,12 +80,10 @@ function removeLoading() {
 
 function fetchComputers(product) {
   return new Promise((resolve) => {
+    loadingItens();
     fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
-  .then((response) => response.json())
-  .then((data) => {
-    if (data.error) {
-      throw new Error(data.error);
-    }
+  .then((response) => response.json()).then((data) => {
+    if (data.error) { throw new Error(data.error); }
     data.results.forEach((result) => {
       const { id: sku, title: name, thumbnail: image } = result;
       const createElement = createProductItemElement({ sku, name, image });
@@ -85,8 +91,9 @@ function fetchComputers(product) {
       const button = createElement.querySelector('.item__add');
       listItens.appendChild(createElement);
       button.addEventListener('click', () => addItens(sku));
-      resolve();
     });
+    removeLoading();
+    resolve();
   });
   }); 
 }
