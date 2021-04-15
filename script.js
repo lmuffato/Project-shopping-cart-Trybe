@@ -27,6 +27,22 @@ function createProductItemElement({ id, title, thumbnail }) {
 
   return section;
 }
+
+// Soma itens da lista
+const sumPrices = (price) => {
+  const span = document.querySelector('.total-price');
+  const valueAtual = parseFloat(span.innerHTML);
+  span.innerHTML = price + valueAtual;
+};
+
+// Subtrai os itens da lista
+const subPrices = (item) => {
+  const span = document.querySelector('.total-price');
+  const valueAtual = parseFloat(span.innerHTML);
+  const valueRemove = parseFloat(item.split('$')[1]);
+  span.innerHTML = valueAtual - valueRemove;
+};
+
 // Função responsavel pela busca do id do elemento clicado
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
@@ -34,6 +50,8 @@ function getSkuFromProductItem(item) {
 
 // Função callback para retira um item da lista
 function cartItemClickListener({ target }) {
+  subPrices(target.innerHTML);
+  console.log(target);
   target.remove();
 }
 
@@ -52,19 +70,10 @@ const clearList = () => {
   document.querySelector('.cart__items').innerHTML = '';
 };
 
-const sumPrices = (price) => {
-  const span = document.querySelector('.total-price');
-  const valueAtual = parseFloat(span.innerHTML);
-  span.innerHTML = price + valueAtual;
-  // const span = document.querySelector('.total-price');
-  // const value = span.innerHTML;
-  // let test = '';
-  // for (let index = 14; index < value.length; index += 1) {
-  //   test += value[index];
-  // }
-  // const priceAtual = parseFloat(test);
-  // span.innerHTML = `Preço Total: $${priceAtual + price}`;
-};
+// const loadingAPI = () => {
+//   const sectionLoading = document.querySelector('.section');
+//   sectionLoading.innerHTML = 'loading...';
+// };
 
 // Busca de daods atraves do 'ID' do produto
 const dadosAPI = async (id) => {
