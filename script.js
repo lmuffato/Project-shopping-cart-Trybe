@@ -61,13 +61,8 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-const teste = document.querySelectorAll('.item__add');
-teste.forEach((element) => {
-element.addEventListener('click', fetchList());
-});
-
 function cartItemClickListener() {
-  console.log('teste');
+  return 0;
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -96,6 +91,11 @@ async function fetchList() {
     fatherElement.appendChild(item);
   });
 }
+
+const teste = document.querySelectorAll('.item__add');
+teste.forEach((element) => {
+element.addEventListener('click', fetchList());
+});
 
 window.onload = function onload() { 
   fetchComputador();
