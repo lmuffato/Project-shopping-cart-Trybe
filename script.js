@@ -43,7 +43,7 @@ window.onload = function onload() { };
 // }
 
 const buscaApi = async () => {
-  const resposta = await fetch("https://api.mercadolibre.com/sites/MLB/search?q=computador");
+  const resposta = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const data = resposta.json();
   return data;
 };
