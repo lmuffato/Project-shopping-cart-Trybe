@@ -31,9 +31,17 @@ function createProductItemElement({ id, title, thumbnail }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+// Requisito 3
+function cartItemClickListener() {
+  // coloque seu código aqui
+  const getOl = document.querySelectorAll('.cart__items');
+
+  getOl.forEach((li) => {
+    li.addEventListener('click', (event) => {
+      event.target.remove();
+    });
+  });
+}
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
@@ -83,6 +91,7 @@ async function carMarket() {
     const dado = await getPromiseComputer(); // requisito 1
     await AppendItem(dado); // requisito 1
     await AppendIdItem(dado.results); // requisito 2
+    cartItemClickListener(); // requisito 3
   } catch (error) {
     console.log('Falha na pesquisa');
   }
