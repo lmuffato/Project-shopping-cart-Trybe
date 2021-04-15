@@ -1,9 +1,19 @@
+
 window.onload = function onload() { 
   addProductsOnList();
   loadCartFromStorage();
   totalPrice();
+  document.querySelector('button.empty-cart').addEventListener('click', emptyShoppingCart);
 };
-const itemsInfoBackup = JSON.parse(localStorage.getItem('cartItems')) || [];
+let itemsInfoBackup = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+
+function emptyShoppingCart() {
+  localStorage.setItem('cartItem', []);
+  itemsInfoBackup = [];
+  document.querySelectorAll('.cart__item').forEach(el => el.remove());
+  totalPrice();
+}
 
 function totalPrice() {
   const total = itemsInfoBackup.reduce((acc, curr) => acc + curr.salePrice, 0);
