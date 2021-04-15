@@ -32,7 +32,7 @@ function createProductItemElement({ id, title, thumbnail }) {
 const sumPrices = (price) => {
   const span = document.querySelector('.total-price');
   const valueAtual = parseFloat(span.innerHTML);
-  span.innerHTML = price + valueAtual;
+  span.innerHTML = price.price + valueAtual;
 };
 
 // Subtrai os itens da lista
@@ -51,7 +51,6 @@ function getSkuFromProductItem(item) {
 // Função callback para retira um item da lista
 function cartItemClickListener({ target }) {
   subPrices(target.innerHTML);
-  console.log(target);
   target.remove();
 }
 
@@ -70,10 +69,11 @@ const clearList = () => {
   document.querySelector('.cart__items').innerHTML = '';
 };
 
-// const loadingAPI = () => {
-//   const sectionLoading = document.querySelector('.section');
-//   sectionLoading.innerHTML = 'loading...';
-// };
+// Adiciona uma mensagem de Loading na tela
+const RemoveloadingAPI = () => {
+  const section = document.querySelector('.loading');
+  section.remove();
+};
 
 // Busca de daods atraves do 'ID' do produto
 const dadosAPI = async (id) => {
@@ -83,14 +83,14 @@ const dadosAPI = async (id) => {
 };
 
 // Adiciona evento de click em todos "item_add"
-const getListCart = async () => {
+const getListCart = () => {
   const btnCart = document.querySelectorAll('.item__add');
   btnCart.forEach((btn) => {
     btn.addEventListener('click', async () => {
       // console.log('clikei no btn');
       try {
         const dados = await dadosAPI(getSkuFromProductItem(btn.parentNode));
-        sumPrices(dados.price);
+        sumPrices(dados);
         document.querySelector('.cart__items').appendChild(createCartItemElement(dados));
       } catch (error) {
         return erro;
@@ -125,7 +125,8 @@ const createDados = async () => {
   try {
     const dados = await dadosAPIPcs();
     appendComputers(dados);
-    await getListCart();
+    RemoveloadingAPI();
+    getListCart();
   } catch (error) {
     return erro;
   }
