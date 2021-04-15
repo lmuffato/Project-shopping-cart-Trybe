@@ -1,3 +1,16 @@
+function getCartContainer() {
+  return document.querySelector('.cart__items');
+}
+
+function getCartItems() {
+  return document.querySelectorAll('.cart__item');
+}
+
+function saveCart() {
+  const cartContainer = getCartContainer().innerHTML;
+  localStorage.setItem('cart', cartContainer);
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -29,7 +42,8 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // código
+  event.target.remove();
+  updateCart();
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -49,6 +63,13 @@ function getProducts() {
   });
 }
 
+function reloadCart() {
+  const cartContainer = getCartContainer();
+  cartContainer.innerHTML = localStorage.getItem('cart');
+  const cartItems = getCartItems();
+  cartItems.forEach(item => item.addEventListener('click', cartItemClickListener));
+}
+
 function appendProducts(data) {
   data.results.forEach(result => {
     const container = document.querySelector('.items');
@@ -60,11 +81,34 @@ function appendToCart(data) {
   const buttons = document.querySelectorAll('.item button');
   buttons.forEach((button, index) => {
     button.addEventListener('click', () => {
-      const cartContainer = document.querySelector('.cart__items');
+      const cartContainer = getCartContainer();
       const addToCart = createCartItemElement(data[index]);
       cartContainer.appendChild(addToCart);
+      updateCart();
     })
   });
+}
+
+function showTotal() {
+  const cartItems = getCartItems();
+  console.log(cartItems);
+  let result = 0;
+  cartItems.forEach((item) => {
+    const priceIndex = item.innerHTML.search('PRICE');
+    const price = item.innerHTML.slice(priceIndex + 8);
+    result += Number(price);
+  });
+  return result;
+}
+
+async function showTotalPrice() {
+  const result = document.querySelector('.total-price');
+  result.innerHTML = showTotal();
+}
+
+function updateCart() {
+  saveCart();
+  showTotalPrice();
 }
 
 async function createProductsList() {
@@ -72,11 +116,13 @@ async function createProductsList() {
     const data = await getProducts();
     await appendProducts(data);
     await appendToCart(data.results);
+    await showTotalPrice();
   } catch (error) {
-    console.log('Falha na matrix')
+    console.log('Falha na matrix');
   }
 }
 
 window.onload = function onload() {
   createProductsList();
+  reloadCart();
 };
