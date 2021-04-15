@@ -44,23 +44,25 @@ const appendProducts = async () => {
   });
 };
 
-function cartItemClickListener(event) {
+function cartItemClickListener(event, cart) {
   const item = event.target;
-  const parent = item.parentNode;
   item.remove();
-  localStorage.setItem('cart', parent.innerHTML);
+  const toSave = !cart.innerHTML ? '' : cart.innerHTML;
+  localStorage.setItem('cart', toSave);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', (event) => {
+    const cart = document.querySelector('.cart__items');
+    cartItemClickListener(event, cart);
+  });
   return li;
 }
 
-const addToCart = async () => {
-  const cart = document.querySelector('.cart__items');
+const addToCart = async (cart) => {
   const items = document.querySelector('.items');
   items.addEventListener('click', async (event) => {
     if (event.target.tagName === 'BUTTON') {
@@ -70,20 +72,25 @@ const addToCart = async () => {
       const cartItem = createCartItemElement({ sku: id, name: title, salePrice: price });
       cart.appendChild(cartItem);
       localStorage.setItem('cart', cart.innerHTML);
-      console.log(cart);
     }
   });
 };
 
-const getCartItems = () => {
-  const cart = document.querySelector('.cart__items');
-  cart.innerHTML = localStorage.getItem('cart');
-  cart.addEventListener('click', cartItemClickListener);
-  console.log(cart);
+const getCartItems = (cart) => {
+  const cartItems = cart;
+  cartItems.innerHTML = localStorage.getItem('cart');
+  cartItems.addEventListener('click', (event) => {
+    if (event.target.tagName === 'LI') {
+      cartItemClickListener(event, cartItems);
+    }
+  });
 };
 
 window.onload = function onload() {
   appendProducts();
-  addToCart();
-  getCartItems();
+
+  const cart = document.querySelector('.cart__items');
+
+  addToCart(cart);
+  getCartItems(cart);
 };
