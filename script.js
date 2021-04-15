@@ -50,6 +50,9 @@ const empty = () => {
   });
 };
 
+// Requisito 7
+const removeLoading = () => document.querySelector('.loading').remove();
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -153,6 +156,7 @@ const AppendIdItem = (data) => {
 async function carMarket() {
   try {
     const dado = await getPromiseComputer(); // requisito 1
+    removeLoading(); // requisito7
     await AppendItem(dado); // requisito 1
     await AppendIdItem(dado.results); // requisito 2
   } catch (error) {
