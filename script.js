@@ -4,6 +4,25 @@ const clearList = () => {
   listItems.forEach((item) => item.remove());
 };
 
+// resolução ex5
+
+const sumItems = (cartItems) => {
+  const prices = cartItems.map((object) => object.salePrice);
+  return prices.reduce((currentValue, number) => currentValue + number);
+};
+
+async function updateTotal() {
+  let sum = 0;
+  const value = document.querySelector('.total-price');
+  const cartItems = JSON.parse(localStorage.getItem('cart'));
+  if (cartItems !== null) {
+    sum = sumItems(cartItems);
+  }
+  value.innerText = `${sum}`;
+}
+
+// fim exercicio 5
+
 // inicio funçoes do local storage
 
 const addLocalStorage = (object) => {
@@ -16,9 +35,10 @@ const addLocalStorage = (object) => {
   localStorage.setItem('cart', JSON.stringify(storage));
 };
 
-const clearStorage = () => {
+async function clearStorage() {
   localStorage.removeItem('cart');
-};
+  await updateTotal();
+}
   
 const sideFunction = (storage, sku) => {
   const removed = [];
@@ -77,6 +97,7 @@ function getSkuFromProductItem(item) {
 async function cartItemClickListener(event) {
   const id = event.target.innerText.split(' ')[1];
   removeLocalStorage(id);
+  await updateTotal();
   event.target.remove();
 }
 
@@ -109,12 +130,13 @@ const appendCartItem = (object) => {
   cart.appendChild(createCartItemElement(object));
 };
 
-const updateCart = () => {
+async function updateCart() {
   const storage = JSON.parse(localStorage.getItem('cart'));
   if (storage !== null) {
     storage.forEach((object) => appendCartItem(object));
   }
-};
+  await updateTotal();
+}
 
 // end update cart (exercicio4)
 
