@@ -12,12 +12,16 @@ async function addProductsOnList() {
     itemsListSection.appendChild(createProductItemElement({sku: id, name: title, image: thumbnail})));
   
   const listedProductsButtons = document.querySelectorAll('.item button');
-  listedProductsButtons.forEach(button => button.addEventListener('click', (e) => cartItemClickListener(e)));
+  listedProductsButtons.forEach(button => button.addEventListener('click', (e) => productListItemClickListener(e)));
 }
 
 async function addProducstOnCart({sku, name, salePrice}) {
   const cartItemsList = document.querySelector('.cart__items');
   cartItemsList.appendChild(createCartItemElement({sku, name, salePrice}));
+  const productsInTheCart = document.querySelectorAll('.cart__item');
+  productsInTheCart.forEach(product =>
+    product.addEventListener('click',
+      (e) => cartItemClickListener(e)));
 }
 
 function createProductImageElement(imageSource) {
@@ -50,7 +54,7 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-async function cartItemClickListener(event) {
+async function productListItemClickListener(event) {
   const cardItemProduct = event.target.parentElement;
   const cardItemProductId = cardItemProduct.childNodes[0].innerText;
   
@@ -59,7 +63,11 @@ async function cartItemClickListener(event) {
       .then((item) => item);
   
   addProducstOnCart({sku: id, name: title, salePrice:price});
-  // levar os valores do fetch para a addProductsOnTheCart()
+}
+
+async function cartItemClickListener(event) {
+  const itemToBeRemoved = event.target;
+  document.querySelector('.cart__items').removeChild(itemToBeRemoved);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
