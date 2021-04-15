@@ -29,11 +29,11 @@ const removeLoading = () => {
   local.remove();
 };
 
-let eraseCart = document.querySelector('.empty-cart');
-eraseCart.addEventListener('click', removeAllFromCart());
-
 const removeAllFromCart = () => {
-  
+  let eraseCart = document.querySelector('.empty-cart');
+  eraseCart.addEventListener('click', removeAllFromCart());
+  const list = document.querySelectorAll('li');
+  list.forEach((element) => element.remove);
 }
 
 // código melhorado e funcionando corretamente após dica do Patrick Morais - https://files.slack.com/files-pri/TMDDFEPFU-F01U57B6XKQ/image.png
@@ -94,4 +94,5 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 window.onload = function onload() { 
   fetchComputador();
+  removeAllFromCart();
 };
