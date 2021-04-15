@@ -24,18 +24,18 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
-const verifyAPI = async (url) => 
+const fetchAPI = async (url) => 
   fetch(url)
     .then((response) => response.json())
     .then((product) => product);
 
-const getProducts = async () => {
-  const items = await verifyAPI('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
-    .then((products) => products);
+const appendProducts = async () => {
+  const items = await fetchAPI('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
+  .then((products) => products);
   const { results } = items;
   const mainSection = document.querySelector('.items');
   results.forEach((product) => {
@@ -44,18 +44,32 @@ const getProducts = async () => {
   });
 };
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  console.log(event);
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+const addToCart = async () => {
+  const cart = document.querySelector('.cart__items');
+  const items = document.querySelector('.items');
+  items.addEventListener('click', async (event) => {
+    if (event.target.tagName === 'BUTTON') {
+      const item = await fetchAPI(`https://api.mercadolibre.com/items/${
+        getSkuFromProductItem(event.target.parentNode)}`);
+      const { id, title, price } = item;
+      cart.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
+    }
+  });
+};
 
 window.onload = function onload() {
-  getProducts();
+  appendProducts();
+  addToCart();
 };
