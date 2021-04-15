@@ -46,13 +46,25 @@ function getProduct() {
 }
 // fim de Crie uma listagem de produtos
 
-// Crie uma listagem de produtos no cart
+// carrinho de compras
+
+// apagar itens do carrtinho
+function apagarCart() {
+  const btnApagarCart = document.querySelector('.empty-cart');
+  btnApagarCart.addEventListener('click', () => {
+    const ol = document.querySelector('.cart__items');
+    ol.innerHTML = '';
+  });
+}
+
 // Remova o item do carrinho de compras ao clicar nele
 function cartItemClickListener(event) {
   const clicarItem = event.target;
   clicarItem.remove();
 }
+// fim apagar itens do carrtinho
 
+// Crie uma listagem de produtos no cart
 // crio os elementos html / adiciono o produto ao carrinho de compras
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
@@ -84,17 +96,19 @@ function getIDFromProductItem(item) {
 
 // função para cliclar no botão e pegar o conteudo especifico desse clique
 function clickAddToCart() {
+  apagarCart(); // chamo a função de esvaziar o carrinho aqui, pois só posso apagar os intens depois que eles "existirem"
   const btnAddToCart = document.querySelectorAll('.item__add');
   btnAddToCart.forEach((index) => {
       index.addEventListener('click', (event) => {
-      const clicarBtn = event.target.parentNode;
+      const clicarBtn = event.target.parentNode; // estou pegandi o elemnto pai do botão, ou seja, o elemento todo
       getIDFromProductItem(clicarBtn);
     });
   });
 }
 // fim de crie uma listagem de produtos no cart
+// fim carrinho de compras
 
 // onload
 window.onload = function onload() {
-  getProduct().then(() => clickAddToCart());
+  getProduct().then(() => clickAddToCart()); // crio uma promisse dentro de get product pois só posso chamar o clickAddToCart() depois que o getPtoduct foir "resolvidos" 
 };
