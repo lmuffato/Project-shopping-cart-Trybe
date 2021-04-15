@@ -30,27 +30,51 @@ function createProductItemElement({ sku, name, image }) {
 
 function cartItemClickListener(event) {
   const element = event.target;
+  const elementItem = element.id;
   element.remove();
-}
-
-function addListenerCartItem() {
-  document.querySelector('.cart__items').addEventListener('click', cartItemClickListener);
+  localStorage.removeItem(`id-${elementItem}`);
+  localStorage.removeItem(`name-${elementItem}`);
+  localStorage.removeItem(`salePrice-${elementItem}`);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
+  let totalItems = 0;
+  if (localStorage.getItem('totalCartItems')) {
+    totalItems = parseInt(localStorage.getItem('totalCartItems'), 10);
+  }
+  localStorage.setItem(`id-${(totalItems + 1)}`, sku);
+  localStorage.setItem(`name-${(totalItems + 1)}`, name);
+  localStorage.setItem(`salePrice-${(totalItems + 1)}`, salePrice);
+  li.id = `${totalItems + 1}`;
   return li;
 }
 
-const getProducts = () => {
+function onloadCreateCartItemElement() {
+  for (let index = 1; index <= parseInt(localStorage.getItem('totalCartItems'), 10); index += 1) {
+    if (localStorage.getItem(`id-${index}`)) {
+      const li = document.createElement('li');
+      li.className = 'cart__item';
+      const sku = localStorage.getItem(`id-${index}`);
+      const itemName = localStorage.getItem(`name-${index}`);
+      const itemPrice = localStorage.getItem(`salePrice-${index}`);
+      li.id = `${index}`;
+      li.innerText = `SKU: ${sku} | NAME: ${itemName} | PRICE: $${itemPrice}`;
+      li.addEventListener('click', cartItemClickListener);
+      document.querySelector('.cart__items').appendChild(li);
+    }
+  }
+}
+
+const getProducts = async () => {
   const item = 'computador';
   const url = `https://api.mercadolibre.com/sites/MLB/search?q=${item}`;
-  return fetch(url)
-  .then((response) => response.json())
-  .then((data) => data.results);
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.results;
 };
 
 async function fetchProduct() {
@@ -80,6 +104,11 @@ async function appendShoppingCart(event) {
   };
   const cartElement = createCartItemElement(paramObj);
   document.querySelector('.cart__items').appendChild(cartElement);
+  if (localStorage.getItem('totalCartItems')) {
+    localStorage.totalCartItems = parseInt(localStorage.getItem('totalCartItems'), 10) + 1;
+  } else {
+    localStorage.setItem('totalCartItems', 1);
+  }
 }
 
 const addListener = () => {
@@ -89,5 +118,5 @@ const addListener = () => {
 window.onload = function onload() {
   fetchProduct();
   addListener();
-  addListenerCartItem();
+  onloadCreateCartItemElement();
 };
