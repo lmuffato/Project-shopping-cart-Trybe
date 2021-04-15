@@ -42,6 +42,12 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+  const cartList = document.querySelector('.cart__items');
+  cartList.removeChild(event.target);
+}
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -70,10 +76,10 @@ const fechProductId = async (itemId) => {
   cartList.appendChild(itemList);
 };
 
-function cartItemClickListener(event) {
+function productClickListener(event) {
   // coloque seu código aqui
   const id = getSkuFromProductItem(event.target.parentNode);
-  console.log(id);
+  // console.log(id);
   fechProductId(id);
 }
 
@@ -81,7 +87,7 @@ const clickButton = () => {
   const buttons = document.querySelectorAll('.item__add');
 
   buttons.forEach((button) =>
-    button.addEventListener('click', cartItemClickListener));
+    button.addEventListener('click', productClickListener));
 };
 
 const fetchProducts = async () => {
