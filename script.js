@@ -4,6 +4,41 @@
 
 // Constante declerada para os requisitos 3 e 4
 const getOl = document.querySelector('.cart__items');
+const getPrice = document.querySelector('.total-price');
+
+// Requisito 5
+// Requisito feito com ajuda do Guilherme Lira, via chamada Slack
+const getParagrafo = document.querySelector('.total-price');
+  
+const verificaLista = () => {
+  const listas = document.querySelectorAll('.cart__items li');
+
+if (listas.length >= 1) return listas;
+};
+
+const precoTotal = (listas) => {
+  let soma = 0;
+
+  listas.forEach((li) => {
+    const lista = li.innerText.split('$');
+    const number = Number(lista[1]);
+    soma += number;
+  });
+
+  if (soma === Math.round(soma)) return `${soma}`;
+  if (soma === Number(soma.toFixed(1))) return `${soma.toFixed(1)}`;
+   return `${soma.toFixed(2)}`;
+};
+
+const precoAsync = async () => {
+  try {
+    const li = await verificaLista();
+    const total = await precoTotal(li);
+    getParagrafo.innerText = total;
+  } catch (error) {
+    getParagrafo.innerText = '0';
+  }
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -36,17 +71,22 @@ function createProductItemElement({ id, title, thumbnail }) {
 // }
 
 // Requisito 4 
-const savingList = (() => localStorage.setItem('Lista_de_Produtos', getOl.innerHTML));
+const savingList = (() => {
+  localStorage.setItem('Lista_de_Produtos', getOl.innerHTML);
+  localStorage.setItem('Precos', getPrice.innerHTML);
+});
 
 // Requisito 3
 function cartItemClickListener(event) {
   // coloque seu código aqui
   event.target.remove();
   savingList();
+  precoAsync();
 }
 
 const getListSaved = (() => {
   getOl.innerHTML = localStorage.getItem('Lista_de_Produtos');
+  getPrice.innerHTML = localStorage.getItem('Precos');
   
   const getLi = document.querySelectorAll('.cart__item');
 
@@ -95,6 +135,7 @@ const AppendIdItem = (data) => {
       const element = createCartItemElement(data[index]);
       cart.appendChild(element);
       savingList();
+      precoAsync();
     });
   });
 };
@@ -104,7 +145,6 @@ async function carMarket() {
     const dado = await getPromiseComputer(); // requisito 1
     await AppendItem(dado); // requisito 1
     await AppendIdItem(dado.results); // requisito 2
-    cartItemClickListener(); // requisito 3
   } catch (error) {
     console.log('Falha na pesquisa');
   }
@@ -113,4 +153,5 @@ async function carMarket() {
 window.onload = function onload() {
   carMarket();
   getListSaved();
+  precoAsync();
 };
