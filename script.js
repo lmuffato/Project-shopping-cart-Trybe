@@ -1,5 +1,3 @@
-window.onload = function onload() { };
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -46,8 +44,6 @@ const getProducts = async () => {
   });
 };
 
-getProducts();
-
 // function cartItemClickListener(event) {
 //   // coloque seu código aqui
 // }
@@ -59,3 +55,7 @@ getProducts();
 //   li.addEventListener('click', cartItemClickListener);
 //   return li;
 // }
+
+window.onload = function onload() {
+  getProducts();
+};
