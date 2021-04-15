@@ -13,11 +13,6 @@ function createCustomElement(element, className, innerText) {
 }
 
 //  Requisito 1
-async function fetchProducts() {
-  return fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-    .then((response) => response.json())
-      .then((r) => r);
-}
 
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
@@ -29,6 +24,12 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
+}
+
+async function fetchProducts() {
+  return fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+    .then((response) => response.json())
+      .then((r) => r);
 }
 
 async function getProducts() {
