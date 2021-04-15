@@ -28,9 +28,14 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  const element = event.target;
+  element.remove();
+}
+
+function addListenerCartItem() {
+  document.querySelector('.cart__items').addEventListener('click', cartItemClickListener);
+}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -84,4 +89,5 @@ const addListener = () => {
 window.onload = function onload() {
   fetchProduct();
   addListener();
+  addListenerCartItem();
 };
