@@ -24,21 +24,19 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 const getItemPromise = async () => {
-  const data =  await fetch("https://api.mercadolibre.com/sites/MLB/search?q=computador")
-    .then((resolve) => resolve.json().then((Data) => Data.results))
+  const data = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+    .then((resolve) => resolve.json().then((Data) => Data.results));
   data.forEach((computador) => {
     const infoComputador = {
       sku: computador.id,
       name: computador.title,
       image: computador.thumbnail,
-    }
+    };
     const items = document.querySelector('.items');
-    items.appendChild(createProductItemElement(infoComputador))
+    items.appendChild(createProductItemElement(infoComputador));
   });
 }
-getItemPromise()
-
-
+getItemPromise();
 
 // const appendChild = () => {
 //   const sectionMain = document.querySelector('.items')
