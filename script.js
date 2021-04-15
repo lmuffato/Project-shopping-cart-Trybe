@@ -4,14 +4,14 @@ function createCustomElement(element, className, innerText) {
   e.innerText = innerText;
   return e;
 }
+const constItemClass = ('.cart__items');
 
 function loadCartData() {
-  // eslint-disable-next-line sonarjs/no-duplicate-string
-  document.querySelector('.cart__items').innerHTML = localStorage.getItem('Cart data');
+  document.querySelector(constItemClass).innerHTML = localStorage.getItem('Cart data');
 }
 
 function saveCartInLocalStorage() {
-  localStorage.setItem('Cart data', document.querySelector('.cart__items').innerHTML);
+  localStorage.setItem('Cart data', document.querySelector(constItemClass).innerHTML);
 }
 
 function createProductImageElement(imageSource) {
@@ -23,14 +23,14 @@ function createProductImageElement(imageSource) {
 
 async function totalPrice() {
   let sumPrices = 0;
-  const cartItems = document.querySelector('.cart__items');
+  const cartItems = document.querySelector(constItemClass);
   cartItems.childNodes.forEach((child) => {
     const price = child.innerText.split('$')[1];
     sumPrices += Number(price);
     return sumPrices;
   });
   saveCartInLocalStorage();
-  document.querySelector('.total-price').innerHTML = `Total de: R$${sumPrices}`;
+  document.querySelector('.total-price').innerHTML = `${sumPrices}`;
 }
 
 function cartItemClickListener(event) {
@@ -51,7 +51,7 @@ async function onClick(sku) {
     const response = await fetch(`https://api.mercadolibre.com/items/${sku}`);
     const results = await response.json();
     const addItemToCart = createCartItemElement(results);
-    document.querySelector('.cart__items').appendChild(addItemToCart);
+    document.querySelector(constItemClass).appendChild(addItemToCart);
     addItemToCart.addEventListener('click', cartItemClickListener);
     totalPrice();
   } catch (error) {
@@ -71,15 +71,14 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 } 
 
-// eslint-disable-next-line no-unused-vars
-function getSkuFromProductItem(item) {
+/* function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
-}
+} */
 
 function removeAllCartItems() {
   const removeButton = document.querySelector('.empty-cart');
   removeButton.addEventListener('click', () => {
-    document.querySelector('.cart__items').innerHTML = '';
+    document.querySelector(constItemClass).innerHTML = '';
     totalPrice();
   });
 }
