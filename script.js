@@ -32,7 +32,11 @@ function loadCartFromStorage() {
 }
 
 async function addProductsOnList() {
-  document.querySelector('.loading').className = 'loading on';
+  const loadingText = document.createElement('p');
+  loadingText.className = 'loading';
+  loadingText.innerText = 'Loading';
+  document.querySelector('.loadingPage').appendChild(loadingText);
+  document.querySelector('.loadingPage').className = 'loadingPage on';
   const itemsListSection = document.querySelector('.items');
   const apiRequestedItens = await fetch("https://api.mercadolibre.com/sites/MLB/search?q=$computador")
     .then((response) => response.json())
@@ -43,7 +47,8 @@ async function addProductsOnList() {
   
   const listedProductsButtons = document.querySelectorAll('.item button');
   listedProductsButtons.forEach(button => button.addEventListener('click', (e) => productListItemClickListener(e)));
-  document.querySelector('.loading').className = 'loading';
+  document.querySelector('.loadingPage').removeChild(loadingText);
+  document.querySelector('.loadingPage').className = 'loadingPage';
 }
 
 async function addProducstOnCart({sku, name, salePrice}) {
@@ -86,7 +91,11 @@ function getSkuFromProductItem(item) {
 }
 
 async function productListItemClickListener(event) {
-  document.querySelector('.loading').className = 'loading on';
+  const loadingText = document.createElement('p');
+  loadingText.className = 'loading';
+  loadingText.innerText = 'Loading';
+  document.querySelector('.loadingPage').appendChild(loadingText);
+  document.querySelector('.loadingPage').className = 'loadingPage on';
   const cardItemProduct = event.target.parentElement;
   const cardItemProductId = cardItemProduct.childNodes[0].innerText;
   
@@ -95,7 +104,9 @@ async function productListItemClickListener(event) {
       .then((item) => item);
   
   addProducstOnCart({sku: id, name: title, salePrice:price});
-  document.querySelector('.loading').className = 'loading';
+  
+  document.querySelector('.loadingPage').removeChild(loadingText);
+  document.querySelector('.loadingPage').className = 'loadingPage';
 }
 
 function cartItemClickListener(event) {

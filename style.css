@@ -75,11 +75,11 @@
   text-align: center;
 }
 
-.loading {
+.loadingPage {
   display: none;
 }
 
-.loading.on {
+.loadingPage.on {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -90,13 +90,13 @@
   height: 100%;
 }
 
-.loading.on svg {
+.loadingPage.on svg {
   width: 250px;
   height: 250px;
   color: white;
 }
 
-.loading.on p {
+.loadingPage.on p {
   color: white;
   font-size: 48px;
   font-family: Helvetica, sans-serif;
