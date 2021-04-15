@@ -32,16 +32,50 @@ function cartItemClickListener(event) {
   // Para esse trecho da função consultei a seguinte documentação:
   // https://catalin.red/removing-an-element-with-plain-javascript-remove-method/
   const { target } = event;
+  const id = target.dataset.sku;
   target.remove();
+  // Para o trecho a seguir utilizando dataset, estudei o seguinte conteúdo:
+  // https://developer.mozilla.org/pt-BR/docs/Web/API/HTMLOrForeignElement/dataset
+  const storageItens = JSON.parse(localStorage.getItem('cartItens'));
+  if (storageItens) {
+    const newArray = storageItens.filter((product) => product.sku !== id);
+    console.log(newArray);
+    localStorage.setItem('cartItens', JSON.stringify(newArray));
+  }
 }
+
+const verifyLocalStorage = () => {
+  const storageItens = localStorage.getItem('cartItens');
+  if (storageItens === null || storageItens === undefined) {
+    localStorage.setItem('cartItens', JSON.stringify([]));
+  } 
+};
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
+  // Para o trecho a seguir utilizando dataset, estudei o seguinte conteúdo:
+  // https://developer.mozilla.org/pt-BR/docs/Web/API/HTMLOrForeignElement/dataset
+  li.dataset.sku = sku;
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const chargeLocalStorage = () => {
+  const products = JSON.parse(localStorage.getItem('cartItens'));
+  products.forEach((product) => {
+    const li = createCartItemElement(product);
+    const ol = document.querySelector('.cart__items');
+     ol.appendChild(li);
+  });
+};
+
+const addItemToLocalStorage = ({ sku, name, salePrice }) => {
+  const storageItens = JSON.parse(localStorage.getItem('cartItens'));
+  storageItens.push({ sku, name, salePrice });
+  localStorage.setItem('cartItens', JSON.stringify(storageItens));
+};
 
 // Para essa função consultei a seguinte documentação:
 // https://developer.mozilla.org/pt-BR/docs/Web/API/Element/closest
@@ -55,6 +89,7 @@ const fetchProductItem = async (e) => {
   const li = createCartItemElement({ sku, name, salePrice });
   const ol = document.querySelector('.cart__items');
   ol.appendChild(li);
+  addItemToLocalStorage({ sku, name, salePrice });
 };
 
 const handleCartAddClick = () => {
@@ -86,4 +121,6 @@ window.onload = function onload() {
   getObjectItems().then(() => {
     handleCartAddClick();
   });
+  verifyLocalStorage();
+  chargeLocalStorage();
 };
