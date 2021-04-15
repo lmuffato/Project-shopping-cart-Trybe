@@ -125,8 +125,21 @@ async function appendShoppingCart(event) {
   totalPrice();
 }
 
+const clearShoppingCart = () => {
+  const parentElement = document.querySelector('ol');
+  while (parentElement.childNodes.length > 0) {
+    const index = parentElement.firstChild.id;
+    parentElement.firstElementChild.remove();
+    localStorage.removeItem(`id-${index}`);
+    localStorage.removeItem(`name-${index}`);
+    localStorage.removeItem(`salePrice-${index}`);
+  }
+  totalPrice();
+};
+
 const addListener = () => {
   document.querySelector('.items').addEventListener('click', appendShoppingCart);
+  document.querySelector('.empty-cart').addEventListener('click', clearShoppingCart);
 };
 
 window.onload = function onload() {
