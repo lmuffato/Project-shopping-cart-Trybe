@@ -31,20 +31,26 @@ function getSkuFromProductItem(item) {
 // Requisito 4
 const classCartItems = '.cart__items';
 
-// const loudLocalStorage = () => {
-//   const cart = document.querySelector(classCartItems);
-//   cart.innerHTML = JSON.parse(localStorage.getItem('cartList'));
-// };
-
-// const updateLocalStorage = () => {
-//   const cart = document.querySelector(classCartItems);
-//   localStorage.setItem('cartList', JSON.stringify(cart.innerHTML));
-// };
+const updateLocalStorage = () => {
+  const cart = document.querySelector(classCartItems);
+  localStorage.setItem('cartList', cart.innerHTML);
+};
 
 function cartItemClickListener(event) {
   event.target.remove();
-  // updateLocalStorage();
+  updateLocalStorage();
 }
+
+const loudLocalStorage = () => {
+  const cart = document.querySelector(classCartItems);
+  cart.innerHTML = localStorage.getItem('cartList');
+  const cartLi = document.querySelectorAll('.cart__item');
+  const arrayLi = [...cartLi];
+  arrayLi.forEach((item) => {
+    item.addEventListener('click', cartItemClickListener);
+  });
+  console.log(arrayLi);
+};
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
@@ -96,7 +102,7 @@ const addItensToCart = () => {
       const data = await response.json();
       const cartItem = createCartItemElement(data);
       cart.appendChild(cartItem);
-      // updateLocalStorage();
+      updateLocalStorage();
       console.log(data);
     });
   });
@@ -105,5 +111,5 @@ const addItensToCart = () => {
 window.onload = () => {
   fetchProtucts();
   addItensToCart();
-  // loudLocalStorage();
+  loudLocalStorage();
 };
