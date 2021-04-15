@@ -118,9 +118,15 @@ function clearCart() {
   });
 }
 
+function removeLoading() {
+  const loading = document.querySelector('.loading');
+  loading.remove();
+}
+
 async function createProductsList() {
   try {
     const data = await getProducts();
+    await removeLoading();
     await appendProducts(data);
     await appendToCart(data.results);
     await showTotalPrice();
