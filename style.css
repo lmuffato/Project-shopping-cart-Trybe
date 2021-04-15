@@ -74,3 +74,13 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.cart .total-price {
+  width: 100%;
+  height: auto;
+  background-color: rgb(50, 128, 8);
+  text-align: center;
+  padding: 5px;
+  color: white;
+  font-weight: 600;
+}
