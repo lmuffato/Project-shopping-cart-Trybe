@@ -51,6 +51,10 @@ const createItemsSection = (data) => {
   });
 };
 
+const cartItemClickListener = (event) => {
+    event.target.remove();// https://developer.mozilla.org/pt-BR/docs/Web/API/ChildNode/remove
+};
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -58,7 +62,7 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 };
 
