@@ -1,5 +1,5 @@
 const erro = 'Não encontrei nada';
-const olComputers = document.querySelector('.cart__items');
+const classOl = '.cart_items';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -15,6 +15,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+// Cria elementos section para a lista de produtos
 function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -26,41 +27,53 @@ function createProductItemElement({ id, title, thumbnail }) {
 
   return section;
 }
-
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
-function cartItemClickListener(event) {
-  console.log('cliclei no li');
-  olComputers.removeChild(event.target);
+// Função responsavel pela busca do id do elemento clicado
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
 }
 
+// Função callback para retira um item da lista
+function cartItemClickListener({ target }) {
+  document.querySelector(classOl).removeChild(target);
+}
+
+// Cria elementos li para adicionar ao carrinho
 function createCartItemElement({ id, title, price }) {
-  console.log(id, price, title);
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
-  console.log(li);
+
   return li;
 }
 
-const dadosAPI = async (id) => {
-  const dados = await fetch(`https://api.mercadolibre.com/items/${id}`);
-  const dadosValue = await dados.json();
-  return dadosValue;
-};
-
-const eventButton = async () => {
-  console.log('clickei no btn');
-  const elementLi = createCartItemElement(await dadosAPI('MLB1341706310'));
-  olComputers.appendChild(elementLi);
-};
-
 // Função para limpar toda a lista
 const clearList = () => {
-  olComputers.innerHTML = '';
+  document.querySelector('.cart__items').innerHTML = '';
+};
+
+// Busca de daods atraves do 'ID' do produto
+const dadosAPI = async (id) => {
+  const dados = await fetch(`https://api.mercadolibre.com/items/${id}`);
+  const result = await dados.json();
+  return result;
+};
+
+// Adiciona evento de click em todos "item_add"
+const getListCart = async () => {
+  const btnCart = document.querySelectorAll('.item__add');
+  console.log(btnCart);
+  btnCart.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      // console.log('clikei no btn');
+      try {
+        const dados = await dadosAPI(getSkuFromProductItem(btn.parentNode));
+        document.querySelector('.cart__items').appendChild(createCartItemElement(dados));
+      } catch (error) {
+        return erro;
+      }
+    });
+  });
 };
 
 /*
@@ -84,10 +97,12 @@ const appendComputers = (dados) => {
   });
 };
 
-// Adiciona computadores na pagina web
+// Adiciona computadores na pagina web e lista
 const createDados = async () => {
   try {
-    appendComputers(await dadosAPIPcs());
+    const dados = await dadosAPIPcs();
+    appendComputers(dados);
+    await getListCart();
   } catch (error) {
     return erro;
   }
@@ -95,6 +110,5 @@ const createDados = async () => {
 
 window.onload = function onload() {
   createDados();
-  document.querySelector('.btn').addEventListener('click', eventButton);
   document.querySelector('.empty-cart').addEventListener('click', clearList);
 };
