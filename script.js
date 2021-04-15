@@ -30,7 +30,7 @@ function createProductItemElement({ id, title, thumbnail }) { // create the sect
 
 function cartItemClickListener(event) {
   // console.log(event.target);
-  event.target.remove()
+  event.target.remove();
 }
 
 function createCartItemElement({ id, title, price }) {
@@ -58,7 +58,6 @@ const addItemToCart = async (id) => {
   const itemData = await foundItems(endPointCustom);
   const newCartItemElement = createCartItemElement(itemData);
   document.querySelector('.cart__items').appendChild(newCartItemElement);
-
 };
 
 const setEventsToAddCartButtons = async () => { // places an AddEventListener on each button of the item__adds class.
