@@ -65,11 +65,18 @@ const addToCart = async () => {
         getSkuFromProductItem(event.target.parentNode)}`);
       const { id, title, price } = item;
       cart.appendChild(createCartItemElement({ sku: id, name: title, salePrice: price }));
+      localStorage.setItem('cart', cart.innerHTML);
     }
   });
+};
+
+const getCartItems = async () => {
+  const cart = document.querySelector('.cart__items');
+  cart.innerHTML = localStorage.getItem('cart');
 };
 
 window.onload = function onload() {
   appendProducts();
   addToCart();
+  getCartItems();
 };
