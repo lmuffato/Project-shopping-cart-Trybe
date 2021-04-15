@@ -66,15 +66,16 @@ function cartItemClickListener() {
   computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
     const clickedElement = event.target;
     clickedElement.remove();
-  })
-  );
+  }));
 }
 
+// uso do this visto no repositorio do João Nascimento 
+// para tentar evitar lint - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/54
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener());
+  li.addEventListener('click', this.cartItemClickListener);
   return li;
 }
 
