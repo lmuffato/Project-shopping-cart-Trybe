@@ -1,5 +1,3 @@
-window.onload = function onload() { };
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -51,7 +49,7 @@ const productList = (data) => {
 const fetchApi = async () => {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const data = await response.json();
-  productList(data);
+  await productList(data);
 };
 
-fetchApi();
+window.onload = function onload() { fetchApi(); };
