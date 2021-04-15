@@ -12,11 +12,11 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, title, thumbnail }) {
+function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
 
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
@@ -32,15 +32,15 @@ function createProductItemElement({ sku, title, thumbnail }) {
 //   // coloque seu código aqui
 // }
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ id, title, price }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
-const getProductPromise = (product) => (
+const fetchProduct = (product) => (
   new Promise((resolve) => {
     fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
       .then((response) => {
@@ -51,15 +51,48 @@ const getProductPromise = (product) => (
   })
 );
 
+const fetchId = (itemId) => (
+  new Promise((resolve) => {
+    fetch(`https://api.mercadolibre.com/items/${itemId}`)
+    .then((result) => {
+      result.json().then((data) => {
+        resolve(data);
+      });
+    });
+  })
+);
+
 const appendItems = async (data) => {
-  const items = document.querySelector('.items');
-  data.results.forEach((element) => {
+  const items = await document.querySelector('.items');
+  await data.results.forEach((element) => {
     const result = createProductItemElement(element);
     items.appendChild(result);
   });
 };
 
+const appendToCart = (data) => {
+  const cart = createCartItemElement(data);
+  document.querySelector('.cart__items').appendChild(cart);
+};
+
+const addToCart = (product, target) => (
+  fetchProduct(product)
+  .then(() => {
+    const id = target.previousSibling.previousSibling.previousSibling.innerText;
+    fetchId(id)
+    .then((result) => appendToCart(result));
+  })
+);
+
+const addToCartEvent = (product) => {
+  const itemsContainer = document.querySelector('.items');
+  itemsContainer.addEventListener('click', (event) => (
+    event.target.classList.contains('item__add') ? addToCart(product, event.target) : undefined
+  ));
+};
+
 window.onload = function onload() {
-  getProductPromise('computador')
+  fetchProduct('computador')
   .then((result) => appendItems(result));
+  addToCartEvent('computador');
  };
