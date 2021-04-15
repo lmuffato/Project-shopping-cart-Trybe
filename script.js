@@ -35,7 +35,7 @@ const getItemPromise = async () => {
     const items = document.querySelector('.items');
     items.appendChild(createProductItemElement(infoComputador));
   });
-}
+};
 getItemPromise();
 
 // const appendChild = () => {
