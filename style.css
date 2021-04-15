@@ -17,6 +17,14 @@
   display: flex;
 }
 
+.loading {
+  font-family: Courier New, Courier, monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+}
+
 .container {
   display: flex;
   justify-content: space-around;
@@ -58,6 +66,7 @@
 .item .item__add {
   background-color: green;
   border: 0;
+  color: white;
   cursor: pointer;
   margin: 0;
   padding: 5px;
