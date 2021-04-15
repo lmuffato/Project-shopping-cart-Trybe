@@ -52,6 +52,20 @@ const clearList = () => {
   document.querySelector('.cart__items').innerHTML = '';
 };
 
+const sumPrices = (price) => {
+  const span = document.querySelector('.total-price');
+  const valueAtual = parseFloat(span.innerHTML);
+  span.innerHTML = price + valueAtual;
+  // const span = document.querySelector('.total-price');
+  // const value = span.innerHTML;
+  // let test = '';
+  // for (let index = 14; index < value.length; index += 1) {
+  //   test += value[index];
+  // }
+  // const priceAtual = parseFloat(test);
+  // span.innerHTML = `Preço Total: $${priceAtual + price}`;
+};
+
 // Busca de daods atraves do 'ID' do produto
 const dadosAPI = async (id) => {
   const dados = await fetch(`https://api.mercadolibre.com/items/${id}`);
@@ -67,6 +81,7 @@ const getListCart = async () => {
       // console.log('clikei no btn');
       try {
         const dados = await dadosAPI(getSkuFromProductItem(btn.parentNode));
+        sumPrices(dados.price);
         document.querySelector('.cart__items').appendChild(createCartItemElement(dados));
       } catch (error) {
         return erro;
