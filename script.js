@@ -30,7 +30,7 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-const totalPrice = document.querySelector('#spanPrice');
+const totalPrice = document.querySelector('.total-price');
 
 const addSum = (arr) => {
   totalPrice.innerText = arr;
@@ -48,7 +48,10 @@ const sumLi = (list) => {
     const price = Number(text.split('$')[1]);
     sum += price;
   });
-  return `$:${sum.toFixed(2)}`;
+  const str = `${sum}`;
+  if (sum === Math.round(sum)) return str;
+  if (Number(sum.toFixed(1)) === sum) return `${sum.toFixed(1)}`;
+  return `${sum.toFixed(2)}`;
 };
 
 const sumTotal = async () => {
@@ -57,7 +60,7 @@ const sumTotal = async () => {
   const totalSum = await sumLi(cartItems);
   await addSum(totalSum);
  } catch (error) {
-   addSum('$: 0');
+   addSum('0');
  }
 };
 
