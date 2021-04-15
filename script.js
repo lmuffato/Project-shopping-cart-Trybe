@@ -1,14 +1,3 @@
-window.onload = function onload() { 
-  apiResults('computador')
-  .then((results) => {
-    results.forEach(element => {
-      const createProduct = createProductItemElement(element);
-      const getItems = document.querySelector('.items');
-      getItems.appendChild(createProduct);
-    });
-  })
-};
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -35,25 +24,34 @@ function createProductItemElement({ id, title, thumbnail }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
+
+// function cartItemClickListener(event) {
+//   // coloque seu código aqui
+// }
+
+// function createCartItemElement({ sku, name, salePrice }) {
+//   const li = document.createElement('li');
+//   li.className = 'cart__item';
+//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+//   li.addEventListener('click', cartItemClickListener);
+//   return li;
+// }
+
+async function apiResults(query) {
+  const data = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
+  const dataJson = await data.json();
+  return dataJson.results;
 }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
-
-
-  async function apiResults (query) {
-    const data = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
-    const dataJson = await data.json();
-    return dataJson.results;
-}
+window.onload = function onload() {
+  apiResults('computador').then((results) => {
+    results.forEach((element) => {
+      const createProduct = createProductItemElement(element);
+      const getItems = document.querySelector('.items');
+      getItems.appendChild(createProduct);
+    });
+  });
+};
