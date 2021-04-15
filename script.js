@@ -33,6 +33,16 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+const createProductObject = (item) => ({ sku: item.id, name: item.title, image: item.thumbnail });
+
+const appendProductsObject = async () => {
+  const items = document.getElementsByClassName('items')[0];
+  const array = await fetchComputador();
+  array.forEach((item) => {
+    const object = createProductObject(item);
+    items.appendChild(createProductItemElement(object));
+  });
+};
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
@@ -49,19 +59,6 @@ function createProductItemElement({ sku, name, image }) {
 //   return li;
 // }
 
-const createProductsObject = async () => {
-  const array = await fetchComputador();
-  array.forEach((item) => {
-    const productObject = {
-      sku: item.id,
-      name: item.title,
-      image: item.thumbnail,
-    };
-    const items = document.getElementsByClassName('items')[0];
-    items.appendChild(createProductItemElement(productObject));
-  });
-};
-
-window.onload = function onload() { 
-  createProductsObject();
+window.onload = function onload() {
+  appendProductsObject();
 };
