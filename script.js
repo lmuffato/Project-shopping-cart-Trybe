@@ -94,6 +94,7 @@ const AppendIdItem = (data) => {
       const cart = document.querySelector('.cart__items');
       const element = createCartItemElement(data[index]);
       cart.appendChild(element);
+      savingList();
     });
   });
 };
