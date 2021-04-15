@@ -31,19 +31,19 @@ function getSkuFromProductItem(item) {
 // Requisito 4
 const classCartItems = '.cart__items';
 
-const loudLocalStorage = () => {
-  const cart = document.querySelector(classCartItems);
-  cart.innerHTML = JSON.parse(localStorage.getItem('cartList'));
-};
+// const loudLocalStorage = () => {
+//   const cart = document.querySelector(classCartItems);
+//   cart.innerHTML = JSON.parse(localStorage.getItem('cartList'));
+// };
 
-const updateLocalStorage = () => {
-  const cart = document.querySelector(classCartItems);
-  localStorage.setItem('cartList', JSON.stringify(cart.innerHTML));
-};
+// const updateLocalStorage = () => {
+//   const cart = document.querySelector(classCartItems);
+//   localStorage.setItem('cartList', JSON.stringify(cart.innerHTML));
+// };
 
 function cartItemClickListener(event) {
   event.target.remove();
-  updateLocalStorage();
+  // updateLocalStorage();
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -105,5 +105,5 @@ const addItensToCart = () => {
 window.onload = () => {
   fetchProtucts();
   addItensToCart();
-  loudLocalStorage();
+  // loudLocalStorage();
 };
