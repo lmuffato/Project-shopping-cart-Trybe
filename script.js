@@ -29,7 +29,9 @@ function createProductItemElement({ sku, name, image }) {
 // }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  if (event.target.classList.contains('cart__item')) {
+    event.target.remove();
+  }
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -86,7 +88,7 @@ async function verifiedFetchItems(url, itemId) {
   throw new Error('endpoint not exist');
 }
 
-function addItemCar(response) {
+const addItemCar = (response) => {
   const obj = {
     sku: response.id,
     name: response.title,
@@ -94,7 +96,7 @@ function addItemCar(response) {
   };
   const cartItems = document.querySelector('.cart__items');
   cartItems.appendChild(createCartItemElement(obj));
-}
+};
 
 async function getItems(event) { 
   if (event.target.classList.contains('item__add')) {
@@ -107,12 +109,19 @@ async function getItems(event) {
   }
 }
 
-async function fetchProductItems() {
+async function fetchProductItems(getItem) {
   const items = document.querySelector('.items');
-  items.addEventListener('click', getItems);
+  items.addEventListener('click', getItem);
+}
+
+// Implementação requisito 3: Remove item do carrinho de compras ao clicar nele
+function carItemRemove(carlistener) {
+  const cartItems = document.querySelector('.cart__items');
+  cartItems.addEventListener('click', (event) => carlistener(event));
 }
 
 window.onload = function onload() { 
   fetchProductList(createProductList);
-  fetchProductItems();
+  fetchProductItems(getItems);
+  carItemRemove(cartItemClickListener);
 };
