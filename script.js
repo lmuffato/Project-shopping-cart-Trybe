@@ -2,7 +2,7 @@
 /* eslint-disable no-new */
 /* eslint-disable no-unreachable */
 
-// Constante declerada para os requisitos 3 e 4
+// Constante declerada para os requisitos 3,4 e 6
 const getOl = document.querySelector('.cart__items');
 const getPrice = document.querySelector('.total-price');
 
@@ -38,6 +38,16 @@ const precoAsync = async () => {
   } catch (error) {
     getParagrafo.innerText = '0';
   }
+};
+
+// Requisito 6
+const emptyCar = document.querySelector('.empty-cart');
+
+const empty = () => {
+  emptyCar.addEventListener('click', () => {
+   getOl.innerHTML = '';
+   precoAsync();
+  });
 };
 
 function createProductImageElement(imageSource) {
@@ -154,4 +164,5 @@ window.onload = function onload() {
   carMarket();
   getListSaved();
   precoAsync();
+  empty();
 };
