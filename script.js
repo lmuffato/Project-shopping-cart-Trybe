@@ -24,25 +24,25 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
+// function cartItemClickListener(event) {
+//   // coloque seu código aqui
+// }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
+// function createCartItemElement({ sku, name, salePrice }) {
+//   const li = document.createElement('li');
+//   li.className = 'cart__item';
+//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+//   li.addEventListener('click', cartItemClickListener);
+//   return li;
+// }
 
 /// Meu código 
 
-// Solução requisito 1: Criar uma listagem de produtos
+// Implementação requisito 1: Criar uma lista de produtos
 async function verifiedFetch(url) {
   if (url === 'https://api.mercadolibre.com/sites/MLB/search?q=computador') {
     return fetch(url)
@@ -66,7 +66,7 @@ function createProductList(listComputers) {
 }
 
 async function fetchProductList(callback) {
-  await verifiedFetch('https://api.mercadolibre.com/sites/MLB/search?q=compuador')
+  await verifiedFetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
       const listComputers = response.results;
       callback(listComputers);
