@@ -61,15 +61,20 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// function cartItemClickListener() {
-//   console.log('teste');
-// }
+function cartItemClickListener() {
+  const computerOnCart = document.querySelectorAll('.cart__item');
+  computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
+    const clickedElement = event.target;
+    clickedElement.remove();
+  })
+  );
+}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener());
+  li.addEventListener('click', cartItemClickListener());
   return li;
 }
 
@@ -78,17 +83,16 @@ async function fetchList(ItemID) {
   const response = await fetch(endpoint);
   const obj = await response.json();
   const fatherElement = document.querySelector('.cart__items');
-  console.log(fatherElement);
     const pc = {
       sku: obj.id,
       name: obj.title,
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
-    console.log(item);
     fatherElement.appendChild(item);
 }
 
+// dica para pegar o elemento pai e, então pegar o ID do produto vista no código do Mateus Martins - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/59
 const markingTargets = () => {
   const addButton = document.querySelectorAll('.item__add');
   addButton.forEach((element) => element.addEventListener('click', async (event) => {
