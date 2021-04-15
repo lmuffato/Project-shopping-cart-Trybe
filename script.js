@@ -52,6 +52,20 @@ const createItemsSection = (data) => {
 };
 
 const cartItemClickListener = (event) => {
+  const textProductID = event.target.innerText.split('').splice(5, 13).join('');
+  const obj = [...Object.entries(localStorage)];
+  for (let index = 0; index < obj.length; index += 1) {
+    const [position, data] = obj[index];
+    const searchKey = JSON.parse(data).sku;/* https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse */
+    if (textProductID === searchKey) {
+      localStorage.removeItem(position);
+      break;
+    }
+  }
+  if (localStorage.length === 0) {
+    const cartListItems = document.querySelector('.cart__items');
+    cartListItems.innerHTML = '';
+  }
     event.target.remove();// https://developer.mozilla.org/pt-BR/docs/Web/API/ChildNode/remove
 };
 
@@ -73,14 +87,27 @@ const itemClickListener = () => {
     const itemID = getSkuFromProductItem(event.target.parentNode); /* https://developer.mozilla.org/pt-BR/docs/Web/API/Node/parentNode */
     const itemSearched = await foundItemsById(itemID);
     const obj = { sku: itemSearched.id, name: itemSearched.title, salePrice: itemSearched.price };
+    localStorage.setItem(localStorage.length, JSON.stringify(obj)); /* https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify */
     selectOl.appendChild(createCartItemElement(obj));
   }));
 };
+
+function loadCardItems() {
+  const keys = Object.entries(localStorage);
+  keys.sort((a, b) => Number(a[0]) - Number(b[0]));
+  keys.forEach((value) => {
+    const obj = JSON.parse(value[1]);
+    const cartList = document.querySelector('.cart__items');
+    const cartObject = { sku: obj.sku, name: obj.name, salePrice: obj.salePrice };
+    cartList.appendChild(createCartItemElement(cartObject));
+  });
+}
 
 window.onload = async function onload() {
   try {
     await foundItemsByType().then((data) => createItemsSection(data));
     await itemClickListener();
+    loadCardItems();
   } catch (error) {
     alert(error);
   }
