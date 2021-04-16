@@ -110,7 +110,7 @@ const addToCartList2 = async (idItem) => {
   const itemToAdd = {
     sku: itemToAddInCart.id,
     name: itemToAddInCart.title,
-    salePrice: itemToAddInCart.price
+    salePrice: itemToAddInCart.price,
   };
   cartList.appendChild(createCartItemElement(itemToAdd));
   totalPrice();
