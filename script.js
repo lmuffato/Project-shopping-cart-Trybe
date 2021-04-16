@@ -1,3 +1,5 @@
+let sum = 0;
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -32,11 +34,18 @@ function cartItemClickListener(event) {
   event.target.remove();
 }
 
+const appendSum = async () => {
+  const selectTotalPrice = document.querySelector('.total-price span');
+  selectTotalPrice.innerText = `$${sum}`;
+};
+
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
+  sum += price;
+  appendSum();
   return li;
 }
 
