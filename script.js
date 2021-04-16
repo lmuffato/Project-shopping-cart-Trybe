@@ -21,11 +21,34 @@ async function updateTotal() {
   value.innerText = `${sum}`;
 }
 
-// fim exercicio 5
+// início fetch ID
+
+const createCartObject = ({ id, title, price }) => ({
+  sku: id,
+  name: title,
+  salePrice: price,
+});
+
+async function fetchId(id) {  
+  const APIUrlId = `https://api.mercadolibre.com/items/${id}`;
+
+  const myObject = {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+  };
+  return new Promise((resolve) => {
+    fetch(APIUrlId, myObject)
+    .then((response) => response.json()
+    .then((data) => {
+      resolve(data);
+    }));
+  });
+}
 
 // inicio funçoes do local storage
 
-const addLocalStorage = (object) => {
+const addLocalStorage = async (id) => {
+  const object = createCartObject(await fetchId(id));
   let storage = [];
   if (localStorage.getItem('cart') !== null) {
     storage = JSON.parse(localStorage.getItem('cart'));
@@ -109,8 +132,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-// Exercicio 3 fim
-
 // Exercicio 6 inicio
 
 const ListenClearBtn = () => {
@@ -120,8 +141,6 @@ const ListenClearBtn = () => {
     clearList();
   });
 };
-
-// exercicio 6 fim
 
 // begin update cart (exercicio4)
 
@@ -138,43 +157,23 @@ async function updateCart() {
   await updateTotal();
 }
 
-// end update cart (exercicio4)
-
 // Inicio ex 2 (add to cart)
 
-// const fetch = require('node-fetch'); 
+const addToCart = async (item) => {
+  const id = getSkuFromProductItem(item.parentElement);
+  await addLocalStorage(id);
+  clearList();
+  updateCart();
+};
 
-const createCartObject = ({ id, title, price }) => ({
-  sku: id,
-  name: title,
-  salePrice: price,
-});
-
-async function fetchId(id) {  
-  const APIUrlId = `https://api.mercadolibre.com/items/${id}`;
-
-  const myObject = {
-    method: 'GET',
-    headers: { Accept: 'application/json' },
-  };
-  return fetch(APIUrlId, myObject)
-  .then((response) => response.json())
-  .then((data) => addLocalStorage(createCartObject(data)));
-}
-  
-async function addToCart() {
+async function addToCartListener() {
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((item) => {
-    item.addEventListener('click', async () => {
-      const id = getSkuFromProductItem(item.parentElement);
-      await fetchId(id);
-      clearList();
-      updateCart();
+    item.addEventListener('click', () => {
+      addToCart(item);
     });
   });
 }
-
-// Final resolução ex 2
 
 // Início resolução exercicio 1
 
@@ -190,7 +189,7 @@ const createItem = (array) => {
   array.forEach((element) => {
     items.appendChild(createProductItemElement(tratarElemento(element)));
   });
-  addToCart();
+  addToCartListener();
 };
 
 const fetchAPI = () => {
@@ -201,12 +200,14 @@ const fetchAPI = () => {
     headers: { Accept: 'application/json' },
   };
   
-  return fetch(APIUrlComputador, myObject)
-  .then((response) => response.json())
-  .then((data) => data.results);
+  return new Promise((resolve) => {
+    fetch(APIUrlComputador, myObject)
+     .then((response) => response.json()
+      .then((data) => {
+        resolve(data.results);
+      }));
+  });
 };
-
-// Final resolução ex 1
 
 // Inicio resolução exercicio 7
 
@@ -218,15 +219,13 @@ const createloading = () => {
   return title;
 };
 
-const start = () => {
+const start = async () => {
   const section = document.querySelector('.items');
   section.appendChild(createloading());
-  setTimeout(() => { 
-    const promisseList = fetchAPI(); 
-    const loading = document.querySelector('.loading');
-    loading.remove();
-    promisseList.then((array) => createItem(array));
-  });
+  const promisseList = await fetchAPI(); 
+  const loading = document.querySelector('.loading');
+  loading.remove();
+  createItem(promisseList);
 };
 
 // Final resolução exercicio 7
