@@ -103,15 +103,16 @@ const fetchItem = async (sku) => {
 };
 
 const showItems = (skus) => {
-  skus.split(',').forEach(async (sku, index) => {
+  const items = skus.split(',').map(async (sku) => {
     try {
       const item = await fetchItem(sku);
-      await addCartItem(item);
-      console.log(index);
+      return item;
     } catch (error) {
       console.log(error);
     }
   });
+  // Ajuda do João Nascimento
+  Promise.all(items).then((item) => item.forEach((el) => addCartItem(el)));
 };
 
 const getLocalStorageCartList = async () => {
