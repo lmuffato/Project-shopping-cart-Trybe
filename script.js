@@ -1,5 +1,6 @@
 const itemsSection = document.getElementsByClassName('items');
 const cartItemsOL = document.getElementsByClassName('cart__items');
+const emptyCartBtn = document.getElementsByClassName('empty-cart');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -101,8 +102,16 @@ const fetchItems = async function () {
   await itemsSection[0].addEventListener('click', addItemToCart);
 };
 
+const clearCartBtn = () => {
+  emptyCartBtn[0].addEventListener('click', () => {
+    cartItemsOL[0].innerHTML = '';
+    setLocalStorage();
+  });
+};
+
 window.onload = function onload() { 
   console.log('Onload emitido');
   getLocalStorage();
   fetchItems();
+  clearCartBtn();
 };
