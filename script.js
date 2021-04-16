@@ -103,14 +103,15 @@ const fetchItem = async (sku) => {
 };
 
 const showItems = (skus) => {
-  skus.split(',').reduce(async (acc, sku) => {
+  skus.split(',').forEach(async (sku, index) => {
     try {
       const item = await fetchItem(sku);
       await addCartItem(item);
+      console.log(index);
     } catch (error) {
       console.log(error);
     }
-  }, '');
+  });
 };
 
 const getLocalStorageCartList = async () => {
