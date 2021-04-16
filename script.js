@@ -36,10 +36,33 @@ function createProductItemElement({ sku, name, image }) {
 
 const createProductObject = (item) => ({ sku: item.id, name: item.title, image: item.thumbnail });
 
+const updatePrice = (salePrice) => {
+  const price = document.getElementById('price');
+  const newPrice = parseFloat(price.innerText) + salePrice;
+  // const text = newPrice.toString();
+  // if (text[text.length - 1] && text[text.length - 2] === 0) {
+  //   price.innerText = newPrice.toFixed(0);
+  // }
+  // if (text[text.length - 2] === 0) {
+  //   price.innerText = newPrice.toFixed(1);
+  // } else {
+  //   price.innerText = newPrice.toFixed(2);
+  // }
+  // if (newPrice - Math.floor(newPrice) === 0) {
+  //   price.innerText = newPrice.toFixed(0);
+  // } else {
+  //   price.innerText = newPrice.toFixed(2);
+  // } 
+  price.innerText = newPrice.toFixed(2);
+  localStorage.setItem('preco', newPrice);
+};
+
 function cartItemClickListener(event) {
   const text = event.target.innerText;
   const indexOf = text.indexOf('|');
-  console.log(text.slice(5, indexOf - 1));
+  const indexOf$ = text.indexOf('$');
+  const price = text.slice(indexOf$ + 1);
+  updatePrice(price * -1);
   localStorage.removeItem(text.slice(5, indexOf - 1));
   return event.target.remove();
 }
@@ -49,6 +72,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  updatePrice(salePrice);
   return li;
 }
 
@@ -85,14 +109,18 @@ const createLiItem = (text) => {
   return li;
 };
 
-const setItemsToList = () => {
+const getLocalStorage = () => {
   const itemsSize = localStorage.length;
-  console.log(localStorage);
+  const price = document.getElementById('price');
   for (let index = 0; index < itemsSize; index += 1) {
     const key = localStorage.key(index);
-    const li = createLiItem(localStorage.getItem(key));
-    const ol = document.querySelector('.cart__items');
-    ol.appendChild(li);
+    if (key !== 'preco') {
+      const li = createLiItem(localStorage.getItem(key));
+      const ol = document.querySelector('.cart__items');
+      ol.appendChild(li);
+    } else {
+      price.innerText = localStorage.getItem(key);
+    }
   }
 };
 // function getSkuFromProductItem(item) {
@@ -100,5 +128,5 @@ const setItemsToList = () => {
 // }
 window.onload = function onload() {
   appendProductsObject();
-  setItemsToList();
+  getLocalStorage();
 };
