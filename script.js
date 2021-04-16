@@ -36,7 +36,7 @@ function cartItemClickListener(event) {
 
 const appendSum = async () => {
   const selectTotalPrice = document.querySelector('.total-price span');
-  selectTotalPrice.innerText = `$${sum}`;
+  selectTotalPrice.innerText = `${sum}`;
 };
 
 function createCartItemElement({ id, title, price }) {
