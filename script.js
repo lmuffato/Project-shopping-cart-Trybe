@@ -45,6 +45,7 @@ function createCartItemElement({ id, title, price }) {
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   sum += price;
+  sum.toFixed(2);
   appendSum();
   return li;
 }
