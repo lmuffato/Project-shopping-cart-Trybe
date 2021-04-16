@@ -32,26 +32,63 @@ function createProductItemElement({ id, title, thumbnail }) {
 //   // coloque seu código aqui
 // }
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ id, title, price }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: R$${price}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
-async function apiResults(query) {
+async function fetchMercadoLivreResults(query) {
   const data = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
   const dataJson = await data.json();
   return dataJson.results;
 }
 
-window.onload = function onload() {
-  apiResults('computador').then((results) => {
-    results.forEach((element) => {
-      const createProduct = createProductItemElement(element);
-      const getItems = document.querySelector('.items');
-      getItems.appendChild(createProduct);
-    });
+async function cartApiRequisition(ItemID) {
+  const data = await fetch(`https://api.mercadolibre.com/items/${ItemID}`);
+  const dataJson = await data.json();
+  return dataJson;
+}
+
+async function getItemSku(event) {
+  const createCartItem = createCartItemElement(
+    await cartApiRequisition(
+      event.target.previousElementSibling.previousElementSibling.previousElementSibling.innerText,
+    ),
+  );
+
+  const selectCartItem = document.querySelector('.cart__items');
+  selectCartItem.appendChild(createCartItem);
+}
+
+function addItemCart() {
+  const itemAdd = document.querySelectorAll('.item__add');
+  itemAdd.forEach((item) => {
+    item.addEventListener('click', getItemSku);
   });
+}
+
+const apiAppendChild = () => {
+  fetchMercadoLivreResults('computador')
+    .then((results) => {
+      results.forEach((element) => {
+        const createProduct = createProductItemElement(element);
+        const getItems = document.querySelector('.items');
+        getItems.appendChild(createProduct);
+      });
+    })
+    .then(() => {
+      addItemCart();
+    });
+};
+
+// async function everyAsyncFunction() {
+//   apiAppendChild();
+//   await addItemCart();
+// }
+
+window.onload = function onload() {
+  apiAppendChild();
 };
