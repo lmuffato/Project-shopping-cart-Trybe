@@ -39,21 +39,7 @@ const createProductObject = (item) => ({ sku: item.id, name: item.title, image: 
 const updatePrice = (salePrice) => {
   const price = document.getElementById('price');
   const newPrice = parseFloat(price.innerText) + salePrice;
-  // const text = newPrice.toString();
-  // if (text[text.length - 1] && text[text.length - 2] === 0) {
-  //   price.innerText = newPrice.toFixed(0);
-  // }
-  // if (text[text.length - 2] === 0) {
-  //   price.innerText = newPrice.toFixed(1);
-  // } else {
-  //   price.innerText = newPrice.toFixed(2);
-  // }
-  // if (newPrice - Math.floor(newPrice) === 0) {
-  //   price.innerText = newPrice.toFixed(0);
-  // } else {
-  //   price.innerText = newPrice.toFixed(2);
-  // } 
-  price.innerText = newPrice.toFixed(2);
+  price.innerText = newPrice;
   localStorage.setItem('preco', newPrice);
 };
 
