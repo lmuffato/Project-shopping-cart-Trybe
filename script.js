@@ -63,16 +63,29 @@ const somaItensDoCarrinho = () => {
   return soma;
 };
 
+// Pega o container do carrinho de compras (o elemento HTML ol)
+const fetchMyCartContainer = () => document.querySelector('ol.cart__items');
+
 // Formata o preço total e atribui o valor ao elemento HTML com classe .total-price
 const precoTotal = () => {
   const total = document.querySelector('.total-price');
   total.innerHTML = (Math.round(somaItensDoCarrinho() * 100) / 100);
+  const myCart = fetchMyCartContainer();
+  if (!myCart.childElementCount) total.innerHTML = '';
+  return total;
+};
+
+// Salva todo o carrinho no local Storage - função adaptada do projeto To Do List
+const saveMyCart = () => {
+  const cart = fetchMyCartContainer();
+  localStorage.setItem('cart', cart.innerHTML);
 };
 
 // Remove um único elemento do carrinho
 function cartItemClickListener(event) {
   event.target.remove();
   precoTotal();
+  saveMyCart();
 }
 
 // Cria um elemento li no carrinho
@@ -84,15 +97,6 @@ function createCartItemElement({ id, title, price }) {
   li.addEventListener('click', cartItemClickListener);
   return ol.appendChild(li);
 }
-
-// Pega o container do carrinho de compras (o elemento HTML ol)
-const fetchMyCartContainer = () => document.querySelector('ol.cart__items');
-
-// Salva todo o carrinho no local Storage - função adaptada do projeto To Do List
-const saveMyCart = () => {
-  const cart = fetchMyCartContainer();
-  localStorage.setItem('cart', cart.innerHTML);
-};
 
 // Recupera o carrinho do local Storage - função adaptada do projeto To Do List
 const getMyCart = () => {
@@ -126,11 +130,13 @@ const clearLocalStorage = () => localStorage.clear();
 
 // Remove todos os itens do carrinho - função adaptada do projeto To Do List
 function eraseAll() {
+  const totalPrice = document.querySelector('.total-price');
   const btnEmptyCart = document.querySelector('.empty-cart');
   btnEmptyCart.addEventListener('click', () => {
     const itensDoCarrinho = fetchMyCartContainer();
     while (itensDoCarrinho.childElementCount > 0) {
       itensDoCarrinho.firstElementChild.remove();
+      totalPrice.innerHTML = '';
     }
     clearLocalStorage();
   });
