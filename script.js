@@ -1,8 +1,10 @@
 // Jogar os itens que vão pro localStorage dentro de uma lista e depois recuperar os objetos de dentro da lista 
 // Usar o JSON.stringfy para transformar o array de objetos em uma string e depos jogar pro localStorage
 // Retornar do localStorage usando o JSON.parse para converter de string para array.
-let sum = 0;
-let subtract = 0;
+// let sum = 0;
+// let subtract = 0;
+
+// -------------------------------------------------- Loading ---------------------------------------------------------------------
 
 function loading() {
   const div = document.createElement('div');
@@ -17,12 +19,7 @@ function getOutLoading() {
   loadingItem.remove();
 }
 
-function fetchApi(url) {
-  loading();
-  return fetch(url)
-    .then((response) => response.json())
-    .then((respo) => respo.results);
-}
+// -------------------------------------------------- Storage ---------------------------------------------------------------------
 
 function addToLocalStorage(itemId, element) {
   const value = element.querySelector('.item__title').textContent;
@@ -33,31 +30,7 @@ function removeOfLocalStorage(element) {
   localStorage.removeItem(localStorage.key(element));
 }
 
-const sumPrices = (item) => {
-  const price = item;
-  sum += price;
-  return item !== undefined ? sum : 0;
-};
-
-const subtractPrices = (item) => {
-  const price = item;
-  subtract += price;
-  return item !== undefined ? subtract : 0;
-};
-
-function calculatePrices() {
-  const total = sumPrices() - subtractPrices();
-  return total;
-}
-calculatePrices();
-// function creatItemPrices(price) {
-//   const currentPrice = sumPrices(price);
-//   const totalPrice = document.createElement('span');
-//   totalPrice.innerHTML = '';
-//   totalPrice.className = 'cart__price';
-//   totalPrice.innerText = `Preço total: $${currentPrice}`;
-//   return totalPrice;
-// }
+// -------------------------------------------------- Nativas ---------------------------------------------------------------------
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -91,7 +64,6 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   const click = event.target;
-  console.log(`Click ${click}`);
   click.remove();
   removeOfLocalStorage(click);
 }
@@ -105,6 +77,8 @@ function createCartItemElement({ sku, name, salePrice }) {
   // console.log(`sumPrices: ${sumPrices(salePrice)}`);
   return li;
 }
+
+// -------------------------------------------------- Cart -----------------------------------------------------------------------
 
 function fetchItems(items) {
   fetch(`https://api.mercadolibre.com/items/${items}`)
@@ -123,7 +97,6 @@ function fetchItems(items) {
 async function addToShoppingCart(sku) {
   await fetchItems(sku);
 }
-
 function getButtons(element) {
   const addButtons = element.querySelector('.item__add');
   const sku = getSkuFromProductItem(element);
@@ -131,9 +104,29 @@ function getButtons(element) {
   addButtons.addEventListener('click', () => addToLocalStorage(sku, element));
 }
 
+function cleanCart() {
+  const emptyCart = document.querySelector('.empty-cart');
+  console.log(emptyCart);
+  emptyCart.addEventListener('click', () => {
+    localStorage.clear();
+    const ol = document.querySelector('.cart__items');
+    ol.innerHTML = '';
+  });
+}
+
+// -------------------------------------------------- Product List ----------------------------------------------------------------
+
+function fetchApi(url) {
+  // loading();
+  return fetch(url)
+    .then((response) => response.json())
+    .then((respo) => respo.results);
+}
+
 function productsList() {
   const itensSection = document.querySelector('.items');
   const url = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
+  loading();
   fetchApi(url)
     .then((results) => {
       results.forEach((element) => {
@@ -156,22 +149,6 @@ function getAll() {
     addToShoppingCart(element);
   }
 }
-
-function cleanCart() {
-  const emptyCart = document.querySelector('.empty-cart');
-  console.log(emptyCart);
-  emptyCart.addEventListener('click', () => {
-    localStorage.clear();
-    const ol = document.querySelector('.cart__items');
-    ol.innerHTML = '';
-  });
-}
-// emptyCart.addEventListener('click', cleanCart);
-// emptyCart.addEventListener('click', () => {
-//   localStorage.clear();
-//   const ol = document.querySelector('.cart__items');
-//   ol.innerHTML = '';
-// });
 
 window.onload = function onload() {
   productsList();
