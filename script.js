@@ -1,5 +1,3 @@
-const list = document.querySelector('.cart__items');
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -17,7 +15,6 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
-
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
@@ -34,7 +31,9 @@ const removeLoading = () => {
 const removeAllFromCart = () => {
   const eraseCart = document.querySelector('.empty-cart');
   eraseCart.addEventListener('click', () => {
+  const list = document.querySelector('.cart__items');
   list.innerHTML = '';
+  localStorage.clear();
   });
 };
 
@@ -46,7 +45,6 @@ async function fetchComputer() {
   const obj = await response.json();
   const computers = obj.results;
   const items = document.querySelector('.items');
-
   computers.forEach((computer) => {
     const pc = {
       sku: computer.id,
@@ -63,11 +61,13 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
+  const computerOnCart = document.querySelector('.cart__items');
   // computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
   //   const clickedElement = event.target;
   //   clickedElement.remove();
   // }));
-  list.removeChild(event.target);
+  computerOnCart.removeChild(event.target);
+  removefromLocalStorage(computerOnCart.sku);
 }
 
 // uso do this visto no repositorio do João Nascimento 
@@ -83,14 +83,16 @@ function createCartItemElement({ sku, name, salePrice }) {
 async function fetchList(ItemID) {
   const endpoint = `https://api.mercadolibre.com/items/${ItemID}`;
   const response = await fetch(endpoint);
-  const obj = await response.json();
-    const pc = {
+  const obj = await response.json();    
+  const pc = {
       sku: obj.id,
       name: obj.title,
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
-    list.appendChild(item);
+    const fatherElement = document.querySelector('.cart__items');
+    fatherElement.appendChild(item);
+    saveLocalStorage(pc.sku);
     // totalPrice(pc.salePrice);
 }
 
@@ -119,17 +121,23 @@ const markingTargets = () => {
 //   }
 // }
 
-// function saveLocalStorage() {
+function saveLocalStorage(id) {
+  if (localStorage.length === 0) {
+  localStorage.setItem(id, id);
+  } else {
+    localStorage.setItem(id, id);
+  }
+}
 
-// }
-
-// function removefromLocalStorage() {
-
-// }
+function removefromLocalStorage() {
+  if (localStorage.length !== 0) {
+    localStorage.removeItem(id, id);
+  }
+}
 
 window.onload = function onload() { 
   fetchComputer()
   .then(() => markingTargets());
   removeAllFromCart();
-  cartItemClickListener();
+  // cartItemClickListener();
 };
