@@ -73,12 +73,11 @@ function getSkuFromProductItem(item) {
 // tentativa de funcionar vista no repositório do
 // Lucas Pedroso - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/97
 function cartItemClickListener(event) {
-  // const itemsSearched = document.querySelectorAll('.cart__item');
-  // itemsSearched.forEach((element) => element.addEventListener('click', (event) => {
-  //   const clickedElement = event.target;
-  //   clickedElement.remove(event.target);
-  event.target.remove();
-  // }));
+  const itemsSearched = document.querySelectorAll('.cart__item');
+  itemsSearched.forEach((element) => element.addEventListener('click', (event) => {
+    const clickedElement = event.target;
+    clickedElement.remove(event.target);
+  }));
 }
 
 // uso do this visto no repositorio do João Nascimento 
