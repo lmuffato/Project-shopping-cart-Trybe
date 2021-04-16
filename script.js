@@ -79,7 +79,7 @@ const appendToCart = (data) => {
 
 const addToCart = async (product, target) => {
   const id = target.previousSibling.previousSibling.previousSibling.innerText;
-  const cartPrice = document.querySelector('.cart-price');
+  const cartPrice = document.querySelector('.total-price');
   const currentPrice = parseInt(cartPrice.innerText, 10);
   const idData = await fetchId(id);
   const newPrice = currentPrice + idData.price;
@@ -95,7 +95,7 @@ const addToCartEvent = (product) => {
 };
 
 window.onload = function onload() {
-  document.querySelector('.cart-price').innerText = 0;
+  document.querySelector('.total-price').innerText = 0;
   appendItems('computador');
   addToCartEvent('computador');
  };
