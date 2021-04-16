@@ -14,7 +14,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ id, title, thumbnail }) {
+function createProductItemElement({ sku: id, name: title, image: thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
   
@@ -26,27 +26,26 @@ function createProductItemElement({ id, title, thumbnail }) {
   return section;
 }
 
-function pcList() {
-  let pcData;
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-  .then((response) => {
-    response.json()
-    .then((data) => {
-      pcData = data.results;
-      pcData.forEach((pc) => {
-        createProductItemElement(pc);
+const fetchPcs = () => new Promise((resolve) => {
+    fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+      .then((response) => {
+        response.json()
+        .then((data) => {
+          resolve(data.results);
+          data.results.forEach((element) => {
+            createProductItemElement({ element });
+          });
+        });
       });
-    });
   });
-}
 
-async function pcPromise() {
-  try {
-    pcList();
-  } catch (error) {
-    console.log(error);
-  }
-} 
+// const fixData = async () => {
+//   const pcList = await fetchPcs();
+//     return pcList.forEach((pcItem) => {
+//       createProductItemElement(pcItem);
+//     });
+// };
+// fixData();
 
 // function getSkuFromProductItem(item) {
   //         return item.querySelector('span.item__sku').innerText;
@@ -54,12 +53,12 @@ async function pcPromise() {
   
   // function cartItemClickListener(event) {}
   
-  // function createCartItemElement({ sku, name, salePrice }) {
-    //   const li = document.createElement('li');
-    //   li.className = 'cart__item';
-    //   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-    //   li.addEventListener('click', cartItemClickListener);
-    //   return li;
-    // }
+// function createCartItemElement({ sku, name, salePrice }) {
+//   const li = document.createElement('li');
+//     li.className = 'cart__item';
+//     li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+//     li.addEventListener('click', cartItemClickListener);
+//     return li;
+// }
     
-    window.onload = function onload() { pcPromise(); };
+window.onload = function onload() { fetchPcs(); };
