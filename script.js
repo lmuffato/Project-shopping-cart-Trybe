@@ -8,7 +8,10 @@ function createProductImageElement(imageSource) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  const selectCartItem = document.querySelector('.cart__items');
+  const targetToRemove = event.target;
+  selectCartItem.removeChild(targetToRemove);
+
   return event;
 }
 
