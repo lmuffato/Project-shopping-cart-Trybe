@@ -1,3 +1,5 @@
+const list = document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -32,7 +34,6 @@ const removeLoading = () => {
 const removeAllFromCart = () => {
   const eraseCart = document.querySelector('.empty-cart');
   eraseCart.addEventListener('click', () => {
-  const list = document.querySelector('.cart__items');
   list.innerHTML = '';
   });
 };
@@ -62,12 +63,11 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  const computerOnCart = document.querySelector('.cart__items');
   // computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
   //   const clickedElement = event.target;
   //   clickedElement.remove();
   // }));
-  computerOnCart.removeChild(event.target);
+  list.removeChild(event.target);
 }
 
 // uso do this visto no repositorio do João Nascimento 
@@ -90,8 +90,7 @@ async function fetchList(ItemID) {
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
-    const fatherElement = document.querySelector('.cart__items');
-    fatherElement.appendChild(item);
+    list.appendChild(item);
     // totalPrice(pc.salePrice);
 }
 
