@@ -1,8 +1,17 @@
-// // Função  Realizada com a ajuda do Mauricio Viegas
-// function addLocalStorage() {
-//   const ol = document.querySelector('.cart__items');
-//   localStorage.setItem('aa', ol.innerHTML);
-// }
+// Função  Realizada com a ajuda do Mauricio Viegas
+function getOl() {
+  return document.querySelector('.cart__items');
+}
+
+function addLocalStorage() {
+  const ol = getOl();
+  localStorage.setItem('list', ol.innerHTML);
+}
+
+function addHtml() {
+  const ol = getOl();
+  ol.innerHTML = localStorage.getItem('list');
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -69,7 +78,7 @@ function addItemCard(data) {
     button.addEventListener('click', () => {
       const li = createCartItemElement(data.results[index]);
       document.querySelector('.cart__items').appendChild(li);
-      // addLocalStorage();
+      addLocalStorage();
     });
   });
 }
@@ -80,7 +89,7 @@ function addItemCard(data) {
 
 function clearButton() {
   const button = document.querySelector('.empty-cart');
-  const ol = document.querySelector('.cart__items');
+  const ol = getOl();
   button.addEventListener('click', () => {
     ol.innerHTML = ' ';
   });
@@ -91,6 +100,7 @@ async function funcionamento() {
   carregaPagina(data);
   addItemCard(data);
   clearButton();
+  addHtml();
 }
 
 window.onload = function onload() {
