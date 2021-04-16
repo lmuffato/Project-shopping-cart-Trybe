@@ -28,15 +28,16 @@ function createProductItemElement({ id, title, thumbnail }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  const parent = event.target.parentNode;
+  parent.removeChild(event.target);
+}
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
@@ -51,6 +52,15 @@ const fetchProduct = (product) => (
   })
 );
 
+const appendItems = async (product) => {
+  const data = await fetchProduct(product);
+  const items = await document.querySelector('.items');
+  data.results.forEach((element) => {
+    const result = createProductItemElement(element);
+    items.appendChild(result);
+  });
+};
+
 const fetchId = (itemId) => (
   new Promise((resolve) => {
     fetch(`https://api.mercadolibre.com/items/${itemId}`)
@@ -61,14 +71,6 @@ const fetchId = (itemId) => (
     });
   })
 );
-
-const appendItems = async (data) => {
-  const items = await document.querySelector('.items');
-  await data.results.forEach((element) => {
-    const result = createProductItemElement(element);
-    items.appendChild(result);
-  });
-};
 
 const appendToCart = (data) => {
   const cart = createCartItemElement(data);
@@ -92,7 +94,6 @@ const addToCartEvent = (product) => {
 };
 
 window.onload = function onload() {
-  fetchProduct('computador')
-  .then((result) => appendItems(result));
+  appendItems('computador');
   addToCartEvent('computador');
  };
