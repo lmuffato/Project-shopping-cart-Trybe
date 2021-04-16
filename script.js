@@ -71,8 +71,8 @@ function getSkuFromProductItem(item) {
 // }
 
 // function cartItemClickListener(event) {
-//   searchUl();
-//   // computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
+//   const itemSearched = document.querySelector(ul);
+//   itemSearched.forEach((element) => element.addEventListener('click', (event) => {
 //   //   const clickedElement = event.target;
 //   //   clickedElement.remove();
 //   // }));
@@ -104,8 +104,8 @@ async function fetchList(ItemID) {
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
-    const item = document.querySelector(ul);
-    item.appendChild(item);
+    const itemSearched = document.querySelector(ul);
+    itemSearched.appendChild(itemSearched);
     saveLocalStorage(pc.sku);
     // totalPrice(pc.salePrice);
 }
