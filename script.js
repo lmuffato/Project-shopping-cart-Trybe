@@ -1,4 +1,6 @@
 // ----------- Ready codes ---------/
+const getCartItems = () => document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) { // create imgThumbnail.
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -27,10 +29,18 @@ function createProductItemElement({ id, title, thumbnail }) { // create the sect
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
+const saveLisToLocalStorage = () => {
+  const ul = getCartItems();
+  // console.log(lis);
+  localStorage.clear();
+  console.log('Clear in localStorage.');
+  localStorage.setItem('listCartItems', JSON.stringify(ul.innerHTML));
+};
 
 function cartItemClickListener(event) {
-  // console.log(event.target);
   event.target.remove();
+  saveLisToLocalStorage();
+  // salvar ul no localStorage
 }
 
 function createCartItemElement({ id, title, price }) {
@@ -38,10 +48,30 @@ function createCartItemElement({ id, title, price }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
+  saveLisToLocalStorage();
   return li;
 }
 
-// --------- Coded by me ------------//
+const addEvListenerAfterLocalStorage = () => {
+  if (localStorage.getItem('listCartItems') !== undefined) {
+    const lis = document.querySelectorAll('.cart__item');
+    lis.forEach((li) => {
+      li.addEventListener('click', cartItemClickListener);
+    });
+  }
+};
+
+const getLisOfLocalStorage = () => {
+  if (localStorage.getItem('listCartItems') !== undefined) {
+    const recoveredList = localStorage.getItem('listCartItems');
+    const ul = getCartItems();
+    ul.innerHTML = JSON.parse(recoveredList);
+    addEvListenerAfterLocalStorage();
+  } else {
+    console.log('Não há nada no local storage.');
+  }
+};
+
 const foundItems = async (endPoint) => new Promise((resolve) => { // API endpoint search, returns data (object).
   fetch(endPoint)
     .then((response) => {
@@ -57,16 +87,16 @@ const addItemToCart = async (id) => {
   const endPointCustom = `https://api.mercadolibre.com/items/${id}`;
   const itemData = await foundItems(endPointCustom);
   const newCartItemElement = createCartItemElement(itemData);
-  document.querySelector('.cart__items').appendChild(newCartItemElement);
+  getCartItems().appendChild(newCartItemElement);
+  // salvar a ul no localStorage.
+  saveLisToLocalStorage();
 };
 
-const setEventsToAddCartButtons = async () => { // places an AddEventListener on each button of the item__adds class.
+const setEventsToAddCartButtons = () => { // places an AddEventListener on each button of the item__adds class.
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((button) => {
     button.addEventListener('click', (event) => {
       const id = event.target.parentNode.firstElementChild.innerText;
-      // console.log(id);
-      // return id;
       addItemToCart(id);
     });
   });
@@ -84,4 +114,6 @@ const setItems = async () => { // add childrens for section 'items'.
 
 window.onload = function onload() {
   setItems();
+  getLisOfLocalStorage();
+  // addEvListenerAfterLocalStorage();
 };
