@@ -1,3 +1,5 @@
+const cartItems = '.cart__items';
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -45,7 +47,7 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  const cartItensContainer = document.querySelector('.cart__items');
+  const cartItensContainer = document.querySelector(cartItems);
   const productSelected = event.target;
   cartItensContainer.removeChild(productSelected);
 }
@@ -66,7 +68,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 const putItemInCart = (product) => {
-  const cartItensContainer = document.querySelector('.cart__items');
+  const cartItensContainer = document.querySelector(cartItems);
 
   cartItensContainer.appendChild(createCartItemElement(product));
 };
@@ -88,9 +90,20 @@ const addEventButtons = async () => {
   buttons.forEach((button) => button.addEventListener('click', onClick));
 };
 
+const clearButton = () => {
+  const cartItens = document.querySelector(cartItems);
+  cartItens.innerHTML = '';
+};
+
+const buttonClearEvent = () => {
+  const buttonClear = document.querySelector('.empty-cart');
+  buttonClear.addEventListener('click', clearButton);
+};
+
 window.onload = async function onload() { 
   createListProductItems()
-    .then(() => addEventButtons());
+    .then(() => addEventButtons())
+    .then(() => buttonClearEvent());
 };
 
 // o window.onload foi colocado abaixo devido a ele ter que fazer as funções acima primeiro, para depois ele reconhecer e utilizá-las.
