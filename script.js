@@ -87,3 +87,8 @@ document.body.addEventListener('click', (event) => {
   verifiedFetchItems(child.innerText);
   }
 });
+
+const button = document.querySelector('.empty-cart');
+button.addEventListener('click', () => {
+  cart.innerHTML = '';
+});
