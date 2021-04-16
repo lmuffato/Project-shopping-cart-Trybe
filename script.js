@@ -77,14 +77,14 @@ const getProductDataFromForPurchase = (productId) => new Promise((resolve, rejec
   });
 });
 
-const click = (e) => {
+const getDataId = (e) => {
   const event = e.target.parentNode;
   const id = getSkuFromProductItem(event);
   getProductDataFromForPurchase(id);
 };
 
-const getClass = () => {
-  document.querySelector('.items').addEventListener('click', click);
+const clickButton = () => {
+  document.querySelector('.items').addEventListener('click', getDataId);
 };
 
 // function cartItemClickListener(event) {
@@ -94,6 +94,7 @@ const getClass = () => {
 const functionsAsync = async () => {
   try {
     createProductList(await getProductDataList());
+    clickButton();
   } catch (erro) {
     throw new Error('Deu algum bizil');
   }
@@ -101,5 +102,4 @@ const functionsAsync = async () => {
 
 window.onload = function onload() { 
   functionsAsync();
-  getClass();
 };
