@@ -1,13 +1,24 @@
 const products = {
-  async getProducts() {
-    const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
-    const data = await response.json();
-    return data.results;
-  },
-  async getProduct(productId) {
-    const response = await fetch(`https://api.mercadolibre.com/items/${productId}`);
-    const data = await response.json();
-    return data;
+  get: {
+    async getProducts() {
+      const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
+      const data = await response.json();
+      return data.results;
+    },
+    async getProduct(productId) {
+      const response = await fetch(`https://api.mercadolibre.com/items/${productId}`);
+      const data = await response.json();
+      return data;
+    },
+    cartItems() {
+      return document.querySelector('.cart__items');
+    },
+    buttonToEmptyCart() {
+      return document.querySelector('.empty-cart');
+    },
+    productsCatalogueSection() {
+      return document.querySelector('.items');
+    },
   },
   addToCart(cart, cartItem) {
     cart.appendChild(cartItem);
@@ -52,7 +63,7 @@ const products = {
       const section = document.createElement('section');
       section.className = 'item';
       const button = this.createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-      const cartItems = document.querySelector('.cart__items');
+      const cartItems = products.get.cartItems();
       const cartItemElement = this.createCartItemElement(product);
       button.onclick = () => products.addToCart(cartItems, cartItemElement);
       section.appendChild(
@@ -88,11 +99,11 @@ const products = {
   },
 
   async loadCart() {
-    const cartItems = document.querySelector('.cart__items');
+    const cartItems = products.get.cartItems();
     const localCart = localStorage.getItem('cart').split(',');
     const productsData = [];
     localCart.forEach((productId) => {
-      const productFound = this.getProduct(productId);
+      const productFound = products.get.getProduct(productId);
       productsData.push(productFound); 
     });
     const data = await Promise.all(productsData);
@@ -106,6 +117,11 @@ const products = {
       }
     });
   },
+  emptyCart() {
+    localStorage.setItem('cart', '');
+    const cartItems = products.get.cartItems();
+    cartItems.querySelectorAll('.cart__item').forEach((cartItem) => cartItem.remove());
+  },
 };
 
 // function getSkuFromProductItem(item) {
@@ -113,7 +129,8 @@ const products = {
 // }
 
 window.onload = async function onload() { 
-  const productsFound = await products.getProducts();
+  const productsFound = await products.get.getProducts();
   products.create.generateListOfProducts(productsFound);
   if (localStorage.getItem('cart')) products.loadCart();
+  products.get.buttonToEmptyCart().addEventListener('click', products.emptyCart);
 };
