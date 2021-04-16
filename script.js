@@ -1,4 +1,7 @@
-window.onload = function onload() { };
+window.onload = function onload() { 
+  getData('computador');
+  clearCart();
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -29,6 +32,14 @@ function createProductItemElement({ sku, name, image }) {
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
+function clearCart() {
+  document.getElementsByClassName('empty-cart')[0].addEventListener('click', () => {
+    const getProductsList = document.getElementsByTagName('li')
+    while (getProductsList.length > 0) {
+      getProductsList[0].remove()
+    }
+  })
+}
 
 function cartItemClickListener(event) {
   event.target.remove();
@@ -58,7 +69,8 @@ function addItem(item) {
     });
   });
 }
-async function getData(product) {
+
+ async function getData(product) {
   await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=$${product}`)
   .then((resp) => {
     resp.json()
@@ -76,4 +88,3 @@ async function getData(product) {
   });
 }
 
-getData('computador');
