@@ -28,31 +28,36 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// const totalPrice = async () => {
-//   const items = document.getElementsByClassName('cart__item');
-//   console.log(items);
-//   console.log(items[0]);
-//   if (items !== undefined) {
-//   const parcialPrice = await items.reduce((acc, item) => {
-//     const itemTXT = item.innerText;
-//     const price = itemTXT.split('$')[1];
-//     console.log(price);
-//     return acc + price;
-//      }, 0);
-//   const p = document.createElement('p');
-//   p.innerText = parcialPrice;
-//   p.className = 'total-price';
-//   const parentToAdd = document.querySelector('.cart');
-//   parentToAdd.appendChild(p);
-//   }
-// };
+const createTotalPriceElement = async () => {
+  const p = document.createElement('p');
+  p.innerText = 0;
+  p.className = 'total-price';
+  const parentToAdd = document.querySelector('.cart');
+  parentToAdd.appendChild(p);
+};
+
+const totalPrice = () => {
+  const items = document.querySelectorAll('.cart__item');
+  if (document.querySelector('.total-price')) {
+    if (items !== undefined) {
+      let price = 0;
+      items.forEach((item) => {
+        const itemTXT = item.innerText;
+        price += parseFloat(itemTXT.split('$')[1]);
+        console.log(price);
+      });
+      const p = document.querySelector('.total-price');
+      p.innerText = price;
+    }
+  } else createTotalPriceElement();
+};
 
 const cartItemClickListener = (event) => {
   // event.target.remove(); Aprendido no plantao (nao lembro quem estava usando)
   const e = event.target;
   const eParent = e.parentNode;
   eParent.removeChild(e);
-  // totalPrice();
+  totalPrice();
 };
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -72,16 +77,16 @@ async function tratarJSON(url) {
 async function getProductsInfo() {
   const pc = 'computador';
   const productInfo = await
-  tratarJSON(`https://api.mercadolibre.com/sites/MLB/search?q=$${pc}`)
-    .then((data) => data);
+    tratarJSON(`https://api.mercadolibre.com/sites/MLB/search?q=$${pc}`)
+      .then((data) => data);
   return productInfo;
 }
 
 const getInfoToCartList = async (id) => {
   const itemInfo = await
-  fetch(`https://api.mercadolibre.com/items/${id}`)
-  .then((data) => data.json())
-  .then((data) => data);
+    fetch(`https://api.mercadolibre.com/items/${id}`)
+      .then((data) => data.json())
+      .then((data) => data);
   return itemInfo;
 };
 
@@ -93,7 +98,7 @@ async function creatingItems() {
       sku: item.id,
       name: item.title,
       image: item.thumbnail,
-      };
+    };
     sectionItems.appendChild(createProductItemElement(newItem));
   });
 }
@@ -102,11 +107,13 @@ const addToCartList2 = async (idItem) => {
   const cartList = document.querySelector('.cart__items');
   const itemToAddInCart = await getInfoToCartList(idItem);
   // console.log(itemToAddInCart);
-  const itemToAdd = { sku: itemToAddInCart.id,
+  const itemToAdd = {
+    sku: itemToAddInCart.id,
     name: itemToAddInCart.title,
-    salePrice: itemToAddInCart.price };
+    salePrice: itemToAddInCart.price
+  };
   cartList.appendChild(createCartItemElement(itemToAdd));
-  // totalPrice();
+  totalPrice();
 };
 
 const addToCartList = (event) => {
@@ -129,14 +136,19 @@ const emptyCart = async () => {
   items.forEach((item) => {
     cartItemsList.removeChild(item);
   });
+  totalPrice();
 };
 const emptyCartEventListner = () => {
   const btnEmptyCart = document.querySelector('.empty-cart');
   btnEmptyCart.addEventListener('click', emptyCart);
 };
 
-window.onload = function onload() { 
+window.onload = function onload() {
   creatingItems()
     .then(() => createEventListenerToButtons())
-    .then(() => emptyCartEventListner());
+    .then(() => emptyCartEventListner())
+    /* .then(() => totalPrice()); precisa ser colocado aqui para ele instanciar o numero 0 ao carregar a pagina
+    caso contrario ele vai carregar 0 no total value quando clicar no primeiro item e so depois do segundo
+    que realmente ira comecar a somar */
+    .then(() => totalPrice());
 };
