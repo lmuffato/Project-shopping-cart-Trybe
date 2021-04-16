@@ -28,11 +28,31 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+// const totalPrice = async () => {
+//   const items = document.getElementsByClassName('cart__item');
+//   console.log(items);
+//   console.log(items[0]);
+//   if (items !== undefined) {
+//   const parcialPrice = await items.reduce((acc, item) => {
+//     const itemTXT = item.innerText;
+//     const price = itemTXT.split('$')[1];
+//     console.log(price);
+//     return acc + price;
+//      }, 0);
+//   const p = document.createElement('p');
+//   p.innerText = parcialPrice;
+//   p.className = 'total-price';
+//   const parentToAdd = document.querySelector('.cart');
+//   parentToAdd.appendChild(p);
+//   }
+// };
+
 const cartItemClickListener = (event) => {
   // event.target.remove(); Aprendido no plantao (nao lembro quem estava usando)
   const e = event.target;
   const eParent = e.parentNode;
   eParent.removeChild(e);
+  // totalPrice();
 };
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -86,6 +106,7 @@ const addToCartList2 = async (idItem) => {
     name: itemToAddInCart.title,
     salePrice: itemToAddInCart.price };
   cartList.appendChild(createCartItemElement(itemToAdd));
+  // totalPrice();
 };
 
 const addToCartList = (event) => {
@@ -102,7 +123,20 @@ const createEventListenerToButtons = () => {
   });
 };
 
+const emptyCart = async () => {
+  const cartItemsList = document.querySelector('.cart__items');
+  const items = document.querySelectorAll('.cart__item');
+  items.forEach((item) => {
+    cartItemsList.removeChild(item);
+  });
+};
+const emptyCartEventListner = () => {
+  const btnEmptyCart = document.querySelector('.empty-cart');
+  btnEmptyCart.addEventListener('click', emptyCart);
+};
+
 window.onload = function onload() { 
   creatingItems()
-    .then(() => createEventListenerToButtons());
+    .then(() => createEventListenerToButtons())
+    .then(() => emptyCartEventListner());
 };
