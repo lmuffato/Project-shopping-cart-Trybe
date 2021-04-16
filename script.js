@@ -98,10 +98,14 @@ function createLoadingBox() {
   const boxLoading = document.createElement('section');
   boxLoading.classList.add('loading-section');
 
+  const imageLoading = document.createElement('img');
+  imageLoading.src = 'Rainbow.gif';
+
   const spanLoading = document.createElement('span');
   spanLoading.classList.add('loading');
   spanLoading.innerText = 'Loading...';
 
+  boxLoading.appendChild(imageLoading);
   boxLoading.appendChild(spanLoading);
   document.getElementsByTagName('body')[0].appendChild(boxLoading);
 }

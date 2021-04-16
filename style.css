@@ -79,11 +79,20 @@
   display: flex;
 }
 
-.loading {
+.loading-section {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+}
+
+.loading {
+  margin: 16px;
+}
+
+.block {
+  display: block;
 }
 
 .invisible {
