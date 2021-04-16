@@ -77,14 +77,15 @@ const appendToCart = (data) => {
   document.querySelector('.cart__items').appendChild(cart);
 };
 
-const addToCart = (product, target) => (
-  fetchProduct(product)
-  .then(() => {
-    const id = target.previousSibling.previousSibling.previousSibling.innerText;
-    fetchId(id)
-    .then((result) => appendToCart(result));
-  })
-);
+const addToCart = async (product, target) => {
+  const id = target.previousSibling.previousSibling.previousSibling.innerText;
+  const cartPrice = document.querySelector('.cart-price');
+  const currentPrice = parseInt(cartPrice.innerText, 10);
+  const idData = await fetchId(id);
+  const newPrice = currentPrice + idData.price;
+  cartPrice.innerText = newPrice;
+  appendToCart(idData);  
+};
 
 const addToCartEvent = (product) => {
   const itemsContainer = document.querySelector('.items');
@@ -94,6 +95,7 @@ const addToCartEvent = (product) => {
 };
 
 window.onload = function onload() {
+  document.querySelector('.cart-price').innerText = 0;
   appendItems('computador');
   addToCartEvent('computador');
  };
