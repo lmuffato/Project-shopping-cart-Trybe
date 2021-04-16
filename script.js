@@ -1,15 +1,30 @@
-const API_URL_PRODUCTS = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
-const API_URL_ITEM = 'https://api.mercadolibre.com/items/';
-let totalPrice = 0;
-
-const getCurrentCartList = () => {
-  const items = document.querySelectorAll('.cart__item');
-  const list = Object.values(items).map((item) => item.id);
-  return list;
+const fetchProducts = async () => {
+  try {
+    const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador');
+    const { results } = await response.json();
+    return results;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-const saveCartList = () => {
-  localStorage.setItem('cart_items', getCurrentCartList());
+let totalPrice = 0;
+
+const calcTotalPrice = {
+  sum: async (price) => {
+    totalPrice += price;
+    return totalPrice;
+  },
+  sub: async (price) => {
+    totalPrice -= price;
+    return totalPrice;
+  },
+};
+
+const showTotalPrice = async (price, operation) => {
+  const finalPrice = await calcTotalPrice[operation](price);
+  const totalPriceConteiner = document.querySelector('.total-price');
+  totalPriceConteiner.innerHTML = finalPrice;
 };
 
 const createProductImageElement = (imageSource) => {
@@ -45,25 +60,19 @@ const appendProduct = (product) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const sumPrice = async (price) => {
-  totalPrice += price;
-  return totalPrice;
+const getCartList = () => {
+  const items = document.querySelectorAll('.cart__item');
+  const list = Object.values(items).map((item) => item.id);
+  return list;
 };
 
-const subPrice = async (price) => {
-  totalPrice -= price;
-  return totalPrice;
-};
-
-const showTotalPrice = async (price, operation) => {
-  const finalPrice = await operation(price);
-  const totalPriceConteiner = document.querySelector('.total-price');
-  totalPriceConteiner.innerHTML = finalPrice;
+const saveCartList = () => {
+  localStorage.setItem('cart_items', getCartList());
 };
 
 const cartItemClickListener = (event) => {
   const price = Number(event.target.innerHTML.split('PRICE: $')[1]);
-  showTotalPrice(price, subPrice);
+  showTotalPrice(price, 'sub');
   event.target.remove();
   saveCartList();
 };
@@ -80,12 +89,12 @@ const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
 const addCartItem = (item) => {
   const cart = document.querySelector('.cart__items');
   cart.appendChild(createCartItemElement(item));
-  showTotalPrice(item.price, sumPrice);
+  showTotalPrice(item.price, 'sum');
 };
 
 const fetchItem = async (sku) => {
   try {
-    const response = await fetch(`${API_URL_ITEM}${sku}`);
+    const response = await fetch(`https://api.mercadolibre.com/items/${sku}`);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -106,7 +115,7 @@ const showItems = (skus) => {
 
 const getLocalStorageCartList = async () => {
   const skus = localStorage.getItem('cart_items');
-  if (skus) showItems(skus);
+  if (skus) await showItems(skus);
 };
 
 const cartButtonEvent = () => {
@@ -124,22 +133,24 @@ const cartButtonEvent = () => {
   });
 };
 
-const fetchProducts = () => {
-  fetch(API_URL_PRODUCTS)
-  .then((response) => response.json())
-  .then(({ results }) => results.forEach((product) => appendProduct(product)))
-  .then(() => cartButtonEvent()) 
-  .catch((error) => console.log(error));
-};
-
 const emptyCartButton = document.querySelector('.empty-cart');
 emptyCartButton.addEventListener('click', () => {
   const cart = document.querySelector('.cart__items');
   cart.innerHTML = '';
+  showTotalPrice(totalPrice, 'sub');
   saveCartList();
 });
 
-window.onload = function onload() { 
-  fetchProducts();
+const removeLoading = () => document.querySelector('.loading').remove();
+
+window.onload = async () => {
+  try {
+    await fetchProducts()
+      .then((results) => results.forEach((product) => appendProduct(product)));
+    removeLoading();
+    await cartButtonEvent();
+  } catch (error) {
+    console.log(error);
+  }
   getLocalStorageCartList();
 };
