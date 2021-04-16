@@ -1,4 +1,5 @@
-// o primeiro requisitos foram feiots com ajuda dos colegas Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos,Jonathan Fernandes,Nilson Ribeiro,Marília , Lucas Lara , e o Prof. Zezé e Jack !!
+// os requisitos foram feiots com ajuda dos colegas Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos,Jonathan Fernandes,Nilson Ribeiro,Marília , Lucas Lara , e o Prof. Zezé e Jack !!
+
 function createProductImageElement(imageSource) {
     const img = document.createElement('img');
     img.className = 'item__image';
@@ -24,11 +25,45 @@ function createProductImageElement(imageSource) {
     return section;
   }
   
+  function getSkuFromProductItem(item) {
+    return item.querySelector('span.item__sku').innerText;
+  }
+
+  function createCartItemElement({ id, title, price }) {
+    const li = document.createElement('li');
+    li.className = 'cart__item';
+    li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+//          li.addEventListener('click', cartItemClickListener);
+    return li;
+}
+
+  const searchItemId = (id) => {
+      fetch(`https://api.mercadolibre.com/items/${id}`)
+        .then((response) => {
+          response.json()
+            .then((data) => {
+              const IDInfos = data;
+              createCartItemElement(IDInfos);
+              document.querySelector('.cart__items').appendChild(createCartItemElement(IDInfos));
+            });
+        });
+    };
+
+  const pegaOsDadosItem = () => {
+    const buttonAddToChart = [...document.querySelectorAll('.item__add')];
+    buttonAddToChart.forEach((button) => {
+      button.addEventListener('click', (event) => {
+        const IdOfComputer = getSkuFromProductItem(event.target.parentElement);
+        searchItemId(IdOfComputer);
+      });
+    });
+  };
   const productsInformation = (computerInfos) => {
     computerInfos.forEach((computer) => {
       const computerSection = document.querySelector('.items');
       computerSection.appendChild(createProductItemElement(computer));
     });
+    pegaOsDadosItem();
   };
   
 const searchComputerAPI = () => {
@@ -42,22 +77,11 @@ const searchComputerAPI = () => {
       });
     };
 
-  // function getSkuFromProductItem(item) {
-    //   return item.querySelector('span.item__sku').innerText;
-    // }
-    
-    // function cartItemClickListener(event) {
-      //   // coloque seu código aqui
-      // }
-      
-      // function createCartItemElement({ id, title, salePrice }) {
-        //   const li = document.createElement('li');
-        //   li.className = 'cart__item';
-        //   li.innerText = `SKU: $ id} | NAME: ${title} | PRICE: $${salePrice}`;
-        //   li.addEventListener('click', cartItemClickListener);
-        //   return li;
-        // }
+//    function cartItemClickListener(event) {
+        // coloque seu código aqui
+// }
 
 window.onload = function onload() { 
   searchComputerAPI();
-  };
+  pegaOsDadosItem();
+  };    
