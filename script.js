@@ -1,8 +1,8 @@
-// Função  Realizada com a ajuda do Mauricio Viegas
-function addLocalStorage() {
-  const ol = document.querySelector('.cart__items');
-  localStorage.setItem('aa', ol.innerHTML);
-}
+// // Função  Realizada com a ajuda do Mauricio Viegas
+// function addLocalStorage() {
+//   const ol = document.querySelector('.cart__items');
+//   localStorage.setItem('aa', ol.innerHTML);
+// }
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -69,7 +69,7 @@ function addItemCard(data) {
     button.addEventListener('click', () => {
       const li = createCartItemElement(data.results[index]);
       document.querySelector('.cart__items').appendChild(li);
-      addLocalStorage();
+      // addLocalStorage();
     });
   });
 }
@@ -78,10 +78,19 @@ function addItemCard(data) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+function clearButton() {
+  const button = document.querySelector('.empty-cart');
+  const ol = document.querySelector('.cart__items');
+  button.addEventListener('click', () => {
+    ol.innerHTML = ' ';
+  });
+}
+
 async function funcionamento() {
   const data = await getProduct();
   carregaPagina(data);
   addItemCard(data);
+  clearButton();
 }
 
 window.onload = function onload() {
