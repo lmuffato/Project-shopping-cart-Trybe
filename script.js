@@ -1,5 +1,3 @@
-
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -25,6 +23,38 @@ function createProductItemElement({ id, title, thumbnail }) {
 
   return section;
 }
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+}
+function createCartItemElement({ id, title, price }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  document.querySelector('.cart__items').appendChild(li);
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+function fetchCartItem() {
+  const btns = document.querySelectorAll('.item__add');
+  if (btns.length > 0) {
+    btns.forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+       const itemSection = event.srcElement.parentNode;
+       const itemChildren = itemSection.children;
+        const searchId = [...itemChildren];
+       const idElement = searchId.find((element) => element.className === 'item__sku');
+       const id = idElement.textContent;
+       fetch(`https://api.mercadolibre.com/items/${id}`)
+       .then((response) => {
+        response.json().then((product) => {
+          createCartItemElement(product);
+        });
+       });
+      });
+    });
+  }
+} 
+
 function fetchItem() {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador') 
     .then((response) => {
@@ -32,33 +62,19 @@ function fetchItem() {
         data.results.forEach((result) => {
           createProductItemElement(result);
         });
+        fetchCartItem();
       });
     });
 }
 
-/* function getSkuFromProductItem(item) {
+ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
-function fetchCartItem() {
-  const btns = document.getElementsByClassName('item_add');
-  btns.forEach((btn) => {
-    btn.addEventListener('click', (event) =>{
-      const sectionItem = event.parentElement;
-    });
-  });
-} */
+
+
+
 window.onload = function onload() { 
   fetchItem();
 };
