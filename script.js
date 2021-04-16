@@ -103,9 +103,9 @@ async function fetchList(ItemID) {
       name: obj.title,
       salePrice: obj.price,
     };
-    createCartItemElement(pc);
+    const item = createCartItemElement(pc);
     const itemSearched = document.querySelector(ul);
-    itemSearched.appendChild(itemSearched);
+    itemSearched.appendChild(item);
     saveLocalStorage(pc.sku);
     // totalPrice(pc.salePrice);
 }
