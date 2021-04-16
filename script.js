@@ -1,6 +1,5 @@
-const compuiterData = {}
-
-const products = () => {
+// Nota mental para eu do Futuro: usar Promise e tratar os dados em outra função async
+const fetchProducts = () => {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
     .then((data) => {
@@ -8,7 +7,8 @@ const products = () => {
         const compuiter = {
           sku: element.id,
           name: element.title,
-          image: element.thumbnail
+          image: element.thumbnail,
+          price: element.price
           };
         // Depois de 3 dias descobri que era aqui que eu puxava a criação dos elementos
         document.querySelector('.items').appendChild(createProductItemElement(compuiter));
@@ -16,8 +16,12 @@ const products = () => {
         });
     });
   };
- 
 
+// const products = async {
+//   await fetchProducts()
+// }
+
+// Aqui começa o Bloco que coloca as coisa na tela
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -32,7 +36,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -41,17 +44,28 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+    addEventListener("click",cartItemClickListener);
 
   return section;
 }
+// Aqui termina o Bloco que coloca as coisa na tela
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
+function cartItemClickListener(event) {
+  // const item = event.target.parentNode;
+  console.log('deu certo')
+  // const cartClick = () => {
+  //   fetch(`https://api.mercadolibre.com/items/${ItemID}`)
+
+
+
+  // }
+}
 
 // function createCartItemElement({ sku, name, salePrice }) {
 //   const li = document.createElement('li');
@@ -62,5 +76,5 @@ function createProductItemElement({ sku, name, image }) {
 // }
 
 window.onload = async () => {
-  await products();
+  await fetchProducts();
 };
