@@ -103,11 +103,18 @@ const addListeners = () => {
   });
 };
 
+const loadingScreen = async () => {
+  const getImage = document.querySelector('.loading');
+  const father = document.querySelector('#toCenter');
+  father.removeChild(getImage);
+};
+
 async function criaOsElementos(buscar, general = true, classe) {
   const section = document.querySelector(`.${classe}`);
-  getProducts(buscar, general)
+  await getProducts(buscar, general)
     .then((r) => r.forEach((product) => section.appendChild(createProductItemElement(product))))
     .then(() => addListeners());
+  loadingScreen();
 }
 
 const priceDefault = async () => {
