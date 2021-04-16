@@ -12,34 +12,36 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, title, thumbnail }) {
+function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
 
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
 }
-/*
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+/*
 function cartItemClickListener(event) {
   // coloque seu código aqui
 }
-
-function createCartItemElement({ sku, name, salePrice }) {
+*/
+function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+ // li.addEventListener('click', cartItemClickListener);
+
   return li;
 }
-*/
+
 function promiseListaDeProdutos() {
   const getClassItems = document.querySelector('.items');
   let recebeFunc;
@@ -49,12 +51,42 @@ function promiseListaDeProdutos() {
       .then((data) => {
         data.results.forEach((element) => {
         recebeFunc = createProductItemElement(element);
-          getClassItems.appendChild(recebeFunc);
+          getClassItems.appendChild(recebeFunc); 
         });  
       });
   });
 }
 
+const acaoDoBotaoAddNoCarrinho = (getIdDoItem) => 
+   new Promise(() => {
+   fetch(`https://api.mercadolibre.com/items/${getIdDoItem}`)
+     .then((response) => { 
+      response.json()
+     .then((data) => {
+       const obj = createCartItemElement(data);
+       const ol = document.querySelector('.cart__items');
+       ol.appendChild(obj); 
+     });
+   });
+ });      
+ 
+function adcionaProdutoNoCarrinho() {
+  const getSection = document.querySelectorAll('.items');
+  getSection.forEach((element) => {
+   element.addEventListener('click', (event) => {
+     const getButton = document.querySelectorAll('.item__add');
+     getButton.forEach((buttonAdd) => {
+    if (event.target === buttonAdd) {
+      const getBotaoAddInteiro = event.target.parentNode;
+      const recebeId = getSkuFromProductItem(getBotaoAddInteiro);
+      acaoDoBotaoAddNoCarrinho(recebeId); 
+    }
+  });
+   });
+});
+}
+
 window.onload = function onload() { 
   promiseListaDeProdutos();
+  adcionaProdutoNoCarrinho(); 
 };
