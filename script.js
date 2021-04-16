@@ -37,6 +37,7 @@ function getProduct() {
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
     .then((data) => {
+      document.querySelector('.loading').remove(); // tira a frase "carregando" da tela quando a api termina a requisição
       console.log(data);
       produtos = data.results;
       produtos.forEach((produto) => createProductItemElement(produto)); 
@@ -47,6 +48,12 @@ function getProduct() {
 // fim de Crie uma listagem de produtos
 
 // carrinho de compras
+// salvar itens do carrinho 
+// function salvarItens() {
+//   let conteudoOl = document.querySelector('.cart__items').innerHTML; // pego o conteudo do ol
+//   localStorage.setItem('lista', conteudoOl); // salvo no storage toda a ol
+//   conteudoOl = localStorage.getItem('lista');
+// }
 
 // apagar itens do carrtinho
 function apagarCart() {
@@ -62,7 +69,6 @@ function cartItemClickListener(event) {
   const clicarItem = event.target;
   clicarItem.remove();
 }
-// fim apagar itens do carrtinho
 
 // Crie uma listagem de produtos no cart
 // crio os elementos html / adiciono o produto ao carrinho de compras
@@ -97,18 +103,23 @@ function getIDFromProductItem(item) {
 // função para cliclar no botão e pegar o conteudo especifico desse clique
 function clickAddToCart() {
   apagarCart(); // chamo a função de esvaziar o carrinho aqui, pois só posso apagar os intens depois que eles "existirem"
+  // salvarItens(); // chamo a função de salvar intens do carrinho aqui, pois só posso salvar os intens depois que eles "existirem"
   const btnAddToCart = document.querySelectorAll('.item__add');
   btnAddToCart.forEach((index) => {
       index.addEventListener('click', (event) => {
-      const clicarBtn = event.target.parentNode; // estou pegandi o elemnto pai do botão, ou seja, o elemento todo
+      const clicarBtn = event.target.parentNode; // estou pegando o elemnto pai do botão, ou seja, o elemento todo
       getIDFromProductItem(clicarBtn);
     });
   });
 }
 // fim de crie uma listagem de produtos no cart
+
+// somar o preço dos produtos
+
 // fim carrinho de compras
 
 // onload
 window.onload = function onload() {
-  getProduct().then(() => clickAddToCart()); // crio uma promisse dentro de get product pois só posso chamar o clickAddToCart() depois que o getPtoduct foir "resolvidos" 
+  getProduct()
+    .then(() => clickAddToCart()); // crio uma promisse dentro de get product pois só posso chamar o clickAddToCart() depois que o getPtoduct foir "resolvidos" 
 };
