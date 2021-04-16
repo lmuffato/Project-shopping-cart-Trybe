@@ -6,6 +6,7 @@ function createProductImageElement(imageSource) {
 }
 
 const arrayToStorage = [];
+const cartNode = () => document.querySelector('.cart__items');
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -59,13 +60,13 @@ const saveItems = (e) => {
 };
 
 const getItemsFromLocal = () => {
-  const cart = document.querySelector('.cart__items');
   const items = JSON.parse(localStorage.getItem('toBuy'));
   if (items) {
     items.forEach((element) => {
       const son = document.createElement('li');
+      son.className = 'cart__item';
       son.innerHTML = element;
-      cart.appendChild(son);
+      cartNode().appendChild(son);
     });
   }
 };
@@ -80,17 +81,16 @@ const sumPrices = (price) => {
 
 const createPricesHTML = (price) => {
   const cartTotal = document.querySelector('.total-price');
-  cartTotal.innerText = `Preço total: R$ ${sumPrices(price)}`;
+  cartTotal.innerText = `Valor total da compra: R$ ${(sumPrices(price))}`;
 };
 
 const moveToCart = (e) => {
-  const cart = document.querySelector('.cart__items');
   const esteId = e.target.previousSibling.previousSibling.previousSibling.innerText;
   getProducts(esteId, false)
     .then((r) => {
       const { price: salePrice } = r;
       const li = createCartItemElement(r);
-      cart.appendChild(li);
+      cartNode().appendChild(li);
       saveItems(li);
       createPricesHTML(salePrice);
     });
@@ -116,8 +116,24 @@ const priceDefault = async () => {
   return toCheck ? createPricesHTML(0) : localStorage.setItem('currentPrice', '0');
 };
 
+const cleanCart = () => {
+  const btn = document.querySelector('.empty-cart');
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const items = document.querySelectorAll('.cart__item');
+    items.forEach((item) => {
+      cartNode().removeChild(item);
+    });
+    localStorage.clear();
+    priceDefault();
+    const cartTotal = document.querySelector('.total-price');
+    cartTotal.innerText = 'Valor total da compra: R$ 0';
+  });
+};
+
 window.onload = function onload() {
   criaOsElementos('computador', true, 'items');
   getItemsFromLocal();
   priceDefault();
+  cleanCart();
 };
