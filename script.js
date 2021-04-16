@@ -1,5 +1,6 @@
 window.onload = function onload() { };
 
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -26,21 +27,21 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  cart.removeChild(event.target);
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
 const items = document.getElementById('product');
 
@@ -61,4 +62,30 @@ const createList = () => {
   });
 };
 
-createList();
+createList()
+
+const cart = document.querySelector('.cart__items');
+
+const verifiedFetchItems = (itemId) => {
+  fetch(`https://api.mercadolibre.com/items/${itemId}`)
+  .then((response) => response.json())
+  .then((data) => {
+    const obj = {
+      sku: itemId,
+      name: data.title,
+      salePrice: data.price,
+    };
+    const li = createCartItemElement(obj);
+    cart.appendChild(li);
+  });
+};
+
+
+document.body.addEventListener('click', (event) => {
+  if (event.target.nodeName === 'BUTTON') {
+    const parent = event.target.parentElement;
+  const child = parent.firstChild;
+  console.log(child.innerText);
+  verifiedFetchItems(child.innerText);
+  }
+});
