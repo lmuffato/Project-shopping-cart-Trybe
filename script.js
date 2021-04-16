@@ -58,14 +58,41 @@ const saveItems = (e) => {
   localStorage.setItem('toBuy', JSON.stringify(arrayToStorage));
 };
 
+const getItemsFromLocal = () => {
+  const cart = document.querySelector('.cart__items');
+  const items = JSON.parse(localStorage.getItem('toBuy'));
+  if (items) {
+    items.forEach((element) => {
+      const son = document.createElement('li');
+      son.innerHTML = element;
+      cart.appendChild(son);
+    });
+  }
+};
+
+const sumPrices = (price) => {
+  let total = 0;
+  const current = localStorage.getItem('currentPrice');
+  total = current ? price + parseFloat(current) : total = price;
+  localStorage.setItem('currentPrice', `${total}`);
+  return total.toFixed(2);
+};
+
+const createPricesHTML = (price) => {
+  const cartTotal = document.querySelector('.total-price');
+  cartTotal.innerText = `Preço total: R$ ${sumPrices(price)}`;
+};
+
 const moveToCart = (e) => {
   const cart = document.querySelector('.cart__items');
   const esteId = e.target.previousSibling.previousSibling.previousSibling.innerText;
   getProducts(esteId, false)
     .then((r) => {
+      const { price: salePrice } = r;
       const li = createCartItemElement(r);
       cart.appendChild(li);
       saveItems(li);
+      createPricesHTML(salePrice);
     });
 };
 
@@ -83,19 +110,14 @@ async function criaOsElementos(buscar, general = true, classe) {
     .then(() => addListeners());
 }
 
-const getItemsFromLocal = () => {
-  const cart = document.querySelector('.cart__items');
-  const items = JSON.parse(localStorage.getItem('toBuy'));
-  if (items) {
-    items.forEach((element) => {
-      const son = document.createElement('li');
-      son.innerHTML = element;
-      cart.appendChild(son);
-    });
-  }
+const priceDefault = async () => {
+  await criaOsElementos();
+  const toCheck = localStorage.getItem('currentPrice');
+  return toCheck ? createPricesHTML(0) : localStorage.setItem('currentPrice', '0');
 };
 
 window.onload = function onload() {
   criaOsElementos('computador', true, 'items');
   getItemsFromLocal();
+  priceDefault();
 };
