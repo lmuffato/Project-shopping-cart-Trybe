@@ -86,11 +86,13 @@ async function criaOsElementos(buscar, general = true, classe) {
 const getItemsFromLocal = () => {
   const cart = document.querySelector('.cart__items');
   const items = JSON.parse(localStorage.getItem('toBuy'));
-  items.forEach((element) => {
-    const son = document.createElement('li');
-    son.innerHTML = element;
-    cart.appendChild(son);
-  });
+  if (items) {
+    items.forEach((element) => {
+      const son = document.createElement('li');
+      son.innerHTML = element;
+      cart.appendChild(son);
+    });
+  }
 };
 
 window.onload = function onload() {
