@@ -1,6 +1,24 @@
-// const cartList = document.querySelector('.cart__items');
+// Jogar os itens que vão pro localStorage dentro de uma lista e depois recuperar os objetos de dentro da lista 
+// Usar o JSON.stringfy para transformar o array de objetos em uma string e depos jogar pro localStorage
+// Retornar do localStorage usando o JSON.parse para converter de string para array.
+let sum = 0;
+let subtract = 0;
+
+function loading() {
+  const div = document.createElement('div');
+  div.classList = 'loading';
+  div.innerText = 'loading...';
+  const container = document.querySelector('.container');
+  container.firstElementChild.appendChild(div);
+}
+
+function getOutLoading() {
+  const loadingItem = document.querySelector('.loading');
+  loadingItem.remove();
+}
 
 function fetchApi(url) {
+  loading();
   return fetch(url)
     .then((response) => response.json())
     .then((respo) => respo.results);
@@ -14,6 +32,32 @@ function addToLocalStorage(itemId, element) {
 function removeOfLocalStorage(element) {
   localStorage.removeItem(localStorage.key(element));
 }
+
+const sumPrices = (item) => {
+  const price = item;
+  sum += price;
+  return item !== undefined ? sum : 0;
+};
+
+const subtractPrices = (item) => {
+  const price = item;
+  subtract += price;
+  return item !== undefined ? subtract : 0;
+};
+
+function calculatePrices() {
+  const total = sumPrices() - subtractPrices();
+  return total;
+}
+calculatePrices();
+// function creatItemPrices(price) {
+//   const currentPrice = sumPrices(price);
+//   const totalPrice = document.createElement('span');
+//   totalPrice.innerHTML = '';
+//   totalPrice.className = 'cart__price';
+//   totalPrice.innerText = `Preço total: $${currentPrice}`;
+//   return totalPrice;
+// }
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -46,8 +90,10 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  event.target.remove();
-  removeOfLocalStorage(event);
+  const click = event.target;
+  console.log(`Click ${click}`);
+  click.remove();
+  removeOfLocalStorage(click);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -55,11 +101,13 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  // console.log(`salePrice: ${salePrice}`);
+  // console.log(`sumPrices: ${sumPrices(salePrice)}`);
   return li;
 }
 
-function addToShoppingCart(sku) {
-  fetch(`https://api.mercadolibre.com/items/${sku}`)
+function fetchItems(items) {
+  fetch(`https://api.mercadolibre.com/items/${items}`)
     .then((response) => response.json())
     .then((result) => {
       const itemCart = createCartItemElement({
@@ -70,6 +118,10 @@ function addToShoppingCart(sku) {
       const cartList = document.querySelector('.cart__items');
       cartList.appendChild(itemCart);
     });
+}
+
+async function addToShoppingCart(sku) {
+  await fetchItems(sku);
 }
 
 function getButtons(element) {
@@ -94,16 +146,35 @@ function productsList() {
         getButtons(product);
       });
     });
+  getOutLoading();
 }
 
 function getAll() {
-  for (let index = 0; index < localStorage.length; index += 1) {
+  for (let index = (localStorage.length - 1); index >= 0; index -= 1) {
     const element = localStorage.key(index);
+    console.log(element);
     addToShoppingCart(element);
   }
 }
 
+function cleanCart() {
+  const emptyCart = document.querySelector('.empty-cart');
+  console.log(emptyCart);
+  emptyCart.addEventListener('click', () => {
+    localStorage.clear();
+    const ol = document.querySelector('.cart__items');
+    ol.innerHTML = '';
+  });
+}
+// emptyCart.addEventListener('click', cleanCart);
+// emptyCart.addEventListener('click', () => {
+//   localStorage.clear();
+//   const ol = document.querySelector('.cart__items');
+//   ol.innerHTML = '';
+// });
+
 window.onload = function onload() {
   productsList();
   getAll();
+  cleanCart();
 };
