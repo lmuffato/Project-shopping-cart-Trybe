@@ -1,3 +1,5 @@
+const cartItems = () => document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -10,6 +12,15 @@ function createCustomElement(element, className, innerText) {
   e.className = className;
   e.innerText = innerText;
   return e;
+}
+
+function eventSaveList() {
+  const getInnerHTML = {
+    list: cartItems().innerHTML,
+  };
+  const getInnerHTMLJSON = JSON.stringify(getInnerHTML);
+  localStorage.setItem('listaCompleta', getInnerHTMLJSON);
+  return JSON.parse(localStorage.getItem('listaCompleta'));
 }
 
 function cartItemClickListener(event) {
@@ -40,8 +51,9 @@ async function clickButtons(callback) {
               name: r.title,
               salePrice: r.price,
             }; 
-            const cartItems = document.querySelector('.cart__items');
-            cartItems.appendChild(createCartItemElement(objItem));
+            cartItems()
+              .appendChild(createCartItemElement(objItem));
+              eventSaveList();
           });
     });
   });
@@ -89,8 +101,23 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 */
+function defineVariable() {
+  if (localStorage.getItem('listaCompleta') != null) {
+   const listaLocalStoryString = JSON.parse(localStorage.getItem('listaCompleta'));
+   const ol = document.querySelector('.cart__items');
+   ol.innerHTML = listaLocalStoryString.list;
+   const items = document.querySelectorAll('.cart__item');
+   items.forEach((item) => {
+     item.addEventListener('click', (event) => {
+       cartItemClickListener(event);
+     });
+   });
+  }
+}
 
 window.onload = function onload() { 
+   cartItems();
    getProducts();
    clickButtons();
+   defineVariable();
 };
