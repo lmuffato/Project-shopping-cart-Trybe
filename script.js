@@ -14,38 +14,41 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku: id, name: title, image: thumbnail }) {
+function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
+  const sectionItems = document.querySelector('.items');
+  sectionItems.appendChild(section);
   
-  section.appendChild(createCustomElement('span', 'item__sku', id));
-  section.appendChild(createCustomElement('span', 'item__title', title));
-  section.appendChild(createProductImageElement(thumbnail));
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
   
   return section;
 }
 
 const fetchPcs = () => new Promise((resolve) => {
-    fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-      .then((response) => {
-        response.json()
-        .then((data) => {
-          resolve(data.results);
-          data.results.forEach((element) => {
-            createProductItemElement({ element });
-          });
-        });
+  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+    .then((response) => {
+      response.json()
+      .then((data) => {
+        resolve(data.results);
       });
-  });
+    });
+});
 
-// const fixData = async () => {
-//   const pcList = await fetchPcs();
-//     return pcList.forEach((pcItem) => {
-//       createProductItemElement(pcItem);
-//     });
-// };
-// fixData();
+const addProducts = async () => {
+  const pcList = await fetchPcs();
+  pcList.forEach((pc) => {
+    const pcData = [{
+    sku: pc.id,
+    name: pc.title,
+    image: pc.thumbnail,         
+    }];
+    pcData.forEach((pcItem) => createProductItemElement(pcItem));
+  });
+};
 
 // function getSkuFromProductItem(item) {
   //         return item.querySelector('span.item__sku').innerText;
@@ -61,4 +64,4 @@ const fetchPcs = () => new Promise((resolve) => {
 //     return li;
 // }
     
-window.onload = function onload() { fetchPcs(); };
+window.onload = function onload() { addProducts(); };
