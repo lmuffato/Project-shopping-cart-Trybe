@@ -26,7 +26,7 @@ const loadingMessage = async () => {
 const deleteLoadingMessage = async () => {
   const loading = document.querySelector('.loading');
 
-  const container = document.querySelector('.container')
+  const container = document.querySelector('.container');
   container.removeChild(loading);
 };
 
