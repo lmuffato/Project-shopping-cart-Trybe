@@ -1,4 +1,6 @@
-window.onload = function onload() { };
+window.onload = function onload() { 
+  getItemPromise();
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -36,7 +38,6 @@ const getItemPromise = async () => {
     items.appendChild(createProductItemElement(infoComputador));
   });
 };
-getItemPromise();
 
 // const appendChild = () => {
 //   const sectionMain = document.querySelector('.items')
@@ -58,3 +59,5 @@ getItemPromise();
 //   li.addEventListener('click', cartItemClickListener);
 //   return li;
 // }
+
+
