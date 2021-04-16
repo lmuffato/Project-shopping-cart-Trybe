@@ -53,11 +53,17 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+function cartItemClickListener(event) {
+  event.preventDefault();
+  const itemCart = document.querySelector('.cart__item');
+  itemCart.remove();  
+}
+
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
@@ -86,10 +92,6 @@ const getDataId = (e) => {
 const clickButton = () => {
   document.querySelector('.items').addEventListener('click', getDataId);
 };
-
-// function cartItemClickListener(event) {
-//   
-// }
 
 const functionsAsync = async () => {
   try {
