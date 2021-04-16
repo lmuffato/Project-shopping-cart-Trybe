@@ -61,12 +61,13 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener() {
-  const computerOnCart = document.querySelectorAll('.cart__item');
-  computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
-    const clickedElement = event.target;
-    clickedElement.remove();
-  }));
+function cartItemClickListener(event) {
+  const computerOnCart = document.querySelector('.cart__items');
+  // computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
+  //   const clickedElement = event.target;
+  //   clickedElement.remove();
+  // }));
+  computerOnCart.removeChild(event.target);
 }
 
 // uso do this visto no repositorio do João Nascimento 
@@ -83,14 +84,15 @@ async function fetchList(ItemID) {
   const endpoint = `https://api.mercadolibre.com/items/${ItemID}`;
   const response = await fetch(endpoint);
   const obj = await response.json();
-  const fatherElement = document.querySelector('.cart__items');
     const pc = {
       sku: obj.id,
       name: obj.title,
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
+    const fatherElement = document.querySelector('.cart__items');
     fatherElement.appendChild(item);
+    // totalPrice(pc.salePrice);
 }
 
 // dica para pegar o elemento pai e, então pegar o ID do produto vista no código do Mateus Martins - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/59
@@ -103,6 +105,28 @@ const markingTargets = () => {
     fetchList(ID);
   }));
 };
+
+// const totalPrice = async (price) => {
+//   let sum = document.querySelector('.total-price');
+//   const p = document.createElement('p');
+//   p.className = 'total-price';
+//   if (sum === null) {
+//     const fatherElement = document.querySelector('.cart__items');
+//     fatherElement.appendChild(p);
+//     sum = parseFloat(price);
+//     p.innerHTML = `Total R$ ${sum}`;
+//   } else { sum += parseFloat(price);
+//     p.innerHTML = `Total R$ ${sum}`;
+//   }
+// }
+
+// function saveLocalStorage() {
+
+// }
+
+// function removefromLocalStorage() {
+
+// }
 
 window.onload = function onload() { 
   fetchComputer()
