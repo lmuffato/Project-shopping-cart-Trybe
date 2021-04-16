@@ -45,15 +45,6 @@ const appendProduct = (product) => {
 
 const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.id = sku;
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-};
-
 const sumPrice = async (price) => {
   totalPrice += price;
   return totalPrice;
@@ -77,28 +68,45 @@ const cartItemClickListener = (event) => {
   saveCartList();
 };
 
+const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.id = sku;
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+};
+
 const addCartItem = (item) => {
   const cart = document.querySelector('.cart__items');
   cart.appendChild(createCartItemElement(item));
   showTotalPrice(item.price, sumPrice);
 };
 
-const fetchItem = (sku) => fetch(`${API_URL_ITEM}${sku}`)
-  .then((response) => response.json())
-  .then((data) => data)
-  .catch((error) => console.log(error));
-
-const showItems = (itemsIds) => {
-  if (itemsIds) {
-    itemsIds.split(',').forEach((sku) => {
-      fetchItem(sku)
-      .then((data) => addCartItem(data));
-    });
+const fetchItem = async (sku) => {
+  try {
+    const response = await fetch(`${API_URL_ITEM}${sku}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
   }
 };
 
-const getLocalCartList = () => {
-  if (localStorage) showItems(localStorage.getItem('cart_items'));
+const showItems = (skus) => {
+  skus.split(',').reduce(async (acc, sku) => {
+    try {
+      const item = await fetchItem(sku);
+      await addCartItem(item);
+    } catch (error) {
+      console.log(error);
+    }
+  }, '');
+};
+
+const getLocalStorageCartList = async () => {
+  const skus = localStorage.getItem('cart_items');
+  if (skus) showItems(skus);
 };
 
 const cartButtonEvent = () => {
@@ -133,5 +141,5 @@ emptyCartButton.addEventListener('click', () => {
 
 window.onload = function onload() { 
   fetchProducts();
-  getLocalCartList();
+  getLocalStorageCartList();
 };
