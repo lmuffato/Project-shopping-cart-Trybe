@@ -1,7 +1,3 @@
-window.onload = function onload() { 
-  getItemPromise();
-};
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -60,4 +56,6 @@ const getItemPromise = async () => {
 //   return li;
 // }
 
-
+window.onload = function onload() { 
+  getItemPromise();
+};
