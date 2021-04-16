@@ -28,15 +28,16 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// async function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+async function cartItemClickListener(event) {
+  // coloque seu código aqui
+  event.target.remove();
+}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 }
 // Função requisito 01
@@ -61,6 +62,7 @@ const getApiComputer = async () => {
 };
 
 // Funções requisito 02
+// Agradecimento ao pessoal que me ajudou na elaboração do raciocínio: Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos, Nilson Ribeiro,Marília , Lucas Lara , Leonardo Mallman, Nathi Zebral  e os Professores Zezé e Jack !!
 
 const getIdButtons = () => {
   const buttons = document.querySelectorAll('.item__add');
