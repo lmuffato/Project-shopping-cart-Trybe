@@ -130,6 +130,8 @@ const products = {
 
 window.onload = async function onload() { 
   const productsFound = await products.get.getProducts();
+  const productsCatalogueSection = products.get.productsCatalogueSection();
+  productsCatalogueSection.querySelector('.loading').remove();
   products.create.generateListOfProducts(productsFound);
   if (localStorage.getItem('cart')) products.loadCart();
   products.get.buttonToEmptyCart().addEventListener('click', products.emptyCart);
