@@ -1,12 +1,15 @@
 const API_URL_PC = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
 const API_URL_ID = 'https://api.mercadolibre.com/items/';
 
-const fetchAPI = (URL, key) => new Promise((resolve, reject) => {
-  fetch(URL)
-    .then((response) => response.json())
-    .then((data) => resolve(data[key]))
-    .catch(reject);
-});
+const fetchAPI = async (URL, key) => {
+  try {
+    const response = await fetch(URL);
+    const data = await response.json();
+    return data[key];
+  } catch (error) {
+    return error;
+  }
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -77,9 +80,27 @@ const itemClick = () => {
   });
 };
 
+const loadingInfo = () => {
+  const section = document.querySelector('.items');
+  const p = document.createElement('p');
+  p.className = 'loading';
+  section.appendChild(p);
+  return {
+    loading: () => {
+      p.innerText = 'loading...';
+    },
+    finish: () => {
+      p.remove();
+    },
+  };
+};
+
 const appendProductsObject = async () => {
+  const info = loadingInfo();
   const items = document.getElementsByClassName('items')[0];
+  info.loading();
   const array = await fetchAPI(API_URL_PC, 'results');
+  info.finish();
   array.forEach((item) => {
     const object = createProductObject(item);
     items.appendChild(createProductItemElement(object));
