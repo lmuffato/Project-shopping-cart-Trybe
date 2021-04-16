@@ -130,6 +130,23 @@ function getButtonItem(item) {
   return item.querySelector('button.item__add');
 }
 
+function loadCart() {
+  productsOnCart.forEach((productItem) => {
+    const cartItem = createCartItemElement(productItem);
+    getOlCartItems().appendChild(cartItem);
+  });
+}
+
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(productsOnCart));
+}
+
+function getCart() {
+  let cart = localStorage.getItem('cart');
+  cart = JSON.parse(cart);
+  return cart === null ? [] : cart;
+}
+
 async function loadCartTotalValue() {
   const totalPriceElement = getTotalPriceElement();
   try {
@@ -143,6 +160,7 @@ async function loadCartTotalValue() {
 
 async function olObserver(mutationList) {
   if (mutationList[0].type === 'childList') {
+    saveCart();
     loadCartTotalValue().then();
   }
 }
@@ -172,7 +190,6 @@ async function addItemToCart(sku) {
 }
 
 function initAddCartListener() {
-  productsOnCart = [];
   const items = document.getElementsByClassName('item');
   Array.from(items).forEach((item) => {
     const sku = getSkuFromProductItem(item);
@@ -200,12 +217,14 @@ function initLoadingInitial() {
 
 async function init() {
   initLoadingInitial();
+  productsOnCart = getCart();
+  initOlObserver(olObserver, getOlCartItems());
+  loadCart();
   const products = await product.getProducts();
   await initCatalog(products);
   initPageVisible();
   initAddCartListener();
   initClearCartButton().then();
-  initOlObserver(olObserver, getOlCartItems());
 }
 
 window.onload = function onload() {
