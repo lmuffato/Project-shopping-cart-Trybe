@@ -32,8 +32,15 @@ const addItens = (itensApi) => {
   });
 };
 
-const receiveApi = () => {
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+const receiveApi = async () => {
+  const frase = 'loading...';
+  const div = document.createElement('div');
+  div.className = 'loading';
+  div.innerHTML = frase;
+  const body = document.querySelector('body');
+  body.appendChild(div);
+
+   await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
       response.json()
         .then((data) => {
@@ -41,6 +48,7 @@ const receiveApi = () => {
           addItens(itensApi);
         });
     });
+    div.remove();
 }; // Obtive ajuda da Carolina Vasconcelos na finalização deste requisito, obrigado :)
 
 function getSkuFromProductItem(item) {
@@ -93,5 +101,5 @@ const addEvent = () => document
 
 window.onload = function onload() {
   receiveApi();
-  addEvent();  
+  addEvent(); 
 };
