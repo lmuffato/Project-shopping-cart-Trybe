@@ -51,28 +51,15 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 }
 
-const getProductsPromise = () => new Promise((resolve) => {
-  fetch(`${API}computador`)
-    .then((response) => {
-      response.json().then((data) => {
-        resolve(data.results);
-      });
-    });
-});
-
-const getAPIById = (sku) => new Promise((resolve, reject) => {
+const getProductsPromise = async (sku) => {
   try {
-    fetch(`${itemAPI}${sku}`)
-    .then((response) => {
-      response.json()
-        .then((data) => {
-          resolve(data);
-        });
-    });
+    const fetchAPI = sku ? await fetch(`${itemAPI}${sku}`) : await fetch(`${API}computador`);
+    const data = await fetchAPI.json();
+    return data;
   } catch (error) {
-    reject(error);
+    return error;
   }
-});
+};
 
 const sumAllItensCart = () => {
   let sum = 0;
@@ -104,11 +91,9 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 const getItemById = async (event) => {
   const cart = document.querySelector(idCarts);
   const sku = event.target.parentNode.querySelector('.item__sku').innerText;
-  const el = getAPIById(sku);
-  await el.then((data) => {
-    const newEl = createCartItemElement(data);
-    cart.appendChild(newEl);
-  });
+  const el = await getProductsPromise(sku);
+  const newEl = await createCartItemElement(el);
+  cart.appendChild(newEl);
   createTotalPrice();
   saveCart();
 };
@@ -132,7 +117,7 @@ window.onload = async function onload() {
   const emptyCart = document.querySelector('.empty-cart');
 
   loading();
-  const results = await getProductsPromise();
+  const { results } = await getProductsPromise();
   results.forEach((element) => {
     items.appendChild(createProductItemElement(element));
   });
