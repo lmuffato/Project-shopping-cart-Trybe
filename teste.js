@@ -142,7 +142,6 @@ const fetchProducts = async () => {
   });
 
   clickButton();
-};
 
 const getItemsStorage = () => {
   const savedItems = localStorage.getItem('listProducts');
