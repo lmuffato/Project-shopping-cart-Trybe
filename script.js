@@ -31,7 +31,7 @@ const removeLoading = () => {
 const removeAllFromCart = () => {
   const eraseCart = document.querySelector('.empty-cart');
   eraseCart.addEventListener('click', () => {
-  const list = document.querySelector('.cart__items');
+  searchUl();
   list.innerHTML = '';
   localStorage.clear();
   });
@@ -60,15 +60,21 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener(event) {
-  const computerOnCart = document.querySelector('.cart__items');
-  // computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
-  //   const clickedElement = event.target;
-  //   clickedElement.remove();
-  // }));
-  computerOnCart.removeChild(event.target);
-  removefromLocalStorage(computerOnCart.sku);
+function removefromLocalStorage() {
+  if (localStorage.length !== 0) {
+    localStorage.removeItem(id, id);
+  }
 }
+
+// function cartItemClickListener(event) {
+//   searchUl();
+//   // computerOnCart.forEach((element) => element.addEventListener('click', (event) => {
+//   //   const clickedElement = event.target;
+//   //   clickedElement.remove();
+//   // }));
+//   computerOnCart.removeChild(event.target);
+//   removefromLocalStorage(computerOnCart.sku);
+// }
 
 // uso do this visto no repositorio do João Nascimento 
 // para tentar evitar lint - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/54
@@ -90,7 +96,7 @@ async function fetchList(ItemID) {
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
-    const fatherElement = document.querySelector('.cart__items');
+    searchUl ();
     fatherElement.appendChild(item);
     saveLocalStorage(pc.sku);
     // totalPrice(pc.salePrice);
@@ -112,7 +118,7 @@ const markingTargets = () => {
 //   const p = document.createElement('p');
 //   p.className = 'total-price';
 //   if (sum === null) {
-//     const fatherElement = document.querySelector('.cart__items');
+       searchUl();
 //     fatherElement.appendChild(p);
 //     sum = parseFloat(price);
 //     p.innerHTML = `Total R$ ${sum}`;
@@ -122,17 +128,12 @@ const markingTargets = () => {
 // }
 
 function saveLocalStorage(id) {
-  if (localStorage.length === 0) {
   localStorage.setItem(id, id);
-  } else {
-    localStorage.setItem(id, id);
-  }
 }
 
-function removefromLocalStorage() {
-  if (localStorage.length !== 0) {
-    localStorage.removeItem(id, id);
-  }
+function searchUl() {
+  const ul = document.querySelector('.cart__items');
+  return ul;
 }
 
 window.onload = function onload() { 
