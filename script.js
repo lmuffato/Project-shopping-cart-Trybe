@@ -86,7 +86,19 @@ function adcionaProdutoNoCarrinho() {
 });
 }
 
+const botaoLimparCart = () => {
+  const getClassButtonClear = document.querySelector('.empty-cart');
+  const getListaDeCompras = document.querySelector('.cart__items');
+
+  getClassButtonClear.addEventListener('click', (event) => {
+    if (event.target === getClassButtonClear) {
+      getListaDeCompras.innerHTML = '';
+    }  
+  });
+};
+
 window.onload = function onload() { 
   promiseListaDeProdutos();
   adcionaProdutoNoCarrinho(); 
+  botaoLimparCart();
 };
