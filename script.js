@@ -1,7 +1,6 @@
-function searchUl() {
-  const ul = document.querySelector('.cart__items');
-  return ul;
-}
+// problema do lint com o numero de chamadas do item visto 
+// no repositório do Murilo - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/82
+const ul = '.cart__items';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -36,8 +35,8 @@ const removeLoading = () => {
 const removeAllFromCart = () => {
   const eraseCart = document.querySelector('.empty-cart');
   eraseCart.addEventListener('click', () => {
-  searchUl();
-  ul.innerHTML = '';
+  const item = document.querySelector(ul);
+  item.innerHTML = '';
   localStorage.clear();
   });
 };
@@ -105,8 +104,8 @@ async function fetchList(ItemID) {
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
-    searchUl();
-    ul.appendChild(item);
+    const item = document.querySelector(ul);
+    item.appendChild(item);
     saveLocalStorage(pc.sku);
     // totalPrice(pc.salePrice);
 }
@@ -127,8 +126,8 @@ const markingTargets = () => {
 //   const p = document.createElement('p');
 //   p.className = 'total-price';
 //   if (sum === null) {
-       searchUl();
-//     fatherElement.appendChild(p);
+//     const item = document.querySelector(ul);
+//     item.appendChild(p);
 //     sum = parseFloat(price);
 //     p.innerHTML = `Total R$ ${sum}`;
 //   } else { sum += parseFloat(price);
