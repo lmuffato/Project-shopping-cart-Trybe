@@ -56,7 +56,7 @@ const interageApi = () => {
     });
   });
  };
-
+// consegui fazer o requisito 1 com ajuda do Adelino Junior, Tiago santos, tiago souza,Nathi zebral, Lucas lara, Marilia e os instrutores da trybe.
  window.onload = function onload() { 
    interageApi();
 };
