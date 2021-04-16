@@ -5,18 +5,10 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
-// const getItemInfo = async (btn) => {
-//   const itemInfo = btn.parentElement();
-//   console.log(itemInfo);
-// };
-
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
-  // if (element === 'button') {
-  //   e.addEventListener('click', getItemInfo(e));
-  // }
   return e;
 }
 
@@ -36,9 +28,12 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
+const cartItemClickListener = (event) => {
+  // event.target.remove(); Aprendido no plantao (nao lembro quem estava usando)
+  const e = event.target;
+  const eParent = e.parentNode;
+  eParent.removeChild(e);
+};
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -48,13 +43,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-// // // const btnAddToCartEvent = async () => {
-// // //   const btnAddToCart = await document.querySelectorAll('.item_add');
-// // //   btnAddToCart.forEach((btn) => {
-// // //     btn.addEventListener('click', getItemInfo(btn));
-// // //   });
-// // // };
-
 async function tratarJSON(url) {
   return fetch(url)
     .then((data) => data.json())
@@ -62,11 +50,20 @@ async function tratarJSON(url) {
 }
 
 async function getProductsInfo() {
-  const productInfo = await 
-  tratarJSON('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
+  const pc = 'computador';
+  const productInfo = await
+  tratarJSON(`https://api.mercadolibre.com/sites/MLB/search?q=$${pc}`)
     .then((data) => data);
   return productInfo;
 }
+
+const getInfoToCartList = async (id) => {
+  const itemInfo = await
+  fetch(`https://api.mercadolibre.com/items/${id}`)
+  .then((data) => data.json())
+  .then((data) => data);
+  return itemInfo;
+};
 
 async function creatingItems() {
   const sectionItems = document.querySelector('.items');
@@ -83,19 +80,18 @@ async function creatingItems() {
 
 const addToCartList2 = async (idItem) => {
   const cartList = document.querySelector('.cart__items');
-  const array = await getProductsInfo();
-  const itemToAddInCart = array.find((item) => item.id === idItem);
+  const itemToAddInCart = await getInfoToCartList(idItem);
+  // console.log(itemToAddInCart);
   const itemToAdd = { sku: itemToAddInCart.id,
     name: itemToAddInCart.title,
     salePrice: itemToAddInCart.price };
   cartList.appendChild(createCartItemElement(itemToAdd));
 };
 
-const addToCartList = () => {
+const addToCartList = (event) => {
   const e = event.target;
   const eParent = e.parentNode;
   const id = eParent.querySelector('.item__sku').innerText;
-  console.log(id);
   return addToCartList2(id);
 };
 
