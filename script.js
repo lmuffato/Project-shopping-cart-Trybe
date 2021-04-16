@@ -1,62 +1,66 @@
-// window.onload = function onload() { };
+const compuiterData = {}
 
+const products = () => {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-    .then((response) => {
-      response.json()
-        .then((data) => {
-          data.results.forEach((element) => {
-            const compuiterData = {
-              sku: element.id,
-              name: element.title,
-              image: element.thumbnail,
-              price: element.price};
-            
-              // console.log(compuiterData);
-            
-            });
-          });
-        // });
-  });
+    .then((response) => response.json())
+    .then((data) => {
+      data.results.forEach((element) => {
+        const compuiter = {
+          sku: element.id,
+          name: element.title,
+          image: element.thumbnail
+          };
+        // Depois de 3 dias descobri que era aqui que eu puxava a criação dos elementos
+        document.querySelector('.items').appendChild(createProductItemElement(compuiter));
+
+        });
+    });
+  };
+ 
+
+function createProductImageElement(imageSource) {
+  const img = document.createElement('img');
+  img.className = 'item__image';
+  img.src = imageSource;
+  return img;
+}
+
+function createCustomElement(element, className, innerText) {
+  const e = document.createElement(element);
+  e.className = className;
+  e.innerText = innerText;
+  return e;
+}
 
 
-// function createProductImageElement(imageSource) {
-//   const img = document.createElement('img');
-//   img.className = 'item__image';
-//   img.src = imageSource;
-//   return img;
-// }
+function createProductItemElement({ sku, name, image }) {
+  const section = document.createElement('section');
+  section.className = 'item';
 
-// function createCustomElement(element, className, innerText) {
-//   const e = document.createElement(element);
-//   e.className = className;
-//   e.innerText = innerText;
-//   return e;
-// }
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
-// function createProductItemElement({ sku, name, image }) {
-//   const section = document.createElement('section');
-//   section.className = 'item';
+  return section;
+}
 
-//   section.appendChild(createCustomElement('span', 'item__sku', sku));
-//   section.appendChild(createCustomElement('span', 'item__title', name));
-//   section.appendChild(createProductImageElement(image));
-//   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
-//   return section;
-// }
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+}
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
-
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+window.onload = async () => {
+  await products();
+};
