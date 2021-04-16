@@ -12,19 +12,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
-  const section = document.createElement('section');
-  section.className = 'item';
-
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  const bt = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-  bt.addEventListener('click', addToCart);
-  section.appendChild(bt);
-  return section;
-}
-
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -80,9 +67,21 @@ const addToCart = async (event) => {
 
 // Desafio 3
 
-const removeAllItems = () => {
-  const getRemoveButton = document.getElementsByClassName('.empty-cart');
-  console.log(getRemoveButton);
-};
+// const removeAllItems = () => {
+//   const getRemoveButton = document.getElementsByClassName('.empty-cart');
+// };
 
-removeAllItems();
+// removeAllItems();
+
+function createProductItemElement({ sku, name, image }) {
+  const section = document.createElement('section');
+  section.className = 'item';
+
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  const bt = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  bt.addEventListener('click', addToCart);
+  section.appendChild(bt);
+  return section;
+}
