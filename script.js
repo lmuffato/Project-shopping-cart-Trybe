@@ -140,5 +140,5 @@ window.onload = function onload() {
   fetchComputer()
   .then(() => markingTargets());
   removeAllFromCart();
-  // cartItemClickListener();
+  cartItemClickListener();
 };
