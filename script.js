@@ -29,16 +29,20 @@ function createProductItemElement({ id, title, thumbnail }) {
 function getIdFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+// metodo 
+function cartItemClickListener({ target }) {
+  target.remove();
+}
 
-// function cartItemClickListener(event) {
-  
-// }
-// códigos feitos baseados no repositório do Renzo. Fui observando cada código e refatorando os que eram necessários para o meu entendimento.
+// A maioria dos códigos foram feitos baseados no repositório do Renzo. Fui observando cada código e refatorando os que eram necessários para o meu entendimento.
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
+  // Elisa França me enviou a documentação sobre o dataset que mapea o DOMString e guarda os valores de determinado elemento
+  // https://developer.mozilla.org/pt-BR/docs/Web/API/HTMLOrForeignElement/dataset
+  li.dataset.xablau = price;
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
@@ -66,20 +70,17 @@ const setCart = async () => {
   event.addEventListener('click', async () => {
     try {
       const item = await fetchId(getIdFromProductItem(event.parentNode));
-      console.log(item);
       ol.appendChild(createCartItemElement(item));
     } catch (error) {
         throw new Error('Erro no click');
     }
-    console.log('Clicaram em mim');
   }));
 };
 
-const sumPrices = () => {
-  const prices = document.querySelectorAll('cart__item').innerText;
-  console.log(prices);
-};
-sumPrices();
+// const sumPrices = () => {
+//   const prices = document.querySelectorAll('cart__item').innerText;
+// };
+// sumPrices();
 
 const asyncAll = async () => {
   try {
