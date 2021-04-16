@@ -70,15 +70,16 @@ function getSkuFromProductItem(item) {
 //   }
 // }
 
-// function cartItemClickListener(event) {
-//   const itemSearched = document.querySelector(ul);
-//   itemSearched.forEach((element) => element.addEventListener('click', (event) => {
-//   //   const clickedElement = event.target;
-//   //   clickedElement.remove();
-//   // }));
-//   computerOnCart.removeChild(event.target);
-//   removefromLocalStorage(computerOnCart.sku);
-// }
+// tentativa de funcionar vista no repositório do
+// Lucas Pedroso - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/97
+function cartItemClickListener(event) {
+  // const itemsSearched = document.querySelectorAll('.cart__item');
+  // itemsSearched.forEach((element) => element.addEventListener('click', (event) => {
+  //   const clickedElement = event.target;
+  //   clickedElement.remove(event.target);
+  event.target.remove();
+  // }));
+}
 
 // uso do this visto no repositorio do João Nascimento 
 // para tentar evitar lint - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/54
