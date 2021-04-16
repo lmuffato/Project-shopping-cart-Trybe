@@ -12,9 +12,24 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function createProductItemElement({ sku, name, image }) {
+  const section = document.createElement('section');
+  section.className = 'item';
+
+  section.appendChild(createCustomElement('span', 'item__sku', sku));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createProductImageElement(image));
+  const bt = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  bt.addEventListener('click', addToCart);
+  section.appendChild(bt);
+  return section;
+}
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+
+// Desafio 3 - Removendo do Carrinho
 
 function cartItemClickListener(event) {
   const getItemsFromCart = document.querySelector('.cart__items');
@@ -29,7 +44,7 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
   return li;
 };
 
-// Desafio 1
+// Desafio 1 - Realizando a consulta na API
 
 const getResults = async () => {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
@@ -45,11 +60,9 @@ const getResults = async () => {
   });
 };
 
-window.onload = function onload() {
-  getResults();
-};
+// Desafio 2 - Adicionando no Carrinho
 
-// Desafio 2
+let sum = localStorage.getItem('keySoma');
 
 const addToCart = async (event) => {
   const itemID = getSkuFromProductItem(event.target.parentElement); // Retirei a ideia de pegar o target pai do Miguel Dantas sala 09 
@@ -63,25 +76,48 @@ const addToCart = async (event) => {
   };
 
   document.querySelector('ol.cart__items').appendChild(createCartItemElement(obj));
+  localStorage.setItem(itemID, JSON.stringify(obj));
+  console.log(obj.salePrice);
+
+  sum += obj.salePrice;
+  console.log(sum);
+  sumPrices();
+  localStorage.setItem('keySoma', sum);
 };
 
-// Desafio 3
+// Carregando o Carrinho de Compras ao Entrar no Site
 
-// const removeAllItems = () => {
-//   const getRemoveButton = document.getElementsByClassName('.empty-cart');
-// };
+const loadCart = () => {
+  const getSpace = document.querySelector('ol.cart__items');
+  Object.keys(localStorage).forEach((item) => {
+    if (item !== 'keySoma') {
+      getSpace.appendChild(createCartItemElement(JSON.parse(localStorage[item])));
+    }
+  });
+};
 
-// removeAllItems();
+// Desafio 5 - Somando os valores do Carrinho:
 
-function createProductItemElement({ sku, name, image }) {
-  const section = document.createElement('section');
-  section.className = 'item';
+const sumPrices = async () => {
+  const ul = document.querySelector('.total-price');
+  ul.innerHTML = sum; // depois testar com toFixed 
+};
 
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  const bt = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-  bt.addEventListener('click', addToCart);
-  section.appendChild(bt);
-  return section;
-}
+// Desafio 6 - Limpar TODO o Carrinho de Compras
+
+const removeAllItems = () => {
+  const bt = document.querySelector('.empty-cart');
+  bt.addEventListener('click', () => {
+    localStorage.clear();
+    sum = 0;
+    sumPrices();
+  });
+};
+
+removeAllItems();
+
+window.onload = function onload() {
+  getResults();
+  loadCart();
+  sumPrices();
+};
