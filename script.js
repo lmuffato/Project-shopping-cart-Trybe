@@ -56,29 +56,6 @@ const createCartItemElement = ({ sku: id, name, salePrice }) => {
   return li;
 };
 
-/**
- * Cria a Url do site sem os parâmetros de busca.
- * @param {string} siteId Nome do site.
- * @returns Retorna a URL completa do site.
- */
-const sites = (siteId) => `sites/${siteId}/search?`;
-
-/**
- * @param {string} userId Nome do usuário.
- * @returns Retorna a URL completa do usuário.
- */
-const user = (userId) => `users/${userId}/items/search`;
-const users = (usersId) => `users/ids=${usersId}`;
-const queries = (queries) => queries;
-
-const createUrl = (cb) => {
-  // https://api.mercadolibre.com/sites/MLB/search?q=computador
-
-};
-
-// /sites/$SITE_ID/search?
-// /users/$USER_ID/items/search
-// /users?ids=$USER_ID1,$USER_ID2
 const fetchProductList = async (query) => {
   const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
   const productList = await response.json();
