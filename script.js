@@ -4,7 +4,7 @@
 // let sum = 0;
 // let subtract = 0;
 
-// -------------------------------------------------- Loading ---------------------------------------------------------------------
+// ---------------------------------------------------- Loading -------------------------------------------------------------------
 
 function loading() {
   const div = document.createElement('div');
@@ -19,7 +19,7 @@ function getOutLoading() {
   loadingItem.remove();
 }
 
-// -------------------------------------------------- Storage ---------------------------------------------------------------------
+// ----------------------------------------------------- Storage ------------------------------------------------------------------
 
 function addToLocalStorage(itemId, element) {
   const value = element.querySelector('.item__title').textContent;
@@ -30,7 +30,7 @@ function removeOfLocalStorage(element) {
   localStorage.removeItem(localStorage.key(element));
 }
 
-// -------------------------------------------------- Nativas ---------------------------------------------------------------------
+// ------------------------------------------------------- Base -------------------------------------------------------------------
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -78,7 +78,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-// -------------------------------------------------- Cart -----------------------------------------------------------------------
+// ------------------------------------------------------ Cart --------------------------------------------------------------------
 
 function fetchItems(items) {
   fetch(`https://api.mercadolibre.com/items/${items}`)
@@ -114,20 +114,19 @@ function cleanCart() {
   });
 }
 
-// -------------------------------------------------- Product List ----------------------------------------------------------------
+// ---------------------------------------------------- Product List --------------------------------------------------------------
 
 function fetchApi(url) {
-  // loading();
+  loading();
   return fetch(url)
     .then((response) => response.json())
     .then((respo) => respo.results);
 }
 
-function productsList() {
+async function productsList() {
   const itensSection = document.querySelector('.items');
   const url = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-  loading();
-  fetchApi(url)
+  await fetchApi(url)
     .then((results) => {
       results.forEach((element) => {
         const product = createProductItemElement({
@@ -151,6 +150,8 @@ function getAll() {
 }
 
 window.onload = function onload() {
+  loading();
+  getOutLoading();
   productsList();
   getAll();
   cleanCart();
