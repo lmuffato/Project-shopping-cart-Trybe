@@ -109,10 +109,19 @@ const getLocalStorage = () => {
     }
   }
 };
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+const emptyCart = () => {
+  const emptyBtn = document.querySelector('.empty-cart');
+  const price = document.querySelector('.total-price');
+  const ol = document.querySelector('ol');
+  emptyBtn.addEventListener('click', () => {
+    ol.innerHTML = '';
+    price.innerText = 0;
+    localStorage.clear();
+  });
+};
+
 window.onload = function onload() {
   appendProductsObject();
   getLocalStorage();
+  emptyCart();
 };
