@@ -44,9 +44,11 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui  
-// }
+function cartItemClickListener(event) {
+  const cartItensContainer = document.querySelector('.cart__items');
+  const productSelected = event.target;
+  cartItensContainer.removeChild(productSelected);
+}
 
 const getProductBySku = async (sku) => {
  const product = fetch(`https://api.mercadolibre.com/items/${sku}`)
@@ -59,7 +61,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
@@ -78,8 +80,6 @@ const onClick = async (event) => {
     name: productSelected.title,
     salePrice: productSelected.price,
   };
-
-  console.log(objectProduct);
   putItemInCart(objectProduct);  
 };
 
@@ -95,4 +95,4 @@ window.onload = async function onload() {
 
 // o window.onload foi colocado abaixo devido a ele ter que fazer as funções acima primeiro, para depois ele reconhecer e utilizá-las.
 
-// Graças ao Murilo Goncalves, em uma call no Slack, 15/04, eu pude entender como utilizar funções async. Assim como quebrar a cabeça para entender que quando utilizado o await para uma função, a função onde ele está também deve ser uma async. Assim como só iremos conseguir maninupar o json quando a função dele retorna com o await.
+// Graças ao Murilo Gonçalves, em uma call no Slack, 15/04, eu pude entender como utilizar funções async. Assim como quebrar a cabeça para entender que quando utilizado o await para uma função, a função onde ele está também deve ser uma async. Assim como só iremos conseguir maninupar o json quando a função dele retorna com o await.
