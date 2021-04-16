@@ -12,15 +12,7 @@
   });
 } */
 
-const listStorage = [];
-
-const setStorage = (objProduct) => {
-  listStorage.push(objProduct);
-  console.log('List storage: ' + listStorage);
-  localStorage.setItem('listProducts', JSON.stringify(listStorage));
-};
-
-/* const sum = { sku: [], price: [] };
+const sum = { sku: [], price: [] };
 const totalPriceElem = document.createElement('p');
 let totalPrice;
 
@@ -51,7 +43,7 @@ const updateTotalPrice = (sku, salePrice, change) => {
     sum.price.splice(indexItemToRemove, 1);
     changePrice(sum.price);
   }
-}; */
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -83,31 +75,20 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-const removeItem = (sku) => {
-  const indexItemToRemove = listStorage.findIndex((item) => item.sku === sku);
-  listStorage.splice(indexItemToRemove, 1);
-  
-  localStorage.setItem('listProducts', JSON.stringify(listStorage));
-  // sum.price.splice(indexItemToRemove, 1);
-  // changePrice(sum.price);
-};
-
 function cartItemClickListener(event) {
   // coloque seu código aqui
   const cartList = document.querySelector('.cart__items');
   cartList.removeChild(event.target);
-  // localStorage.setItem('listProducts', cartList.innerHTML);
-
-  // setStorage
+  localStorage.setItem('listProducts', cartList.innerHTML);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', () => removeItem(sku));
+  li.addEventListener('click', () => updateTotalPrice(sku, salePrice, 'deduct'));
   li.addEventListener('click', cartItemClickListener);
-  // updateTotalPrice(sku, salePrice, 'sum');
+  updateTotalPrice(sku, salePrice, 'sum');
   return li;
 }
 
@@ -127,9 +108,7 @@ const fechProductById = async (itemId) => {
   const itemList = createCartItemElement(obj);
   cartList.appendChild(itemList);
 
-  setStorage(obj);
-
-  // localStorage.setItem('listProducts', cartList.innerHTML);
+  localStorage.setItem('listProducts', cartList.innerHTML);
 };
 
 function productClickListener(event) {
@@ -142,24 +121,6 @@ const clickButton = () => {
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((button) =>
     button.addEventListener('click', productClickListener));
-};
-
-const teste = () => {
-  console.log(listStorage);
-  // if (listStorage.length > 0) {
-
-  const storage = JSON.parse(localStorage.getItem('listProducts'));
-  const cart = document.querySelector('.cart__items');
-  console.log(storage);
-  if (storage !== null) {
-    storage.forEach((product) => {
-      const item = createCartItemElement(product);
-      cart.appendChild(item);
-      setStorage(product);
-    });
-  }
-  //} else 
-  // setStorage(obj);
 };
 
 const fetchProducts = async () => {
@@ -175,28 +136,27 @@ const fetchProducts = async () => {
       name: title,
       image: thumbnail,
     };
+
     const item = createProductItemElement(obj);
     sectionItems.appendChild(item);
   });
 
   clickButton();
-  teste();
 };
 
-/* const getItemsStorage = () => {
+const getItemsStorage = () => {
   const savedItems = localStorage.getItem('listProducts');
   const savedCart = document.querySelector('.cart__items');
   savedCart.innerHTML = savedItems;
 
   savedCart.childNodes.forEach((item) =>
     item.addEventListener('click', cartItemClickListener));
-}; */
-
-window.onload = function onload() {
-  fetchProducts();
-  // getItemsStorage();
-  /*     console.log(JSON.parse(localStorage.getItem('prices')));
-      console.log(localStorage.getItem('prices'));
-      changePrice(JSON.parse(localStorage.getItem('prices'))); */
-  // teste();
+  };
+  
+  window.onload = function onload() {
+    fetchProducts();
+    getItemsStorage();
+    console.log(JSON.parse(localStorage.getItem('prices')));
+    //console.log(localStorage.getItem('prices'));
+    changePrice(JSON.parse(localStorage.getItem('prices')));
 };
