@@ -83,10 +83,16 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+const saveCart = async () => {
+  const cartList = document.querySelector(cartItems);
+  localStorage.setItem('listSaved', cartList.outerHTML);
+};
+
 const putItemInCart = (product) => {
   const cartItensContainer = document.querySelector(cartItems);
 
   cartItensContainer.appendChild(createCartItemElement(product));
+  saveCart();
 };
 
 const onClick = async (event) => {
@@ -109,6 +115,7 @@ const addEventButtons = async () => {
 const clearButton = () => {
   const cartItens = document.querySelector(cartItems);
   cartItens.innerHTML = '';
+  saveCart();
 };
 
 const buttonClearEvent = () => {
@@ -116,8 +123,22 @@ const buttonClearEvent = () => {
   buttonClear.addEventListener('click', clearButton);
 };
 
+// const loadingLocalStorage = async () => {
+//   if (localStorage.length >= 1) {
+//     const storedList = localStorage.getItem('listSaved');
+//     const changeList = document.querySelector(cartItems);
+//     changeList.outerHTML = storedList;
+//   }
+// };
+
 window.onload = async function onload() { 
   loadingMessage();
+  if (localStorage.length >= 1) {
+    const storedList = localStorage.getItem('listSaved');
+    const changeList = document.querySelector(cartItems);
+    changeList.outerHTML = storedList;
+  }
+  // loadingLocalStorage();
   createListProductItems()
     .then(() => deleteLoadingMessage())
     .then(() => addEventButtons())
