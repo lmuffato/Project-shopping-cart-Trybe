@@ -189,8 +189,21 @@ async function fetchItemsListener() {
 //   return value;
 // };
 
+const cleanItemsCart = () => {
+  document.querySelector('.empty-cart')
+  .addEventListener('click', () => {
+    document.querySelector('.total-price').textContent = 0;
+    document.querySelectorAll('.cart__item')
+      .forEach((cartItem) => {
+        cartItem.remove();
+      });
+    addLocalStorage();
+  });
+};
+
 window.onload = function onload() { 
   fetchSearch('computador');
   fetchItemsListener();
   loadLocalStorage();
+  cleanItemsCart();
 };
