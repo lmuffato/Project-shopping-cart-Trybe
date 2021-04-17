@@ -38,7 +38,7 @@ async function products(product) {
   return data;
 }
 
-const classe = '.cart__items'
+const classe = '.cart__items';
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
@@ -51,7 +51,7 @@ function createCartItemElement({ id, title, price }) {
 }
 
 const saveList = () => {
-  const fatherLi = document.querySelector('.cart__items').innerHTML;
+  const fatherLi = document.querySelector(classe).innerHTML;
   localStorage.setItem('result', fatherLi);
 };
 
@@ -79,7 +79,7 @@ const addComputers = async (product) => {
 
 const recordItens = () => {
   const result = localStorage.getItem('result');
-  const fatherLi = document.querySelector('.cart__items');
+  const fatherLi = document.querySelector(classe);
   fatherLi.innerHTML = result;
 };
 
