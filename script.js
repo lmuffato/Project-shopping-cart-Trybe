@@ -76,12 +76,12 @@ const sumPrices = (price) => {
   const current = localStorage.getItem('currentPrice');
   total = current ? price + parseFloat(current) : total = price;
   localStorage.setItem('currentPrice', `${total}`);
-  return total.toFixed(2);
+  return parseFloat(total.toFixed(2));
 };
 
 const createPricesHTML = (price) => {
   const cartTotal = document.querySelector('.total-price');
-  cartTotal.innerText = `Valor total da compra: R$ ${(sumPrices(price))}`;
+  cartTotal.innerText = `${(sumPrices(price))}`;
 };
 
 const moveToCart = (e) => {
@@ -134,7 +134,7 @@ const cleanCart = () => {
     localStorage.clear();
     priceDefault();
     const cartTotal = document.querySelector('.total-price');
-    cartTotal.innerText = 'Valor total da compra: R$ 0';
+    cartTotal.innerText = 'Valor total da compra: R$ 0.00';
   });
 };
 
