@@ -79,6 +79,7 @@ const fechProductById = async (itemId) => {
   const dataFetch = await fetch(URL);
   const data = await dataFetch.json();
 
+  document.querySelector('.loading').remove();
   const cartList = document.querySelector('.cart__items');
 
   const obj = {
@@ -93,9 +94,17 @@ const fechProductById = async (itemId) => {
   setStorage(obj);
 };
 
+const createLoadingElem = () => {
+  const loadingElem = document.createElement('p');
+  document.body.insertBefore(loadingElem, document.body.childNodes[0]);
+  loadingElem.className = 'loading';
+  loadingElem.innerText = 'Loading';
+};
+
 function productClickListener(event) {
   // coloque seu código aqui
   const id = getSkuFromProductItem(event.target.parentNode);
+  createLoadingElem();
   fechProductById(id);
 }
 
@@ -123,6 +132,7 @@ const fetchProducts = async () => {
   const dataFetch = await fetch(URL);
   const data = await dataFetch.json();
 
+  document.querySelector('.loading').remove();
   const sectionItems = document.querySelector('.items');
 
   data.results.forEach(({ id, title, thumbnail }) => {
@@ -134,7 +144,6 @@ const fetchProducts = async () => {
     const item = createProductItemElement(obj);
     sectionItems.appendChild(item);
   });
-
   clickButton();
   loadStorage();
 };
@@ -157,4 +166,5 @@ const clearAllClickListener = () => {
 window.onload = function onload() {
   fetchProducts();
   clearAllClickListener();
+  // loading();
 };
