@@ -100,10 +100,6 @@ const emptyCart = () => {
   });
 };
 
-const totalPrices = () => {
-  
-}
-
 window.onload = function onload() {
   addComputers('computador');
   eventClick();
