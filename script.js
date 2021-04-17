@@ -94,7 +94,7 @@ const clearCart = () => {
   const listInCart = document.querySelector('.cart__items');
   const arr = [...listInCart.children];
   arr.forEach((element) => listInCart.removeChild(element));
-}
+};
 
 document.querySelector('.empty-cart').addEventListener('click', clearCart);
 
