@@ -163,32 +163,6 @@ async function fetchItemsListener() {
   items.addEventListener('click', fetchItems);
 }
 
-// Tentativa requisito 5
-
-// async function fetchItemsCart(itemId) {
-//   return fetch(`https://api.mercadolibre.com/items/${itemId}`)
-//     .then((response) => response.json())
-//     .then((data) => data)
-//     .catch((err) => err);
-// }
-
-// function getIdItemsCart() {
-//   const [...cartItems] = document.querySelectorAll('.cart__item');
-//   return cartItems.map((cartItem) => cartItem.textContent.match(/(\s[A-Z]\w+)/g)[0].trim());
-// }
-
-// const sumPricesItemsCart = async () => {
-//   const value = [];
-//   const idsItems = getIdItemsCart();
-//   idsItems.map(async (id) => {
-//     const teste = await fetchItemsCart(id);
-//     console.log(teste.price);
-//     value.push(teste.price);
-//   });
-//   console.log(value);
-//   return value;
-// };
-
 const cleanItemsCart = () => {
   document.querySelector('.empty-cart')
   .addEventListener('click', () => {
