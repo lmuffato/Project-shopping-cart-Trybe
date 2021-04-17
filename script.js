@@ -1,6 +1,7 @@
 const itemsSection = document.getElementsByClassName('items');
 const cartItemsOL = document.getElementsByClassName('cart__items');
 const emptyCartBtn = document.getElementsByClassName('empty-cart');
+const totalPriceSpan = document.getElementsByClassName('total-price');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -32,6 +33,26 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+const updateCartTotal = function () {
+  return new Promise((resolve, reject) => {
+    const prices = Array.from(cartItemsOL[0].childNodes)
+      .map((el) => el.innerText
+      .split('PRICE: $')[1]);
+    const totalSum = prices.reduce((acc, curr) => acc + parseFloat(curr), 0);
+
+    if (typeof totalSum !== 'number' || Number.isNaN(totalSum)) {
+      throw reject(new Error('IT WAS NOT POSSIBLE TO CALCULATE THE TOTAL'));
+    }
+    resolve(totalSum);
+  });
+};
+
+async function calculateCartTotal() {
+  const data = await updateCartTotal();
+
+  totalPriceSpan[0].innerHTML = data;  
+}
+
 function setLocalStorage() {
   const data = cartItemsOL[0].innerHTML;
   localStorage.setItem('cart', data);  
@@ -40,6 +61,7 @@ function setLocalStorage() {
 function cartItemClickListener(event) {  
   event.target.remove();
   setLocalStorage();
+  calculateCartTotal();
 }
 
 function getLocalStorage() {
@@ -90,6 +112,7 @@ async function addItemToCart(event) {
     cartItemsOL[0].appendChild(createCartItemElement({ sku, name, salePrice }));
 
     setLocalStorage();
+    await calculateCartTotal();
     }
   } catch (error) {
     console.log(error);
@@ -106,6 +129,7 @@ const clearCartBtn = () => {
   emptyCartBtn[0].addEventListener('click', () => {
     cartItemsOL[0].innerHTML = '';
     setLocalStorage();
+    calculateCartTotal();
   });
 };
 
@@ -114,4 +138,5 @@ window.onload = function onload() {
   getLocalStorage();
   fetchItems();
   clearCartBtn();
+  calculateCartTotal();
 };
