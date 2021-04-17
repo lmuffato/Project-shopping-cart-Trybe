@@ -28,16 +28,35 @@ function createProductItemElement({ id, title, thumbnail }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-function cartItemClickListener(event) {
+let totalPrice = 0;
+let toDecrease = 0;
+function cartItemClickListener() {
   const parent = event.target.parentNode;
   parent.removeChild(event.target);
+  
 }
+
+const updatePrice = (price) => {
+  totalPrice += price;
+  return totalPrice;
+};
+
+const calculateCartPrice = (data) => {
+  const cartPrice = Math.round(updatePrice(data.price) * 100) / 100;
+  document.querySelector('.total-price').innerText = cartPrice;
+};
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', () => {
+    toDecrease = price * (-1);
+    const cartPrice = Math.round(updatePrice(toDecrease) * 100) / 100;
+    document.querySelector('.total-price').innerText = cartPrice;
+    
+  })
   return li;
 }
 
@@ -72,17 +91,9 @@ const fetchId = (itemId) => (
   })
 );
 
-let totalPrice = 0;
-
-const updatePrice = (price) => {
-  totalPrice += price;
-  return totalPrice;
-};
-
-const appendToCart = (data) => {
-  const cart = createCartItemElement(data);
-  const cartPrice = Math.round(updatePrice(data.price) * 100) / 100;
-  document.querySelector('.total-price').innerText = cartPrice;
+const appendToCart = async (data) => {
+  const cart = await createCartItemElement(data);
+  calculateCartPrice(data);
   document.querySelector('.cart__items').appendChild(cart);
 };
 
