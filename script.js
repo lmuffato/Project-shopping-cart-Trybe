@@ -1,7 +1,7 @@
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
-  img.src = imageSource;
+  img.src = imageSource.replace('I.jpg', 'O.jpg');
   return img;
 }
 
@@ -45,7 +45,7 @@ async function getInfoProduct() {
   .then((response) => response.json()).then((data) => data.results);
   
   const sectionItems = document.querySelector('.items');
-  
+
   objResults.forEach((result) => {
     const computerInfos = {
       sku: result.id,
@@ -55,6 +55,7 @@ async function getInfoProduct() {
     sectionItems.appendChild(createProductItemElement(computerInfos));
   });
 }
+// Requisito 02
 function addToCart() {
   const sectionItems = document.querySelector('.items');
   sectionItems.addEventListener('click', (event) => {
