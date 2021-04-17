@@ -1,3 +1,14 @@
+function totalPrice() {
+  const list = document.querySelectorAll('li');
+  const total = document.querySelector('.total-price');
+  let soma = 0;
+  list.forEach((item) => {
+    const price = item.innerText.split('$')[1];
+    soma += parseFloat(price);
+  });
+  total.innerText = ` Total a Pagar ${soma}`;
+}
+
 // Função  Realizada com a ajuda do Mauricio Viegas
 function getOl() {
   return document.querySelector('.cart__items');
@@ -60,6 +71,7 @@ function carregaPagina(data) {
 // Função  Realizada com a ajuda do Mauricio Viegas
 function cartItemClickListener(event) {
   event.target.remove();
+  totalPrice();
 }
 
 // Função  Realizada com a ajuda do Mauricio Viegas
@@ -79,6 +91,7 @@ function addItemCard(data) {
       const li = createCartItemElement(data.results[index]);
       document.querySelector('.cart__items').appendChild(li);
       addLocalStorage();
+      totalPrice();
     });
   });
 }
@@ -92,6 +105,7 @@ function clearButton() {
   const ol = getOl();
   button.addEventListener('click', () => {
     ol.innerHTML = ' ';
+    totalPrice();
   });
 }
 
@@ -101,6 +115,7 @@ async function funcionamento() {
   addItemCard(data);
   clearButton();
   addHtml();
+  await totalPrice();
 }
 
 window.onload = function onload() {
