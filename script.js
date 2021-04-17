@@ -35,8 +35,7 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   const getItemsFromCart = document.querySelector('.cart__items');
-  // getItemsFromCart.removeChild(event.target);
-  console.log(event.target);
+  getItemsFromCart.removeChild(event.target);
 }
 
 // ------------------------------ Já veio pronto: 
@@ -119,7 +118,6 @@ const removeAllItems = () => {
     sumPrices();
 
     const getItemsFromCart = document.querySelector('.cart__items');
-    const li = document.querySelector('.cart__item');
     while (getItemsFromCart.firstChild) {
       getItemsFromCart.removeChild(getItemsFromCart.firstChild);
     }
