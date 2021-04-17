@@ -1,6 +1,6 @@
 // problema do lint com o numero de chamadas do item visto 
-// no repositório do Murilo - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/82
-const ul = '.cart__items';
+// no repositório do Lucas Pedroso - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/97
+const getCartItems = () => document.querySelector('ol.cart__items');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -35,7 +35,7 @@ const removeLoading = () => {
 const removeAllFromCart = () => {
   const eraseCart = document.querySelector('.empty-cart');
   eraseCart.addEventListener('click', () => {
-  const item = document.querySelector(ul);
+  const item = getCartItems();
   item.innerHTML = '';
   localStorage.clear();
   });
@@ -64,20 +64,29 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// function removefromLocalStorage() {
-//   if (localStorage.length !== 0) {
-//     localStorage.removeItem(id, id);
-//   }
-// }
+// forma de funcionar dos carrinhos vista no código do Lucas Pedroso
+// repositório - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/97
+const saveLocalStorage = () => {
+  localStorage.setItem('cart', getCartItems().innerHTML);
+  // totalPrice();
+};
 
-// tentativa de funcionar vista no repositório do
-// Lucas Pedroso - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/97
+const loadLocalStorage = () => {
+  getCartItems().innerHTML = localStorage.getItem('cart');
+  const cartItems = document.querySelectorAll('li.cart__item');
+  cartItems.forEach((item) => item.addEventListener('click', cartItemClickListener));
+  // totalPrice();
+};
+
 function cartItemClickListener(event) {
-  const itemsSearched = document.querySelectorAll('.cart__item');
-  itemsSearched.forEach((element) => element.addEventListener('click', (event) => {
-    const clickedElement = event.target;
-    clickedElement.remove(event.target);
-  }));
+  const itemSearched = getCartItems();
+  // itemSearched.forEach((element) => element.addEventListener('click', (event) => {
+  //   const clickedElement = event.target;
+  //   clickedElement.remove();
+  // }));
+  itemSearched.removeChild(event.target);
+  removefromLocalStorage(ol.sku);
+// }));
 }
 
 // uso do this visto no repositorio do João Nascimento 
@@ -90,10 +99,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function saveLocalStorage(id) {
-  localStorage.setItem(id, id);
-}
-
 async function fetchList(ItemID) {
   const endpoint = `https://api.mercadolibre.com/items/${ItemID}`;
   const response = await fetch(endpoint);
@@ -104,9 +109,9 @@ async function fetchList(ItemID) {
       salePrice: obj.price,
     };
     const item = createCartItemElement(pc);
-    const itemSearched = document.querySelector(ul);
+    const itemSearched = getCartItems();
     itemSearched.appendChild(item);
-    saveLocalStorage(pc.sku);
+    saveLocalStorage();
     // totalPrice(pc.salePrice);
 }
 
@@ -139,5 +144,6 @@ window.onload = function onload() {
   fetchComputer()
   .then(() => markingTargets());
   removeAllFromCart();
-  cartItemClickListener();
+  loadLocalStorage();
+  // cartItemClickListener();
 };
