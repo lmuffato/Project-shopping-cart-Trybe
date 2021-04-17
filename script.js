@@ -1,3 +1,5 @@
+const cartItems = document.querySelector('.cart__items');
+
 function transformKeys(arrayDeObjs) {
   const arrays = arrayDeObjs.map((produto) => {
     const { id: sku, title: name, price: salePrice, thumbnail: image } = produto;
@@ -20,8 +22,15 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function setLocalStorage() {
+  const listaProdutos = cartItems.innerHTML;
+  localStorage.setItem('userSession', listaProdutos);
+}
+
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  cartItems.removeChild(event.target);
+  localStorage.removeItem('userSession');
+  setLocalStorage();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -36,8 +45,8 @@ async function addToCart(id) {
   const response = await fetch(`https://api.mercadolibre.com/items/${id}`);
   const responseToJson = await response.json();
   const parseKeys = transformKeys([responseToJson]);
-  const ol = document.querySelector('.cart__items');
-  ol.appendChild(createCartItemElement(parseKeys[0]));
+  cartItems.appendChild(createCartItemElement(parseKeys[0]));
+  setLocalStorage();
 }
 
 function createProductItemElement({ sku, name, image }) {
@@ -54,11 +63,11 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(button);
 
   return section;
-}
+} 
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
 function insertItems(produtos) {
   const sessao = document.querySelector('.items');
@@ -76,6 +85,14 @@ async function getProductsByName() {
   return insertItems(produtos);
 }
 
+function getUserSession() {
+  const content = localStorage.getItem('userSession');
+  cartItems.innerHTML = content;
+  const items = document.querySelectorAll('.cart__item');
+  items.forEach((item) => item.addEventListener('click', cartItemClickListener));
+}
+
 window.onload = function onload() {
   getProductsByName();
+  getUserSession();
  };
