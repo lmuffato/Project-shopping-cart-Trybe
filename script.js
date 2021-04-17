@@ -81,9 +81,8 @@ const updatePrice = (price) => {
 
 const appendToCart = (data) => {
   const cart = createCartItemElement(data);
-  const cartPrice = updatePrice(data.price).toFixed(2);
+  const cartPrice = Math.round(updatePrice(data.price) * 100) / 100;
   document.querySelector('.total-price').innerText = cartPrice;
-
   document.querySelector('.cart__items').appendChild(cart);
 };
 
