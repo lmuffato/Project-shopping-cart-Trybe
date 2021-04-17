@@ -1,5 +1,3 @@
-const { results } = require('./cypress/mocks/computerCategory.js');
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -58,10 +56,8 @@ const API = {
 };
 
 async function processItemInfo(itemID) {
-  console.log(`Processing ${itemID} data`);
   const data = await API.fetch(`https://api.mercadolibre.com/items/${itemID}`);
   const json = await data.json();
-  console.log(json);
   const { id: sku, title: name, price: salePrice } = json;
   return ({ sku, name, salePrice });
 }
@@ -69,6 +65,7 @@ async function processItemInfo(itemID) {
 const cart = {
   section: null,
   separator: '|',
+  total: 0,
   init() {
     this.section = document.querySelector('.cart__items');
     const clearBtn = document.querySelector('.empty-cart');
@@ -80,39 +77,49 @@ const cart = {
     await this.processItems(data);
   },
   async processItems(data) {
-    const ids = data.split(this.separator);
-    const processedItem = [];
-    for (let index = 0; index < ids.length; index += 1) {
-      processedItem.push(processItemInfo(ids[index]));
-    }
-    const wait = await Promise.all(processedItem);
-    wait.forEach((item) => cart.add(item));
+    const items = data.split(this.separator);
+    items.forEach((item) => {
+      const things = item.split(',');
+      console.log(things);
+      const sku = things[0];
+      const name = things[1];
+      const salePrice = things[2];
+      cart.add({ sku, name, salePrice });
+    });
+    /*     const processedItem = [];
+        for (let index = 0; index < items.length; index += 1) {
+    
+          processedItem.push(processItemInfo(items[index]));
+        }
+         const wait = await Promise.all(processedItem);
+        wait.forEach((item) => cart.add(item));  */
   },
   save() {
-    const regEx = /SKU: ([A-Z]\w+)/;
+    const regEx = /SKU: (.*) \| NAME: (.*) \| PRICE: \$(.*)/;
     const data = [...this.section.children];
     if (data.length === 0) {
       localStorage.removeItem('carList');
       return;
     }
-    const stringify = data.map(({ innerText }) => innerText.match(regEx)[1]).join(this.separator);
-    /*     const stringify = data.reduce((acc, { innerText }) =>
-          `${acc}${innerText.match(regEx)[1]}${this.separator}`, ''); */
-    localStorage.setItem('carList', stringify);
+    localStorage.setItem('carList', data.map(({ innerText }) =>
+      innerText.match(regEx).slice(1)).join(this.separator));
   },
   add(item) {
     this.section.appendChild(this.createCartItemElement(item));
     this.save();
+    this.updateTotalPrice();
   },
   remove(item) {
     this.section.removeChild(item);
     this.save();
+    this.updateTotalPrice();
   },
   clear() {
     while (this.section.lastElementChild) {
       this.section.removeChild(this.section.lastElementChild);
     }
     this.save();
+    this.updateTotalPrice();
   },
   createCartItemElement({ sku, name, salePrice }) {
     const li = document.createElement('li');
@@ -120,6 +127,20 @@ const cart = {
     li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
     li.addEventListener('click', (event) => this.remove(event.target));
     return li;
+  },
+  updateTotalPrice() {
+    const items = [...this.section.children];
+    const totalPrice = document.getElementById('totalPrice');
+    if (items.length === 0) {
+      this.total = 0;
+      totalPrice.innerText = `${this.total}`;
+      return;
+    }
+    const regEx = /PRICE: \$(\d+\.?\d*)/;
+    const sum = [...this.section.children].reduce((acc, { innerText }) =>
+      acc + parseFloat(innerText.match(regEx)[1]), 0);
+    this.total = parseFloat(sum.toFixed(2));
+    totalPrice.innerText = `${this.total}`;
   },
 };
 
@@ -149,29 +170,18 @@ const products = {
   },
 };
 
-const fetchMock = (url) => Promise.resolve({
-  status: 200,
-  ok: true,
-  json: () => {
-    if (url.includes('https://api.mercadolibre.com/items/')) {
-      const productId = url.split('items/')[1];
-      return Promise.resolve(results.results.find(({ id }) => id === productId));
-    }
-    return Promise.resolve(results);
-  },
-});
+document.onreadystatechange = function onload() {
 
-document.onreadystatechange = function inject() {
-  window.fetch = fetchMock;
 };
-
 window.onload = async function onload() {
+  const item = document.querySelector('.items');
+  const p = document.createElement('p');
+  item.appendChild(p);
+  p.className = 'loading';
   API.init();
   products.init();
   cart.init();
   await products.fetch();
   await cart.load();
-  const thing = await API.fetch('https://api.mercadolibre.com/items/MLB687124927');
-  const data = await thing.json();
-  console.log(data);
+  p.remove();
 };
