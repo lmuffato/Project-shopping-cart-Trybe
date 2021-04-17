@@ -1,4 +1,5 @@
 const classCartItems = '.cart__item';
+
 // Implementação requisito 5: Some o valor total dos itens do carrinho de compras de forma assíncrona.
 const sumPricesItemsCart = async () => {
   const regex = /(\$\d+)(\.\d+)|(\$\d+)/g;
