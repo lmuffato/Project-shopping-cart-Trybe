@@ -1,3 +1,7 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
 .top-bar {
   align-items: center;
   display: flex;
@@ -28,6 +32,7 @@
   flex-basis: 70%;
   flex-wrap: wrap;
   justify-content: center;
+  font-size: 14px;
 }
 
 .item {
@@ -52,7 +57,10 @@
 }
 
 .item .item__image {
-  width: 100%;
+  max-width: 60%;
+  max-height: 100%;
+  display: flex;
+  align-self: center;
 }
 
 .item .item__add {
@@ -74,3 +82,5 @@
   font-size: 16pt;
   text-align: center;
 }
+
+
