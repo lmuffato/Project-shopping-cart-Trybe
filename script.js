@@ -35,7 +35,8 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   const getItemsFromCart = document.querySelector('.cart__items');
-  getItemsFromCart.removeChild(event.target);
+  // getItemsFromCart.removeChild(event.target);
+  console.log(event.target);
 }
 
 // ------------------------------ Já veio pronto: 
@@ -62,10 +63,8 @@ const addToCart = async (event) => {
 
   document.querySelector('ol.cart__items').appendChild(createCartItemElement(obj));
   localStorage.setItem(itemID, JSON.stringify(obj));
-  console.log(obj.salePrice);
 
   sum += obj.salePrice;
-  console.log(sum);
   sumPrices();
   localStorage.setItem('keySoma', sum);
 };
@@ -118,6 +117,12 @@ const removeAllItems = () => {
     localStorage.clear();
     sum = 0;
     sumPrices();
+
+    const getItemsFromCart = document.querySelector('.cart__items');
+    const li = document.querySelector('.cart__item');
+    while (getItemsFromCart.firstChild) {
+      getItemsFromCart.removeChild(getItemsFromCart.firstChild);
+    }
   });
 };
 
