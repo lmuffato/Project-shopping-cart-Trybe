@@ -6,7 +6,7 @@ function totalPrice() {
     const price = item.innerText.split('$')[1];
     soma += parseFloat(price);
   });
-  total.innerText = ` Total a Pagar ${soma}`;
+  total.innerText = soma;
 }
 
 // Função  Realizada com a ajuda do Mauricio Viegas
