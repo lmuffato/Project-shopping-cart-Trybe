@@ -1,8 +1,8 @@
+const classCartItems = '.cart__item';
 // Implementação requisito 5: Some o valor total dos itens do carrinho de compras de forma assíncrona.
-
 const sumPricesItemsCart = async () => {
   const regex = /(\$\d+)(\.\d+)|(\$\d+)/g;
-  const [...cartItems] = document.querySelectorAll('.cart__item');
+  const [...cartItems] = document.querySelectorAll(classCartItems);
   const sumPrices = cartItems.map((item) => +item.textContent.match(regex)[0]
     .replace(/\$/g, '').trim()).reduce((acc, curr) => acc + curr, 0);
    return +sumPrices.toFixed(2);
@@ -19,7 +19,7 @@ const showSumPrice = async () => {
 // Implementação requisito 4: Carrinho de compras carregado do localStorage ao iniciar a página
 function getItemsCar() {
   const productsCart = [];
-  const products = document.querySelectorAll('.cart__item');
+  const products = document.querySelectorAll(classCartItems);
   products.forEach((product) => {
     const productInfoCart = {
       text: product.textContent,
