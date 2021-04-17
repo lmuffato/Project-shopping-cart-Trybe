@@ -26,28 +26,19 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-  // const addItem = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-  // addItem.addEventListener('click', createCartItem);
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
-// function cartItemClickListener(event) {
-//   event.target.remove();
-//   savingItems();
-// }
-// cartItemClickListener();
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
-  return li;
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
 }
+
+function cartItemClickListener(event) {
+  const click = event.target;
+  click.remove();
+}
+
+// funções de fetch, 1 e 2 requisito
 
 async function fetchProducts() {
   const getProduct = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
@@ -56,48 +47,41 @@ async function fetchProducts() {
     getProduct.forEach((item) => {
     const receivedItems = { sku: item.id, name: item.title, image: item.thumbnail };
     document.querySelector('.items').appendChild(createProductItemElement(receivedItems));
+    createCartItem(receivedItems);
   });
 }
 
-// const createCartItem = () => {
-//   const everyItem = document.querySelector('.items');
-//   everyItem.addEventListener('click', async (event) => {
-//    const idSku = getSkuFromProductItem(event.target.parentElement);
-//    const getItems = await fetch(`https://api.mercadolibre.com/items/${idSku}`)
-//     .then((result) => result.json());
-//    const getPrice = { sku: idSku, name: getItems.title, salePrice: getItems.price };
-//    const cartLoad = createCartItemElement(getPrice);
-//    document.querySelector('ol.cart__items').appendChild(cartLoad);
-//    savingItems();
-//  });
-// };
-
-// tentando de outra forma, já que o parent não estava funcionando.
-async function createCartItem(sku) {
-  const olList = document.querySelector(cartItems);
-  const idToSku = sku;
-  const result = await fetch(`https://api.mercadolibre.com/items/${idToSku}`);
-  const json = await result.json()
-  .then((item) => createCartItemElement({
-        sku: item.id,
-        name: item.title,
-        salePrice: item.price,
-   }));
-  olList.appendChild(json);
-  savingItems();
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  document.querySelector('ol.cart__items').appendChild(li);
+  li.addEventListener('click', cartItemClickListener);
+  return li;
 }
+
+const createCartItem = ({sku}) => {
+  const everyItem = document.querySelector('.item__add');
+  everyItem.addEventListener('click', async () => {
+   const idSku = sku;
+   const getItems = await fetch(`https://api.mercadolibre.com/items/${idSku}`)
+    .then((result) => result.json());
+   const getPrice = { sku: idSku, name: getItems.title, salePrice: getItems.price };
+   createCartItemElement(getPrice);
+   savingItems();
+ });
+};
 
 // referência Patrick, turma A. Me deu noção de como fazer o botão de maneira pragmática.
-const clearingCart = () => {
-  const clearButton = document.querySelector('.empty-cart');
-  clearButton.addEventListener('click', () => {
-    const clearingItems = document.querySelector(cartItems);
-    clearingItems.innerHTML = '';
-    savingItems();
-  });
-};
+// const clearingCart = () => {
+//   const cartList = document.querySelector(cartItems);
+//   cartList.innerHTML = '';
+//     savingItems();
+// };
+
+// const clear = document.getElementsByClassName ('empty-cart')[0];
+// clear.addEventListener('click', clearingCart)
 
 window.onload = function onload() { };
 fetchProducts();
-createCartItem();
-clearingCart();
+// clearingCart();
