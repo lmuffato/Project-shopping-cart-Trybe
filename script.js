@@ -1,5 +1,7 @@
 // PROJECT SHOPPING CART
 
+const getCartList = () => document.querySelector('.cart__items');
+
 const totalPriceElem = document.createElement('p');
 totalPriceElem.className = 'total-price';
 let totalPrice;
@@ -59,8 +61,7 @@ const removeItem = (sku) => {
 
 function cartItemClickListener(event) {
   // coloque seu código aqui
-  const cartList = document.querySelector('.cart__items');
-  cartList.removeChild(event.target);
+  getCartList().removeChild(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -80,7 +81,6 @@ const fechProductById = async (itemId) => {
   const data = await dataFetch.json();
 
   document.querySelector('.loading').remove();
-  const cartList = document.querySelector('.cart__items');
 
   const obj = {
     sku: data.id,
@@ -89,7 +89,7 @@ const fechProductById = async (itemId) => {
   };
 
   const itemList = createCartItemElement(obj);
-  cartList.appendChild(itemList);
+  getCartList().appendChild(itemList);
 
   setStorage(obj);
 };
@@ -116,12 +116,11 @@ const clickButton = () => {
 
 const loadStorage = () => {
   const storage = JSON.parse(localStorage.getItem('listProducts'));
-  const cart = document.querySelector('.cart__items');
 
   if (storage !== null) {
     storage.forEach((product) => {
       const item = createCartItemElement(product);
-      cart.appendChild(item);
+      getCartList().appendChild(item);
       setStorage(product);
     });
   }
@@ -149,9 +148,7 @@ const fetchProducts = async () => {
 };
 
 const clearAll = () => {
-  const cartList = document.querySelector('.cart__items');
-
-  listStorage.forEach((item) => cartList.firstElementChild.remove(item));
+  listStorage.forEach((item) => getCartList().firstElementChild.remove(item));
 
   listStorage = [];
   localStorage.setItem('listProducts', JSON.stringify(listStorage));
@@ -166,5 +163,4 @@ const clearAllClickListener = () => {
 window.onload = function onload() {
   fetchProducts();
   clearAllClickListener();
-  // loading();
 };
