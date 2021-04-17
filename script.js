@@ -97,7 +97,6 @@ const getResults = async () => {
   const data = await response.json();
   removeLoading();
   data.results.forEach(({ id: sku, title: name, thumbnail: image }) => {
-
     const objPc = {
       sku,
       name,
