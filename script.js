@@ -14,15 +14,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function eventSaveList() {
-  const getInnerHTML = {
-    list: cartItems().innerHTML,
-  };
-  const getInnerHTMLJSON = JSON.stringify(getInnerHTML);
-  localStorage.setItem('listaCompleta', getInnerHTMLJSON);
-  return JSON.parse(localStorage.getItem('listaCompleta'));
-}
-
 async function sumPrices() {
   const listOfCar = await document.querySelectorAll('li');
   const p = document.querySelector('p');
@@ -33,11 +24,32 @@ async function sumPrices() {
   p.innerText = `${sum}`;
 }
 
+function eventSaveList() {
+  const getInnerHTML = {
+    list: cartItems().innerHTML,
+  };
+  const getInnerHTMLJSON = JSON.stringify(getInnerHTML);
+  localStorage.setItem('listaCompleta', getInnerHTMLJSON);
+  // emptyingCar();
+  return JSON.parse(localStorage.getItem('listaCompleta'));
+}
+
+async function emptyingCar() {
+  const currentlyList = cartItems();
+  const buttonEmpt = document.querySelector('.empty-cart');
+  buttonEmpt.addEventListener('click', () => {
+    currentlyList.innerText = '';
+    sumPrices();
+    eventSaveList();
+  });
+}
+
 function cartItemClickListener(event) {
   // coloque seu código aqui
   const li = event.target;
   const ol = li.parentNode;
   ol.removeChild(li);
+  eventSaveList();
   sumPrices();
 }
 
@@ -128,4 +140,5 @@ window.onload = function onload() {
    clickButtons();
    defineVariable();
    sumPrices();
+   emptyingCar();
 };
