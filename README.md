@@ -396,8 +396,8 @@ Cada produto na página _HTML_ possui um botão com o nome `Adicionar ao carrinh
 
 Ao clicar nesse botão você deve realizar uma requisição para o _endpoint_:
 ```javascript
-"https://api.mercadolibre.com/items/$ItemID"
-```
+.then((response) => response.json())
+.then((data) => data.results)```
 onde `$ItemID` deve ser o valor `id` do item selecionado.
 
 Quando colocado o id `MLB1341706310` retorno desse _endpoint_ será algo no formato:

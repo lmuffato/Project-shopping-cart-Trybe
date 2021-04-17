@@ -1,7 +1,7 @@
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
-  img.src = imageSource;
+  img.src = imageSource.replace('I.jpg', 'O.jpg');
   return img;
 }
 
@@ -24,21 +24,21 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
 // function cartItemClickListener(event) {
-//   // coloque seu código aqui
+
 // }
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
 const searchComputers = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
 .then((response) => response.json())
@@ -54,19 +54,27 @@ const searchComputers = () => fetch('https://api.mercadolibre.com/sites/MLB/sear
 //   console.log(async2.results);
 //   // console.log(sync3);
 // };
+const searchPcById = (mlb) => fetch(`https://api.mercadolibre.com/items/${mlb}`)
+.then((response) => response.json())
+.then(({ id, title, price }) => ({ id, title, price }));
 
-// const takeaway = () => {
-// searchComputers.forEach((item) => {
-// const objComputer = {
-//   sku: item.id,
-//   name: item.title,
-//   image: item.thumbnail,
-// };
-// document.querySelector('.items').appendChild(createProductItemElement(objComputer));
-// });
-// };
+const addButton = () => {
+const buttons = document.querySelectorAll('.item button');
+  buttons.forEach((btn) => {
+      btn.addEventListener('click', async (event) => {
+        const cartItens = document.querySelector('.cart__items');
+        const mlb = getSkuFromProductItem(event.target.parentElement);
+        const IEW = await searchPcById(mlb);
+        const getPc = createCartItemElement(IEW);
+        
+        cartItens.appendChild(getPc);
+      });
+  });
+};
 
-window.onload = function onload() { 
-  searchComputers();
+window.onload = async function onload() { 
+  await searchComputers();
    // syncTest();
+  // searchPcById();
+  addButton();
 };
