@@ -29,9 +29,9 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
 function cartItemClickListener(event) {
   const click = event.target;
@@ -39,6 +39,27 @@ function cartItemClickListener(event) {
 }
 
 // funções de fetch, 1 e 2 requisito
+
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  document.querySelector('ol.cart__items').appendChild(li);
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+const createCartItem = ({ sku }) => {
+  const everyItem = document.querySelector('.item__add');
+  everyItem.addEventListener('click', async () => {
+   const idSku = sku;
+   const getItems = await fetch(`https://api.mercadolibre.com/items/${idSku}`)
+    .then((result) => result.json());
+   const getPrice = { sku: idSku, name: getItems.title, salePrice: getItems.price };
+   createCartItemElement(getPrice);
+   savingItems();
+ });
+};
 
 async function fetchProducts() {
   const getProduct = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
@@ -50,27 +71,6 @@ async function fetchProducts() {
     createCartItem(receivedItems);
   });
 }
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  document.querySelector('ol.cart__items').appendChild(li);
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
-
-const createCartItem = ({sku}) => {
-  const everyItem = document.querySelector('.item__add');
-  everyItem.addEventListener('click', async () => {
-   const idSku = sku;
-   const getItems = await fetch(`https://api.mercadolibre.com/items/${idSku}`)
-    .then((result) => result.json());
-   const getPrice = { sku: idSku, name: getItems.title, salePrice: getItems.price };
-   createCartItemElement(getPrice);
-   savingItems();
- });
-};
 
 // referência Patrick, turma A. Me deu noção de como fazer o botão de maneira pragmática.
 // const clearingCart = () => {
