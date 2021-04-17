@@ -78,3 +78,8 @@
 .cart__item {
   cursor: pointer;
 }
+
+.total-price-container {
+  display: flex;
+  align-items: center;
+}
