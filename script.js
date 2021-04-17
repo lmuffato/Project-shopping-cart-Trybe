@@ -30,10 +30,9 @@ function createProductItemElement({ id, title, thumbnail }) {
 
 let totalPrice = 0;
 let toDecrease = 0;
-function cartItemClickListener() {
+function cartItemClickListener(event) {
   const parent = event.target.parentNode;
   parent.removeChild(event.target);
-  
 }
 
 const updatePrice = (price) => {
@@ -55,8 +54,7 @@ function createCartItemElement({ id, title, price }) {
     toDecrease = price * (-1);
     const cartPrice = Math.round(updatePrice(toDecrease) * 100) / 100;
     document.querySelector('.total-price').innerText = cartPrice;
-    
-  })
+  });
   return li;
 }
 
