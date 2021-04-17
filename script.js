@@ -31,8 +31,22 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+const decreasePrice = (price) => {
+  const current = localStorage.getItem('currentPrice');
+  const total = parseFloat(current) - price;
+  localStorage.setItem('currentPrice', `${parseFloat(total.toFixed(2))}`);
+  return parseFloat(total.toFixed(2));
+};
+
+const createPricesHTML = (price, callback) => {
+  const cartTotal = document.querySelector('.total-price');
+  cartTotal.innerText = callback(price);
+};
+
 function cartItemClickListener(event) {
   const parent = event.target.parentElement;
+  const price = event.target.innerHTML.split('$')[1];
+  createPricesHTML(Number(price), decreasePrice);
   parent.removeChild(event.target);
 }
 
@@ -67,6 +81,7 @@ const getItemsFromLocal = () => {
       son.className = 'cart__item';
       son.innerHTML = element;
       cartNode().appendChild(son);
+      son.addEventListener('click', (event) => cartItemClickListener(event));
     });
   }
 };
@@ -79,11 +94,6 @@ const sumPrices = (price) => {
   return parseFloat(total.toFixed(2));
 };
 
-const createPricesHTML = (price) => {
-  const cartTotal = document.querySelector('.total-price');
-  cartTotal.innerText = `${(sumPrices(price))}`;
-};
-
 const moveToCart = (e) => {
   const esteId = e.target.previousSibling.previousSibling.previousSibling.innerText;
   getProducts(esteId, false)
@@ -92,7 +102,7 @@ const moveToCart = (e) => {
       const li = createCartItemElement(r);
       cartNode().appendChild(li);
       saveItems(li);
-      createPricesHTML(salePrice);
+      createPricesHTML(salePrice, sumPrices);
     });
 };
 
@@ -105,12 +115,12 @@ const addListeners = () => {
 
 const loadingScreen = async () => {
   const getImage = document.querySelector('.loading');
-  const father = document.querySelector('#toCenter');
+  const father = document.getElementById('toCenter');
   father.removeChild(getImage);
 };
 
-async function criaOsElementos(buscar, general = true, classe) {
-  const section = document.querySelector(`.${classe}`);
+async function criaOsElementos(buscar, general = true) {
+  const section = document.querySelector('.items');
   await getProducts(buscar, general)
     .then((r) => r.forEach((product) => section.appendChild(createProductItemElement(product))))
     .then(() => addListeners());
@@ -118,9 +128,9 @@ async function criaOsElementos(buscar, general = true, classe) {
 }
 
 const priceDefault = async () => {
-  await criaOsElementos();
+  await criaOsElementos('computador', true);
   const toCheck = localStorage.getItem('currentPrice');
-  return toCheck ? createPricesHTML(0) : localStorage.setItem('currentPrice', '0');
+  return toCheck ? createPricesHTML(0, sumPrices) : localStorage.setItem('currentPrice', '0');
 };
 
 const cleanCart = () => {
@@ -139,7 +149,6 @@ const cleanCart = () => {
 };
 
 window.onload = function onload() {
-  criaOsElementos('computador', true, 'items');
   getItemsFromLocal();
   priceDefault();
   cleanCart();
