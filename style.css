@@ -1,4 +1,4 @@
-/* .top-bar {
+.top-bar {
   align-items: center;
   display: flex;
   height: 100px;
@@ -73,4 +73,4 @@
   flex-basis: 1;
   font-size: 16pt;
   text-align: center;
-} */
+}
