@@ -40,9 +40,12 @@ const updatePrice = (price) => {
   return totalPrice;
 };
 
+const getPriceHtml = () => document.querySelector('.total-price');
+
 const calculateCartPrice = (data) => {
   const cartPrice = Math.round(updatePrice(data.price) * 100) / 100;
-  document.querySelector('.total-price').innerText = cartPrice;
+  const finalPrice = getPriceHtml();
+  finalPrice.innerText = cartPrice;
 };
 
 function createCartItemElement({ id, title, price }) {
@@ -53,10 +56,23 @@ function createCartItemElement({ id, title, price }) {
   li.addEventListener('click', () => {
     toDecrease = price * (-1);
     const cartPrice = Math.round(updatePrice(toDecrease) * 100) / 100;
-    document.querySelector('.total-price').innerText = cartPrice;
+    const finalPrice = getPriceHtml();
+    finalPrice.innerText = cartPrice;
   });
   return li;
 }
+
+const emptyCart = () => {
+  const btn = document.querySelector('.empty-cart');
+  btn.addEventListener('click', () => {
+    const cart = document.querySelector('.cart__items');
+    const items = document.querySelectorAll('.cart__item');
+    items.forEach((item) => cart.removeChild(item));
+    totalPrice = 0;
+    const finalPrice = getPriceHtml();
+    finalPrice.innerText = 0;
+  });
+};
 
 const fetchProduct = (product) => (
   new Promise((resolve) => {
@@ -111,4 +127,5 @@ const addToCartEvent = (product) => {
 window.onload = function onload() {
   appendItems('computador');
   addToCartEvent('computador');
+  emptyCart();
  };
