@@ -22,6 +22,8 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
+  const cartSection = document.querySelector('.items');
+  cartSection.appendChild(section);
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
@@ -74,13 +76,13 @@ async function fetchProducts() {
 
 // referência Patrick, turma A. Me deu noção de como fazer o botão de maneira pragmática.
 // const clearingCart = () => {
-//   const cartList = document.querySelector(cartItems);
-//   cartList.innerHTML = '';
+//   const getCart = document.querySelector('.empty-cart');
+//   getCart.addEventListener('click', () => {
+//     const cartItem = document.querySelector(cartItems);
+//     cartItem.innerHTML = '';
 //     savingItems();
+//   });
 // };
-
-// const clear = document.getElementsByClassName ('empty-cart')[0];
-// clear.addEventListener('click', clearingCart)
 
 window.onload = function onload() { };
 fetchProducts();
