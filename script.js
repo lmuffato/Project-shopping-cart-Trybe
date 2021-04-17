@@ -59,11 +59,32 @@ function cartItemClickListener(event) {
   itemCart.remove();  
 }
 
-function createCartItemElement({ id, title, price }) {
+const emptyCart = () => {
+  const getClass = document.querySelectorAll('.cart__item');
+  getClass.forEach((element) => element.remove());
+};
+
+const eventEmptyCart = () => {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', emptyCart);
+};
+
+const totalPrice = async (price) => {
+  const parentNodeTotal = document.querySelector('.cart');
+  const parentTotal = document.createElement('div');
+  const total = document.createElement('p');
+  parentNodeTotal.appendChild(parentTotal);
+  parentTotal.className = 'total-price';
+  parentTotal.appendChild(total);
+  total.innerText = `${price + price}`;
+};
+
+  function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
+  totalPrice(price);
   return li;
 }
 
@@ -97,6 +118,7 @@ const functionsAsync = async () => {
   try {
     createProductList(await getProductDataList());
     clickButton();
+    await eventEmptyCart();
   } catch (erro) {
     throw new Error('Deu algum bizil');
   }
