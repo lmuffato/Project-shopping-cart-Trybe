@@ -74,11 +74,14 @@ const fetchId = (itemId) => (
 
 let totalPrice = 0;
 
-const updatePrice = (price) => totalPrice += price;
+const updatePrice = (price) => {
+  totalPrice += price;
+  return totalPrice;
+};
 
 const appendToCart = (data) => {
   const cart = createCartItemElement(data);
-  let cartPrice = updatePrice(data.price).toFixed(2);
+  const cartPrice = updatePrice(data.price).toFixed(2);
   document.querySelector('.total-price').innerText = cartPrice;
 
   document.querySelector('.cart__items').appendChild(cart);
