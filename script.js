@@ -71,13 +71,6 @@ const saveLocalStorage = () => {
   // totalPrice();
 };
 
-const loadLocalStorage = () => {
-  getCartItems().innerHTML = localStorage.getItem('cart');
-  const cartItems = document.querySelectorAll('li.cart__item');
-  cartItems.forEach((item) => item.addEventListener('click', cartItemClickListener));
-  // totalPrice();
-};
-
 function cartItemClickListener(event) {
   const itemSearched = getCartItems();
   // itemSearched.forEach((element) => element.addEventListener('click', (event) => {
@@ -85,9 +78,16 @@ function cartItemClickListener(event) {
   //   clickedElement.remove();
   // }));
   itemSearched.removeChild(event.target);
-  removefromLocalStorage(ol.sku);
+  saveLocalStorage();
 // }));
 }
+
+const loadLocalStorage = () => {
+  getCartItems().innerHTML = localStorage.getItem('cart');
+  const cartItems = document.querySelectorAll('li.cart__item');
+  cartItems.forEach((item) => item.addEventListener('click', cartItemClickListener));
+  // totalPrice();
+};
 
 // uso do this visto no repositorio do João Nascimento 
 // para tentar evitar lint - https://github.com/tryber/sd-010-a-project-shopping-cart/pull/54
