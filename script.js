@@ -1,4 +1,13 @@
+// A maioria dos códigos foram feitos baseados no repositório do Renzo. Fui observando cada código e refatorando os que eram necessários para o meu entendimento.
+window.onload = function onload() { };
+
 const ol = document.querySelector('.cart__items');
+// const prices = document.querySelector('.total-price');
+
+const setStorage = () => {
+  localStorage.setItem('cart', ol.innerHTML);
+  // localStorage.setItem('priceCart', prices.innerHTML);
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -29,12 +38,25 @@ function createProductItemElement({ id, title, thumbnail }) {
 function getIdFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
-// metodo 
+
+// metodo target desestruturado do elemento clicado do addEventListener e utilizado.
+
 function cartItemClickListener({ target }) {
   target.remove();
+  setStorage();
 }
 
-// A maioria dos códigos foram feitos baseados no repositório do Renzo. Fui observando cada código e refatorando os que eram necessários para o meu entendimento.
+const loadStorage = () => {
+  ol.innerHTML = localStorage.getItem('cart');
+  // prices.innerHTML = localStorage.getItem('priceCart');
+  document.querySelectorAll('.cart__item')
+    .forEach((e) => e.addEventListener('click', cartItemClickListener));
+};
+// const sumPrices = () => {
+//   prices;
+// };
+// sumPrices();
+
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   // Elisa França me enviou a documentação sobre o dataset que mapea o DOMString e guarda os valores de determinado elemento
@@ -71,16 +93,12 @@ const setCart = async () => {
     try {
       const item = await fetchId(getIdFromProductItem(event.parentNode));
       ol.appendChild(createCartItemElement(item));
+      setStorage();
     } catch (error) {
         throw new Error('Erro no click');
     }
   }));
 };
-
-// const sumPrices = () => {
-//   const prices = document.querySelectorAll('cart__item').innerText;
-// };
-// sumPrices();
 
 const asyncAll = async () => {
   try {
@@ -91,6 +109,5 @@ const asyncAll = async () => {
   }
 };
 
-window.onload = function onload() {
-  asyncAll();
-};
+asyncAll();
+loadStorage();
