@@ -31,13 +31,13 @@ function createProductItemElement({ id, title, thumbnail }) {
 
 // pegando o produto com api do mercado livre
 function getProduct() {
-  return new Promise((resolve) => {
+    return new Promise((resolve) => {
     let produtos;
 
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
     .then((data) => {
-      document.querySelector('.loading').remove(); // tira a frase "carregando" da tela quando a api termina a requisição
+      document.querySelector('.loading').remove(); // tira a frase "carregando" da tela quando a api termina a requisição requisito 7
       console.log(data);
       produtos = data.results;
       produtos.forEach((produto) => createProductItemElement(produto)); 
@@ -70,6 +70,28 @@ function cartItemClickListener(event) {
   clicarItem.remove();
 }
 
+// somar o preço dos produtos
+function soma(price) {
+  const p = document.querySelector('.total-price');
+
+  // const arrayLi = document.querySelector('.cart__items').childNodes; // array  com o fillhos da ol 
+  // const arrayPreço = [];
+  // arrayLi.forEach((li) => {
+  //   const conteudoLi = li.innerText;
+  //   const valor = conteudoLi.split('$');
+  //   arrayPreço.push(valor[1]);
+  // });
+
+  const total = {
+    prices: [],
+  };
+  total.prices.push(price); // o valor price é acumulado dentro do objeto a cada vez que a função é chamada
+
+  const valorTotal = total.prices.reduce((acc, item) => acc + item, 0);
+
+  p.innerText = `PREÇO: ${valorTotal}`;
+}
+
 // Crie uma listagem de produtos no cart
 // crio os elementos html / adiciono o produto ao carrinho de compras
 function createCartItemElement({ id, title, price }) {
@@ -78,8 +100,8 @@ function createCartItemElement({ id, title, price }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
-  const addFilho = ol.appendChild(li);
-  return addFilho;
+  ol.appendChild(li);
+  soma(price);
 }
 
 // pego o conteudo do produto especifico pela api com o id do produto especifico
@@ -113,13 +135,21 @@ function clickAddToCart() {
   });
 }
 // fim de crie uma listagem de produtos no cart
-
-// somar o preço dos produtos
-
 // fim carrinho de compras
 
 // onload
 window.onload = function onload() {
-  getProduct()
-    .then(() => clickAddToCart()); // crio uma promisse dentro de get product pois só posso chamar o clickAddToCart() depois que o getPtoduct foir "resolvidos" 
+  // getProduct()
+  //   .then(() => clickAddToCart()); // crio uma promisse dentro de get product pois só posso chamar o clickAddToCart() depois que o getPtoduct foir "resolvidos" 
+
+    const execute = async () => {
+      try {
+        await getProduct();
+        await clickAddToCart();
+        // await soma();
+      } catch (error) {
+        console.log(error);
+      } 
+    };
+    execute();
 };
