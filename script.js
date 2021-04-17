@@ -48,18 +48,22 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 // req 2
 
-const insertInCart = async (item) => {
-  const theTargetId = await item.target.parentNode.firstChild.lastChild.innerText;
-  const endPoint = `https://api.mercadolibre.com/items/MLB${theTargetId}`;
-  const response = await fetch(endPoint);
-  const asJson = await response.json();
-  const asObj = {
+const insertInCart = async ({target}) => {
+  const parentElement = target.parentElement;
+  try {
+    const theTargetId = parentElement.querySelector('.item__sku').innerText;
+    const endPoint = `https://api.mercadolibre.com/items/${theTargetId}`;
+    const response = await fetch(endPoint);
+    const asJson = await response.json();
+    const asObj = {
     sku: asJson.id,
     name: asJson.title,
     salePrice: asJson.price,
   };
   const weGonnaAppend = createCartItemElement(asObj);
   document.getElementsByClassName('cart__items')[0].appendChild(weGonnaAppend);
+  }
+  catch(erro) { console.log(erro)};
 };
 
 // add eventLis
