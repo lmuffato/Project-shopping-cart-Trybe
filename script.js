@@ -1,4 +1,6 @@
 // Requisitos realizados com ajuda do Zezé, Adelino, Orlando Flores, Thiago Souza, Lucas Lara, Nathi, Nilson, Tiago Santos
+const cartList = document.querySelector('.cart__items');
+const cartListItems = '.cart__item';
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -22,12 +24,11 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
- 
   return section;
  }
 
 function cartItemClickListener() {
-  const selectedLi = document.querySelector('.cart__item');
+  const selectedLi = document.querySelector(cartListItems);
   selectedLi.parentElement.removeChild(selectedLi);
 }
 
@@ -40,11 +41,21 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 function saveCart() {
-  const cartList = [...document.querySelectorAll('.cart__item')];
-  cartList.forEach((item, index) => {
+  const cartListElements = [...document.querySelectorAll(cartListItems)];
+  cartListElements.forEach((item, index) => {
     localStorage.setItem(`cartItem${index}`, item.textContent);
   });
 }
+
+function clearCart() {
+  localStorage.clear();
+  while (cartList.firstChild) {
+    cartList.removeChild(cartList.lastChild);
+  }
+}
+
+const clearButton = document.querySelector('.empty-cart');
+clearButton.addEventListener('click', clearCart);
 
 function recoverCart() {
   const localStorageItems = localStorage.length;
@@ -54,7 +65,6 @@ function recoverCart() {
     li.className = 'cart__item';
     li.innerText = text;
     li.addEventListener('click', cartItemClickListener);
-    const cartList = document.querySelector('.cart__items');
     cartList.appendChild(li);
   }
 }
@@ -64,7 +74,6 @@ async function getSpecificProduct(productId) {
   const data = await response.json();
   const prodData = data;
   const productList = { sku: prodData.id, name: prodData.title, salePrice: prodData.price };
-  const cartList = document.querySelector('.cart__items');
   cartList.appendChild(createCartItemElement(productList));
   saveCart();
 }
