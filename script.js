@@ -7,6 +7,30 @@ const loading = () => {
   container.appendChild(h1);
 };
 
+///
+const span = document.createElement('span');
+
+const sumPrice = async () => {
+  const lis = document.querySelectorAll('li');
+  const cart = document.querySelector('.cart');
+  const arrayLi = [...lis];
+  let sum = 0;
+
+  arrayLi.forEach((li) => {
+    const price = parseFloat(li.innerText.split('$')[1]);
+    sum += price;
+  });
+  sum = Math.round(sum * 100) / 100;
+
+  const sumString = document.createElement('span');
+  sumString.className = 'total-price';
+  sumString.innerHTML = sum.toString();
+  span.innerHTML = 'Preço total: R$';
+
+  cart.appendChild(span).appendChild(sumString);
+};
+///
+
 const deleteLoading = () => {
   const h1 = document.querySelector('.loading');
   h1.remove();
@@ -42,7 +66,6 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// Requisito 4
 const classCartItems = '.cart__items';
 
 const updateLocalStorage = () => {
@@ -52,6 +75,7 @@ const updateLocalStorage = () => {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  sumPrice();
   updateLocalStorage();
 }
 
@@ -63,7 +87,6 @@ const loudLocalStorage = () => {
   arrayLi.forEach((item) => {
     item.addEventListener('click', cartItemClickListener);
   });
-  console.log(arrayLi);
 };
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -92,7 +115,6 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 //       });
 //     };
 
-// Requisito 1
 const fetchProtucts = async () => {
   loading();
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
@@ -106,7 +128,6 @@ const fetchProtucts = async () => {
   deleteLoading();
 };
 
-// Requisito 2
 const addItensToCart = () => {
   const itemAdd = document.querySelectorAll('.items');
   const cart = document.querySelector(classCartItems);
@@ -119,12 +140,11 @@ const addItensToCart = () => {
       const cartItem = createCartItemElement(data);
       cart.appendChild(cartItem);
       updateLocalStorage();
-      console.log(data);
+      sumPrice();
     });
   });
 };
 
-// Requisito 6
 const emptyCart = () => {
   const cart = document.querySelector(classCartItems);
   const button = document.querySelector('.empty-cart');
@@ -132,18 +152,14 @@ const emptyCart = () => {
     button.addEventListener('click', () => {
       cart.innerHTML = '';
       updateLocalStorage();
+      sumPrice();
     });
 };
-
-// const sumPrice = async () => {
-//   const sumResult = document.querySelector('.total-price');
-
-// };
 
 window.onload = () => {
   fetchProtucts();
   addItensToCart();
   loudLocalStorage();
   emptyCart();
-  // sumPrice();
+  sumPrice();
 };
