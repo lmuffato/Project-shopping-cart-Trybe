@@ -40,7 +40,7 @@ const receiveApi = async () => {
   const body = document.querySelector('body');
   body.appendChild(div);
 
-   await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+  await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
       response.json()
         .then((data) => {
@@ -48,7 +48,7 @@ const receiveApi = async () => {
           addItens(itensApi);
         });
     });
-    div.remove();
+  div.remove();
 }; // Obtive ajuda da Carolina Vasconcelos na finalização deste requisito, obrigado :)
 
 function getSkuFromProductItem(item) {
@@ -56,8 +56,11 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  const itensCart = document.querySelector('.cart__item');
+  const itensCart = document.querySelectorAll('.cart__item');
   event.target.remove(itensCart);
+  const sku = (event.target.innerText.split('|')[0].split(' ')[1]);
+  localStorage.removeItem(sku);
+  // Obtive ajuda do colega Orlando Flores.
 }
 
 function createCartItemElement({ id, title, price }) {
@@ -68,11 +71,23 @@ function createCartItemElement({ id, title, price }) {
   return li;
 }
 
+// async function somePriesCart(price) {
+//   const li = await document.querySelectorAll('.cart__item');
+//   const section = document.querySelector('.priceCart');
+//   const element = document.createElement('p');
+//   element.className = 'total-price';
+//   element.innerHTML = price;
+//   section.appendChild(element);
+// }
+
+const classeCartItems = () => document.querySelector('ol');
+
 const cleanCart = () => {
+  const itemCart = classeCartItems();
   const buttonCart = document.querySelector('.empty-cart');
-  const itemCart = document.querySelectorAll('.cart__item');
   buttonCart.addEventListener('click', () => {
-    itemCart.forEach((item) => item.remove());
+    itemCart.innerHTML = '';
+    localStorage.clear();
   });
 };
 
@@ -83,8 +98,10 @@ const itemID = (id) => {
       response.json()
         .then((data) => {
           const itensCart = data;
-          cartItems.appendChild(createCartItemElement(itensCart));
-          cleanCart();
+
+          const li = createCartItemElement(itensCart);
+          cartItems.appendChild(li);
+          localStorage.setItem(id, li.innerText);
         });
     });
 };
@@ -99,7 +116,22 @@ const addEvent = () => document
   .querySelector('.items')
   .addEventListener('click', sendItens);
 
+const loadStorage = () => {
+  const cartItems = document.querySelector('.cart__items');
+
+  Object.keys(localStorage).forEach((item) => {
+    const itemLoad = localStorage.getItem(item);
+    const itemLi = document.createElement('li');
+    itemLi.className = 'cart__item';
+    itemLi.innerText = itemLoad;
+    itemLi.addEventListener('click', cartItemClickListener);
+    cartItems.appendChild(itemLi);
+  });
+};
+
 window.onload = function onload() {
   receiveApi();
-  addEvent(); 
+  addEvent();
+  loadStorage();
+  cleanCart();
 };
