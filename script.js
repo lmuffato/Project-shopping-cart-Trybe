@@ -64,7 +64,7 @@ const addToCart = async (event) => {
   localStorage.setItem(itemID, JSON.stringify(obj));
 
   sum += obj.salePrice;
-  sumPrices();
+  await sumPrices();
   localStorage.setItem('keySoma', sum);
 };
 
@@ -81,12 +81,23 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+// Desafio 7 - Loading!!!  
+// Inspirado pelo aluno Miguel Dantas SdA 09
+
+const removeLoading = () => {
+  const getLoadingParent = document.getElementById('loadingParent');
+  getLoadingParent.remove();
+};
+
 // Desafio 1 - Realizando a consulta na API
 
 const getResults = async () => {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
+  console.log(response);
   const data = await response.json();
+  removeLoading();
   data.results.forEach(({ id: sku, title: name, thumbnail: image }) => {
+
     const objPc = {
       sku,
       name,
