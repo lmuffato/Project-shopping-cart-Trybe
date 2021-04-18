@@ -101,6 +101,8 @@ async function creatingItems() {
     };
     sectionItems.appendChild(createProductItemElement(newItem));
   });
+  const deleteLoading = document.querySelector('.loading');
+  document.querySelector('.container').removeChild(deleteLoading);
 }
 
 const addToCartList2 = async (idItem) => {
