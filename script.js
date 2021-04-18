@@ -1,8 +1,6 @@
 const cartItems = '.cart__items';
 
-const arrayPrices = [];
-
-const reduceValue = [0];
+// const arrayPrices = [];
 
 function savingItems() {
   const cartLi = document.querySelector(cartItems);
@@ -38,17 +36,18 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 }
 
 // loading - 7 requisito (referência https://developer.mozilla.org/pt-BR/docs/Web/API/Element/className - criar a classe)
-const loading = () =>{
+const loading = () => {
   const createText = document.createElement('p');
   createText.className = 'loading';
   createText.innerText = 'Levando as compras ao caixa';
   const getItems = document.querySelector('.items');
   getItems.appendChild(createText);
-}
-const finishLoading = () =>{
+};
+
+const finishLoading = () => {
   const getLoading = document.querySelector('.loading');
   getLoading.remove();
-}
+};
 
 // funções de fetch, 1 e 2 requisito
 
@@ -71,11 +70,11 @@ function createProductItemElement({ sku, name, image }) {
     const gettingChild = section.firstChild.innerHTML;
     const returnFunction = await createCartItem(gettingChild);
     document.querySelector(cartItems).appendChild(createCartItemElement(returnFunction));
-    arrayPrices.push(returnFunction.price);
-    const reduceSum = arrayPrices.reduce((acc, totalValue) => acc + totalValue);
-    reduceValue.push(reduceSum);
-    const totalprice = document.querySelector('.total-price');
-    totalprice.innerHTML = reduceSum;
+    // arrayPrices.push(returnFunction.price);
+    // const reduceSum = arrayPrices.reduce((acc, totalValue) => acc + totalValue);
+    // reduceValue.push(reduceSum);
+    // const totalprice = document.querySelector('.total-price');
+    // totalprice.innerHTML = reduceSum;
     finishLoading();
   });
   return section;
