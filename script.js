@@ -3,22 +3,7 @@
 // ------------------------ Support Functions ------------------
 
 function toReal(n) {
-  const realWDot = 'R$ ' + n.toFixed(2).replace('.', ',');
-  const real = realWDot.replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
-  return real;
-}
-
-function createProductItemElement({ sku: id, name, image, price }) {
-  const section = document.createElement('section');
-  section.className = 'item';
-
-  section.appendChild(createCustomElement('span', 'item__sku', id));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createCustomElement('span', 'item__title', price));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
-  return section;
+  return `R$ ${n.toFixed(2).replace('.', ',')}`;
 }
 
 function createCustomElement(element, className, innerText) {
@@ -33,6 +18,19 @@ function createProductImageElement(imageSource) {
   img.className = 'item__image';
   img.src = imageSource;
   return img;
+}
+
+function createProductItemElement({ sku: id, name, image, price }) {
+  const section = document.createElement('section');
+  section.className = 'item';
+
+  section.appendChild(createCustomElement('span', 'item__sku', id));
+  section.appendChild(createCustomElement('span', 'item__title', name));
+  section.appendChild(createCustomElement('span', 'item__title', price));
+  section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+
+  return section;
 }
 
 // ------- GET ------ ADD ---- and ---- CREATE ----- DATA --------
@@ -57,7 +55,7 @@ async function addDataList(QUERY) {
     });
 
     marketSection.appendChild(item);
-  })
+  });
 }
 
 /* function getSkuFromProductItem(item) {
