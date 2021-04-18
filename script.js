@@ -17,12 +17,14 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ sku, name, image }) {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
     .then((response) => {
-      response.json((cleanComputersList) => {
-        cleanComputersList.then((computerList) => {
-          console.log(computerList);
-        })
-      })
-    })
+      response.json()
+      .then((computers) => {
+        const ul = document.querySelector('ol');
+        const li = document.createElement('li');
+          li.innerHTML = computers;
+          ul.appendChild(li);
+      });
+    });
   const section = document.createElement('section');
   section.className = 'item';
 
