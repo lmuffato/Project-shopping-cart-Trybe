@@ -29,9 +29,11 @@ function refreshLocalStorage(element) {
 
 // ------------------------------------------------------ Cart Price --------------------------------------------------------------
 
-function prices() {
+function prices(array) {
   let value = 0;
-  value = myArray.map((object) => object.salePrice).reduce((acc, curr) => acc + curr, 0);
+  console.log('Array');
+  console.log(array);
+  value = array.map((object) => object.salePrice).reduce((acc, curr) => acc + curr, 0);
   return value;
 }
 
@@ -52,9 +54,9 @@ function returnFixed(htmlItem, currentPrice, stringCurrentPrice) {
   }
 }
 
-function refreshShoppingCartPrice() {
+function refreshShoppingCartPrice(array) {
   const span = document.querySelector('.total-price');
-  const currentPrice = prices();
+  const currentPrice = prices(array);
   const stringCurrentPrice = currentPrice.toFixed(2).toString();
   if (currentPrice > currentPrice.toFixed() || currentPrice < currentPrice.toFixed()) {
     returnFixed(span, currentPrice, stringCurrentPrice);
@@ -106,7 +108,7 @@ function cartItemClickListener(event) {
   });
   click.remove();
   refreshLocalStorage(myArray);
-  refreshShoppingCartPrice();
+  refreshShoppingCartPrice(myArray);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -138,7 +140,7 @@ function fetchItems(items) {
 
 async function addItemToShoppingCart(sku) {
   await fetchItems(sku);
-  refreshShoppingCartPrice();
+  refreshShoppingCartPrice(myArray);
 }
 
 // ------------------------------------------------------ Buttons -----------------------------------------------------------------
@@ -156,7 +158,7 @@ function cleanCart() {
     const listEraser = document.querySelector(cartItems);
     listEraser.innerHTML = '';
     myArray = [];
-    refreshShoppingCartPrice();
+    refreshShoppingCartPrice(myArray);
   });
 }
 
@@ -189,12 +191,16 @@ async function productsList() {
 
 async function getAll() {
   const element = localStorage.getItem('itens');
-  console.log(element);
   const elementArray = JSON.parse(element);
+  const ol = document.querySelector(cartItems);
 
-  for (let index = elementArray.length - 1; index >= 0; index -= 1) {
-    addItemToShoppingCart(elementArray[index].sku);
+  for (let index = 0; index < elementArray.length; index += 1) {
+    const el = elementArray[index];
+    const li = createCartItemElement(el);
+    myArray.push(el);
+    ol.appendChild(li);
   }
+  refreshShoppingCartPrice(myArray);
 }
 
 window.onload = function onload() {
