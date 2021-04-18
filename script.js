@@ -1,9 +1,8 @@
 // Jogar os itens que vão pro localStorage dentro de uma lista e depois recuperar os objetos de dentro da lista 
 // Usar o JSON.stringfy para transformar o array de objetos em uma string e depos jogar pro localStorage
 // Retornar do localStorage usando o JSON.parse para converter de string para array.
-// let sum = 0;
-// let subtract = 0;
-
+// const myObj = {};
+const myArray = [];
 // ---------------------------------------------------- Loading -------------------------------------------------------------------
 
 function loading() {
@@ -28,6 +27,45 @@ function addToLocalStorage(itemId, element) {
 
 function removeOfLocalStorage(element) {
   localStorage.removeItem(localStorage.key(element));
+}
+
+// ------------------------------------------------------ Cart Price --------------------------------------------------------------
+
+// Jogar tudo dentro de um objeto usando o SKU como chave, depois usar o Object.values para retornar um array de valores e usar o reduce pra somar esses valores.
+function prices() {
+  let value = 0;
+  value = myArray.map((object) => object.salePrice).reduce((acc, curr) => acc + curr, 0);
+  return value;
+}
+
+// Salvar todos os itens do shoppingCart em um array, fazer o map percorrer esse array e pegar o valor da chave price, depois dar um reduce nos valores desse array
+
+function creatElementP() {
+  const p = document.createElement('p');
+  p.classList = 'cart_price';
+  p.innerHTML = 'Preço total: $<span class = "total-price">0</span>';
+  const cartList = document.querySelector('.cart');
+  cartList.appendChild(p);
+}
+
+function returnFixed(htmlItem, currentPrice, stringCurrentPrice) {
+  const span = htmlItem;
+    if (stringCurrentPrice[stringCurrentPrice.length - 1] === '0') {
+      span.innerText = `${currentPrice.toFixed(1)}`;
+    } else {
+      span.innerText = `${currentPrice.toFixed(2)}`;
+    }
+}
+
+function refreshShoppingCartPrice() {
+  const span = document.querySelector('.total-price');
+  const currentPrice = prices();
+  const stringCurrentPrice = currentPrice.toFixed(2).toString();
+  if (currentPrice > currentPrice.toFixed() || currentPrice < currentPrice.toFixed()) {
+    returnFixed(span, currentPrice, stringCurrentPrice);
+  } else {
+    span.innerText = `${currentPrice.toFixed()}`;
+  }
 }
 
 // ------------------------------------------------------- Base -------------------------------------------------------------------
@@ -64,8 +102,17 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   const click = event.target;
+  const clickContent = click.innerHTML;
+  myArray.map((object) => object.sku).forEach((id, index) => {
+    if (clickContent.includes(id)) {
+      myArray.splice(index, 1);
+      return myArray;
+    }
+  });
+
   click.remove();
   removeOfLocalStorage(click);
+  refreshShoppingCartPrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -73,40 +120,39 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
-  // console.log(`salePrice: ${salePrice}`);
-  // console.log(`sumPrices: ${sumPrices(salePrice)}`);
   return li;
 }
 
 // ------------------------------------------------------ Cart --------------------------------------------------------------------
 
 function fetchItems(items) {
-  fetch(`https://api.mercadolibre.com/items/${items}`)
+  return fetch(`https://api.mercadolibre.com/items/${items}`)
     .then((response) => response.json())
     .then((result) => {
-      const itemCart = createCartItemElement({
+      const myObj = {
         sku: result.id,
         name: result.title,
         salePrice: result.price,
-      });
+      };
+      const itemCart = createCartItemElement(myObj);
       const cartList = document.querySelector('.cart__items');
+      myArray.push(myObj);
       cartList.appendChild(itemCart);
     });
 }
-
-async function addToShoppingCart(sku) {
+async function addItemToShoppingCart(sku) {
   await fetchItems(sku);
+  refreshShoppingCartPrice();
 }
 function getButtons(element) {
   const addButtons = element.querySelector('.item__add');
   const sku = getSkuFromProductItem(element);
-  addButtons.addEventListener('click', () => addToShoppingCart(sku));
+  addButtons.addEventListener('click', () => addItemToShoppingCart(sku));
   addButtons.addEventListener('click', () => addToLocalStorage(sku, element));
 }
 
 function cleanCart() {
   const emptyCart = document.querySelector('.empty-cart');
-  console.log(emptyCart);
   emptyCart.addEventListener('click', () => {
     localStorage.clear();
     const ol = document.querySelector('.cart__items');
@@ -144,8 +190,7 @@ async function productsList() {
 function getAll() {
   for (let index = (localStorage.length - 1); index >= 0; index -= 1) {
     const element = localStorage.key(index);
-    console.log(element);
-    addToShoppingCart(element);
+    addItemToShoppingCart(element);
   }
 }
 
@@ -153,6 +198,7 @@ window.onload = function onload() {
   loading();
   getOutLoading();
   productsList();
+  creatElementP();
   getAll();
   cleanCart();
 };
