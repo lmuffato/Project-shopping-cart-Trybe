@@ -3,6 +3,13 @@ const getCartItems = () => document.querySelector('.cart__items');
 const getButtonEmptycart = () => document.querySelector('.empty-cart');
 const getItemsOnCart = () => document.querySelectorAll('.cart__item');
 let total = 0;
+const saveLisToLocalStorage = () => {
+  const ul = getCartItems();
+  // console.log(lis);
+  localStorage.clear();
+  console.log('Clear in localStorage.');
+  localStorage.setItem('listCartItems', JSON.stringify(ul.innerHTML));
+};
 
 const clearCart = () => {
   const itemsOnCart = getItemsOnCart();
@@ -45,13 +52,6 @@ function createProductItemElement({ id, title, thumbnail }) { // create the sect
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
-const saveLisToLocalStorage = () => {
-  const ul = getCartItems();
-  // console.log(lis);
-  localStorage.clear();
-  console.log('Clear in localStorage.');
-  localStorage.setItem('listCartItems', JSON.stringify(ul.innerHTML));
-};
 
 const decreasesPrice = (li) => {
   const getText = li.innerText;
