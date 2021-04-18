@@ -83,8 +83,13 @@ const addEventLisOnItens = () => {
 
 const insertIntens = async () => {
   const itensSection = document.querySelector('.items');
+  const loading = document.createElement('section');
+  loading.innerText = 'Carregando...';
+  loading.className = 'loading';
+  itensSection.appendChild(loading);
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const asJson = await response.json();
+  loading.parentElement.removeChild(loading);
   const resultsArr = asJson.results;
   resultsArr.forEach((result) => {
     const resultAsObj = {
@@ -112,3 +117,5 @@ window.onload = function onload() {
   if (previCart !== null) listInCart.innerHTML = previCart;
   insertIntens();
 };
+
+// obrigado rogerio e murilo
