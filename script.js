@@ -35,73 +35,74 @@ function createProductItemElement({ sku, name, image }) { // cria os componentes
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
-  
   const itemProduct = document.querySelector('.items'); // O retorno da createProductItemElement deve ser docionado como filho da <section class="items">.
   itemProduct.appendChild(section);
-  
   
   return section;
 }
 
-async function addCartItem() {
-  const btn = document.querySelectorAll('button.item__add');
-  btn.forEach((button, index) => button.addEventListener('click', (e) => {
-    const sku = e.target.parentNode.firstChild.innerText
-    fetchById(sku)
-    console.log('sku', sku)
-    console.log('btn', btn[index])
-  }))
-}
 // function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
+  //   return item.querySelector('span.item__sku').innerText;
+  // }
+  
+// function cartItemClickListener() {
+//   // coloque aqui sua solução
 // }
+  
+function createCartItemElement({ sku, name, salePrice }) { // Cria os componentes HTML referentes a um item do carrinho.
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  // li.addEventListener('click', cartItemClickListener);
+  
+  const cartItems = document.querySelector('.cart__items');
+  cartItems.appendChild(li);
 
-function cartItemClickListener() {
-// coloque aqui sua solução
+  return li;
 }
 
+const fetchById = (sku) => { // nova requisição contendo o valor id do item selecionado.
+  fetch(`https://api.mercadolibre.com/items/${sku}`)
+  .then((response) => response.json())
+  .then((data) => {
+    // Acessa o array results e entitula seus elementos como productItem.
+    
+    const productCart = { // Converte o item da API com o solicitado no projeto.
+      sku: data.id,
+      name: data.title,
+      salePrice: data.base_price,
+    };
+    
+    createCartItemElement(productCart);
+  })
+  .catch((error) => console.log(error));
+};
 
+async function addCartItem(productUnit) {
+  productUnit.addEventListener('click', (e) => {
+    const sku = e.target.parentNode.firstChild.innerText;
 
-// function createCartItemElement({ sku, name, salePrice }) { // Cria os componentes HTML referentes a um item do carrinho.
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-
-//   const btnCart = document.querySelector('.item__add');
-//   console.log('button', btnCart);
-
-//   return li;
-// }
-
+    fetchById(sku);
+  });
+}
 
 function getProductItem() { // Pega a lista de produtos.
-  const url = 'https://api.mercadolibre.com/sites/MLB/search?q=computador'
+  const url = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
   fetch(url)
   .then((response) => response.json()) // Transforma a resposta em JSON.
-  .then((data) => data.results.forEach((productItem) => { // Acessa o array results e entitula seus elementos como productItem.
-  
+  .then((data) => data.results.forEach((productItem) => {
+    // Acessa o array results e entitula seus elementos como productItem.
     const product = { // Converte o item da API com o solicitado no projeto.
       sku: productItem.id,
       name: productItem.title,
       image: productItem.thumbnail,
       salePrice: productItem.price,
     };
-    
+
     const productUnit = createProductItemElement(product);
-    addCartItem()
-
-    // addProductCart({ sku })
-    // cartItemClickListener();
+    addCartItem(productUnit);
   }));
-};
-
-const fetchById = (sku) => { // nova requisição contendo o valor id do item selecionado.
-  fetch(`https://api.mercadolibre.com/items/${sku}`)
-  .then((response) => response.json())
-  .then((data) => console.log('objetoClick', data))
-  .catch(error => console.log(error));
-};
+}
 
 window.onload = function onload() { // Carrega a página?
   getProductItem();
