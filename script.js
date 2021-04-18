@@ -39,7 +39,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
-// Requisito 01
+// Requisito 01 - Feito com Ajuda de Mutilo Gonçalves e Lucas Pedroso Turma - 10A
 async function getInfoProduct() {
   const objResults = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
   .then((response) => response.json()).then((data) => data.results);
@@ -55,7 +55,7 @@ async function getInfoProduct() {
     sectionItems.appendChild(createProductItemElement(computerInfos));
   });
 }
-// Requisito 02
+// Requisito 02 - Exercicício ralizado com o vídeo https://trybecourse.slack.com/archives/C01A9A2N93R/p1608238090190400?thread_ts=1608237982.190300&cid=C01A9A2N93R
 function addToCart() {
   const sectionItems = document.querySelector('.items');
   sectionItems.addEventListener('click', (event) => {
@@ -76,7 +76,7 @@ function addToCart() {
     }
   });
 }
-// Requisito 03
+// Requisito 03 - Ideia de Lucas Portella - Turma 10B
 function emptyCart() {
   const btnEmptyCart = document.querySelector('.empty-cart');
   btnEmptyCart.addEventListener('click', cartItemClickListener);
