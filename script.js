@@ -1,30 +1,11 @@
 /* const fetch = require('node-fetch'); */
 
-async function getData(QUERY) {
-  const URL = `https://api.mercadolibre.com/sites/MLB/search?q=${QUERY}`;
-  const response = await fetch(URL);
-  const data = await response.json();
-  return data.results;
-}
-
-async function addDataList(QUERY) {
-  const productList = await getData(QUERY)
-  const marketSection = document.querySelector('section.items')
-
-  productList.forEach((product) => {
-    const item = createProductItemElement({
-      sku: product.id,
-      name: product.title,
-      image: product.thumbnail,
-      price: toReal(product.price),
-    });
-
-    marketSection.appendChild(item);
-  })
-}
+// ------------------------ Support Functions ------------------
 
 function toReal(n) {
-  return "R$ " + n.toFixed(2).replace('.', ',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+  const realWDot = 'R$ ' + n.toFixed(2).replace('.', ',');
+  const real = realWDot.replace(/(\d)(?=(\d{3})+\,)/g, '$1.');
+  return real;
 }
 
 function createProductItemElement({ sku: id, name, image, price }) {
@@ -52,6 +33,31 @@ function createProductImageElement(imageSource) {
   img.className = 'item__image';
   img.src = imageSource;
   return img;
+}
+
+// ------- GET ------ ADD ---- and ---- CREATE ----- DATA --------
+
+async function getData(QUERY) {
+  const URL = `https://api.mercadolibre.com/sites/MLB/search?q=${QUERY}`;
+  const response = await fetch(URL);
+  const data = await response.json();
+  return data.results;
+}
+
+async function addDataList(QUERY) {
+  const productList = await getData(QUERY);
+  const marketSection = document.querySelector('section.items');
+
+  productList.forEach((product) => {
+    const item = createProductItemElement({
+      sku: product.id,
+      name: product.title,
+      image: product.thumbnail,
+      price: toReal(product.price),
+    });
+
+    marketSection.appendChild(item);
+  })
 }
 
 /* function getSkuFromProductItem(item) {
