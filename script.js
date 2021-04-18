@@ -1,4 +1,4 @@
-// os requisitos foram feiots com ajuda dos colegas Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos,Jonathan Fernandes,Nilson Ribeiro,Marília , Lucas Lara , e o Prof. Zezé e Jack !!
+// os requisitos foram feitos com ajuda dos colegas Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos,Jonathan Fernandes,Nilson Ribeiro,Marília , Lucas Lara , e o Prof. Zezé e Jack !!
 
 function createProductImageElement(imageSource) {
     const img = document.createElement('img');
@@ -29,11 +29,18 @@ function createProductImageElement(imageSource) {
     return item.querySelector('span.item__sku').innerText;
   }
 
+  function cartItemClickListener(event) {
+    const { target } = event;
+    if (target.classList.contains('cart__item')) {
+    target.remove('li');
+    }
+  }
+
   function createCartItemElement({ id, title, price }) {
     const li = document.createElement('li');
     li.className = 'cart__item';
     li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-//          li.addEventListener('click', cartItemClickListener);
+    li.addEventListener('click', cartItemClickListener);
     return li;
 }
 
@@ -76,10 +83,6 @@ const searchComputerAPI = () => {
       });
       });
     };
-
-//    function cartItemClickListener(event) {
-        // coloque seu código aqui
-// }
 
 window.onload = function onload() { 
   searchComputerAPI();
