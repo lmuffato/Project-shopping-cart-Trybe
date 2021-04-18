@@ -11,12 +11,25 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
-//              Função Nativa - Requisito 1              //
+//              Função Nativa - Requisito 7              //
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
   return e;
+}
+
+// Requisito 7 - Adicione um texto de "loading" durante uma requisição à API.
+// criar elemento loading
+function createLoading() {
+  const container = document.querySelector('.container');
+  const loading = createCustomElement('div', 'loading', 'loading...');
+  container.appendChild(loading);
+}
+// remover loading
+function removeLoading() {
+  const loading = document.querySelector('.loading');
+  loading.remove();
 }
 
 //              Função Nativa - Requisito 1              //
@@ -44,6 +57,7 @@ async function recoverMercadoLivreResults(term) {
     const element = createProductItemElement({ sku, name, image });
     itemsElement.appendChild(element);
   });
+  removeLoading(); // removendo da API - Requisito 7
 }
 
 //                        Requisito 5 - Some o valor total dos itens do carrinho de compras de forma assíncrona.
@@ -147,4 +161,5 @@ window.onload = function onload() {
   addProductToCart();
   updatePage();
   emptyCart();
+  createLoading();
 };
