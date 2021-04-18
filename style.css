@@ -1,3 +1,114 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+/* ------- header ------- */
+
+#header {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  width: 100vw;
+  background: linear-gradient(to left,#e7e7e9, #cae4e6);
+  border-bottom: 3px solid black;
+}
+
+#header img {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 50%;
+}
+
+#titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#titles {
+  margin: 0;
+  padding: 0;
+}
+
+#titles h1 {
+  padding: 0;
+  font-size: 1.2em;
+  font-weight: 600;
+  font-family: "Archivo Black", sans-serif;
+  text-align: center;
+  margin: 10px auto -0.25em auto;
+  display: block;
+}
+
+#titles h2 {
+  font-size: 1em;
+  font-weight: 400;
+  text-align: center;
+  color: rgb(88, 133, 192);
+  margin: 5px, auto, 0, auto;
+}
+
+.gradient-text {
+  background-color: #CA4246;
+  background-image: linear-gradient(
+        45deg,
+        #CA4246 16.666%, 
+        #E16541 16.666%, 
+        #E16541 33.333%, 
+        #F18F43 33.333%, 
+        #F18F43 50%, 
+        #8B9862 50%, 
+        #8B9862 66.666%, 
+        #476098 66.666%, 
+        #476098 83.333%, 
+        #A7489B 83.333%);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow-text-animation-rev 0.75s ease forwards;
+}
+
+.gradient-text:hover{
+  animation: rainbow-text-animation 0.5s ease-in forwards;
+}
+
+/* Move the background and make it smaller. */
+@keyframes rainbow-text-animation-rev {
+    0% {
+        background-size: 650%;
+    }
+    40% {
+        background-size: 650%;
+    }
+    100% {
+        background-size: 100%;
+    }
+}
+
+/* Move the background and make it larger. */
+@keyframes rainbow-text-animation {
+    0% {
+        background-size: 100%;
+    }
+    80% {
+        background-size: 650%;
+    }
+    100% {
+        background-size: 650%;
+    }
+}
+
+/* ------- main ------- */
+main {
+  display: block;
+  background-color:rgb(88, 133, 192);
+}
+
+/* ----- pre-fixed attributes ----- */
 .top-bar {
   align-items: center;
   display: flex;
