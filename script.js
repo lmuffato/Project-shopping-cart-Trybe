@@ -66,11 +66,11 @@ const fetchById = (sku) => { // nova requisição contendo o valor id do item se
   .then((response) => response.json())
   .then((data) => {
     // Acessa o array results e entitula seus elementos como productItem.
-    
+
     const productCart = { // Converte o item da API com o solicitado no projeto.
       sku: data.id,
       name: data.title,
-      salePrice: data.base_price,
+      salePrice: data.price,
     };
     
     createCartItemElement(productCart);
