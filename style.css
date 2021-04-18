@@ -74,3 +74,10 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.loading {
+  font-size: large;
+  font-weight: bold;
+  color: red;
+  background-color: blue;
+}

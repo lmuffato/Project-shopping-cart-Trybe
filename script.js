@@ -107,13 +107,28 @@ const clearCart = () => {
   ol.innerHTML = '';
   localStorage.removeItem('cartList');
 };
+
+const loading = (boolean) => {
+  const container = document.querySelector('body');
+  if (boolean === true) {
+    const spanLoading = document.createElement('span');
+    spanLoading.className = 'loading';
+    spanLoading.innerHTML = 'loading...';
+    container.appendChild(spanLoading);
+  } else {
+    console.log('remove');
+    container.removeChild(container.lastChild);
+  }
+};
 window.onload = async function onload() {
   try {
     const olCart = getCart();
     loadToLocalStorage('cartList', olCart);
     olCart.childNodes.forEach((node) => node.addEventListener('click', cartItemClickListener));
     const uriData = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
+    loading(true);
     const data = await fetchData(uriData);
+    loading(false);
     createElements(data.results);
     const itemAdd = document.querySelectorAll('.item__add');
     itemAdd.forEach((item) => item.addEventListener('click', fetchItem));
@@ -123,6 +138,5 @@ window.onload = async function onload() {
     console.log(error);
   }
 };
-
 
 /* Cada vez que se adicionar um item ao carrinho de compras, será necessário somar seus valores e apresentá-los na página principal do projeto. Não queremos que essa soma, no entanto, impacte no carregamento da página. Devemos, portanto, fazer essa soma de forma *assíncrona*. Use `async/await` para fazer isso. O elemento que tem como filho o preço total dos itens do carrinho deve ter, **obrigatóriamente**, a classe `total-price`. */
