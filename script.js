@@ -45,15 +45,16 @@ function createProductItemElement({ sku, name, image }) { // cria os componentes
   //   return item.querySelector('span.item__sku').innerText;
   // }
   
-// function cartItemClickListener() {
-//   // coloque aqui sua solução
-// }
+function cartItemClickListener(e) {
+  event.target.remove();
+
+}
   
 function createCartItemElement({ sku, name, salePrice }) { // Cria os componentes HTML referentes a um item do carrinho.
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', (e) => cartItemClickListener(e));
   
   const cartItems = document.querySelector('.cart__items');
   cartItems.appendChild(li);
@@ -79,7 +80,7 @@ const fetchById = (sku) => { // nova requisição contendo o valor id do item se
 };
 
 async function addCartItem(productUnit) {
-  productUnit.addEventListener('click', (e) => {
+  productUnit.lastChild.addEventListener('click', (e) => {
     const sku = e.target.parentNode.firstChild.innerText;
 
     fetchById(sku);
