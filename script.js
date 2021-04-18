@@ -37,11 +37,10 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 
 // loading - 7 requisito (referência https://developer.mozilla.org/pt-BR/docs/Web/API/Element/className - criar a classe)
 const loading = () => {
-  const createText = document.createElement('p');
-  createText.className = 'loading';
+  const createText = document.createElement('section');
+  createText.classList.add = 'loading';
   createText.innerText = 'Levando as compras ao caixa';
-  const getItems = document.querySelector('.items');
-  getItems.appendChild(createText);
+  document.body.appendChild(createText);
 };
 
 const finishLoading = () => {
