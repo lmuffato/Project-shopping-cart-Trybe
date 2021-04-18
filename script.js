@@ -98,6 +98,10 @@ document.querySelector('.empty-cart').addEventListener('click', () => {
   localStorage.removeItem('userSession');
 });
 
+setTimeout(() => {
+  document.body.removeChild(document.querySelector('.loading'));
+}, 2000);
+
 window.onload = function onload() {
   getProductsByName();
   getUserSession();
