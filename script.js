@@ -8,11 +8,21 @@ function createProductImageElement(imageSource) {
 }
 
 function searchAPI() {
+  const load = document.createElement('div');
+  load.className = 'loading';
+  load.innerText = 'Loading...';
+  const container = document.querySelector('.container');
+  container.appendChild(load);
   return new Promise((resolve) => {
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
       .then((response) => { 
         response.json()
-        .then((data) => { resolve(data.results); });
+        .then((data) => { 
+          if (data !== undefined) {
+            container.removeChild(load);
+            resolve(data.results);
+          }
+         });
       });
   });
 }
