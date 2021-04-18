@@ -65,6 +65,7 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   const cartItensContainer = document.querySelector(cartItems);
   const productSelected = event.target;
+  
   cartItensContainer.removeChild(productSelected);
 }
 
@@ -78,6 +79,7 @@ const getProductBySku = async (sku) => {
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
+  li.classList.add(`${salePrice}`);
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
@@ -88,23 +90,34 @@ const saveCart = async () => {
   localStorage.setItem('listSaved', cartList.outerHTML);
 };
 
-const putItemInCart = (product) => {
+const summPriceCartProducts = async (price) => {
+  const summElement = document.querySelector('.total-price');
+
+  if (summElement.innerHTML === '') {
+    summElement.innerText = price;
+  } else {
+    summElement.innerText = (parseFloat(summElement.innerText) + price).toFixed(2);
+  }
+};
+
+const putItemInCart = async (product) => {
   const cartItensContainer = document.querySelector(cartItems);
 
   cartItensContainer.appendChild(createCartItemElement(product));
+  summPriceCartProducts(product.salePrice);
   saveCart();
 };
 
 const onClick = async (event) => {
   const buttonSelect = event.target.parentNode;
-  const idProduct = getSkuFromProductItem(buttonSelect);
+  const idProduct = await getSkuFromProductItem(buttonSelect);
   const productSelected = await getProductBySku(idProduct);
   const objectProduct = {
     sku: productSelected.id,
     name: productSelected.title,
     salePrice: productSelected.price,
   };
-  putItemInCart(objectProduct);  
+  putItemInCart(objectProduct);
 };
 
 const addEventButtons = async () => {
@@ -114,7 +127,9 @@ const addEventButtons = async () => {
 
 const clearButton = () => {
   const cartItens = document.querySelector(cartItems);
+  const price = document.querySelector('.total-price');
   cartItens.innerHTML = '';
+  price.innerText = '';
   saveCart();
 };
 
@@ -123,14 +138,6 @@ const buttonClearEvent = () => {
   buttonClear.addEventListener('click', clearButton);
 };
 
-// const loadingLocalStorage = async () => {
-//   if (localStorage.length >= 1) {
-//     const storedList = localStorage.getItem('listSaved');
-//     const changeList = document.querySelector(cartItems);
-//     changeList.outerHTML = storedList;
-//   }
-// };
-
 window.onload = async function onload() { 
   loadingMessage();
   if (localStorage.length >= 1) {
@@ -138,7 +145,6 @@ window.onload = async function onload() {
     const changeList = document.querySelector(cartItems);
     changeList.outerHTML = storedList;
   }
-  // loadingLocalStorage();
   createListProductItems()
     .then(() => deleteLoadingMessage())
     .then(() => addEventButtons())
@@ -148,3 +154,5 @@ window.onload = async function onload() {
 // o window.onload foi colocado abaixo devido a ele ter que fazer as funções acima primeiro, para depois ele reconhecer e utilizá-las.
 
 // Graças ao Murilo Gonçalves, em uma call no Slack, 15/04, eu pude entender como utilizar funções async. Assim como quebrar a cabeça para entender que quando utilizado o await para uma função, a função onde ele está também deve ser uma async. Assim como só iremos conseguir maninupar o json quando a função dele retorna com o await.
+
+// Requisto da conta do carinho. Pensei em adicionar um elemento igual ao span invisível dos produtos, contendo o price nele, mas isso tenho que colocar dentro da Li criada, pois tera a interação de retirá-la. Ao mesmo tempo a função de soma tem que pegar todas aquelas spans invisíveis do carrinho e somar seus preços com base nas suas existências. Lembrando de ver o seu Style!
