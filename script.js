@@ -1,8 +1,5 @@
-// Jogar os itens que vão pro localStorage dentro de uma lista e depois recuperar os objetos de dentro da lista 
-// Usar o JSON.stringfy para transformar o array de objetos em uma string e depos jogar pro localStorage
-// Retornar do localStorage usando o JSON.parse para converter de string para array.
-// const myObj = {};
-const myArray = [];
+let myArray = [];
+const cartItems = '.cart__items';
 // ---------------------------------------------------- Loading -------------------------------------------------------------------
 
 function loading() {
@@ -20,41 +17,39 @@ function getOutLoading() {
 
 // ----------------------------------------------------- Storage ------------------------------------------------------------------
 
-function addToLocalStorage(itemId, element) {
-  const value = element.querySelector('.item__title').textContent;
-  localStorage.setItem(itemId, value);
+function addToLocalStorage(storageArray) {
+  const myArrayStringfied = JSON.stringify(storageArray);
+  localStorage.setItem('itens', myArrayStringfied);
 }
 
-function removeOfLocalStorage(element) {
-  localStorage.removeItem(localStorage.key(element));
+function refreshLocalStorage(element) {
+  localStorage.removeItem(localStorage.key('itens'));
+  addToLocalStorage(element);
 }
 
 // ------------------------------------------------------ Cart Price --------------------------------------------------------------
 
-// Jogar tudo dentro de um objeto usando o SKU como chave, depois usar o Object.values para retornar um array de valores e usar o reduce pra somar esses valores.
 function prices() {
   let value = 0;
   value = myArray.map((object) => object.salePrice).reduce((acc, curr) => acc + curr, 0);
   return value;
 }
 
-// Salvar todos os itens do shoppingCart em um array, fazer o map percorrer esse array e pegar o valor da chave price, depois dar um reduce nos valores desse array
-
 function creatElementP() {
   const p = document.createElement('p');
   p.classList = 'cart_price';
   p.innerHTML = 'Preço total: $<span class = "total-price">0</span>';
-  const cartList = document.querySelector('.cart');
-  cartList.appendChild(p);
+  const cart = document.querySelector('.cart');
+  cart.appendChild(p);
 }
 
 function returnFixed(htmlItem, currentPrice, stringCurrentPrice) {
   const span = htmlItem;
-    if (stringCurrentPrice[stringCurrentPrice.length - 1] === '0') {
-      span.innerText = `${currentPrice.toFixed(1)}`;
-    } else {
-      span.innerText = `${currentPrice.toFixed(2)}`;
-    }
+  if (stringCurrentPrice[stringCurrentPrice.length - 1] === '0') {
+    span.innerText = `${currentPrice.toFixed(1)}`;
+  } else {
+    span.innerText = `${currentPrice.toFixed(2)}`;
+  }
 }
 
 function refreshShoppingCartPrice() {
@@ -109,9 +104,8 @@ function cartItemClickListener(event) {
       return myArray;
     }
   });
-
   click.remove();
-  removeOfLocalStorage(click);
+  refreshLocalStorage(myArray);
   refreshShoppingCartPrice();
 }
 
@@ -135,28 +129,34 @@ function fetchItems(items) {
         salePrice: result.price,
       };
       const itemCart = createCartItemElement(myObj);
-      const cartList = document.querySelector('.cart__items');
+      const cartList = document.querySelector(cartItems);
       myArray.push(myObj);
       cartList.appendChild(itemCart);
+      addToLocalStorage(myArray);
     });
 }
+
 async function addItemToShoppingCart(sku) {
   await fetchItems(sku);
   refreshShoppingCartPrice();
 }
+
+// ------------------------------------------------------ Buttons -----------------------------------------------------------------
+
 function getButtons(element) {
   const addButtons = element.querySelector('.item__add');
   const sku = getSkuFromProductItem(element);
   addButtons.addEventListener('click', () => addItemToShoppingCart(sku));
-  addButtons.addEventListener('click', () => addToLocalStorage(sku, element));
 }
 
 function cleanCart() {
   const emptyCart = document.querySelector('.empty-cart');
   emptyCart.addEventListener('click', () => {
     localStorage.clear();
-    const ol = document.querySelector('.cart__items');
-    ol.innerHTML = '';
+    const listEraser = document.querySelector(cartItems);
+    listEraser.innerHTML = '';
+    myArray = [];
+    refreshShoppingCartPrice();
   });
 }
 
@@ -187,10 +187,13 @@ async function productsList() {
   getOutLoading();
 }
 
-function getAll() {
-  for (let index = (localStorage.length - 1); index >= 0; index -= 1) {
-    const element = localStorage.key(index);
-    addItemToShoppingCart(element);
+async function getAll() {
+  const element = localStorage.getItem('itens');
+  console.log(element);
+  const elementArray = JSON.parse(element);
+
+  for (let index = elementArray.length - 1; index >= 0; index -= 1) {
+    addItemToShoppingCart(elementArray[index].sku);
   }
 }
 
