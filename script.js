@@ -15,6 +15,7 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
+  
   // requisito 1
   const sectionItems = document.querySelector('.items');
   sectionItems.appendChild(section);
@@ -42,22 +43,47 @@ const productList = () => {
   });
 };
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
 // function cartItemClickListener(event) {
-//   // coloque seu código aqui
+  
 // }
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ id, title, price }) {
+  const li = document.createElement('li');
+  
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  return li;
+}
+
+// requisito 2
+// const fetchId = (id) => {
+//   fetch(`https://api.mercadolibre.com/items/${id}`)
+//   .then((response) => {
+//     response.json()
+//     .then((data) => {
+//       const itemData = data;
+//       document.querySelectorAll('.cart_items').appendChild(createCartItemElement(itemData));
+//     });
+//   });
+// };
+
+const getItemId = () => {
+  const cartItem = document.querySelector('.cart__items');
+  const buttons = document.querySelector('.items');
+    buttons.addEventListener('click', async (e) => {
+      const itemId = getSkuFromProductItem(e.target.parentElement);
+      const getFetch = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
+      const itemData = await getFetch.json();
+        const { id, title, price } = itemData;
+        cartItem.appendChild(createCartItemElement({ id, title, price }));
+      });
+};
 
 window.onload = function onload() {
   productList();
+  getItemId();
 };
