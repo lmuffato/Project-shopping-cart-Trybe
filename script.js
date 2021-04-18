@@ -1,5 +1,3 @@
-window.onload = function onload() { };
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -69,6 +67,26 @@ function foundSectionId(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+async function saveCartItems() {
+  const cartList = [...document.querySelectorAll('.cart__item')];
+  cartList.forEach((item, index) => {
+    localStorage.setItem(`cartItem${index}`, item.textContent);
+  });
+}
+
+function recoverCart() {
+  const localStorageItems = localStorage.length;
+  for (let index = 0; index < localStorageItems; index += 1) {
+    const text = localStorage.getItem(`cartItem${index}`);
+    const li = document.createElement('li');
+    li.className = 'cart__item';
+    li.innerText = text;
+    li.addEventListener('click', cartItemClickListener);
+    const cartList = document.querySelector('.cart__items');
+    cartList.appendChild(li);
+  }
+}
+
 function addListener(element) {
    const lista = document.querySelector('.cart__items');
    element.addEventListener('click', async (e) => {
@@ -76,6 +94,7 @@ function addListener(element) {
     const foundAPI = await searchApiId(itemId);
     const obj = { sku: foundAPI.id, name: foundAPI.title, salePrice: foundAPI.price };
     lista.appendChild(createCartItemElement(obj));
+    saveCartItems();
    });
 }
 
@@ -91,4 +110,8 @@ async function makeObjsAndTakeButtons() {
     });
   });
 }
-makeObjsAndTakeButtons();
+
+window.onload = function onload() {
+  makeObjsAndTakeButtons();
+  recoverCart();
+};
