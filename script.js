@@ -16,7 +16,7 @@ return e;
 }
 
 function cartItemClickListener(event) {
-  return event;
+  cartitems[0].removeChild(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
