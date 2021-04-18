@@ -61,7 +61,7 @@ async function amount() {
   let value = 0;
     [...selectLi].forEach((productValue) => {
       value += parseFloat(productValue.innerHTML.split('$')[1]);
-      totalPrice.innerHTML = `Preço Total: R$ ${((Math.round(value * 100)) / 100)}`;
+      totalPrice.innerHTML = ((Math.round(value * 100)) / 100);
     });
 }
 
@@ -83,17 +83,16 @@ function cartItemClickListener(event) {
 }
 
 // Função auxiliar para o Requisito 4
-// função para reinserir lista de produtos do localStorage
-// sempre será executado ao abrir a página, ou seja, criará o evento
 
 function updatePage() {
+  // função para reinserir lista de produtos do localStorage
+  // sempre será executado ao abrir a página, ou seja, criará o evento
     const cart = document.querySelector('.cart__items');
     cart.innerHTML = localStorage.getItem('cart');
     const recoverItems = document.querySelectorAll('.cart__item');
     // adiciona o evento click no cart__item que está no carrinho de compras 
    [...recoverItems].forEach((listItem) => 
    listItem.addEventListener('click', cartItemClickListener));
-    // productPrice.innerHTcreateTotalPrice('span.item__sku').innerText;
 }
 
 //              Função Nativa - Requisito 2 - captura id dos produtos             //
