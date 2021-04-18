@@ -1,5 +1,11 @@
 // ----------- Ready codes ---------/
 const getCartItems = () => document.querySelector('.cart__items');
+let total = 0;
+
+const attTotalPrice = async () => {
+  const getTotalPrice = document.querySelector('.total-price');
+  getTotalPrice.innerText = parseFloat(total.toFixed(2));
+};
 
 function createProductImageElement(imageSource) { // create imgThumbnail.
   const img = document.createElement('img');
@@ -37,9 +43,18 @@ const saveLisToLocalStorage = () => {
   localStorage.setItem('listCartItems', JSON.stringify(ul.innerHTML));
 };
 
+const decreasesPrice = (li) => {
+  const getText = li.innerText;
+  const priceString = getText.split('$')[1];
+  const priceFloat = parseFloat(priceString);
+  total -= priceFloat;
+};
+
 function cartItemClickListener(event) {
+  decreasesPrice(event.target);
   event.target.remove();
   saveLisToLocalStorage();
+  attTotalPrice();
   // salvar ul no localStorage
 }
 
@@ -83,12 +98,23 @@ const foundItems = async (endPoint) => new Promise((resolve) => { // API endpoin
   // reject(new Error('endpoint não existe.'));
 });
 
+const increasesPrice = (price) => {
+  if (localStorage.getItem('totalOnStorage')) {
+    console.log('Há valor predefinido no localStorage.');
+  }
+  total += price;
+};
+
 const addItemToCart = async (id) => {
   const endPointCustom = `https://api.mercadolibre.com/items/${id}`;
   const itemData = await foundItems(endPointCustom);
   const newCartItemElement = createCartItemElement(itemData);
   getCartItems().appendChild(newCartItemElement);
   // salvar a ul no localStorage.
+  // console.log();
+  increasesPrice(itemData.price);
+  attTotalPrice();
+  // incresesPriceLocalStorage(); -> Consiste em salvar o valor da variável global 'total' no localStorage
   saveLisToLocalStorage();
 };
 
@@ -116,4 +142,5 @@ window.onload = function onload() {
   setItems();
   getLisOfLocalStorage();
   // addEvListenerAfterLocalStorage();
+  // verifyTotal(); //verifica set existe variavel com valor no localstorage, se existir carregar ela, se não existir, atribua 0 a total
 };
