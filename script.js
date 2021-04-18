@@ -46,8 +46,7 @@ function createProductItemElement({ sku, name, image }) { // cria os componentes
   // }
   
 function cartItemClickListener(e) {
-  event.target.remove();
-
+  e.target.remove();
 }
   
 function createCartItemElement({ sku, name, salePrice }) { // Cria os componentes HTML referentes a um item do carrinho.
