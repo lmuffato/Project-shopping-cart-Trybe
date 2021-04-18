@@ -1,6 +1,16 @@
 // ----------- Ready codes ---------/
 const getCartItems = () => document.querySelector('.cart__items');
+const getButtonEmptycart = () => document.querySelector('.empty-cart');
+const getItemsOnCart = () => document.querySelectorAll('.cart__item');
 let total = 0;
+
+const clearCart = () => {
+  const itemsOnCart = getItemsOnCart();
+  itemsOnCart.forEach((li) => {
+    getCartItems().removeChild(li);
+  });
+  saveLisToLocalStorage(); // att localStorage
+};
 
 const attTotalPrice = async () => {
   const getTotalPrice = document.querySelector('.total-price');
@@ -143,4 +153,5 @@ window.onload = function onload() {
   getLisOfLocalStorage();
   // addEvListenerAfterLocalStorage();
   // verifyTotal(); //verifica set existe variavel com valor no localstorage, se existir carregar ela, se não existir, atribua 0 a total
+  getButtonEmptycart().addEventListener('click', clearCart);
 };
