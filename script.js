@@ -1,6 +1,10 @@
 // Requisitos realizados com ajuda do Zezé, Adelino, Orlando Flores, Thiago Souza, Lucas Lara, Nathi, Nilson, Tiago Santos
 const cartList = document.querySelector('.cart__items');
 const cartListItems = '.cart__item';
+const priceDiv = document.createElement('div');
+priceDiv.className = 'total-price';
+const cart = document.querySelector('#total');
+cart.appendChild(priceDiv);
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -34,11 +38,31 @@ function saveCart() {
   });
 }
 
-function cartItemClickListener() {
-  const selectedLi = document.querySelector(cartListItems);
+function sumPrice() {
+  const cartElements = cartList.childNodes;
+  if (cartElements.length === 0) {
+    return '---';
+  }
+  const productArray = [];
+  for (let index = 0; index < cartElements.length; index += 1) {
+    const { innerText } = cartElements[index];
+    const value = innerText.substring(innerText.indexOf('$') + 1);
+    productArray.push(parseFloat(value));
+  }
+  const totalPrice = parseFloat((productArray.reduce((acc, curr) => acc + curr, 0)).toFixed(2));
+  return totalPrice;
+}
+
+function showPrice() {
+  priceDiv.innerText = sumPrice();
+}
+
+function cartItemClickListener(event) {
+  const selectedLi = event.target;
   selectedLi.parentElement.removeChild(selectedLi);
   localStorage.clear();
   saveCart();
+  showPrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -49,16 +73,12 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function sumPrice() {
-  const cartListElements = [...document.querySelectorAll(cartListItems)];
-  console.log(cartListElements);
-}
-
 function clearCart() {
   localStorage.clear();
   while (cartList.firstChild) {
     cartList.removeChild(cartList.lastChild);
   }
+  showPrice();
 }
 
 const clearButton = document.querySelector('.empty-cart');
@@ -83,7 +103,7 @@ async function getSpecificProduct(productId) {
   const productList = { sku: prodData.id, name: prodData.title, salePrice: prodData.price };
   cartList.appendChild(createCartItemElement(productList));
   saveCart();
-  sumPrice();
+  showPrice();
 }
 
 function getSkuFromProductItem(item) {
@@ -118,7 +138,7 @@ async function getComputers() {
   const loader = document.createElement('div');
   loader.className = 'loading';
   loader.innerText = 'Loading...';
-  const container = document.querySelector('.container');
+  const container = document.querySelector('.items');
   container.appendChild(loader);
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const data = await response.json();
@@ -133,4 +153,5 @@ window.onload = function onload() {
   getComputers();
   getItemData();
   recoverCart();
+  showPrice();
 };
