@@ -51,7 +51,6 @@ function totalPriceFunction(price) {
   event.target.remove();
   const priceArray = event.target.innerHTML.split('$');
   const price = parseFloat(priceArray[1], 10);
-  console.log(price);
   totalPriceFunction(-parseFloat(price.toFixed(2)));
   const itemsObj = document.querySelectorAll('.cart__item');
   const items = [...itemsObj];
@@ -59,6 +58,16 @@ function totalPriceFunction(price) {
   items.forEach((item) => arrayItems.push(item.innerHTML));
   localStorage.setItem('li', JSON.stringify(arrayItems));
 } 
+function btnEmptyCart() {
+  const btn = document.querySelector('.empty-cart');
+  btn.addEventListener('click', () => {
+    const items = document.querySelectorAll('.cart__item');
+    items.forEach((item) => item.remove());
+    localStorage.clear();
+    totalPrice = 0;
+    totalPriceFunction(0);
+  });
+}
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
@@ -121,4 +130,5 @@ window.onload = function onload() {
   fetchItem();
   storageList();
   totalPriceFunction(0);
+  btnEmptyCart();
 };
