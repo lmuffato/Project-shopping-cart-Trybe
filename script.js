@@ -30,9 +30,6 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 async function recoverMercadoLivreResults(term) {
-  // OU: const endpoint = `https://api.mercadolibre.com/sites/MLB/search?q=${term}`;
-  // OU: const edpoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-  // OU: const response = await fetch(endpoint);
   const response = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${term}`);
   const object = await response.json();
   // const obj = object.results;
@@ -46,8 +43,29 @@ async function recoverMercadoLivreResults(term) {
   });
 }
 
+//                        Requisito 5 - Some o valor total dos itens do carrinho de compras de forma assíncrona.
+
+// criando elemento <p class="total-price">:
+function createTotalPrice() {
+  const placeCart = document.querySelector('.cart');
+  const createPriceElement = document.createElement('p');
+  createPriceElement.className = 'total-price';
+  placeCart.appendChild(createPriceElement);
+}
+
+// função assincrona para retornar apenas o preço total dos produtos
+
+async function amount() {
+  const totalPrice = document.querySelector('.total-price');
+  const selectLi = document.querySelectorAll('.cart__item');
+  let value = 0;
+    [...selectLi].forEach((productValue) => {
+      value += parseFloat(productValue.innerHTML.split('$')[1]);
+      totalPrice.innerHTML = `Preço Total: R$ ${((Math.round(value * 100)) / 100)}`;
+    });
+}
+
 //                        Requisito 4 - Carregue o carrinho de compras através do LocalStorage ao iniciar a página.
-// const productPrice = document.querySelector('.total-price');
 
 // salvar carrinho no localStorage
 function storeCart() {
@@ -61,6 +79,7 @@ function storeCart() {
 function cartItemClickListener(event) {
   event.target.remove();
   storeCart(); // para remover do localStorage - Requisito 4
+  amount(); // para remover do localStorage - Requisito 5
 }
 
 // Função auxiliar para o Requisito 4
@@ -74,10 +93,8 @@ function updatePage() {
     // adiciona o evento click no cart__item que está no carrinho de compras 
    [...recoverItems].forEach((listItem) => 
    listItem.addEventListener('click', cartItemClickListener));
-    // productPrice.innerHTML = localStorage.getItem('productValue');
+    // productPrice.innerHTcreateTotalPrice('span.item__sku').innerText;
 }
-
-//                        Requisito 2 - Adicione o produto ao carrinho de compras
 
 //              Função Nativa - Requisito 2 - captura id dos produtos             //
 function getSkuFromProductItem(item) {
@@ -102,16 +119,13 @@ function addProductToCart() {
     const id = getSkuFromProductItem(event.target.parentNode);
     const response = await fetch(`https://api.mercadolibre.com/items/${id}`);
     const object = await response.json();
-    // const item = { sku: id, name: object.title, salePrice: object.price };
-    const item = {
-      sku: id,
-      name: object.title,
-      salePrice: object.price,
-    }; 
+    const item = { sku: id, name: object.title, salePrice: object.price }; 
     const getItemCart = createCartItemElement(item);
     const getItemsCart = document.querySelector('.cart__items');
-    getItemsCart.appendChild(getItemCart); // novo elemnento na lista
+    getItemsCart.appendChild(getItemCart); // novo elemento na lista
+    createTotalPrice(); // adicionando o total-price - Requisito 5
     storeCart(); // para salvar o carrinho no localStorage - Requisito 4
+    amount(); // para salvar o preço no localStorage - Requisito 5
   });
 }
  
