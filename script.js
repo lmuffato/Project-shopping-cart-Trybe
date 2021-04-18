@@ -158,5 +158,3 @@ window.onload = async function onload() {
 // o window.onload foi colocado abaixo devido a ele ter que fazer as funções acima primeiro, para depois ele reconhecer e utilizá-las.
 
 // Graças ao Murilo Gonçalves, em uma call no Slack, 15/04, eu pude entender como utilizar funções async. Assim como quebrar a cabeça para entender que quando utilizado o await para uma função, a função onde ele está também deve ser uma async. Assim como só iremos conseguir maninupar o json quando a função dele retorna com o await.
-
-// Requisto da conta do carinho. Pensei em adicionar um elemento igual ao span invisível dos produtos, contendo o price nele, mas isso tenho que colocar dentro da Li criada, pois tera a interação de retirá-la. Ao mesmo tempo a função de soma tem que pegar todas aquelas spans invisíveis do carrinho e somar seus preços com base nas suas existências. Lembrando de ver o seu Style!
