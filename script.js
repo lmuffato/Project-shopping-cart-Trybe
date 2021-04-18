@@ -15,6 +15,14 @@ function createCustomElement(element, className, innerText) {
 }
 
 function createProductItemElement({ sku, name, image }) {
+  fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
+    .then((response) => {
+      response.json((cleanComputersList) => {
+        cleanComputersList.then((computerList) => {
+          console.log(computerList);
+        })
+      })
+    })
   const section = document.createElement('section');
   section.className = 'item';
 
