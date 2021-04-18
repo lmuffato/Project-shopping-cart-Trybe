@@ -71,34 +71,45 @@ function cartItemClickListener(event) {
   saveToLocalStorage('cartList', parent.innerHTML);
 }
 
+const getCart = () => {
+  return document.querySelector('.cart__items');
+};
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
-  
   return li;
 }
 
 const appendElementToCart = (element) => {
-  const olCart = document.querySelector('.cart__items');
+  const olCart = getCart();
   olCart.appendChild(element);
+  console.log(element.price);
   saveToLocalStorage('cartList', olCart.innerHTML);
 };
 
 const fetchItem = async (item) => {
   const id = item.path[1].firstChild.innerText;
   const data = await fetchData(`https://api.mercadolibre.com/items/${id}`);
+  const { id: sku, title: name, price: salePrice } = data;
   const obj = {
-    sku: data.id,
-    name: data.title,
-    salePrice: data.price,
+    sku,
+    name,
+    salePrice,
   };
   appendElementToCart(createCartItemElement(obj));
 };
+
+const clearCart = () => {
+  const ol = getCart();
+  ol.innerHTML = '';
+  localStorage.removeItem('cartList');
+};
 window.onload = async function onload() {
   try {
-    const olCart = document.querySelector('.cart__items');
+    const olCart = getCart();
     loadToLocalStorage('cartList', olCart);
     olCart.childNodes.forEach((node) => node.addEventListener('click', cartItemClickListener));
     const uriData = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
@@ -106,7 +117,12 @@ window.onload = async function onload() {
     createElements(data.results);
     const itemAdd = document.querySelectorAll('.item__add');
     itemAdd.forEach((item) => item.addEventListener('click', fetchItem));
+    const emptyCart = document.querySelector('.empty-cart');
+    emptyCart.addEventListener('click', clearCart);
   } catch (error) {
     console.log(error);
   }
 };
+
+
+/* Cada vez que se adicionar um item ao carrinho de compras, será necessário somar seus valores e apresentá-los na página principal do projeto. Não queremos que essa soma, no entanto, impacte no carregamento da página. Devemos, portanto, fazer essa soma de forma *assíncrona*. Use `async/await` para fazer isso. O elemento que tem como filho o preço total dos itens do carrinho deve ter, **obrigatóriamente**, a classe `total-price`. */
