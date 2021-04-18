@@ -77,7 +77,7 @@
 
 .loading {
   font-size: large;
-  font-weight: bold;
+  font-weight: 200;
   color: red;
   background-color: blue;
 }
