@@ -29,7 +29,7 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  event.target.remove();
+  event.target.parentElement.removeChild(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -76,14 +76,8 @@ function addToCart() {
     }
   });
 }
-// Requisito 03 - Ideia de Lucas Portella - Turma 10B
-function emptyCart() {
-  const btnEmptyCart = document.querySelector('.empty-cart');
-  btnEmptyCart.addEventListener('click', cartItemClickListener);
-}
 
 window.onload = function onload() {
   getInfoProduct();
   addToCart();
-  emptyCart();
  };
