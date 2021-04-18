@@ -1,3 +1,6 @@
+const cartItems = '.cart__items';
+const cartItem = '.cart__item';
+
 //                        Requisito 1 - Crie uma listagem de produtos.
 
 //              Função Nativa - Requisito 1              //
@@ -57,7 +60,7 @@ function createTotalPrice() {
 
 async function amount() {
   const totalPrice = document.querySelector('.total-price');
-  const selectLi = document.querySelectorAll('.cart__item');
+  const selectLi = document.querySelectorAll(cartItem);
   let value = 0;
     [...selectLi].forEach((productValue) => {
       value += parseFloat(productValue.innerHTML.split('$')[1]);
@@ -87,9 +90,9 @@ function cartItemClickListener(event) {
 function updatePage() {
   // função para reinserir lista de produtos do localStorage
   // sempre será executado ao abrir a página, ou seja, criará o evento
-    const cart = document.querySelector('.cart__items');
+    const cart = document.querySelector(cartItems);
     cart.innerHTML = localStorage.getItem('cart');
-    const recoverItems = document.querySelectorAll('.cart__item');
+    const recoverItems = document.querySelectorAll(cartItem);
     // adiciona o evento click no cart__item que está no carrinho de compras 
    [...recoverItems].forEach((listItem) => 
    listItem.addEventListener('click', cartItemClickListener));
@@ -120,16 +123,28 @@ function addProductToCart() {
     const object = await response.json();
     const item = { sku: id, name: object.title, salePrice: object.price }; 
     const getItemCart = createCartItemElement(item);
-    const getItemsCart = document.querySelector('.cart__items');
+    const getItemsCart = document.querySelector(cartItems);
     getItemsCart.appendChild(getItemCart); // novo elemento na lista
     createTotalPrice(); // adicionando o total-price - Requisito 5
     storeCart(); // para salvar o carrinho no localStorage - Requisito 4
     amount(); // para salvar o preço no localStorage - Requisito 5
   });
 }
+
+//                        Requisito 6 - Crie um botão para limpar carrinho de compras.
+function emptyCart() {
+  const emptyButton = document.querySelector('.empty-cart');
+  emptyButton.addEventListener('click', () => {
+    const allLi = document.querySelectorAll(cartItem);
+   const ifOrElse = (allLi.length !== 0) ? allLi.forEach((li) =>
+    li.remove()) : alert('Não existe produto a ser removido do carrinho de compras');
+    return ifOrElse;
+  });
+} 
  
 window.onload = function onload() {
   recoverMercadoLivreResults('computador');
   addProductToCart();
   updatePage();
+  emptyCart();
 };
