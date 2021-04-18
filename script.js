@@ -58,11 +58,13 @@ const pegaDadosID = () => {
   const caminho = document.querySelectorAll('.item__add');
   caminho.forEach((button) => {
     button.addEventListener('click', (event) => {
-      const idDoPc = getSkuFromProductItem(event.target.parentElement);
-      procuraId(idDoPc);
+       const idDoPc = getSkuFromProductItem(event.target.parentElement);
+       procuraId(idDoPc);
     });
   });
 };
+
+// com ajuda de Nathi zebral, Adelino Junior e outros amigos da sala de estudo consegui fazer o requisito 2
 
 // x------------------requisito 1 abaixo---------------------x
 
@@ -71,13 +73,13 @@ const informaçoesApi = (interageApi) => {
     const section = document.querySelector('.items');
     section.appendChild(createProductItemElement(computer));
   });
+  pegaDadosID();
 };
 
 const interageApi = () => {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador').then((response) => {
     response.json().then((data) => {
       const informaçoes = data.results;
-      console.log(informaçoes);
       informaçoesApi(informaçoes);
     });
   });
