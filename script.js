@@ -23,13 +23,13 @@ function createProductItemElement({ sku, name, image }) {
   
   return section;
 }
-
+/*
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
-
+*/
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  console.log(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -40,13 +40,36 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = function onload() { 
+const getSearchQueryResult = async (endpoint) => {
+  const response = await fetch(endpoint);
+  const data = await response.json();
+  return data.results;
+};
+
+const getCartItemData = async (itemId) => {
+  const endPoint = `https://api.mercadolibre.com/items/${itemId}`;
+  const response = await fetch(endPoint);
+  const data = await response.json();
+  const singleItemInfo = { 
+    sku: data.id, 
+    name: data.title, 
+    salePrice: data.base_price,
+  };
+  return singleItemInfo;
+};
+
+window.onload = async function onload() { 
   // fetches data from the API and adds it to the page
   const apiEndPoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-  fetch(apiEndPoint).then((response) => response.json()).then((data) => {
-    data.results.forEach((item) => {
-      const itemInfo = { sku: item.id, name: item.title, image: item.thumbnail };
-      document.querySelector('.items').appendChild(createProductItemElement(itemInfo));
+  const queryResults = await getSearchQueryResult(apiEndPoint);
+  queryResults.forEach((item) => {
+    const itemInfo = { sku: item.id, name: item.title, image: item.thumbnail };
+
+    const newSectionItem = createProductItemElement(itemInfo);
+    newSectionItem.lastChild.addEventListener('click', async () => {
+      const singleItemInfo = await getCartItemData(item.id);
+      document.querySelector('.cart__items').appendChild(createCartItemElement(singleItemInfo));
     });
+    document.querySelector('.items').appendChild(newSectionItem);
   });
 };
