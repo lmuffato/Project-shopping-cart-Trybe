@@ -1,6 +1,6 @@
 // const { default: fetch } = require('node-fetch');
 
-const cartItemsConst = '.cart__items';
+const cartItemsConst = '.cart__items'; // Requerido pelo eslit pois a string estava sendo utilizada mais de 3 vezes. 
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -75,12 +75,12 @@ function createCartItemElement({ sku: id, name: title, salePrice }) {
 
 const localStorageCart = () => { // será adicionado junto com o produto ao carrinho de compras 
   const shoppingCartItems = document.querySelector(cartItemsConst);
-  localStorage.setItem('Shoppin cart', shoppingCartItems.innerHTML); // método setItem adiciona a chave e valor ao localStorage. src = https://developer.mozilla.org/pt-BR/d
+  localStorage.setItem('Shopping cart', shoppingCartItems.innerHTML); // método setItem adiciona a chave e valor ao localStorage. src = https://developer.mozilla.org/pt-BR/d
 };
 
 const showCartOnLoad = () => { // será mostrado após ser recuperado do localStorage.
   const shoppingCartItems = document.querySelector(cartItemsConst);
-  shoppingCartItems.innerHTML = localStorage.getItem('cart'); // método getItem busca o valor da chave passada que foi armazenada no localStorage. src = https://developer.mozilla.org/pt-BR/docs/Web/API/Storage/getItem
+  shoppingCartItems.innerHTML = localStorage.getItem('Shopping cart'); // método getItem busca o valor da chave passada que foi armazenada no localStorage. src = https://developer.mozilla.org/pt-BR/docs/Web/API/Storage/getItem
 };
 
 const addCart = async (e) => {
