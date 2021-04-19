@@ -1,4 +1,17 @@
 // Nota mental para eu do Futuro: usar Promise e tratar os dados em outra função async
+// Nota mental para eu do Futuro: setItem salva, getItem coloca no localStorage
+
+const literal3times = '.cart__items';
+
+function SaveLocalStorage() {
+  localStorage.setItem('cartItens', document.querySelector(literal3times).innerHTML);
+}
+
+// CART ITEM é os do Carrinho de compra!
+function cartItemClickListener(event) {
+  event.target.parentNode.removeChild(event.target);
+}
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -9,10 +22,6 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
-}
-// CART ITEM é os do Carrinho de compra!
-function cartItemClickListener(event) {
-
 }
 
 function productClickListener(event) {
@@ -26,12 +35,12 @@ function productClickListener(event) {
         name: data.title,
         salePrice: data.price,
       };
-      const itemSelect = document.querySelector('.cart__items');
+      const itemSelect = document.querySelector(literal3times);
       itemSelect.appendChild(createCartItemElement(skuEvent));
+      SaveLocalStorage();
+      console.log(localStorage);
     });
-
 }
-
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -50,6 +59,7 @@ function createProductImageElement(imageSource) {
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
+  
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
@@ -84,7 +94,7 @@ const fetchProducts = () => {
   
 window.onload = async () => {
   await fetchProducts();
-  clearCart()
+  clearCart();
 };
 
 // Não foi necessário já que o projeto pede para fazer outro endpoint no futuro
