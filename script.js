@@ -51,10 +51,10 @@ const finishLoading = () => {
 // funções de fetch, 1 e 2 requisito
 
 const createCartItem = async (item) => {
-  loading();
   const getProduct = await fetch(`https://api.mercadolibre.com/items/${item}`);
   const response = await getProduct.json();
   return response;
+
 };
 
 // Bruno ajudou na fundamentação da lógica para o cálculo do preço.
@@ -74,7 +74,6 @@ function createProductItemElement({ sku, name, image }) {
     // reduceValue.push(reduceSum);
     // const totalprice = document.querySelector('.total-price');
     // totalprice.innerHTML = reduceSum;
-    finishLoading();
   });
   return section;
 }
@@ -83,10 +82,12 @@ async function fetchProducts() {
   const getProduct = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
     const result = await getProduct.json();
     const data = await result.results;
+    loading();
     data.forEach((value) => {
       const product = { sku: value.id, name: value.title, image: value.thumbnail };
       document.querySelector('.items').appendChild(createProductItemElement(product));
   });
+  finishLoading();
 }
 
 // referência Patrick e Rogério - turma 10. Me deu noção e lógica de como fazer o botão de maneira pragmática e funcional.
