@@ -54,7 +54,6 @@ const createCartItem = async (item) => {
   const getProduct = await fetch(`https://api.mercadolibre.com/items/${item}`);
   const response = await getProduct.json();
   return response;
-
 };
 
 // Bruno ajudou na fundamentação da lógica para o cálculo do preço.
