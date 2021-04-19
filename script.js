@@ -99,7 +99,7 @@ const addQueryResultToPage = async (endpoint) => {
 };
 
 window.onload = function onload() { 
-  addQueryResultToPage('https://api.mercadolibre.com/sites/MLB/search?q=feijao');
+  addQueryResultToPage('https://api.mercadolibre.com/sites/MLB/search?q=computador');
 
   if (localStorage.cartList) {
     document.querySelector('.cart').outerHTML = localStorage.cartList;
