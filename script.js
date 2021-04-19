@@ -1,3 +1,31 @@
+// Projeto feito com ajuda das colegas Heloísa Hackenhaar, Pollyana Oliveira
+
+// requisito 3
+function cartItemClickListener(event) {
+  event.target.remove();
+}
+
+// requisito 4
+const saveCart = () => {
+  const cartContent = document.querySelector('.cart__items').innerHTML;
+  localStorage.setItem('cart', cartContent);
+};
+
+const getCart = () => {
+  localStorage.getItem('cart');
+};
+
+function loadCart() {
+  const currentCart = localStorage.getItem('cart');
+  const cartItems = document.querySelector('.cart__items');
+  cartItems.innerHTML = currentCart;
+  cartItems.addEventListener('click', (e) => {
+    if (e.target.classList.contains('cart__item')) {
+      cartItemClickListener(e);
+    }
+  });
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -29,7 +57,6 @@ function createProductItemElement({ id, title, thumbnail }) {
 }
 
 // requisito 1 
-// feito com ajuda da colega Heloísa Hackenhaar
 const addProduct = (products) => {
   products.forEach((product) => {
     const { id, title, thumbnail } = product;
@@ -52,16 +79,12 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function cartItemClickListener(event) {
-  event.target.remove();
-}
-
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener);
+  // li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
@@ -75,10 +98,13 @@ const getItemId = () => {
       const itemData = await getFetch.json();
         const { id, title, price } = itemData;
         cartItem.appendChild(createCartItemElement({ id, title, price }));
+        saveCart();
       });
 };
 
 window.onload = function onload() {
+  loadCart();
   productList();
   getItemId();
+  getCart();
 };
