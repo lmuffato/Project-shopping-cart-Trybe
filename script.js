@@ -52,7 +52,7 @@ async function totalPrice() {
     return (total + Number(item.innerText.substr(priceIndex + 8)));
   }, 0);
   const totalItem = document.querySelector('span.total-price');
-  totalItem.innerText = totalPrices.toFixed(2);
+  totalItem.innerText = totalPrices;
 }
 
 function saveCart() {
