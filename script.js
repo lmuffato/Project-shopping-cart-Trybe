@@ -1,3 +1,8 @@
+const clearAll = () => {
+  const ol = document.querySelector('.cart__items');
+  ol.innerText = '';
+}
+
 const requisition = async (e) => {
   const IdItem = e.target.parentNode.firstChild.innerText;
   const response = await fetch(`https://api.mercadolibre.com/items/${IdItem}`);
@@ -68,4 +73,6 @@ window.onload = async function onload() {
     sectionSelected.appendChild(createProductItemElement({ sku, name, image }));
   });
   createListeners();
+  const buttonClear = document.querySelector('.empty-cart');
+  buttonClear.addEventListener('click', clearAll);
 }
