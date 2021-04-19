@@ -52,17 +52,19 @@ async function totalPrice() {
     return (total + Number(item.innerText.substr(priceIndex + 8)));
   }, 0);
   const totalItem = document.querySelector('span.total-price');
-  totalItem.innerText = `Valor Total: R$: ${totalPrices.toFixed(2)}`;
+  totalItem.innerText = totalPrices.toFixed(2);
 }
 
 function saveCart() {
   const cartList = document.querySelector('ol.cart__items').innerHTML;
   localStorage.setItem('saveCart', cartList);
+  totalPrice()
 }
 
 function loadingCart() {
   const cartList = document.querySelector('ol.cart__items');
   cartList.innerHTML = localStorage.getItem('saveCart');
+  totalPrice()
 }
 
 function cartItemClickListener(e) {
