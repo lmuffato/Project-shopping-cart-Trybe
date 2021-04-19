@@ -36,12 +36,13 @@ function cartItemClickListener(event) {
 
 const loading = async () => {
   const selectLoading = document.querySelector('.loading');
-  selectLoading.style.display = 'none';
+  selectLoading.remove();
 };
 
 const appendSum = async () => {
   const selectTotalPrice = document.querySelector('.total-price');
-  selectTotalPrice.innerText = `${(sum / 100) * 100}`;
+  selectTotalPrice.innerText = `${parseFloat(sum.toFixed(2))}`;
+  // https://stackoverflow.com/questions/17555999/tofixed-not-for-0
 };
 
 function createCartItemElement({ id, title, price }) {
