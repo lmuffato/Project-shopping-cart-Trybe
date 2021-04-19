@@ -82,19 +82,19 @@ function createProductItemElement({ sku, name, image }) {
 }
 // ajuda de Bruno, turma 10 na nossa chamada da madrugada.
 async function fetchProducts() {
-  const createText = document.createElement('section');
-  createText.classList.add = 'loading';
-  createText.innerText = 'Levando as compras ao caixa';
-  document.body.appendChild(createText);
+  const createLoad = document.createElement('section');
+  createLoad.classList.add('loading');
+  createLoad.innerText = 'Levando as compras ao caixa';
+  const getItems = document.querySelector('.items');
+  getItems.appendChild(createLoad);
   const getProduct = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
     const result = await getProduct.json();
     const data = await result.results;
-    createText.parentElement.removeChild(createText);
     data.forEach((value) => {
       const product = { sku: value.id, name: value.title, image: value.thumbnail };
       document.querySelector('.items').appendChild(createProductItemElement(product));
   });
-  // finishLoading();
+  createLoad.remove();
 }
 
 // referência Patrick e Rogério - turma 10. Me deu noção e lógica de como fazer o botão de maneira pragmática e funcional.
