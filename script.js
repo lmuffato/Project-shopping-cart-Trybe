@@ -86,14 +86,14 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 const emptyCart = () => {
   const emptyButton = document.querySelector('.empty-cart');
-  const liParent = document.querySelector('.cart__items');
+  const ol = document.querySelector('#cartList');
 
   // Para essa função passar no avaliador precisei utilizar o loop while,
   // consultei o seguinte artigo:
   // https://www.docow.com/4834/remover-todos-os-elementos-filho-de-um-no-dom-em-javascript.html 
   emptyButton.addEventListener('click', () => {
-    while (liParent.hasChildNodes()) { 
-      liParent.removeChild(liParent.lastChild); 
+    while (ol.hasChildNodes()) { 
+      ol.removeChild(ol.lastChild); 
     }
 
     updateCartValue();
