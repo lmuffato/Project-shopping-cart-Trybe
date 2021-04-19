@@ -45,6 +45,16 @@ function createProductItemElement({ sku, name, image }) { // cria os componentes
   //   return item.querySelector('span.item__sku').innerText;
   // }
 
+async function totalPrice() {
+  const cartItems = document.querySelectorAll('li.cart__item');
+  const totalPrice = Array.from(cartItems).reduce((total, item) => {
+    const priceIndex = item.innerText.lastIndexOf('PRICE');
+    return (total + Number(item.innerText.substr(priceIndex + 8)));
+  }, 0);
+  const totalItem = document.querySelector('span.total-price');
+  totalItem.innerHTML = `Valor Total: R$: ${totalPrice.toFixed(2)}`;
+}
+
 function saveCart() {
   const cartList = document.querySelector('ol.cart__items').innerHTML;
   localStorage.setItem('saveCart', cartList);
@@ -85,6 +95,7 @@ const fetchById = (sku) => { // nova requisição contendo o valor id do item se
     
     createCartItemElement(productCart);
     saveCart();
+    totalPrice();
   })
   .catch((error) => console.log(error));
 };
