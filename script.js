@@ -183,3 +183,12 @@ window.onload = function onload() {
   verifyAsyncData();
   loadCartShop();
 };
+
+// Conteúdo utilizado para auxilio nos exercícios:
+// https://drive.google.com/file/d/1JchPxBmLi2UxSmMXCo5Ymch29rCOgAh_/view?usp=sharing
+// https://youtu.be/h0sNAXE1ozo
+// https://youtu.be/YeFzkC2awTM
+// Dicas no Slack dos colegas:
+// Lucas Paz - Turma 10 - Tribo A
+// Marcelo Maurício (Tchelo) - Turma 10 - Tribo A 
+// Rafael Medeiros Gomes - Turma 10 - Tribo A
