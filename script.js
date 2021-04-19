@@ -140,17 +140,21 @@ const handleCartAddClick = () => {
 
 // Para essa função contei com o auxílio das dicas do Patrick Morais no slack.
 const getObjectItems = async () => {
+  const itemsElement = document.querySelector('.items');
+  const p = document.createElement('p');
+  p.className = 'loading';
+  p.innerText = 'loading...';
+  itemsElement.appendChild(p);
   const endPoint = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const objectJson = await endPoint.json();
+  p.remove();
   const items = objectJson.results;
-
   items.forEach((item) => {
     const newObject = {
       sku: item.id,
       name: item.title,
       image: item.thumbnail,
     };
-    const itemsElement = document.querySelector('.items');
     const creatingElement = createProductItemElement(newObject);
     itemsElement.appendChild(creatingElement);
   });
