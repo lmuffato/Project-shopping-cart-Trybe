@@ -38,20 +38,21 @@ function createCartItemElement({ id, title, price }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
-
   return li;
 }
 
 function promiseListaDeProdutos() {
+  mensagemDeLoading();
   const getClassItems = document.querySelector('.items');
   let recebeFunc;
   return new Promise(() => {
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
       .then((response) => response.json())
       .then((data) => {
+        removeLoading();
         data.results.forEach((element) => {
         recebeFunc = createProductItemElement(element);
-          getClassItems.appendChild(recebeFunc); 
+        getClassItems.appendChild(recebeFunc); 
         });  
       });
   });
@@ -71,22 +72,22 @@ const acaoDoBotaoAddNoCarrinho = (getIdDoItem) =>
  });      
  
 function adcionaProdutoNoCarrinho() {
-  const getSection = document.querySelectorAll('.items');
+  const getSection = document.querySelectorAll('.items'); 
   getSection.forEach((element) => {
-   element.addEventListener('click', (event) => {
+    element.addEventListener('click', (event) => {
      const getButton = document.querySelectorAll('.item__add');
      getButton.forEach((buttonAdd) => {
-    if (event.target === buttonAdd) {
-      const getBotaoAddInteiro = event.target.parentNode;
-      const recebeId = getSkuFromProductItem(getBotaoAddInteiro);
-      acaoDoBotaoAddNoCarrinho(recebeId); 
-    }
+        if (event.target === buttonAdd) {
+          const getBotaoAddInteiro = event.target.parentNode;
+          const recebeId = getSkuFromProductItem(getBotaoAddInteiro);
+          acaoDoBotaoAddNoCarrinho(recebeId); 
+        }
+      });
+    });
   });
-   });
-});
 }
 
-const botaoLimparCart = () => {
+function botaoLimparCart() {
   const getClassButtonClear = document.querySelector('.empty-cart');
   const getListaDeCompras = document.querySelector('.cart__items');
 
@@ -96,9 +97,35 @@ const botaoLimparCart = () => {
     }  
   });
 };
+/*
+let valorTotal = 0;
+ 
+async function sumValorTotalDosItens(price){
+  const priceTotal = document.querySelector('.total-price');
+  
+  valorTotal += price;
+  priceTotal.innerText = valorTotal;
+}
+*/ 
+
+
+function mensagemDeLoading() {
+  const getClassItems = document.querySelector('.items');
+  const spanDeCarregamento = document.createElement('span');
+  spanDeCarregamento.innerText = 'loading...';
+  spanDeCarregamento.className = 'loading';
+  spanDeCarregamento.style.width = '500px';
+  spanDeCarregamento.style.height = '25px';
+  getClassItems.appendChild(spanDeCarregamento);
+}
+
+function removeLoading() {
+  document.querySelector('.loading').remove();
+}
 
 window.onload = function onload() { 
   promiseListaDeProdutos();
   adcionaProdutoNoCarrinho(); 
   botaoLimparCart();
+  
 };
