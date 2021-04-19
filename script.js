@@ -34,6 +34,12 @@ function cartItemClickListener(event) {
   event.target.remove();
 }
 
+const loading = async () => {
+  const selectLoading = document.querySelector('.loading');
+  selectLoading.classList.remove('ativo');
+  selectLoading.classList.add('none');
+};
+
 const appendSum = async () => {
   const selectTotalPrice = document.querySelector('.total-price');
   selectTotalPrice.innerText = `${sum.toFixed(2)}`;
@@ -88,6 +94,7 @@ const apiAppendChild = () => {
         getItems.appendChild(createProduct);
       });
     })
+    .then(() => loading())
     .then(() => {
       addItemCart();
     });
