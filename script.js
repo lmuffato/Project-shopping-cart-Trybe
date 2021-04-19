@@ -27,6 +27,7 @@ function createProductItemElement({ sku, name, image }) {
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
+
 const createTotalItem = () => {
   const totalPriceParentNode = document.createElement('section');
   totalPriceParentNode.className = 'total-price';
@@ -82,6 +83,23 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 } 
+
+const emptyCart = () => {
+  const emptyButton = document.querySelector('.empty-cart');
+  const liParent = document.querySelector('.cart__items');
+
+  // Para essa função passar no avaliador precisei utilizar o loop while,
+  // consultei o seguinte artigo:
+  // https://www.docow.com/4834/remover-todos-os-elementos-filho-de-um-no-dom-em-javascript.html 
+  emptyButton.addEventListener('click', () => {
+    while (liParent.hasChildNodes()) { 
+      liParent.removeChild(liParent.lastChild); 
+    }
+
+    updateCartValue();
+    localStorage.removeItem('cartItens');
+  });
+};
 
 const chargeLocalStorage = () => {
   const products = JSON.parse(localStorage.getItem('cartItens'));
@@ -146,4 +164,5 @@ window.onload = function onload() {
   chargeLocalStorage();
   createTotalItem();
   updateCartValue();
+  emptyCart();
 };
