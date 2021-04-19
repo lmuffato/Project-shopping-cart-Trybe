@@ -108,10 +108,21 @@ const cartItems = async () => {
   });
 };
 
+const clickRemove = () => {
+  document.querySelector(cartItemClass).innerHTML = '';
+  totalPrice();
+  saveStorage();
+};
+
+const removeItems = () => {
+  document.querySelector('.empty-cart').addEventListener('click', clickRemove);
+};
+
 window.onload = async function onload() {
   try {
     getPcsFromId(await getPcId());
     await cartItems();
+    removeItems();
   } catch (error) {
     console.log('erro ai');
   }
