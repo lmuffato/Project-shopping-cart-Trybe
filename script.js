@@ -1,4 +1,9 @@
-// const { identity } = require("cypress/types/lodash");
+const cartItems = '.cart__items';
+
+const cartSaving = () => {
+const myCart = document.querySelector(cartItems).innerHTML;
+localStorage.setItem('cart', myCart);
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -8,10 +13,10 @@ function createProductImageElement(imageSource) {
 }
 
 function cartItemClickListener(event) {
-  const selectCartItem = document.querySelector('.cart__items');
+  const selectCartItem = document.querySelector(cartItems);
   const targetToRemove = event.target;
   selectCartItem.removeChild(targetToRemove);
-
+  cartSaving();
   return event;
 }
 
@@ -41,7 +46,7 @@ function getSkuFromProductItem(item) {
 }
 
 const getButtonsID = async (event) => {
-  const cartElements = document.querySelector('.cart__items');
+  const cartElements = document.querySelector(cartItems);
     const itemTargeted = getSkuFromProductItem(event.target.parentNode);
     const computer = await getItemByID(itemTargeted);
     const obj = {
@@ -50,6 +55,7 @@ const getButtonsID = async (event) => {
       salePrice: computer.price,
     };
     cartElements.appendChild(createCartItemElement(obj));
+    cartSaving();
   };
 
 function createProductItemElement({ sku, name, image }) {
@@ -77,6 +83,27 @@ const getItem = () => {
         }));
 };
 
+const emptyCart = () => {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', () => {
+    const selectCartItem = document.querySelector(cartItems);
+    selectCartItem.innerHTML = '';
+    localStorage.clear();
+  });
+};
+
+// referência para o localStorage: Rogério Lambert (https://github.com/tryber/sd-010-a-project-shopping-cart/pull/48/files);
+// No if, se o local storage tiver algum conteúdo, a lista do carrinho recebe o conteúdo do local storage. O for foi utilizado para
+// que a função de remover itens possa ser acionada para os itens do carrinho (ela precisa ser definida posteriormente ao if
+// caso contrário não vai ser possível remover os itens do carrinho pois estão sendo atribuídos pelo local storage);
 window.onload = async function onload() { 
   await getItem();
+  const cartContent = document.querySelector(cartItems);
+  const storageContent = localStorage.getItem('cart');
+  if (storageContent) cartContent.innerHTML = storageContent;
+  const liCart = document.getElementsByTagName('li');
+  for (let index = 0; index < liCart.length; index += 1) {
+    liCart[index].addEventListener('click', cartItemClickListener);
+}
+  emptyCart();
 };
