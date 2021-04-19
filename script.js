@@ -1,5 +1,6 @@
 const erro = 'Não encontrei nada';
-// const classOl = '.cart_items';
+const classOl = '.cart__items';
+const classPrice = '.total-price';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -28,30 +29,73 @@ function createProductItemElement({ id, title, thumbnail }) {
   return section;
 }
 
-// Soma itens da lista
-const sumPrices = (price) => {
-  const span = document.querySelector('.total-price');
-  const valueAtual = parseFloat(span.innerHTML);
-  span.innerHTML = price.price + valueAtual;
+// Fui ajudar a Beatriz a resolver os requisitos 4 e 5, e vi que ela usou uma forma muito util de atualizar o preço
+// Usei a mesma ideia para refatorar minha logica da soma dos itens com a ideia do codigo dela.
+
+// Atulizar soma
+const updateSum = () => {
+  const allLi = document.querySelector(classOl).childNodes;
+  let price = 0;
+  allLi.forEach((li) => {
+    const test = li.innerText;
+    price += parseFloat(test.split('$')[1]);
+  });
+  document.querySelector(classPrice).innerText = price;
 };
 
-// Subtrai os itens da lista
-const subPrices = (item) => {
-  const span = document.querySelector('.total-price');
-  const valueAtual = parseFloat(span.innerHTML);
-  const valueRemove = parseFloat(item.split('$')[1]);
-  span.innerHTML = valueAtual - valueRemove;
+// Save local Storage
+const saveStorage = () => {
+  localStorage.setItem('price', document.querySelector(classPrice).innerText);
+  const allLi = document.querySelector(classOl).childNodes;
+  const listaSave = [];
+  allLi.forEach((li) => {
+    listaSave.push(li.innerText);
+  });
+
+  localStorage.setItem('list', listaSave);
 };
+
+// Função callback para retira um item da lista
+function cartItemClickListener({ target }) {
+  // subPrices(target.innerHTML);
+  target.remove();
+  updateSum();
+  saveStorage();
+}
+
+// Update local Storage
+const attStorage = () => {
+  document.querySelector(classPrice).innerText = localStorage.price;
+  if (localStorage.list !== undefined) {
+    const elementosLi = localStorage.list.split(',');
+    elementosLi.forEach((e) => {
+      const li = document.createElement('li');
+      li.className = 'cart__item';
+      li.innerText = e;
+      li.addEventListener('click', cartItemClickListener);
+      document.querySelector(classOl).appendChild(li);
+  });
+  }
+};
+
+// Soma itens da lista
+// const sumPrices = (price) => {
+//   const span = document.querySelector('.total-price');
+//   const valueAtual = parseFloat(span.innerHTML);
+//   span.innerHTML = price.price + valueAtual;
+// };
+
+// Subtrai os itens da lista
+// const subPrices = (item) => {
+//   const span = document.querySelector('.total-price');
+//   const valueAtual = parseFloat(span.innerHTML);
+//   const valueRemove = parseFloat(item.split('$')[1]);
+//   span.innerHTML = valueAtual - valueRemove;
+// };
 
 // Função responsavel pela busca do id do elemento clicado
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
-}
-
-// Função callback para retira um item da lista
-function cartItemClickListener({ target }) {
-  subPrices(target.innerHTML);
-  target.remove();
 }
 
 // Cria elementos li para adicionar ao carrinho
@@ -66,10 +110,10 @@ function createCartItemElement({ id, title, price }) {
 
 // Função para limpar toda a lista
 const clearList = () => {
-  document.querySelector('.cart__items').innerHTML = '';
+  document.querySelector(classOl).innerHTML = '';
 };
 
-// Adiciona uma mensagem de Loading na tela
+// Remove o elemento de loading
 const RemoveloadingAPI = () => {
   const section = document.querySelector('.loading');
   section.remove();
@@ -90,8 +134,10 @@ const getListCart = () => {
       // console.log('clikei no btn');
       try {
         const dados = await dadosAPI(getSkuFromProductItem(btn.parentNode));
-        sumPrices(dados);
-        document.querySelector('.cart__items').appendChild(createCartItemElement(dados));
+        document.querySelector(classOl).appendChild(createCartItemElement(dados));
+        updateSum();
+        saveStorage();
+        // sumPrices(dados);
       } catch (error) {
         return erro;
       }
@@ -135,4 +181,5 @@ const createDados = async () => {
 window.onload = function onload() {
   createDados();
   document.querySelector('.empty-cart').addEventListener('click', clearList);
+  attStorage();
 };
