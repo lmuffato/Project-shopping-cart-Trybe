@@ -1,27 +1,33 @@
-### Termos de acordos
+# Projeto Carrinho de Compras - Shopping Cart Project
 
-Ao iniciar este projeto, você concorda com as diretrizes do Código de Ética e Conduta e do Manual da Pessoa Estudante da Trybe.
+## Habilidades desenvolvidas
 
-# Boas vindas ao repositório do projeto de Carrinho de Compras!
+Nesse projeto, as seguintes habilidades são desenvolvidas e avaliadas:
 
-Você já usa o GitHub diariamente para desenvolver os exercícios, certo? Agora, para desenvolver os projetos, você deverá seguir as instruções a seguir. Fique atento a cada passo, e se tiver qualquer dúvida, nos envie por _Slack_! #vqv 🚀
+* Fazer requisições a uma API *(Application Programming Interface)* do Mercado Livre;
+* Utilizar os seus conhecimentos sobre JavaScript, CSS e HTML;
+* Trabalhar com funções assíncronas;
 
-Aqui você vai encontrar os detalhes de como estruturar o desenvolvimento do seu projeto a partir desse repositório, utilizando uma branch específica e um _Pull Request_ para colocar seus códigos.
+### Protótipo do projeto
+
+O projeto deve ter o comportamento parecido com o do gif abaixo quando finalizado:
+
+![Project Gif](./out.gif)
+
+## Requisitos do projeto
+
+- [x]  1 - Crie uma listagem de produtos
+- [x]  2 - Adicione o produto ao carrinho de compras
+- [x]  3 - Remova o item do carrinho de compras ao clicar nele
+- [x]  4 - Carregue o carrinho de compras através do **LocalStorage** ao iniciar a página
+- [x]  5 - Some o valor total dos itens do carrinho de compras de forma assíncrona
+- [x]  6 - Crie um botão para limpar carrinho de compras
+- [x]  7 - Adicione um texto de "loading" durante uma requisição à API
 
 ---
 
-## SUMÁRIO
 
-- [Habilidades](#habilidades)
-- [O que deverá ser desenvolvido](#o-que-deverá-ser-desenvolvido)
-  - [Protótipo do projeto](#protótipo-do-projeto)
-- [Data de entrega](#data-de-entrega)
-- [Como desenvolver](#como-desenvolver)
-  - [Antes de começar a desenvolver](#antes-de-começar-a-desenvolver)
-- [Requisitos do projeto](#requisitos-do-projeto)
-  - [Linter](#linter)
-  - [Execução de testes de requisito](#execução-de-testes-de-requisito)
-  - [API Shopping Cart](#api-shopping-cart)
+## SUMÁRIO
 - [Lista de requisitos](#lista-de-requisitos)
   - [1 - Criar listagem de produtos](#1-criar-listagem-de-produtos)
   - [2 - Adicione o produto ao carrinho de compras](#2-adicione-o-produto-ao-carrinho-de-compras)
@@ -38,36 +44,11 @@ Aqui você vai encontrar os detalhes de como estruturar o desenvolvimento do seu
 
 ---
 
-## Habilidades
-
-Nesse projeto, você será capaz de:
-
-- Fazer requisições a uma API *(Application Programming Interface)* do Mercado Livre;
-- Utilizar os seus conhecimentos sobre JavaScript, CSS e HTML;
-- Trabalhar com funções assíncronas;
-
----
-
 ## O que será desenvolvido
 
 Nesse projeto vocês farão um **carrinho de compras** totalmente dinâmico! E o melhor: consumindo dados diretamente de uma **API!** Isso mesmo. Da sigla em inglês _Application Programming Interface_, uma API é um ponto de contato na internet com determinado serviço. Através de **requisições HTTP** a essa API é possível interagir com ela da forma como quem a criou planejou. Aqui usaremos a API do Mercado Livre para buscarmos produtos à venda.
 
-### Protótipo do projeto
 
-Seu projeto deve ter o comportamento parecido com o do gif abaixo quando finalizado, **não se preocupe em replicar o visual, o gif so ilustra o comportamento**:
-
-![Project Gif](./out.gif)
-
----
-
-## Data de entrega
-
-  - Projeto individual;
-
-  - Serão `2` dias de projeto.
-  - Data de entrega para avaliação final do projeto: `22/04/2021 - 14:00h`.
-
----
 
 ## Como desenvolver
 
