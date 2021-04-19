@@ -91,14 +91,20 @@ const clickToCart = () => {
   });
 };
 
-// const emptyCart = () => {
-//   const shoppingCart = document.querySelector('.cart__items');
-//   shoppingCart.forEach((product) => {
-//     product.remove();
-//   }); 
-// };
+const emptyCart = () => {
+  const shoppingCart = document.querySelectorAll('li');
+  shoppingCart.forEach((product) => {
+    product.remove();
+  }); 
+};
+
+const emptyBtnFunction = () => {
+  const emptyBtn = document.querySelector('.empty-cart');
+  emptyBtn.addEventListener('click', emptyCart);
+};
 
 window.onload = function onload() { 
   fetchProducts('computador')
-    .then(() => clickToCart());   
+    .then(() => clickToCart());
+    emptyBtnFunction();   
 };
