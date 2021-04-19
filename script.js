@@ -71,9 +71,19 @@ const getCartItemData = async (itemId) => {
   return singleItemInfo;
 };
 
+const displayLoader = (bool) => {
+  if (!bool) {
+    document.querySelector('.loading').outerHTML = '';
+  } else {
+    document.querySelector('.loading').style.display = 'block';
+  }
+};
+
 const addQueryResultToPage = async (endpoint) => {
+  displayLoader(true);
   const response = await fetch(endpoint);
   const data = await response.json();
+  displayLoader(false);
   const itemsFullList = data.results;
   itemsFullList.forEach((item) => {
     const itemInfo = { sku: item.id, name: item.title, image: item.thumbnail };
@@ -88,8 +98,8 @@ const addQueryResultToPage = async (endpoint) => {
   });
 };
 
-window.onload = async function onload() { 
-  addQueryResultToPage('https://api.mercadolibre.com/sites/MLB/search?q=computador');
+window.onload = function onload() { 
+  addQueryResultToPage('https://api.mercadolibre.com/sites/MLB/search?q=feijao');
 
   if (localStorage.cartList) {
     document.querySelector('.cart').outerHTML = localStorage.cartList;
