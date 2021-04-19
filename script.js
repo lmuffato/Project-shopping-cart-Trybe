@@ -1,10 +1,24 @@
 const cartItemClass = '.cart__items';
 
 const URL = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
+const classPrice = document.querySelector('.total-price');
 
 const saveStorage = () => {
   const saveItem = document.querySelector(cartItemClass);
   localStorage.setItem('cartItem', saveItem.innerHTML);
+  localStorage.setItem('priceTotal', classPrice.innerHTML);
+};
+
+const totalPrice = async () => {
+  let sum = 0;
+  const cartItemLi = document.querySelector(cartItemClass);
+  cartItemLi.childNodes.forEach((element) => {
+    const price = element.innerText.split('$')[1];
+    sum += Number(price);
+    return sum;
+  });
+  saveStorage();
+  classPrice.innerHTML = `${sum}`;
 };
 
 function createProductImageElement(imageSource) {
@@ -39,13 +53,15 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  totalPrice();
   saveStorage();
 }
 
 const loadStorage = () => {
+  classPrice.innerHTML = localStorage.getItem('priceTotal');
   const loadItem = document.querySelector(cartItemClass);
   loadItem.innerHTML = localStorage.getItem('cartItem');
-  document.querySelectorAll(cartItemClass).forEach((e) => {
+  document.querySelectorAll('.cart__item').forEach((e) => {
     e.addEventListener('click', cartItemClickListener);
   });
 };
@@ -83,6 +99,7 @@ const cartItems = async () => {
         const dataIn = await getCartId(getSkuFromProductItem(event.parentNode));
         document.querySelector(cartItemClass)
         .appendChild(createCartItemElement(dataIn));
+        totalPrice();
         saveStorage();
       } catch (error) {
         console.log('algo deu errado', error);
@@ -95,8 +112,8 @@ window.onload = async function onload() {
   try {
     getPcsFromId(await getPcId());
     await cartItems();
-    loadStorage();
   } catch (error) {
     console.log('erro ai');
   }
 };
+loadStorage();
