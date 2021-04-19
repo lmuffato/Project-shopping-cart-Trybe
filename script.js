@@ -42,6 +42,14 @@ function createCartItemElement({ id, title, price }) {
   ol.appendChild(li);
 }
 
+function clearCart() {
+const btnClearCart = document.querySelector('.empty-cart');
+btnClearCart.addEventListener('click', () => {
+  const cartItems = document.querySelector('.cart__items');
+  cartItems.innerText = '';
+});
+}
+
 // const getPrice = () => {
 //   const cartPrice = document.querySelector('li.cart__item');
 //   cartPrice.innerText.split('PRICE');
@@ -93,4 +101,5 @@ const fetchProductList = async () => {
 
 window.onload = async function onload() {
   fetchProductList();
+  clearCart();
 };
