@@ -77,3 +77,8 @@
 .total {
   display:flex
 }
+.loading {
+  display: flex;
+  color: deepskyblue;
+  justify-content: center;
+}

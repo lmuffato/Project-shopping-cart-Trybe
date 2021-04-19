@@ -2,10 +2,10 @@ const cartItems = '.cart__items';
 
 // const arrayPrices = [];
 
-function savingItems() {
+const savingItems = () => {
   const cartLi = document.querySelector(cartItems);
-  localStorage.setItem('items', cartLi.innerHTML);
-}
+  localStorage.setItem('cart', cartLi.innerHTML);
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -24,6 +24,7 @@ function createCustomElement(element, className, innerText) {
 function cartItemClickListener(event) {
   const click = event.target;
   click.remove();
+  savingItems();
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -32,21 +33,24 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   document.querySelector('ol.cart__items').appendChild(li);
   li.addEventListener('click', cartItemClickListener);
+  savingItems();
   return li;
 }
 
 // loading - 7 requisito (referência https://developer.mozilla.org/pt-BR/docs/Web/API/Element/className - criar a classe)
-const loading = () => {
-  const createText = document.createElement('section');
-  createText.classList.add = 'loading';
-  createText.innerText = 'Levando as compras ao caixa';
-  document.body.appendChild(createText);
-};
+// const loading = () => {
+//   const createText = document.createElement('section');
+//   createText.classList.add = 'loading';
+//   createText.innerText = 'Levando as compras ao caixa';
+//   document.body.appendChild(createText);
+// };
 
-const finishLoading = () => {
-  const getLoading = document.querySelector('.loading');
-  getLoading.remove();
-};
+// const finishLoading = () => {
+//   const getBody = document.querySelector('body')
+//   console.log(getBody);
+//   const getLoading = document.querySelector('.loading');
+//   document.querySelector('.loading').remove();
+// };
 
 // funções de fetch, 1 e 2 requisito
 
@@ -78,15 +82,19 @@ function createProductItemElement({ sku, name, image }) {
 }
 // ajuda de Bruno, turma 10 na nossa chamada da madrugada.
 async function fetchProducts() {
+  const createText = document.createElement('section');
+  createText.classList.add = 'loading';
+  createText.innerText = 'Levando as compras ao caixa';
+  document.body.appendChild(createText);
   const getProduct = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
     const result = await getProduct.json();
     const data = await result.results;
-    loading();
+    createText.parentElement.removeChild(createText);
     data.forEach((value) => {
       const product = { sku: value.id, name: value.title, image: value.thumbnail };
       document.querySelector('.items').appendChild(createProductItemElement(product));
   });
-  finishLoading();
+  // finishLoading();
 }
 
 // referência Patrick e Rogério - turma 10. Me deu noção e lógica de como fazer o botão de maneira pragmática e funcional.
