@@ -108,6 +108,19 @@ const getFetchId = async (idElement) => {
   }
 };
 
+const loading = () => {
+  const positionLoading = document.querySelector('body');
+  const loadingApi = document.createElement('span');
+  loadingApi.className = 'loading';
+  loadingApi.innerText = 'Loading...';
+  positionLoading.appendChild(loadingApi);
+};
+
+const stopLoading = async () => {
+ const stop = document.querySelector('.loading');
+ stop.outerHTML = null;
+};
+
 const getListItems = async (listItem) => {
   const { results } = listItem;
   results.forEach((result) => {
@@ -117,8 +130,9 @@ const getListItems = async (listItem) => {
       image: result.thumbnail,
     };
     const sectionItem = document.querySelector('.items');
-    return sectionItem.appendChild(createProductItemElement(itensObj));
+    sectionItem.appendChild(createProductItemElement(itensObj));
   });
+  stopLoading();
 };
 
 const getListProducts = async () => {
@@ -165,7 +179,7 @@ document.addEventListener('click', getSkuFromProductItem);
 document.addEventListener('click', btnEmptyCart);
 
 window.onload = function onload() {
-  // displayTotalPrice();
+  loading();
   verifyAsyncData();
   loadCartShop();
 };
