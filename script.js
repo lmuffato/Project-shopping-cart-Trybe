@@ -36,8 +36,7 @@ function cartItemClickListener(event) {
 
 const loading = async () => {
   const selectLoading = document.querySelector('.loading');
-  selectLoading.classList.remove('ativo');
-  selectLoading.classList.add('none');
+  selectLoading.style.display = 'none';
 };
 
 const appendSum = async () => {

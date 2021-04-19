@@ -75,7 +75,7 @@
   text-align: center;
 }
 
-.ativo {
+.loading {
   display: flex;
   position: absolute;
   height: 100vh;
@@ -86,8 +86,4 @@
 
   text-transform: uppercase;
   font-size: 2em;
-}
-
-.none {
-  display: none;
 }
