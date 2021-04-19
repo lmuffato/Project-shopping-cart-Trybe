@@ -2,11 +2,11 @@
 window.onload = function onload() { };
 
 const ol = document.querySelector('.cart__items');
-// const prices = document.querySelector('.total-price');
+const prices = document.querySelector('.total-price');
 
 const setStorage = () => {
   localStorage.setItem('cart', ol.innerHTML);
-  // localStorage.setItem('priceCart', prices.innerHTML);
+  localStorage.setItem('priceCart', prices.innerHTML);
 };
 
 function createProductImageElement(imageSource) {
@@ -38,30 +38,44 @@ function createProductItemElement({ id, title, thumbnail }) {
 function getIdFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+const updatePrice = async () => {
+  const items = document.querySelectorAll('li.cart__item');
+  const totalPrice = [...items].reduce((acc, element) => {
+    const curr = parseFloat(element.dataset.price);
+    
+    const total = acc + curr;
+    // TODO lembrar de refatorar para trocar o ponto por vírgula com replace
+    return total;
+  }, 0);
+  
+  prices.innerText = `R$${totalPrice.toFixed(2).replace('.', ',')}`;
+};
 
 // metodo target desestruturado do elemento clicado do addEventListener e utilizado.
 
 function cartItemClickListener({ target }) {
   target.remove();
   setStorage();
+  updatePrice();
 }
+
+const removeItem = () => {
+  document.querySelectorAll('.cart__item')
+    .forEach((e) => e.addEventListener('click', cartItemClickListener));
+};
 
 const loadStorage = () => {
   ol.innerHTML = localStorage.getItem('cart');
   // prices.innerHTML = localStorage.getItem('priceCart');
-  document.querySelectorAll('.cart__item')
-    .forEach((e) => e.addEventListener('click', cartItemClickListener));
+  removeItem();
+  updatePrice();
 };
-// const sumPrices = () => {
-//   prices;
-// };
-// sumPrices();
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   // Elisa França me enviou a documentação sobre o dataset que mapea o DOMString e guarda os valores de determinado elemento
   // https://developer.mozilla.org/pt-BR/docs/Web/API/HTMLOrForeignElement/dataset
-  li.dataset.xablau = price;
+  li.dataset.price = price;
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
@@ -94,6 +108,7 @@ const setCart = async () => {
       const item = await fetchId(getIdFromProductItem(event.parentNode));
       ol.appendChild(createCartItemElement(item));
       setStorage();
+      updatePrice();
     } catch (error) {
         throw new Error('Erro no click');
     }
