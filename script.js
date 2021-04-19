@@ -53,7 +53,7 @@ const getCartItemData = async (itemId) => {
   const singleItemInfo = { 
     sku: data.id, 
     name: data.title, 
-    salePrice: data.base_price,
+    salePrice: data.price,
   };
   return singleItemInfo;
 };
