@@ -1,9 +1,8 @@
 // Nota mental para eu do Futuro: usar Promise e tratar os dados em outra função async
 // Nota mental para eu do Futuro: setItem salva, getItem coloca no localStorage
 
-const literal3times = '.cart__items';
-
 function SaveLocalStorage() {
+  const literal3times = '.cart__items';
   localStorage.setItem('cartItens', document.querySelector(literal3times).innerHTML);
 }
 
@@ -35,7 +34,7 @@ function productClickListener(event) {
         name: data.title,
         salePrice: data.price,
       };
-      const itemSelect = document.querySelector(literal3times);
+      const itemSelect = document.querySelector('.cart__items');
       itemSelect.appendChild(createCartItemElement(skuEvent));
       SaveLocalStorage();
       console.log(localStorage);
@@ -95,6 +94,7 @@ const fetchProducts = () => {
 window.onload = async () => {
   await fetchProducts();
   clearCart();
+  console.log(SaveLocalStorage());
 };
 
 // Não foi necessário já que o projeto pede para fazer outro endpoint no futuro
