@@ -40,7 +40,21 @@ function createCartItemElement({ id, title, price }) {
   return li;
 }
 
-// x ---------------requisito 2 abaixo -----------------------x
+// x-----------------------requisito 6 ------------------------x
+
+const seila = () => {
+  const todasLi = document.querySelector('.cart__items');
+  todasLi.innerHTML = '';
+};
+
+const apagacart = () => {
+  const caminho = document.querySelector('.empty-cart');
+   caminho.addEventListener('click', seila);
+};
+
+// requisito feito com ajuda do GUilherme de Prais e Vinicius rodrigues
+
+// x ----------------------requisito 2 ----------------------------x
 
 const procuraId = (id) => {
   fetch(`https://api.mercadolibre.com/items/${id}`)
@@ -66,7 +80,7 @@ const pegaDadosID = () => {
 
 // com ajuda de Nathi zebral, Adelino Junior e outros amigos da sala de estudo consegui fazer o requisito 2
 
-// x------------------requisito 1 abaixo---------------------x
+// x------------------------requisito 1 --------------------------x
 
 const informaçoesApi = (interageApi) => {
   interageApi.forEach((computer) => { 
@@ -89,4 +103,5 @@ const interageApi = () => {
  window.onload = function onload() { 
    interageApi();
    pegaDadosID();
+   apagacart();
 };
