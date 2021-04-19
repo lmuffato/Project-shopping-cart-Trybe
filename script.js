@@ -95,7 +95,7 @@ const addCart = async (e) => {
   });
   const cartItems = document.querySelector(cartItemsConst);
   cartItems.appendChild(cart);
-  localStorageCart();
+  localStorageCart(); // chamada a função para salvar o carrinho de compras no localStorage
 };
 
 const clickToCart = () => {
@@ -117,9 +117,22 @@ const emptyBtnFunction = () => {
   emptyBtn.addEventListener('click', emptyCart);
 };
 
+const totalPrice = async () => {
+  const price = document.querySelectorAll('li');
+  price.forEach((item) => {
+    let prices = item.textContent;
+    prices = (prices.split(' ')).reverse();
+    // eslint-disable-next-line prefer-destructuring
+    prices = prices[0];
+    prices = [prices.replace('$', '')];
+    return prices;
+   });
+};
+
 window.onload = function onload() { 
   fetchProducts('computador')
     .then(() => clickToCart());
     emptyBtnFunction();
-    showCartOnLoad();   
+    showCartOnLoad();
+    totalPrice();   
 };
