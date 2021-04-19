@@ -28,23 +28,20 @@ function createProductItemElement({ id, title, thumbnail }) {
   return section;
 }
 
-// const loadingMsg = () => {
-//   const loading = document.createElement('h1');
-//   loading.classList.add = 'loading';
-//   loading.innerText = 'Loading...';
-//   const containerItems = document.querySelector('.items');
-//   containerItems.appendChild(loading);
-// };
-
-// const rmvLoading = () => {
-//  document.querySelector('.loading').remove();
-// };
+const loadingMsg = () => {
+  const loading = document.createElement('h1');
+  loading.classList = 'loading';
+  loading.innerText = 'Loading...';
+  const containerItems = document.querySelector('.items');
+  containerItems.appendChild(loading);
+};
 
 const fetchProducts = async (product) => {
-  // loadingMsg();
+  loadingMsg();
   const endpointpcs = `https://api.mercadolibre.com/sites/MLB/search?q=${product}`;
   const response = await fetch(endpointpcs);
   const data = await response.json();
+  document.querySelector('.loading').remove();
   return data.results.forEach((element) => {
     createProductItemElement(element);
   });    
@@ -72,8 +69,8 @@ function createCartItemElement({ sku, name, salePrice }) {
     return li;
 }
 
-const addCart = async (event) => {
-  const pcId = getSkuFromProductItem(event.target.patentNode);
+const addCart = async (e) => {
+  const pcId = getSkuFromProductItem(e.target.patentNode);
   const data = await fetchPcIds(pcId);
   const { id, title, price } = data;
 
@@ -93,4 +90,7 @@ const clickToCart = () => {
   });
 };
 
-window.onload = function onload() { fetchProducts('computador').then(() => clickToCart()); };
+window.onload = function onload() { 
+  fetchProducts('computador')
+    .then(() => clickToCart()); 
+};
