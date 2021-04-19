@@ -71,6 +71,16 @@ function createCartItemElement({ sku: id, name: title, salePrice }) {
     return li;
 }
 
+const localStorageCart = () => { // será adicionado junto com o produto ao carrinho de compras 
+  const shoppingCartItems = document.querySelector('.cart__items');
+  localStorage.setItem('Shoppin cart', shoppingCartItems.innerHTML); // método setItem adiciona a chave e valor ao localStorage. src = https://developer.mozilla.org/pt-BR/d
+};
+
+const showCartOnLoad = () => { // será mostrado após ser recuperado do localStorage.
+  const shoppingCartItems = document.querySelector('.cart__items');
+  shoppingCartItems.innerHTML = localStorage.getItem('cart'); // método getItem busca o valor da chave passada que foi armazenada no localStorage. src = https://developer.mozilla.org/pt-BR/docs/Web/API/Storage/getItem
+};
+
 const addCart = async (e) => {
   const pcId = getSkuFromProductItem(e.target.parentNode);
   const data = await fetchPcIds(pcId);
@@ -83,6 +93,7 @@ const addCart = async (e) => {
   });
   const cartItems = document.querySelector('.cart__items');
   cartItems.appendChild(cart);
+  localStorageCart();
 };
 
 const clickToCart = () => {
@@ -107,5 +118,6 @@ const emptyBtnFunction = () => {
 window.onload = function onload() { 
   fetchProducts('computador')
     .then(() => clickToCart());
-    emptyBtnFunction();   
+    emptyBtnFunction();
+    showCartOnLoad();   
 };
