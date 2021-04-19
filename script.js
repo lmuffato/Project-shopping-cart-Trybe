@@ -1,33 +1,30 @@
 // Nota mental para eu do Futuro: usar Promise e tratar os dados em outra função async
 const fetchProducts = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-    .then((response) => {
-      response.json().then((computer) => {
-        resolve(computer.results);
-        });
+    .then((response) => response.json())
+    .then((data) => {
+      // data.results.forEach((element) => {
+        // console.log(data.results);
+        resolve(data.results);
       });
     });
-};
+  };
+
 
 const products = async () => {
   const data = await fetchProducts();
-  data.forEach((product) => {
+  // console.log(data);
+  data.forEach((element) => {
     const compuiter = {
-      sku: product.id,
-      name: product.title,
-      image: product.thumbnail,
-      salePrice: product.price
-    }
-    console.log(compuiter);
+      sku: element.id,
+      name: element.title,
+      image: element.thumbnail,
+      salePrice: element.price
+    };
     document.querySelector('.items').appendChild(createProductItemElement(compuiter));
-
-  })
-  
-
-
+  });
 }
-
 
 // fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
 //   .then((response) => response.json())
@@ -41,11 +38,9 @@ const products = async () => {
 //         };
 //       // Depois de 3 dias descobri que era aqui que eu puxava a criação dos elementos
 //       document.querySelector('.items').appendChild(createProductItemElement(compuiter));
-
 //       });
 //   });
 // };
-
 
 // Aqui começa o Bloco que coloca as coisa na tela
 function createProductImageElement(imageSource) {
@@ -76,8 +71,6 @@ function createProductItemElement({ sku, name, image }) {
 }
 // Aqui termina o Bloco que coloca as coisa na tela
 
-
-
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -85,19 +78,19 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   const item = event.target.parentNode;
   const idItem = getSkuFromProductItem(item);
-  // console.log('deu certo')
   fetch(`https://api.mercadolibre.com/items/${idItem}`)
     .then(resolve => resolve.json())
-    .then((element) => {
-      const cartItem = {
-        sku: element.id,
-        name: element.title,
-        salePrice: element.price
-        };
-      createCartItemElement(cartItem);
-    })
+    .then(data => {
+      const item = {
+        sku: data.id,
+        name: data.title,
+        salePrice: data.price,
+      };
+      const itemSelect = document.querySelector('.cart__items');
+      itemSelect.appendChild(createCartItemElement(item));
+    });
+};
 
-}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
