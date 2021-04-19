@@ -1,3 +1,17 @@
+function mensagemDeLoading() {
+  const getClassItems = document.querySelector('.items');
+  const spanDeCarregamento = document.createElement('span');
+  spanDeCarregamento.innerText = 'loading...';
+  spanDeCarregamento.className = 'loading';
+  spanDeCarregamento.style.width = '500px';
+  spanDeCarregamento.style.height = '25px';
+  getClassItems.appendChild(spanDeCarregamento);
+}
+
+function removeLoading() {
+  document.querySelector('.loading').remove();
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -96,7 +110,7 @@ function botaoLimparCart() {
       getListaDeCompras.innerHTML = '';
     }  
   });
-};
+}
 /*
 let valorTotal = 0;
  
@@ -108,24 +122,8 @@ async function sumValorTotalDosItens(price){
 }
 */ 
 
-
-function mensagemDeLoading() {
-  const getClassItems = document.querySelector('.items');
-  const spanDeCarregamento = document.createElement('span');
-  spanDeCarregamento.innerText = 'loading...';
-  spanDeCarregamento.className = 'loading';
-  spanDeCarregamento.style.width = '500px';
-  spanDeCarregamento.style.height = '25px';
-  getClassItems.appendChild(spanDeCarregamento);
-}
-
-function removeLoading() {
-  document.querySelector('.loading').remove();
-}
-
 window.onload = function onload() { 
   promiseListaDeProdutos();
   adcionaProdutoNoCarrinho(); 
   botaoLimparCart();
-  
 };
