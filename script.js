@@ -1,5 +1,7 @@
 // Projeto feito com ajuda das colegas Heloísa Hackenhaar, Pollyana Oliveira
 
+const cartContainer = () => document.querySelector('.cart__items');
+
 // requisito 3
 function cartItemClickListener(event) {
   event.target.remove();
@@ -7,7 +9,7 @@ function cartItemClickListener(event) {
 
 // requisito 4
 const saveCart = () => {
-  const cartContent = document.querySelector('.cart__items').innerHTML;
+  const cartContent = cartContainer.innerHTML;
   localStorage.setItem('cart', cartContent);
 };
 
@@ -90,7 +92,7 @@ function createCartItemElement({ id, title, price }) {
 
 // requisito 2
 const getItemId = () => {
-  const cartItem = document.querySelector('.cart__items');
+  const cartItem = cartContainer;
   const buttons = document.querySelector('.items');
     buttons.addEventListener('click', async (e) => {
       const itemId = getSkuFromProductItem(e.target.parentElement);
