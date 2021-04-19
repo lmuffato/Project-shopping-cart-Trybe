@@ -39,7 +39,7 @@ function getIdFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 const updatePrice = async () => {
-  const items = document.querySelectorAll('li.cart__item');
+  const items = await document.querySelectorAll('li.cart__item');
   const totalPrice = [...items].reduce((acc, element) => {
     const curr = parseFloat(element.dataset.price);
     
@@ -47,8 +47,11 @@ const updatePrice = async () => {
     // TODO lembrar de refatorar para trocar o ponto por vírgula com replace
     return total;
   }, 0);
-  
-  prices.innerText = `R$${totalPrice.toFixed(2).replace('.', ',')}`;
+  // Dica do Rafael Medeiros na thread https://trybecourse.slack.com/archives/C01L16B9XC7/p1618869252243000
+  // indicação da seguinte documentação https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+  prices.innerText = new Intl
+    .NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalPrice);
+  // `R$${totalPrice.toFixed(2).replace('.', ',')}`;
 };
 
 // metodo target desestruturado do elemento clicado do addEventListener e utilizado.
