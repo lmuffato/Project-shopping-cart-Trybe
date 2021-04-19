@@ -24,6 +24,10 @@ function createProductItemElement({ sku, name, image }) {
 const getItemPromise = async () => {
   const data = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((resolve) => resolve.json().then((Data) => Data.results));
+  return data;
+};
+const appendChild = async () => {
+  const data = await getItemPromise();
   data.forEach((computador) => {
     const infoComputador = {
       sku: computador.id,
@@ -35,27 +39,37 @@ const getItemPromise = async () => {
   });
 };
 
-// const appendChild = () => {
-//   const sectionMain = document.querySelector('.items')
-//   sectionMain.appendChild(createProductItemElement())
-// }
-// appendChild()
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
-// }
+// // }
+function cartItemClickListener(event) {
+  event.target.remove();
+  //  coloque seu código aqui
+}
+function createCartItemElement({ id, title, price }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+const addProductToCart = () => {
+  const section = document.querySelector('.items');
+  section.addEventListener('click', async (event) => {
+    if (event.target.className === 'item__add') {
+      const ids = event.target.parentNode.firstChild.innerText;
+      const product = await fetch(`https://api.mercadolibre.com/items/${ids}`)
+        .then((response) => response.json()
+          .then((data) => data));
+    //  console.log(product);
+      const ol = document.querySelector('.cart__items');
+      ol.appendChild(createCartItemElement(product));
+    }
+  });
+};
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
-
-window.onload = function onload() { 
-  getItemPromise();
+window.onload = function onload() {
+  appendChild();
+  addProductToCart();
 };
