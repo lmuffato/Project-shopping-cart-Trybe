@@ -118,9 +118,12 @@ const removeItems = () => {
   document.querySelector('.empty-cart').addEventListener('click', clickRemove);
 };
 
+const removeLoadingHTML = () => document.querySelector('.loading').remove();
+
 window.onload = async function onload() {
   try {
     getPcsFromId(await getPcId());
+    removeLoadingHTML();
     await cartItems();
     removeItems();
   } catch (error) {
@@ -128,3 +131,5 @@ window.onload = async function onload() {
   }
 };
 loadStorage();
+
+// Creditos ao Renzo, Giovanni, Matheus, e Bruno Mendes 
