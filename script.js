@@ -52,6 +52,14 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+function clearCart() {
+  const clearBtn = document.querySelector('.empty-cart');
+  clearBtn.addEventListener('click', () => {
+    const emptyCart = document.querySelector('.cart__items');
+    emptyCart.innerHTML = '';
+  });
+}
+
 const fetchProducts = () => {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
@@ -70,6 +78,7 @@ const fetchProducts = () => {
   
 window.onload = async () => {
   await fetchProducts();
+  clearCart()
 };
 
 // Não foi necessário já que o projeto pede para fazer outro endpoint no futuro
