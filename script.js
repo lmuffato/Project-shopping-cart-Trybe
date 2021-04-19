@@ -41,7 +41,7 @@ const loading = async () => {
 
 const appendSum = async () => {
   const selectTotalPrice = document.querySelector('.total-price');
-  selectTotalPrice.innerText = `${sum.toFixed(2)}`;
+  selectTotalPrice.innerText = `${(sum / 100) * 100}`;
 };
 
 function createCartItemElement({ id, title, price }) {
