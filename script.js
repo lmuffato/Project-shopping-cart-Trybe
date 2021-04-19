@@ -1,5 +1,7 @@
 // const { default: fetch } = require('node-fetch');
 
+const cartItemsConst = '.cart__items';
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -72,12 +74,12 @@ function createCartItemElement({ sku: id, name: title, salePrice }) {
 }
 
 const localStorageCart = () => { // será adicionado junto com o produto ao carrinho de compras 
-  const shoppingCartItems = document.querySelector('.cart__items');
+  const shoppingCartItems = document.querySelector(cartItemsConst);
   localStorage.setItem('Shoppin cart', shoppingCartItems.innerHTML); // método setItem adiciona a chave e valor ao localStorage. src = https://developer.mozilla.org/pt-BR/d
 };
 
 const showCartOnLoad = () => { // será mostrado após ser recuperado do localStorage.
-  const shoppingCartItems = document.querySelector('.cart__items');
+  const shoppingCartItems = document.querySelector(cartItemsConst);
   shoppingCartItems.innerHTML = localStorage.getItem('cart'); // método getItem busca o valor da chave passada que foi armazenada no localStorage. src = https://developer.mozilla.org/pt-BR/docs/Web/API/Storage/getItem
 };
 
@@ -91,7 +93,7 @@ const addCart = async (e) => {
     name: title,
     salePrice: price,
   });
-  const cartItems = document.querySelector('.cart__items');
+  const cartItems = document.querySelector(cartItemsConst);
   cartItems.appendChild(cart);
   localStorageCart();
 };
