@@ -28,8 +28,9 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+// Requisito 3 //
+
 function cartItemClickListener(event) {
-  // coloque seu código aqui
   event.target.remove();
 }
 
@@ -72,7 +73,6 @@ const idFetch = (id) => new Promise((resolve) => {
 async function getId(event) {
   const x = createCartItemElement(await idFetch(event.target.parentNode.firstChild.innerText));
   const cartItems = document.querySelector('.cart__items');
-  console.log(x);
   cartItems.appendChild(x);
 }
 
@@ -83,8 +83,21 @@ const eventClick = () => {
   });
 };
 
+// Requisito 6 //
+
+const selectItems = () => {
+  const myItens = document.querySelector('.cart__items');
+  myItens.innerHTML = '';
+};
+
+const clearItems = () => {
+const button = document.querySelector('.empty-cart');
+button.addEventListener('click', selectItems);
+};
+
 // Chamada das Funções //
 
 window.onload = function onload() {
   productAsync().then(() => eventClick());
+  clearItems();
 };
