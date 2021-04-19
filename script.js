@@ -95,13 +95,21 @@ const searchComputerAPI = () => {
 };
 
 // cria o botão de esvaziar o carrinho.
-// const createButton = document.createElement('button');
-// const buttonClearCart = document.querySelector('button');
-// buttonClearCart.addEventListener('click', console.log('clicou'));
+
+const allItems = () => {
+  const itensOnCart = document.querySelector('.cart__items');
+  itensOnCart.innerHTML = '';
+};
+
+const clearAllCart = () => {
+  const buttonClearCart = document.querySelector('.empty-cart');
+  buttonClearCart.addEventListener('click', allItems);
+};
 
 window.onload = function onload() {
   searchComputerAPI();
   pegaOsDadosItem();
+  clearAllCart();
 };
 
 // localStorage 
