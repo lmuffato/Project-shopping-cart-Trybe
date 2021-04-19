@@ -59,7 +59,8 @@ const fetchPcIds = async (pcId) => {
 };
 // console.log(fetchPcIds());
 
-function cartItemClickListener(_event) {
+function cartItemClickListener(event) { // Seleciona o produto como evento e remove da lisata do carrinho de compras.
+  event.target.remove();
 }
 
 function createCartItemElement({ sku: id, name: title, salePrice }) {
