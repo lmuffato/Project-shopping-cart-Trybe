@@ -21,7 +21,9 @@ function createProductItemElement({ id, title, thumbnail }) {
   section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
   section.appendChild(createProductImageElement(thumbnail));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(
+    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!')
+  );
 
   return section;
 }
@@ -36,7 +38,7 @@ function cartItemClickListener(event) {
 
 const appendSum = async () => {
   const selectTotalPrice = document.querySelector('.total-price');
-  selectTotalPrice.innerText = `${sum}`;
+  selectTotalPrice.innerText = `${sum.toFixed(2)}`;
 };
 
 function createCartItemElement({ id, title, price }) {
@@ -45,13 +47,14 @@ function createCartItemElement({ id, title, price }) {
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   sum += price;
-  sum.toFixed(2);
   appendSum();
   return li;
 }
 
 async function fetchMercadoLivreResults(query) {
-  const data = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
+  const data = await fetch(
+    `https://api.mercadolibre.com/sites/MLB/search?q=${query}`
+  );
   const dataJson = await data.json();
   return dataJson.results;
 }
@@ -65,8 +68,9 @@ async function cartApiRequisition(ItemID) {
 async function getItemSku(event) {
   const createCartItem = createCartItemElement(
     await cartApiRequisition(
-      event.target.previousElementSibling.previousElementSibling.previousElementSibling.innerText,
-    ),
+      event.target.previousElementSibling.previousElementSibling
+        .previousElementSibling.innerText
+    )
   );
 
   const selectCartItem = document.querySelector('.cart__items');
@@ -94,6 +98,17 @@ const apiAppendChild = () => {
     });
 };
 
+const cleanCartItems = () => {
+  const selectButtonCleanCart = document.querySelector('.empty-cart');
+
+  const cleanCart = () => {
+    const cartItems = document.querySelector('.cart__items');
+    cartItems.innerHTML = '';
+  };
+
+  selectButtonCleanCart.addEventListener('click', cleanCart);
+};
+
 // async function everyAsyncFunction() {
 //   apiAppendChild();
 //   await addItemCart();
@@ -101,4 +116,5 @@ const apiAppendChild = () => {
 
 window.onload = function onload() {
   apiAppendChild();
+  cleanCartItems();
 };
