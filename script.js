@@ -58,13 +58,13 @@ async function totalPrice() {
 function saveCart() {
   const cartList = document.querySelector('ol.cart__items').innerHTML;
   localStorage.setItem('saveCart', cartList);
-  totalPrice()
+  totalPrice();
 }
 
 function loadingCart() {
   const cartList = document.querySelector('ol.cart__items');
   cartList.innerHTML = localStorage.getItem('saveCart');
-  totalPrice()
+  totalPrice();
 }
 
 function cartItemClickListener(e) {
