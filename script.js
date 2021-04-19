@@ -1,5 +1,7 @@
 /**
  * REQUIREMENT 4 - Local Storage
+ * Consultei o repositório do Majevski para resolver esse requisito.
+ * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
  */
 function saveStorage() {
   const olItems = document.getElementById('cart__items');
@@ -11,12 +13,7 @@ function loadStorage() {
   olItems.innerHTML = localStorage.getItem('cart');
 }
 
-/**
- * REQUIREMENT 1 - Product List
- * Consultei o repositório do Majevski para resolver esse requisito.
- * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
- */
- function createProductImageElement(imageSource) {
+function createProductImageElement(imageSource) {
   const imgElement = document.createElement('img');
   imgElement.className = 'item__image';
   imgElement.src = imageSource;
@@ -40,9 +37,7 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 }
 
-/**
- * REQUIREMENT 3 - Remove Product Of Cart
- */
+// REQUIREMENT 3 - Remove Product Of Cart
 function removeSingleProduct(event) {
   event.target.remove();
   saveStorage();
@@ -53,9 +48,7 @@ function cartItemClickListener() {
   olItems.addEventListener('click', removeSingleProduct);
 }
 
-/**
- * REQUIREMENT 6 - Clear Shopping Cart
- */
+// REQUIREMENT 6 - Clear Shopping Cart
 function emptyElement() {
   const cartItemsElement = document.querySelector('.cart__items');
   cartItemsElement.innerHTML = '';
@@ -67,12 +60,8 @@ function emptyCart() {
   btnClearCartElement.addEventListener('click', emptyElement);
 }
 
-/**
- * REQUIREMENT 7 - Loading
- * Consultei o repositório do Majevski para resolver esse requisito.
- * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
- */
-function loadingTimeout() {
+// REQUIREMENT 7 - Loading
+function removeLoading() {
   const loadingElement = document.querySelector('.loading');
 
   setTimeout(() => {
@@ -80,34 +69,31 @@ function loadingTimeout() {
   }, 5000);
 }
 
-function loading() {
+function addLoading() {
   const loadingElement = document.querySelector('.loading');
   loadingElement.classList.add('display');
-  loadingTimeout();
+
+  removeLoading();
 }
 
-// Source: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
-const fetchShoppingCart = () => {
-  const product = 'computador';
-  const loader = document.querySelector('.loading');
-  loading();
-  const endpoint = `https://api.mercadolibre.com/sites/MLB/search?q=${product}`;
-  fetch(endpoint)
-    .then((response) => response.json())
-    .then((object) => object.results.forEach((productItem) => {
-      document.querySelector('.items').appendChild(createProductItemElement(productItem));
-      loader.remove();
-    }))
-    .catch((error) => {
-      window.alert(`Error: ${error}`);
-    });
-};
-
 /**
- * REQUIREMENT 2 - Add Item to Cart
+ * REQUIREMENT 1 - Product List
  * Consultei o repositório do Majevski para resolver esse requisito.
  * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
  */
+const fetchShoppingCart = (product) => {
+  const loader = document.querySelector('.loading');
+  addLoading();
+  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
+    .then((response) => response.json())
+    .then((object) => object.results.forEach((item) => {
+      document
+        .querySelector('.items')
+        .appendChild(createProductItemElement(item));
+      loader.remove();
+    }));
+};
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -116,31 +102,32 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').innerText;
 
-// Source: https://github.com/tryber/sd-010-a-project-shopping-cart/tree/29ce228c9180b050cce515732cbe94a0426deaa1
+/**
+ * REQUIREMENT 2 - Add Item to Cart
+ * Consultei o repositório do Majevski para resolver esse requisito.
+ * Link: https://github.com/tryber/sd-09-project-shopping-cart/tree/majevski-shopping-cart
+ */
 function addItemToCart() {
   const items = document.querySelector('.items');
 
   items.addEventListener('click', async (event) => {
     const itemSku = getSkuFromProductItem(event.target.parentNode);
-    const endpoint = `https://api.mercadolibre.com/items/${itemSku}`;
-    const response = await fetch(endpoint)
+    const response = await fetch(`https://api.mercadolibre.com/items/${itemSku}`)
       .then((object) => object.json());
 
     const item = { sku: itemSku, name: response.title, salePrice: response.price };
-    const cartItems = document.querySelector('.cart__items');
-    const cartItem = createCartItemElement(item);
-    cartItems.appendChild(cartItem);
+    const cartItemsList = document.querySelector('.cart__items');
+    const sigleItem = createCartItemElement(item);
+    cartItemsList.appendChild(sigleItem);
 
     saveStorage();
   });
 }
 
 window.onload = function onload() {
-  fetchShoppingCart();
+  fetchShoppingCart('computador');
   emptyCart();
   cartItemClickListener();
   loadStorage();
