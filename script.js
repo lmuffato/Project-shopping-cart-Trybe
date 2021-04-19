@@ -51,8 +51,9 @@ fetchDataList();
 // }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
   console.log(event);
+  const clicar = event.target;
+  clicar.remove();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -88,6 +89,7 @@ function addEvento() {
     });
     }
   }
+
 const assicronas = async () => {
   createList(await fetchDataList());
   await addEvento();
