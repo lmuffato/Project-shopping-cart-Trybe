@@ -32,6 +32,10 @@ function createProductItemElement({ sku, name, image }) {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  const total = document.querySelector('.total-price');
+  const price = Number(event.target.innerText.split('|')[2].split('$')[1]);
+  total.innerText = Number(total.innerText) - price;
+  total.innerText = Number(total.innerText).toFixed(1);
 }
 
 function createCartItemElement({ id, title, price }) {
@@ -51,7 +55,9 @@ const productsFetch = () => new Promise((resolve) => {
 });
 
 const productAsync = async () => {
+  const myloading = document.querySelector('.loading');
   const data = await productsFetch();
+  myloading.remove();
   data.forEach((obj) => {
     const enter = createProductItemElement({
       sku: obj.id,
@@ -71,8 +77,11 @@ const idFetch = (id) => new Promise((resolve) => {
 });
 
 async function getId(event) {
-  const x = createCartItemElement(await idFetch(event.target.parentNode.firstChild.innerText));
+  const { id, title, price } = await idFetch(event.target.parentNode.firstChild.innerText);
+  const x = createCartItemElement({ id, title, price });
   const cartItems = document.querySelector('.cart__items');
+  const total = document.querySelector('.total-price');
+  total.innerText = Number(total.innerText) + price;
   cartItems.appendChild(x);
 }
 
@@ -85,14 +94,12 @@ const eventClick = () => {
 
 // Requisito 6 //
 
-const selectItems = () => {
-  const myItens = document.querySelector('.cart__items');
-  myItens.innerHTML = '';
-};
-
 const clearItems = () => {
-const button = document.querySelector('.empty-cart');
-button.addEventListener('click', selectItems);
+  const myItens = document.querySelector('.cart__items');
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', () => {
+    myItens.innerHTML = '';
+  });
 };
 
 // Chamada das Funções //
