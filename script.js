@@ -64,7 +64,6 @@ window.onload = async function onload() {
   const queryResults = await getSearchQueryResult(apiEndPoint);
   queryResults.forEach((item) => {
     const itemInfo = { sku: item.id, name: item.title, image: item.thumbnail };
-
     const newSectionItem = createProductItemElement(itemInfo);
     newSectionItem.lastChild.addEventListener('click', async () => {
       const singleItemInfo = await getCartItemData(item.id);
