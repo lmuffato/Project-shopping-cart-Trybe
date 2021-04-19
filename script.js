@@ -55,15 +55,21 @@ function createProductItemElement({ sku, name, image }) { // cria os componentes
   totalItem.innerText = totalPrices;
 }
 
+function clearStorage() {
+  localStorage.removeItem('saveCart');
+}
+
 function clearCart() {
   const outroItem = document.querySelector('ol.cart__items');
   outroItem.innerHTML = '';
   totalPrice();
+  clearStorage();
 }
 
 function buttonClearCart() {
   const clear = document.querySelector('button.empty-cart');
   clear.addEventListener('click', clearCart);
+  clearStorage();
 }
 
 function saveCart() {
