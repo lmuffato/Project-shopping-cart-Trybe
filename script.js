@@ -49,8 +49,9 @@ const updatePrice = async () => {
   }, 0);
   // Dica do Rafael Medeiros na thread https://trybecourse.slack.com/archives/C01L16B9XC7/p1618869252243000
   // indicação da seguinte documentação https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
-  prices.innerText = new Intl
-    .NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalPrice);
+  prices.innerText = totalPrice;
+  // TODO implementar valor em reais
+  // new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(totalPrice);
   // `R$${totalPrice.toFixed(2).replace('.', ',')}`;
 };
 
