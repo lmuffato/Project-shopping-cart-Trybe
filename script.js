@@ -88,8 +88,19 @@ const addEventListener1 = async () => {
   });
 };
 
+const clearAll = () => {
+  const ol = document.querySelector('ol');
+  ol.innerHTML = '';
+};
+
+const emptyCart = () => {
+  const clearButton = document.querySelector('.empty-cart');
+  clearButton.addEventListener('click', clearAll);
+};
+
 window.onload = function onload() {
   addEventListener1();
   getItems();
   removeItems();
+  emptyCart();
 };
