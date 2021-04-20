@@ -62,6 +62,17 @@ async function getInfoProduct() {
     sectionItems.appendChild(createProductItemElement(computerInfos));
   });
 }
+// Requisito 05
+async function cartTotalPrice() {
+  // const paragraph = document.getElementsByTagName('p');
+  const cartPrice = document.querySelectorAll('.cart__item');
+  let result = 0;
+  cartPrice.forEach((price) => {
+    result += parseFloat(price.innerText.split('$')[1]);
+  });
+  // console.log((Math.round(result * 100)) / 100);
+  document.querySelector('.total-price').innerHTML = ((Math.round(result * 100)) / 100);
+}
 
 // Requisito 02 - Exercicício ralizado com o vídeo https://trybecourse.slack.com/archives/C01A9A2N93R/p1608238090190400?thread_ts=1608237982.190300&cid=C01A9A2N93R
 function addToCart() {
@@ -73,13 +84,13 @@ function addToCart() {
         fetch(`https://api.mercadolibre.com/items/${IdProduct}`)
         .then((response) => response.json())
         .then((data) => {
-          const obj = {
-            sku: data.id, 
-            name: data.title, 
-            salePrice: data.price,
+          const obj = { sku: data.id,
+                        name: data.title, 
+                       salePrice: data.price,
           };
           document.querySelector('.cart__items').appendChild(createCartItemElement(obj));
           saveOnWebStore();
+          cartTotalPrice();
         });
     }
   });
@@ -90,7 +101,7 @@ function loadCartFromWebStore() {
   const loadedCart = localStorage.getItem('cart');
   document.querySelector('.cart__items').innerHTML = loadedCart;
   const recoverItems = document.querySelectorAll('.cart__item');
- [...recoverItems].forEach((listItem) => 
+ recoverItems.forEach((listItem) => 
  listItem.addEventListener('click', cartItemClickListener));
 }
 
