@@ -40,6 +40,25 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+// Funções requisito 02
+// Agradecimento ao pessoal que me ajudou na elaboração do raciocínio: Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos, Nilson Ribeiro,Marília , Lucas Lara , Leonardo Mallman, Nathi Zebral  e os Professores Zezé e Jack !!
+const addItemToCart = async (id) => {
+  const url = (`https://api.mercadolibre.com/items/${id}`);
+  const fetchUrl = await fetch(url);
+  const fetchUrlJson = await fetchUrl.json();
+  const obj = { sku: fetchUrlJson.id, name: fetchUrlJson.title, salePrice: fetchUrlJson.price };
+  document.querySelector('.cart__items').appendChild(createCartItemElement(obj));
+};
+
+const getIdButtons = () => {
+  const buttons = document.querySelectorAll('.item__add');
+  buttons.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      const idDoBotao = getSkuFromProductItem(event.target.parentNode);
+      addItemToCart(idDoBotao);
+    });
+  });
+};
 // Função requisito 01
 
 const getApiComputer = async () => {
@@ -61,26 +80,9 @@ const getApiComputer = async () => {
   getIdButtons();
 };
 
-// Funções requisito 02
-// Agradecimento ao pessoal que me ajudou na elaboração do raciocínio: Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos, Nilson Ribeiro,Marília , Lucas Lara , Leonardo Mallman, Nathi Zebral  e os Professores Zezé e Jack !!
+// const localStorageEvent = () => {
 
-const getIdButtons = () => {
-  const buttons = document.querySelectorAll('.item__add');
-  buttons.forEach((button) => {
-    button.addEventListener('click', (event) => {
-      const idDoBotao = getSkuFromProductItem(event.target.parentNode);
-      addItemToCart(idDoBotao);
-    });
-  });
-};
-const addItemToCart = async (id) => {
-  const url = (`https://api.mercadolibre.com/items/${id}`);
-  const fetchUrl = await fetch(url);
-  const fetchUrlJson = await fetchUrl.json();
-  console.log(fetchUrlJson);
-  const obj = { sku: fetchUrlJson.id, name: fetchUrlJson.title, salePrice: fetchUrlJson.price };
-  document.querySelector('.cart__items').appendChild(createCartItemElement(obj));
-};
+// };
 
 window.onload = function onload() {
   getApiComputer();
