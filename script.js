@@ -1,4 +1,6 @@
-window.onload = function onload() { };
+window.onload = function onload() {
+  fetchItems();
+ };
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -15,18 +17,12 @@ function createCustomElement(element, className, innerText) {
 }
 
 function createProductItemElement({ sku, name, image }) {
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
-    .then((response) => {
-      response.json()
-      .then((computers) => {
-        const ul = document.querySelector('ol');
-        const li = document.createElement('li');
-          li.innerHTML = computers;
-          ul.appendChild(li);
-      });
-    });
   const section = document.createElement('section');
   section.className = 'item';
+
+  //Coloca a 'const section' dentro da section.items(HTML)
+  const itemsHTML = document.querySelector('.items');
+  itemsHTML.appendChild(section);
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
@@ -34,6 +30,26 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
+}
+
+// o forEach trata os dados e já utiliza a função que o cria como novo elemento.
+function dataTreatment(computersArray) {
+  computersArray.forEach((element) => {
+    const { id: sku, title: name, thumbnail: image } = element;
+    createProductItemElement({ sku, name, image }); //função q usa o element e cria o item
+  });
+}
+
+// Função que chama os dados do mercado livre e cria o array
+async function fetchItems() {
+  return fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+    .then((response) => {
+      response.json()
+      .then((computers) => {
+        const computersArray = computers.results;
+        dataTreatment(computersArray); //Linka a funcao com o proximo passo -tratamento
+      });
+    });
 }
 
 function getSkuFromProductItem(item) {
