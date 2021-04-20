@@ -1,7 +1,3 @@
-window.onload = function onload() {
-  fetchItems();
- };
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -20,7 +16,7 @@ function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
 
-  //Coloca a 'const section' dentro da section.items(HTML)
+  // Coloca a 'const section' dentro da section.items(HTML)
   const itemsHTML = document.querySelector('.items');
   itemsHTML.appendChild(section);
 
@@ -36,7 +32,7 @@ function createProductItemElement({ sku, name, image }) {
 function dataTreatment(computersArray) {
   computersArray.forEach((element) => {
     const { id: sku, title: name, thumbnail: image } = element;
-    createProductItemElement({ sku, name, image }); //função q usa o element e cria o item
+    createProductItemElement({ sku, name, image }); // função q usa o element e cria o item
   });
 }
 
@@ -47,22 +43,26 @@ async function fetchItems() {
       response.json()
       .then((computers) => {
         const computersArray = computers.results;
-        dataTreatment(computersArray); //Linka a funcao com o proximo passo -tratamento
+        dataTreatment(computersArray); // Linka a funcao com o proximo passo -tratamento
       });
     });
 }
 
-function getSkuFromProductItem(item) {
+/* function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
-}
+} */
 
-function cartItemClickListener(event) {
-}
+/* function cartItemClickListener(event) {
+} */
 
-function createCartItemElement({ sku, name, salePrice }) {
+/* function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-}
+} */
+
+window.onload = function onload() {
+  fetchItems();
+ };
