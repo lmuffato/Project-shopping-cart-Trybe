@@ -12,7 +12,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ id: sku, title: name,thumbnail: image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -26,21 +26,21 @@ function createProductItemElement({ id: sku, title: name,thumbnail: image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
 const pegarLista = async () => {
   const url = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
@@ -49,12 +49,25 @@ const pegarLista = async () => {
   return data.results;
 };
 
+const requestIten = (even) => {
+  const itemSelecionado = even.target;
+  getSkuFromProductItem(itemSelecionado.parentElement);
+};
+
+const addEventButton = () => {
+  const botoes = document.querySelectorAll('.item__add');
+  botoes.forEach((botao) => {
+    botao.addEventListener('click', requestIten);
+  });
+};
+
 async function enviarLista() {
   const iterarItens = await pegarLista();
   iterarItens.forEach((element) => {
     const itens = document.querySelector('.items');
     itens.appendChild(createProductItemElement(element));
   });
+  addEventButton();
 }
 
 window.onload = function onload() {
