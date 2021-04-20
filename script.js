@@ -1,9 +1,3 @@
-// Requisito 4 - salvando na webstore
-function saveOnWebStore() {
-  const ItemsOnCart = document.querySelector('.cart__item').parentElement.innerHTML;
-  localStorage.setItem('cart', ItemsOnCart);
-}
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -33,9 +27,14 @@ function createProductItemElement({ sku, name, image }) {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+// Requisito 4 - salvando na webstore
+function saveOnWebStore() {
+  const ItemsOnCart = document.querySelector('.cart__item').parentElement.innerHTML;
+  localStorage.setItem('cart', ItemsOnCart);
+}
 
 function cartItemClickListener(event) {
-  event.target.parentElement.removeChild(event.target);
+  event.target.remove();
   saveOnWebStore();
 }
 
@@ -91,7 +90,9 @@ function loadCartFromWebStore() {
   document.querySelector('.cart__items').innerHTML = loadedCart;
   const recoverItems = document.querySelectorAll('.cart__item');
  [...recoverItems].forEach((listItem) => 
- listItem.addEventListener('click', cartItemClickListener));
+ listItem.addEventListener('click', (event) => {
+  cartItemClickListener(event);
+ }));
 }
 
 window.onload = function onload() {
