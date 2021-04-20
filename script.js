@@ -128,11 +128,14 @@ const emptyCart = () => {
   });
 };
 
+const loadingApi = () => document.querySelector('.loading').remove();
+
 const asyncAll = async () => {
   try {
     createProductList(await fetchApi());
     await setCart();
     emptyCart();
+    loadingApi();
   } catch (error) {
       throw new Error('Erro na função asyncAll');
   }
