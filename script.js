@@ -1,5 +1,6 @@
 // Requisito 4 - salvando na webstore
 function saveOnWebStore() {
+  // eslint-disable-next-line sonarjs/no-duplicate-string
   const ItemsOnCart = document.querySelector('.cart__items').innerHTML;
   localStorage.setItem('cart', ItemsOnCart);
 }
