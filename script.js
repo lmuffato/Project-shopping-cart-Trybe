@@ -1,3 +1,9 @@
+// Requisito 4 - salvando na webstore
+function saveOnWebStore() {
+  const ItemsOnCart = document.querySelector('.empty-cart').nextElementSibling.innerHTML;
+  localStorage.setItem('cart', ItemsOnCart);
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -27,14 +33,9 @@ function createProductItemElement({ sku, name, image }) {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
-// Requisito 4 - salvando na webstore
-function saveOnWebStore() {
-  const ItemsOnCart = document.querySelector('.cart__item').parentElement.innerHTML;
-  localStorage.setItem('cart', ItemsOnCart);
-}
 
 function cartItemClickListener(event) {
-  event.target.remove();
+  event.target.parentElement.removeChild(event.target);
   saveOnWebStore();
 }
 
@@ -90,13 +91,11 @@ function loadCartFromWebStore() {
   document.querySelector('.cart__items').innerHTML = loadedCart;
   const recoverItems = document.querySelectorAll('.cart__item');
  [...recoverItems].forEach((listItem) => 
- listItem.addEventListener('click', (event) => {
-  cartItemClickListener(event);
- }));
+ listItem.addEventListener('click', cartItemClickListener));
 }
 
 window.onload = function onload() {
-  loadCartFromWebStore();
   getInfoProduct();
   addToCart();
+  loadCartFromWebStore();
  };
