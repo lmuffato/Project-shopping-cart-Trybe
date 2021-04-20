@@ -35,6 +35,7 @@ const removeInfoLoading = () => {
   const p = document.querySelector('.loading');
   items.removeChild(p);
 };
+
 const getItemPromise = async () => {
   const data = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((resolve) => resolve.json().then((Data) => Data.results));
