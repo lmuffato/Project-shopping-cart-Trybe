@@ -1,6 +1,6 @@
 // Requisito 4 - salvando na webstore
 function saveOnWebStore() {
-  const ItemsOnCart = document.querySelector('.empty-cart').nextElementSibling.innerHTML;
+  const ItemsOnCart = document.querySelector('.total-price').previousElementSibling.innerHTML;
   localStorage.setItem('cart', ItemsOnCart);
 }
 
@@ -74,6 +74,7 @@ async function getInfoProduct() {
 //   document.querySelector('.total-price').innerHTML = result;
 // }
 
+const cartItemsLint = document.querySelector('.cart__items');
 // Requisito 02 - Exercicício ralizado com o vídeo https://trybecourse.slack.com/archives/C01A9A2N93R/p1608238090190400?thread_ts=1608237982.190300&cid=C01A9A2N93R
 function addToCart() {
   const sectionItems = document.querySelector('.items');
@@ -85,7 +86,7 @@ function addToCart() {
         .then((response) => response.json())
         .then((data) => {
           const obj = { sku: data.id, name: data.title, salePrice: data.price };
-          document.querySelector('.empty-cart').nextElementSibling.appendChild(createCartItemElement(obj));
+          cartItemsLint.appendChild(createCartItemElement(obj));
           saveOnWebStore();
         });
     }
@@ -105,7 +106,7 @@ function emptyCart() {
   const totalPrice = document.querySelector('.total-price');
   const emptyBtn = document.querySelector('.empty-cart');
   emptyBtn.addEventListener('click', () => {
-    document.querySelector('.cart__items').innerHTML = '';
+    cartItemsLint.innerHTML = '';
     totalPrice.innerHTML = '';
     saveOnWebStore();
   });
