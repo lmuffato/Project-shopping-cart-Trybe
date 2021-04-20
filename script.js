@@ -33,10 +33,22 @@ function createProductItemElement({ sku, name, image }) {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+// Requisito 05
+async function cartTotalPrice() {
+  // const paragraph = document.getElementsByTagName('p');
+  const cartPrice = document.querySelectorAll('.cart__item');
+  let result = 0;
+  cartPrice.forEach((price) => {
+    result += parseFloat(price.innerHTML.split('$')[1]);
+  });
+  // console.log((Math.round(result * 100)) / 100);
+  document.querySelector('.total-price').innerHTML = ((Math.round(result * 100)) / 100);
+}
 
 function cartItemClickListener(event) {
   event.target.parentElement.removeChild(event.target);
   saveOnWebStore();
+  cartTotalPrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -62,17 +74,6 @@ async function getInfoProduct() {
     sectionItems.appendChild(createProductItemElement(computerInfos));
   });
 }
-// Requisito 05
-// async function cartTotalPrice() {
-//   // const paragraph = document.getElementsByTagName('p');
-//   const cartPrice = document.querySelectorAll('.cart__item');
-//   let result = 0;
-//   cartPrice.forEach((price) => {
-//     result += parseFloat(price.innerHTML.split('$')[1]);
-//   });
-//   // console.log((Math.round(result * 100)) / 100);
-//   document.querySelector('.total-price').innerHTML = result;
-// }
 
 // Requisito 02 - Exercicício ralizado com o vídeo https://trybecourse.slack.com/archives/C01A9A2N93R/p1608238090190400?thread_ts=1608237982.190300&cid=C01A9A2N93R
 function addToCart() {
@@ -87,6 +88,7 @@ function addToCart() {
           const obj = { sku: data.id, name: data.title, salePrice: data.price };
           document.querySelector('.te').nextElementSibling.appendChild(createCartItemElement(obj));
           saveOnWebStore();
+          cartTotalPrice();
         });
     }
   });
@@ -110,6 +112,7 @@ function emptyCart() {
     saveOnWebStore();
   });
 }
+
 window.onload = function onload() {
   getInfoProduct();
   addToCart();
