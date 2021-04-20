@@ -1,7 +1,9 @@
 const cartItems = '.cart__items';
 
-// const arrayPrices = [];
+const arrayPrices = [];
 
+const totalPrices = '.total-price';
+// referência: Gildeir, me ajudou na reformulação do localStorage
 function gettingItems() {
   const getItems = localStorage.getItem('selectedItems');
   document.querySelector(cartItems).innerHTML = getItems;
@@ -22,8 +24,18 @@ function createCustomElement(element, className, innerText) {
 }
 
 function cartItemClickListener(event) {
-  const click = event.target;
-  click.remove();
+  const { target } = event;
+  const getTotalPrice = document.querySelector(totalPrices);
+  const obj = target.parentNode.children;
+  const rest = [...obj];
+  rest.forEach((value, index) => {
+    if (target === value) {
+      target.parentNode.removeChild(target);
+      arrayPrices.splice(index, 1);
+      const reduceSum = arrayPrices.reduce((acc, totalValue) => acc + totalValue, 0);
+      getTotalPrice.textContent = reduceSum;
+    }
+  });
   localStorage.removeItem('selectedItems');
 }
 
@@ -57,6 +69,10 @@ function createProductItemElement({ sku, name, image }) {
     const gettingChild = section.firstChild.innerHTML;
     const returnFunction = await createCartItem(gettingChild);
     document.querySelector(cartItems).appendChild(createCartItemElement(returnFunction));
+    arrayPrices.push(returnFunction.price);
+    const reducePrices = arrayPrices.reduce((acc, totalValue) => acc + totalValue);
+    const getTotalPrice = document.querySelector(totalPrices);
+    getTotalPrice.textContent = reducePrices;
     const cartLi = document.querySelector(cartItems);
     localStorage.setItem('selectedItems', cartLi.innerHTML);
   });
