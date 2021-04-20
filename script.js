@@ -23,6 +23,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+// referência - Bruno, ajudou em toda a lógica de como remover o preço do produto após a retirada do carrinho.
 function cartItemClickListener(event) {
   const { target } = event;
   const getTotalPrice = document.querySelector(totalPrices);
