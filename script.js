@@ -1,4 +1,4 @@
-// let sum = 0;
+let sum = 0;
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -41,7 +41,7 @@ const loading = async () => {
 
 const appendSum = async () => {
   const selectTotalPrice = document.querySelector('.total-price');
-  selectTotalPrice.innerText = `${parseFloat(3312.6)}`;
+  selectTotalPrice.innerText = `${parseFloat(sum.toFixed(2))}`;
   // https://stackoverflow.com/questions/17555999/tofixed-not-for-0
 };
 
@@ -50,7 +50,7 @@ function createCartItemElement({ id, title, price }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
-  // sum += price;
+  sum += price;
   appendSum();
   return li;
 }
