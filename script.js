@@ -84,17 +84,6 @@ const products = {
     },
   },
 
-  resolveTestFailure(product) {
-    const productOutdated = product;
-    if (productOutdated.id === 'MLB687124927') {
-      productOutdated.price = 14.6;
-    } else {
-      productOutdated.price = 18;
-    }
-
-    return productOutdated;
-  },
-
   cart: {
     totalPrice: 0,
     totalPriceCalculate(currentProductPrice, addOrRemove) {
@@ -131,15 +120,8 @@ const products = {
     appendElementsToCart(promisesResult) {
       const cartItems = products.get.cartItems();
       promisesResult.forEach((product) => {
-        if (product.id === 'MLB687124927' || product.id === 'MLB973817175') {
-          const cartItem = products.create.createCartItemElement(
-            products.resolveTestFailure(product),
-          );
-          cartItems.appendChild(cartItem);
-        } else {
-          const cartItem = products.create.createCartItemElement(product);
-          cartItems.appendChild(cartItem);
-        }
+        const cartItem = products.create.createCartItemElement(product);
+        cartItems.appendChild(cartItem);
       });
     },
     async loadCart() {
