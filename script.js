@@ -1,3 +1,5 @@
+const olClassName = '.cart__items';
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -51,7 +53,7 @@ function cartItemClickListener(event) {
 
 const loadItemsInLocalStorage = () => {
   if (localStorage.getItem('liItem') !== null) {
-    const olItems = document.querySelector('.cart__items');
+    const olItems = document.querySelector(olClassName);
     const itemsToRestore = localStorage.getItem('liItem').split('#');
     itemsToRestore.forEach((itemRestored) => {
       const li = document.createElement('li');
@@ -112,9 +114,23 @@ const getApiComputer = async () => {
   getIdButtons();
 };
 
+const clearAll = () => {
+  const olItem = document.querySelector(olClassName);
+  getElementOnLoad().forEach((liItem) => {
+    olItem.removeChild(liItem);
+  });
+  localStorage.clear();
+};
+
+const clearCart = () => {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', clearAll);
+};
+
 window.onload = function onload() {
   getApiComputer();
   getIdButtons();
   getElementOnLoad();
   loadItemsInLocalStorage();
+  clearCart();
 };
