@@ -95,7 +95,7 @@ function loadCartFromWebStore() {
 }
 
 window.onload = function onload() {
+  loadCartFromWebStore();
   getInfoProduct();
   addToCart();
-  loadCartFromWebStore();
  };
