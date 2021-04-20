@@ -74,3 +74,13 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.loading {
+  font-size: 900;
+  font-weight: bolder;
+  text-align: center;
+  width: 150px;
+  height: 150px;
+  margin-left: 290px;
+  margin-top: 250px;
+}

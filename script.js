@@ -93,11 +93,18 @@ const getIdButtons = () => {
     });
   });
 };
+// Função requisito 07
+const removeLoading = () => {
+  const loadingText = document.querySelector('.loading');
+  const containerElement = document.querySelector('.container');
+  containerElement.removeChild(loadingText);
+};
 // Função requisito 01
 
 const getApiComputer = async () => {
   const url = ('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const getFetch = await fetch(url);
+  removeLoading();
   const dados = await getFetch.json();
   const dadosProducts = dados.results;
   const createItem = document.querySelector('.items');
@@ -113,6 +120,8 @@ const getApiComputer = async () => {
 
   getIdButtons();
 };
+
+// FUnções requisito 06
 
 const clearAll = () => {
   const olItem = document.querySelector(olClassName);
