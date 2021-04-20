@@ -1,3 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
+
+* {
+  font-family: Poppins, sans-serif;
+}
+
+body {
+  background-color: rgb(235, 235, 235);
+}
+
 .top-bar {
   align-items: center;
   display: flex;
@@ -31,7 +41,8 @@
 }
 
 .item {
-  border: 2px solid blue;
+  background-color: white;
+  box-shadow: 1px 1px 1.5px rgba(0, 0, 0, 0.5);
   border-radius: 5px;
   box-sizing: border-box;
   display: flex;
@@ -56,7 +67,8 @@
 }
 
 .item .item__add {
-  background-color: green;
+  background-color: black;
+  color: white;
   border: 0;
   cursor: pointer;
   margin: 0;
@@ -69,8 +81,60 @@
   flex-flow: column wrap;
 }
 
+.shop-cart {
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .cart .cart__title {
   flex-basis: 1;
-  font-size: 16pt;
+  font-size: 14pt;
   text-align: center;
+}
+
+.fa-shopping-cart {
+  font-size: 25px;
+  margin-right: 15px;
+}
+
+.empty-cart {
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+  transition: all ease-in-out 0.5s;
+}
+
+.empty-cart:hover {
+  background-color: rgb(218, 0, 0);
+  color: white;
+}
+
+.price {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.fa-dollar-sign {
+  margin-right: 15px;
+}
+
+.cart__item {
+  cursor: pointer;
+  margin: 5px;
+  border-bottom: 0.5px solid rgb(100, 100, 100);
+  transition: all ease-in-out 0.5s;
+}
+
+.cart__item:hover {
+  opacity: 0.5;
 }

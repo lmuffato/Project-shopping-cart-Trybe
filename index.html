@@ -7,6 +7,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   <title>My Cart-Shopping</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+    crossorigin="anonymous" />
   <script src="script.js"></script>
 </head>
 
@@ -14,10 +17,16 @@
   <section class="container">
     <section class="items"></section>
     <section class="cart">
-      <span class="cart__title">Carrinho de compras</span>
+      <div class="shop-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart__title">Carrinho de compras</span>
+      </div>
       <button class="empty-cart">Esvaziar carrinho</button>
       <ol class="cart__items"></ol>
-      <span class="total-price"></span>
+      <div class="price">
+        <i class="fas fa-dollar-sign"></i>
+        <span class="total-price">0</span>
+      </div>
     </section>
   </section>
 

@@ -117,8 +117,8 @@ const loading = () => {
 };
 
 const stopLoading = async () => {
- const stop = document.querySelector('.loading');
- stop.outerHTML = null;
+  const stop = document.querySelector('.loading');
+  stop.outerHTML = null;
 };
 
 const getListItems = async (listItem) => {
@@ -192,3 +192,4 @@ window.onload = function onload() {
 // Lucas Paz - Turma 10 - Tribo A
 // Marcelo Maurício (Tchelo) - Turma 10 - Tribo A 
 // Rafael Medeiros Gomes - Turma 10 - Tribo A
+// Gabriel Pereira - Turma 10 - Tribo A
