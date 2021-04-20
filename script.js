@@ -2,10 +2,10 @@ const cartItems = '.cart__items';
 
 // const arrayPrices = [];
 
-const savingItems = () => {
-  const cartLi = document.querySelector(cartItems);
-  localStorage.setItem('cart', cartLi.innerHTML);
-};
+function gettingItems() {
+  const getItems = localStorage.getItem('selectedItems');
+  document.querySelector(cartItems).innerHTML = getItems;
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -24,7 +24,7 @@ function createCustomElement(element, className, innerText) {
 function cartItemClickListener(event) {
   const click = event.target;
   click.remove();
-  savingItems();
+  localStorage.removeItem('selectedItems');
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -33,30 +33,15 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   document.querySelector('ol.cart__items').appendChild(li);
   li.addEventListener('click', cartItemClickListener);
-  savingItems();
   return li;
 }
-
-// loading - 7 requisito (referência https://developer.mozilla.org/pt-BR/docs/Web/API/Element/className - criar a classe)
-// const loading = () => {
-//   const createText = document.createElement('section');
-//   createText.classList.add = 'loading';
-//   createText.innerText = 'Levando as compras ao caixa';
-//   document.body.appendChild(createText);
-// };
-
-// const finishLoading = () => {
-//   const getBody = document.querySelector('body')
-//   console.log(getBody);
-//   const getLoading = document.querySelector('.loading');
-//   document.querySelector('.loading').remove();
-// };
 
 // funções de fetch, 1 e 2 requisito
 
 const createCartItem = async (item) => {
   const getProduct = await fetch(`https://api.mercadolibre.com/items/${item}`);
   const response = await getProduct.json();
+  // savingItems();
   return response;
 };
 
@@ -72,11 +57,8 @@ function createProductItemElement({ sku, name, image }) {
     const gettingChild = section.firstChild.innerHTML;
     const returnFunction = await createCartItem(gettingChild);
     document.querySelector(cartItems).appendChild(createCartItemElement(returnFunction));
-    // arrayPrices.push(returnFunction.price);
-    // const reduceSum = arrayPrices.reduce((acc, totalValue) => acc + totalValue);
-    // reduceValue.push(reduceSum);
-    // const totalprice = document.querySelector('.total-price');
-    // totalprice.innerHTML = reduceSum;
+    const cartLi = document.querySelector(cartItems);
+    localStorage.setItem('selectedItems', cartLi.innerHTML);
   });
   return section;
 }
@@ -103,10 +85,11 @@ const clearingCart = () => {
   getCart.addEventListener('click', () => {
     document.querySelector('ol.cart__items').innerHTML = '';
     document.querySelector('.total-price').innerHTML = '0.00';
-    savingItems();
+    localStorage.removeItem('selectedItems');
   });
 };
 window.onload = function onload() {
  clearingCart();
  fetchProducts();
+ gettingItems();
 };
