@@ -118,9 +118,22 @@ const getItemId = () => {
       });
 };
 
+function emptyCart() {
+  const cartContent = document.querySelectorAll('.cart__item');
+  cartContent.forEach((product) => product.remove());
+  saveCart();
+  sumTotalPrice();
+}
+
+function clearButton() {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', emptyCart);
+}
+
 window.onload = function onload() {
   loadCart();
   productList();
   getItemId();
   getCart();
+  clearButton();
 };
