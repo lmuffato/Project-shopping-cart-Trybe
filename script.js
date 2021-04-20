@@ -1,8 +1,7 @@
-const ItemsOnCart = document.getElementsByClassName('.cart__items')[0];
-
 // Requisito 4 - salvando na webstore
 function saveOnWebStore() {
-  localStorage.setItem('cart', ItemsOnCart.innerHTML);
+  const ItemsOnCart = document.querySelector('.cart__item').parentElement.innerHTML;
+  localStorage.setItem('cart', ItemsOnCart);
 }
 
 function createProductImageElement(imageSource) {
@@ -89,7 +88,7 @@ function addToCart() {
 // requisito 04 - carregando págica com carrinho conhecimentos ** recover Items é ideia de Pollyana Oliveira Turma 10 a
 function loadCartFromWebStore() {
   const loadedCart = localStorage.getItem('cart');
-  ItemsOnCart.innerHTML = loadedCart;
+  document.querySelector('.cart__items').innerHTML = loadedCart;
   const recoverItems = document.querySelectorAll('.cart__item');
  [...recoverItems].forEach((listItem) => 
  listItem.addEventListener('click', cartItemClickListener));
