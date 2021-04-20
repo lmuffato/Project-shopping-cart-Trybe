@@ -1,6 +1,6 @@
 // Requisito 4 - salvando na webstore
 function saveOnWebStore() {
-  const ItemsOnCart = document.querySelector('.teste').nextElementSibling.innerHTML;
+  const ItemsOnCart = document.querySelector('.te').nextElementSibling.innerHTML;
   localStorage.setItem('cart', ItemsOnCart);
 }
 
@@ -85,7 +85,7 @@ function addToCart() {
         .then((response) => response.json())
         .then((data) => {
           const obj = { sku: data.id, name: data.title, salePrice: data.price };
-          document.querySelector('.teste').nextElementSibling.appendChild(createCartItemElement(obj));
+          document.querySelector('.te').nextElementSibling.appendChild(createCartItemElement(obj));
           saveOnWebStore();
         });
     }
