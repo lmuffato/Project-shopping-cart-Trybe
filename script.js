@@ -128,7 +128,7 @@ const emptyCart = () => {
   });
 };
 
-const loadingApi = () => document.querySelector('.loading').remove();
+const loadingApi = setTimeout(() => document.querySelector('.loading').remove(), 2000);
 
 const asyncAll = async () => {
   try {

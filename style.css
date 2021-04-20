@@ -76,10 +76,9 @@
 }
 
 .loading {
-  display: none ;
-  margin-top: 400px;
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
   position: absolute;
-  color: red;
-  font-size: 160px;
-  
+  font-size: 0;
 }
