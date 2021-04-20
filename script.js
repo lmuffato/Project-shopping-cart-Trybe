@@ -1,4 +1,4 @@
- async function totalValue(price) {
+async function totalValue(price) {
   const current = document.querySelector('.total-price');
   if (document.getElementsByTagName('li').length === 0) {
     current.innerText = price;
@@ -7,6 +7,12 @@
     current.innerText = parseFloat(getValue);
   }
  }
+
+async function sub(price) {
+  const current = document.querySelector('.total-price')
+  const newValue = parseFloat(current.innerText) - price
+  current.innerText = parseFloat(newValue)
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -55,6 +61,9 @@ function saveToLocalStorage() {
 }
 
 function cartItemClickListener(event) {
+  const getElement = event.target.innerText.indexOf("$")
+  const getValue = event.target.innerText.slice(getElement+1)
+  sub(getValue)
   event.target.remove();
   saveToLocalStorage();
 }
