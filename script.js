@@ -93,7 +93,7 @@ const createProductList = ({ results }) => {
   });
 };
 
-const dataApi = async () => {
+const fetchApi = async () => {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const data = await response.json();
   return data;
@@ -119,10 +119,20 @@ const setCart = async () => {
   }));
 };
 
+const emptyCart = () => {
+  const emptyButton = document.querySelector('.empty-cart');
+  emptyButton.addEventListener('click', () => {
+    ol.innerHTML = '';
+    setStorage();
+    updatePrice();
+  });
+};
+
 const asyncAll = async () => {
   try {
-    createProductList(await dataApi());
+    createProductList(await fetchApi());
     await setCart();
+    emptyCart();
   } catch (error) {
       throw new Error('Erro na função asyncAll');
   }
