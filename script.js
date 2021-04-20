@@ -5,6 +5,13 @@ const myCart = document.querySelector(cartItems).innerHTML;
 localStorage.setItem('cart', myCart);
 };
 
+// const createLoading = () => {
+//   const loadingText = document.createElement('p');
+//   loadingText.classList.add('loading');
+//   loadingText.innerHTML = 'loading...';
+//   document.querySelector('.items').appendChild(loadingText);
+// };
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -71,8 +78,8 @@ function createProductItemElement({ sku, name, image }) {
   return selectItems.appendChild(section);
 }
 
-const getItem = () => {
-        fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+const getItem = async () => {
+        await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
         .then((response) => response.json()).then((data) => data.results.forEach((pc) => {
             const items = {
                 sku: pc.id,
@@ -80,7 +87,8 @@ const getItem = () => {
                 image: pc.thumbnail,
             };
     createProductItemElement(items);
-        }));
+  }));
+  document.querySelector('.loading').remove();
 };
 
 const emptyCart = () => {
@@ -96,8 +104,10 @@ const emptyCart = () => {
 // No if, se o local storage tiver algum conteúdo, a lista do carrinho recebe o conteúdo do local storage. O for foi utilizado para
 // que a função de remover itens possa ser acionada para os itens do carrinho (ela precisa ser definida posteriormente ao if
 // caso contrário não vai ser possível remover os itens do carrinho pois estão sendo atribuídos pelo local storage);
-window.onload = async function onload() { 
-  await getItem();
+
+window.onload = function onload() {
+  // createLoading();
+  getItem();
   const cartContent = document.querySelector(cartItems);
   const storageContent = localStorage.getItem('cart');
   if (storageContent) cartContent.innerHTML = storageContent;
