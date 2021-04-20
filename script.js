@@ -1,7 +1,7 @@
 /* const fetch = require('node-fetch'); */
 
 // ------------------------------------------
-const shopCar = document.querySelector('section.cart');
+/* const shopCar = document.querySelector('section.cart'); */
 const carList = document.querySelector('ol.cart__items');
 
 function toReal(number) {
