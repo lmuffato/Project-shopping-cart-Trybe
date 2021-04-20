@@ -2,6 +2,18 @@
 
 const cartContainer = () => document.querySelector('.cart__items');
 
+// requisito 5
+const sumTotalPrice = () => {
+  const cartItem = document.querySelectorAll('.cart__item');
+  const totalPrice = document.querySelector('.total-price');
+  let sumTotal = 0;
+  cartItem.forEach((item) => {
+    const split = item.innerText.split('$')[1];
+    sumTotal += parseFloat(split);
+  });
+  totalPrice.innerText = sumTotal;
+};
+
 // requisito 4
 const saveCart = () => {
   const cartContent = cartContainer().innerHTML;
@@ -16,6 +28,7 @@ const getCart = () => {
 function cartItemClickListener(event) {
   event.target.remove();
   saveCart();
+  sumTotalPrice();
 }
 
 function loadCart() {
@@ -27,6 +40,7 @@ function loadCart() {
       cartItemClickListener(e);
     }
   });
+  sumTotalPrice();
 }
 
 function createProductImageElement(imageSource) {
@@ -100,6 +114,7 @@ const getItemId = () => {
         const { id, title, price } = itemData;
         cartItem.appendChild(createCartItemElement({ id, title, price }));
         saveCart();
+        sumTotalPrice();
       });
 };
 
