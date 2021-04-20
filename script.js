@@ -1,3 +1,9 @@
+// Requisito 4 - salvando na webstore
+function saveOnWebStore() {
+  const ItemsOnCart = document.querySelector('.cart__items').innerHTML;
+  localStorage.setItem('cart', ItemsOnCart);
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -30,6 +36,7 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   event.target.parentElement.removeChild(event.target);
+  saveOnWebStore();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -55,6 +62,7 @@ async function getInfoProduct() {
     sectionItems.appendChild(createProductItemElement(computerInfos));
   });
 }
+
 // Requisito 02 - Exercicício ralizado com o vídeo https://trybecourse.slack.com/archives/C01A9A2N93R/p1608238090190400?thread_ts=1608237982.190300&cid=C01A9A2N93R
 function addToCart() {
   const sectionItems = document.querySelector('.items');
@@ -70,14 +78,24 @@ function addToCart() {
             name: data.title, 
             salePrice: data.price,
           };
-          const cartItem = document.querySelector('.cart__items');
-          cartItem.appendChild(createCartItemElement(obj));
+          document.querySelector('.cart__items').appendChild(createCartItemElement(obj));
+          saveOnWebStore();
         });
     }
   });
 }
 
+// requisito 04 - carregando págica com carrinho conhecimentos ** recover Items é ideia de Pollyana Oliveira Turma 10 a
+function loadCartFromWebStore() {
+  const loadedCart = localStorage.getItem('cart');
+  document.querySelector('.cart__items').innerHTML = loadedCart;
+  const recoverItems = document.querySelectorAll('.cart__item');
+ [...recoverItems].forEach((listItem) => 
+ listItem.addEventListener('click', cartItemClickListener));
+}
+
 window.onload = function onload() {
   getInfoProduct();
   addToCart();
+  loadCartFromWebStore();
  };
