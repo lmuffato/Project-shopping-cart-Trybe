@@ -1,9 +1,11 @@
 /* const fetch = require('node-fetch'); */
 
-// ------------------------ Support Functions ------------------
+// ------------------------------------------
+const shopCar = document.querySelector('section.cart');
+const carList = document.querySelector('ol.cart__items');
 
-function toReal(n) {
-  return `R$ ${n.toFixed(2).replace('.', ',')}`;
+function toReal(number) {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(number);
 }
 
 function createCustomElement(element, className, innerText) {
@@ -20,20 +22,38 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
+function addCart(e) {
+  const section = document.createElement('section');
+  const id = e.target.parentNode.querySelector('span.item__sku').innerText;
+  const price = e.target.parentNode.querySelector('span.item__price').innerText;
+  const title = e.target.parentNode.querySelector('span.item__title').innerText;
+
+  section.appendChild(createCustomElement('span', 'cartItem__sku', id));
+  section.appendChild(createCustomElement('span', 'cartItem__title', title));
+  section.appendChild(createCustomElement('span', 'cartItem__price', price));
+  section.appendChild(createCustomElement('span', 'cartItem__preco', toReal(price)));
+
+  carList.appendChild(section);
+}
+
 function createProductItemElement({ sku: id, name, image, price }) {
   const section = document.createElement('section');
   section.className = 'item';
 
+  const createButton = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  createButton.addEventListener('click', addCart);
+
   section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createCustomElement('span', 'item__title', price));
+  section.appendChild(createCustomElement('span', 'item__price', price));
+  section.appendChild(createCustomElement('span', 'item__preco', toReal(price)));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(createButton);
 
   return section;
 }
 
-// ------- GET ------ ADD ---- and ---- CREATE ----- DATA --------
+// ------- GET Data and Add market list --------
 
 async function getData(QUERY) {
   const URL = `https://api.mercadolibre.com/sites/MLB/search?q=${QUERY}`;
@@ -51,7 +71,7 @@ async function addDataList(QUERY) {
       sku: product.id,
       name: product.title,
       image: product.thumbnail,
-      price: toReal(product.price),
+      price: product.price,
     });
 
     marketSection.appendChild(item);
