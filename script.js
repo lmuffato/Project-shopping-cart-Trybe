@@ -28,10 +28,40 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-async function cartItemClickListener(event) {
+// Funções requisito 04
+
+const getElementOnLoad = () => {
+  const liItems = document.querySelectorAll('.cart__item');
+  return liItems;
+};
+
+const saveInLocalStorage = () => {
+  const array = [];
+  getElementOnLoad().forEach((liItem) => {
+    array.push(liItem.innerHTML);
+  });
+  localStorage.setItem('liItem', array.join('#'));
+};
+
+function cartItemClickListener(event) {
   // coloque seu código aqui
   event.target.remove();
+  saveInLocalStorage();
 }
+
+const loadItemsInLocalStorage = () => {
+  if (localStorage.getItem('liItem') !== null) {
+    const olItems = document.querySelector('.cart__items');
+    const itemsToRestore = localStorage.getItem('liItem').split('#');
+    itemsToRestore.forEach((itemRestored) => {
+      const li = document.createElement('li');
+      li.innerHTML = itemRestored;
+      li.className = 'cart__item';
+      li.addEventListener('click', cartItemClickListener);
+      olItems.appendChild(li);
+    });
+  }
+};
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -40,6 +70,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
 // Funções requisito 02
 // Agradecimento ao pessoal que me ajudou na elaboração do raciocínio: Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos, Nilson Ribeiro,Marília , Lucas Lara , Leonardo Mallman, Nathi Zebral  e os Professores Zezé e Jack !!
 const addItemToCart = async (id) => {
@@ -48,6 +79,7 @@ const addItemToCart = async (id) => {
   const fetchUrlJson = await fetchUrl.json();
   const obj = { sku: fetchUrlJson.id, name: fetchUrlJson.title, salePrice: fetchUrlJson.price };
   document.querySelector('.cart__items').appendChild(createCartItemElement(obj));
+  saveInLocalStorage();
 };
 
 const getIdButtons = () => {
@@ -80,11 +112,9 @@ const getApiComputer = async () => {
   getIdButtons();
 };
 
-// const localStorageEvent = () => {
-
-// };
-
 window.onload = function onload() {
   getApiComputer();
   getIdButtons();
+  getElementOnLoad();
+  loadItemsInLocalStorage();
 };
