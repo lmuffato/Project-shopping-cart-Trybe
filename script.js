@@ -74,7 +74,7 @@ const clickAddCar = () => {
   buttonEvent.forEach((button) => button.addEventListener('click', buscaItem));
 };
 
-window.onload = function onload (){
+window.onload = function onload() {
   fetchProduto();
   clickAddCar();
 };
