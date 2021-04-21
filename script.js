@@ -9,6 +9,18 @@ const fetchAPI = () => {
       });
   });
 };
+
+const fetchItem = (idItem) => {
+  const endpointItem = `https://api.mercadolibre.com/items/${idItem}`;
+  return new Promise((resolve) => {
+    fetch(endpointItem)
+      .then((response) => {
+        response.json().then((item) => {
+          resolve(item);
+        });
+      });
+  });
+};
   
 function createProductImageElement(imageSource) { // requisito 1
   const img = document.createElement('img');
@@ -23,6 +35,34 @@ function createCustomElement(element, className, innerText) { // requisito 1
   e.innerText = innerText;
   return e;
 }
+
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
+/* const cartItemClickListener = async (event) => { // requisito 3
+
+} */
+
+const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => { // requisito 2
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  // li.addEventListener('click', cartItemClickListener); // requisito 3
+  return li;
+};
+
+// Ajuda de Eduardo Costa e Douglas Santana (Ambos Turma 10 - Tribo A)
+const addItem = () => {
+  const buttons = document.querySelectorAll('.item__add');
+  buttons.forEach((button) => button.addEventListener('click', async (event) => {
+    const addEvent = event.target;
+    const skulId = getSkuFromProductItem(addEvent.parentElement);
+    const data = await fetchItem(skulId);
+    const itemsCart = document.querySelector('.cart__items');
+    itemsCart.appendChild(createCartItemElement(data));
+  }));
+};
 
 const createProductItemElement = async () => { // requisito 1
   const computers = await fetchAPI();
@@ -39,23 +79,9 @@ const createProductItemElement = async () => { // requisito 1
 
     sectionItems.appendChild(section);
   });
+
+  addItem();
 };
-
-/* function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
-
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-} */
 
 window.onload = function onload() {
   fetchAPI();
