@@ -84,7 +84,7 @@ const limpaCarrinho = () => {
 const loading = () => {
   const title = document.querySelector('.loading');
   title.remove();
-}
+};
 
 const adicionaElementos = async () => { // => Requisito - 1 : async e await ?
   const itensComputadores = await buscaComputadores();
