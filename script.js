@@ -31,24 +31,19 @@ const createList = (data) => {
   return dados;
 };
 
-const fetchDataList = () => new Promise((resolve, reject) => {
+const fetchDataList = () => new Promise((resolve, reject) => {  
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
       response.json().then((data) => {
         resolve(data.results);
         console.log(data.results);
+        document.getElementsByClassName('loading')[0].style.display = 'none';
       })
         .catch((erro) => {
           reject(erro);
         });
     });
 });
-
-fetchDataList();
-
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
 
 const itens = () => document.querySelectorAll('.cart__items');
 
@@ -138,7 +133,6 @@ const assicronas = async () => {
   createList(await fetchDataList());
   await addEvento();
   await loadStorage();
-  // await buttonRemove();
   await removeTodosItens();
 };
 
