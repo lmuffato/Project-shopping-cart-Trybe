@@ -38,7 +38,7 @@ function cartItemClickListener(event) {
 
 // REQUISITO 6 (USAR E MONTAR)
 function clearOl() {
-  const olList = document.querySelectorAll('.cart__items');
+  const olList = document.querySelectorAll('.cart__item');
   olList.forEach((item) => item.remove());
 }
 
@@ -88,8 +88,8 @@ async function getInfo() {
   }); 
 }
 
-window.onload = function onload() {
-getInfo();
-creatAddList();
-pressBtn();
+window.onload = async function onload() {
+await getInfo();
+await creatAddList();
+await pressBtn();
 };
