@@ -28,10 +28,9 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-const cartItemClickListener = (event) => {
-  const ol = document.querySelector('.cart__items');
-  return ol.removeChild(event.target);
-};
+const listElements = () => document.querySelector('.cart__items');
+
+const cartItemClickListener = (event) => listElements().removeChild(event.target);
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -78,9 +77,8 @@ const addEvent = async () => {
 
 const removeItems = () => {
   const button = document.querySelector('.empty-cart');
-  const listProducts = document.querySelector('.cart__items');
-  button.addEventListener('click', () => {
-  listProducts.innerHTML = '';  
+  return button.addEventListener('click', () => {
+    listElements().innerHTML = '';
   });
 };
 
