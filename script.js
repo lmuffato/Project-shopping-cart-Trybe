@@ -40,15 +40,16 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-/* const cartItemClickListener = async (event) => { // requisito 3
-
-} */
+const cartItemClickListener = (event) => { // requisito 3
+  const eventListItem = event.target;
+  eventListItem.remove();
+};
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => { // requisito 2
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener); // requisito 3
+  li.addEventListener('click', cartItemClickListener); // requisito 3
   return li;
 };
 
