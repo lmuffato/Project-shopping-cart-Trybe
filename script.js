@@ -39,7 +39,7 @@ function save() {
 function cartItemClickListener(event) {
 const elementoPai = event.target.parentElement;
 elementoPai.removeChild(event.target);  
-// save();
+ save();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
