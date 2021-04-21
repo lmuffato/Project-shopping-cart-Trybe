@@ -83,7 +83,7 @@ function getSkuFromProductItem(item) {
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: ${price}`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   return li;
 }
 
@@ -95,7 +95,6 @@ const fetchId = () => {
       const fetchProduct = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
       const itemReturned = await fetchProduct.json();
         const { id, title, price } = itemReturned;
-          console.log(itemReturned);
           shoppingCart.appendChild(createCartItemElement({ id, title, price }));
           updateCart();
           checkout();
