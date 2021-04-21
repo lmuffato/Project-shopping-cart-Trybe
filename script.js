@@ -3,8 +3,8 @@ const fetchMercadoLivre = () => {
   return new Promise((resolve) => {
     fetch(endpoint)
     .then((response) => {
-      response.json().then((QUERY) => {
-        resolve(QUERY.results)
+      response.json().then((computers) => {
+        resolve(computers.results)
       });
     });
   });
