@@ -36,7 +36,7 @@ function getSkuFromProductItem(item) {
 // salvar carrinho de compras no local storage 
 function toSaveOnLocal() {
   const toSaveItens = document.querySelector(cartItems);
-  localStorage.setItem('cart Item', toSaveItens.innerText);
+  localStorage.setItem('cart Item', toSaveItens.innerHTML);
   }
 
 // ao clicar no item no carrinho, remove ele da lista
@@ -48,13 +48,23 @@ function cartItemClickListener(event) {
   toSaveOnLocal();
 }
 
+// pegar dados no localStorage e aparecer na página 
+function takeOnLocalStorage() {
+  const itemOnLocalStorage = localStorage.getItem('cart Item');
+  const ol = document.querySelector('.cart__items');
+  ol.innerHTML = itemOnLocalStorage;
+  const listaDeLis = document.querySelectorAll('.cart__item');
+  [...listaDeLis].forEach((li) => {
+    li.addEventListener('click', cartItemClickListener);
+  });
+}
+
 // cria o item dentro da seção do carrinho de compras com as infos do produto.
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
-  toSaveOnLocal();
   return li;
 }
 
@@ -65,8 +75,8 @@ const searchItemId = (id) => {
       response.json()
         .then((data) => {
           const IDInfos = data;
-          createCartItemElement(IDInfos);
           document.querySelector(cartItems).appendChild(createCartItemElement(IDInfos));
+          toSaveOnLocal();
         });
     });
 };
@@ -124,6 +134,7 @@ window.onload = function onload() {
   searchComputerAPI();
   pegaOsDadosItem();
   clearAllCart();
+  takeOnLocalStorage();
 };
 
 // localStorage 
