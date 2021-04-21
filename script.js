@@ -1,4 +1,5 @@
 // const fetch = require('node-fetch');
+let cartList;
 
 const getData = () => (
   new Promise((resolve, reject) => {
@@ -42,6 +43,12 @@ function createProductItemElement({ id, name, image }) {
 
 function cartItemClickListener(event) {
   const item = event.target;
+  const parent = item.parentElement;
+  const cart = JSON.parse(localStorage.getItem('CartList'));
+  const arrOfIndex = Object.keys(parent.children);
+  const itemIndex = parseInt(arrOfIndex.find((index) => parent.children[index] === item), 10);
+  cart.splice(itemIndex, 1);
+  localStorage.setItem('CartList', JSON.stringify(cart));
   item.parentElement.removeChild(item);
 }
 
@@ -52,12 +59,18 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
-const listener = ({ sku }) => {
+const addToCart = ({ sku }) => {
   fetch(`https://api.mercadolibre.com/items/${sku}`)
   .then((response) => response.json())
   .then((response) => ({ sku: response.id, name: response.title, salePrice: response.price }))
   .then((computerInfos) => {
     document.querySelector('.cart__items').appendChild(createCartItemElement(computerInfos));
+    let cart = [];
+    if (JSON.parse(localStorage.getItem('CartList')).length !== 0) {
+      cart = JSON.parse(localStorage.getItem('CartList'));
+    }
+    cart.push(computerInfos);
+    localStorage.setItem('CartList', JSON.stringify(cart));
   });
 };
 
@@ -66,7 +79,7 @@ const fillHtmlWithProducts = async () => {
   const computers = await getData();
   computers.forEach((computer) => {
     const item = createProductItemElement(computer);
-    item.lastElementChild.addEventListener('click', () => listener(computer));
+    item.lastElementChild.addEventListener('click', () => addToCart(computer));
     document.querySelector('.items').appendChild(item);
   });
   } catch (err) {
@@ -74,6 +87,15 @@ const fillHtmlWithProducts = async () => {
   }
 };
 
+const loadCartItems = () => {
+  cartList = JSON.parse(localStorage.getItem('CartList'));
+  if (cartList.length !== 0) {
+    cartList.forEach((item) =>
+    document.querySelector('.cart__items').appendChild(createCartItemElement(item)));
+  }
+};
+
 window.onload = function onload() {
   fillHtmlWithProducts();
+  loadCartItems();
 };
