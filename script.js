@@ -52,4 +52,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = function onload() { };
+window.onload = function onload() {
+  fetchMercadoLivre();
+  createProductItemElement();
+ };
