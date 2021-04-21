@@ -1,5 +1,27 @@
 const api = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-const cart = document.querySelector('.cart__items');
+
+function getCartElement() {
+  return document.querySelector('.cart__items');
+}
+
+function getStoragedCart() {
+  if (!localStorage.getItem('storagedCart')) return [];
+  return localStorage.getItem('storagedCart').split(',');
+}
+
+function setStoragedItem(itemId) {
+  const storage = getStoragedCart();
+
+  storage.push(itemId);
+  localStorage.setItem('storagedCart', storage);
+}
+
+function removeStoragedItem(itemId) {
+  let storage = getStoragedCart();
+  storage = storage.filter((id) => id !== itemId);
+
+  localStorage.setItem('storagedCart', storage);
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -27,13 +49,17 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
 function cartItemClickListener(event) {
+  const cart = getCartElement();
   const e = event.target;
+  const itemId = e.textContent.split(' ')[1];
+  
   cart.removeChild(e);
+  removeStoragedItem(itemId);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -44,23 +70,36 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function getProducts() {
-  const products = fetch(api)
-  .then((response) => response.json())
-  .then((response) => response.results);
-  
-  return products;
+async function getItem(itemUrl) {
+  const itemApi = await fetch(itemUrl);
+  const item = await itemApi.json();
+
+  if (item.error) throw new Error(item.error);
+  return item;
 }
 
 async function setItem(event) {
-  const e = event.target;
-  const itemId = e.parentElement.firstChild.textContent;
-  const itemUrl = `https://api.mercadolibre.com/items/${itemId}`;
-  const { id: sku, title: name, price: salePrice } = await fetch(itemUrl)
-  .then((response) => response.json())
-  .then((response) => response);
+  try {
+    const e = event.target;
+    const cart = getCartElement();
+    const itemId = getSkuFromProductItem(e.parentElement);
+    const itemUrl = `https://api.mercadolibre.com/items/${itemId}`;
+
+    const { id: sku, title: name, price: salePrice } = await getItem(itemUrl);
+    cart.appendChild(createCartItemElement({ sku, name, salePrice }));
+    setStoragedItem(sku);
+  } catch (error) {
+    alert(error);
+  }
+}
+
+async function getProducts() {
+  const productsApi = await fetch(api);
+  const productsJson = await productsApi.json();
+  const products = productsJson.results;
   
-  cart.appendChild(createCartItemElement({ sku, name, salePrice }));
+  if (productsJson.error) console.log(productsJson.message);
+  return products;
 }
 
 function itemAddEvent() {
@@ -69,20 +108,40 @@ function itemAddEvent() {
 }
 
 async function showProducts() {
-  const products = await getProducts();
-  const sectionItems = document.querySelector('.items');
-  
-  products.forEach(({ id: sku, title: name, thumbnail_id: imageId }) => {
-    // https://trybecourse.slack.com/archives/C01L16B9XC7/p1618509977348900
-    const image = `https://http2.mlstatic.com/D_NQ_NP_${imageId}-O.webp`;
-    
-    sectionItems.appendChild(createProductItemElement({ sku, name, image }));
-  });
+  try {
+    const products = await getProducts();
+    const sectionItems = document.querySelector('.items');
+    products.forEach(({ id: sku, title: name, thumbnail_id: imageId }) => {
+      // https://trybecourse.slack.com/archives/C01L16B9XC7/p1618509977348900
+      const image = `https://http2.mlstatic.com/D_NQ_NP_${imageId}-O.webp`;
+      
+      sectionItems.appendChild(createProductItemElement({ sku, name, image }));
+    });
+    itemAddEvent();
+  } catch (error) {
+    alert(error);
+  }
+}
 
-  itemAddEvent();
+async function loadCart() {
+  try {
+    const storage = getStoragedCart();
+    const cart = getCartElement();
+
+    const items = await Promise.all(storage.map(async (itemId) => {
+      const itemUrl = `https://api.mercadolibre.com/items/${itemId}`;
+      const { id: sku, title: name, price: salePrice } = await getItem(itemUrl);
+      return { sku, name, salePrice };
+    }));
+
+    items.forEach(({ sku, name, salePrice }) => 
+    cart.appendChild(createCartItemElement({ sku, name, salePrice })));
+  } catch (error) {
+    alert(error);
+  }
 }
 
 window.onload = () => {
   showProducts();
-  // setItem();
- };
+  loadCart();
+};
