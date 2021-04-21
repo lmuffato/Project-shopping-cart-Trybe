@@ -44,8 +44,23 @@ function getSkuFromProductItem(item) { // => Requisito - 2
   return item.querySelector('span.item__sku').innerText;
 }
 
+let precoTotal = 0; // => Requisito 5
+
+const subtrair = (preco) => { // => Requisito 5
+  precoTotal -= preco ;
+  return precoTotal;
+};
+
+const mostraPrecoTotal = async (callback, preco) => { // => 5
+  const spanItem = document.querySelector('.total-price');
+  spanItem.innerHTML = await callback(preco);
+};
+
 function cartItemClickListener(event) { // => Requisito 3
+  // console.log(event.target.innerHTML.split('$')[1]);
+  const valorItem = Number(event.target.innerHTML.split('$')[1]); // Requisito 5
   event.target.remove();
+  mostraPrecoTotal(subtrair, valorItem); // Requisito 5
 }
 
 function createCartItemElement({ sku, name, salePrice }) { // => Requisito - 2
@@ -56,6 +71,11 @@ function createCartItemElement({ sku, name, salePrice }) { // => Requisito - 2
   return li;
 }
 
+const soma = (preco) => { // Requisito 5
+  precoTotal += preco ;
+  return precoTotal;
+};
+
 const adicionaAoCart = async (event) => { // => Requisito - 2
   const eventItem = event.target; // => captura o botão
   // console.log(event.target);
@@ -64,6 +84,8 @@ const adicionaAoCart = async (event) => { // => Requisito - 2
   // console.log(dadosDoProduto);
   const cartItens = document.querySelector('.cart__items');
   cartItens.appendChild(createCartItemElement(dadosDoProduto));
+  // console.log(somaPreco(dadosDoProduto.salePrice));
+  mostraPrecoTotal(soma, dadosDoProduto.salePrice); // Requisito 5
 };
 
 const addEventBotao = () => { // => Requisito - 2
@@ -78,6 +100,7 @@ const limpaCarrinho = () => {
   button.addEventListener('click', () => {
     const ol = document.querySelectorAll('.cart__item');
     ol.forEach((li) => li.remove());
+    mostraPrecoTotal(subtrair, precoTotal); // zerar o preço
   });
 };
 
