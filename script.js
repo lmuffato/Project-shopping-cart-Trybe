@@ -37,7 +37,7 @@ const fetchDataList = () => new Promise((resolve, reject) => {
       response.json().then((data) => {
         resolve(data.results);
         console.log(data.results);
-        document.getElementsByClassName('loading')[0].style.display = 'none';
+        document.getElementsByClassName('loading')[0].remove();
       })
         .catch((erro) => {
           reject(erro);
