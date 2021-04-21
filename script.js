@@ -95,7 +95,20 @@ const apagacart = () => {
    caminho.addEventListener('click', addVazio);
 };
 
-// x ----------------------requisito 2 ----------------------------x
+// x----------------------requisito 7 ----------------------------x
+
+const meuLoading = () => {
+  const minhaDiv = document.createElement('div');
+  minhaDiv.className = 'loading';
+  minhaDiv.innerText = 'loading...';
+  document.querySelector('#xablau').appendChild(minhaDiv);
+};
+
+const deletaLoading = () => {
+  document.querySelector('.loading').remove();
+};
+
+// x----------------------requisito 2 ----------------------------x
 
 // com ajuda de Nathi zebral, Adelino Junior e outros amigos da sala de estudo consegui fazer o requisito 2
 
@@ -135,17 +148,17 @@ const informaçoesApi = (interageApi) => {
   somaTodosItens();
 };
 
-const interageApi = () => {
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador').then((response) => {
+const interageApi = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+  .then((response) => {
     response.json().then((data) => {
       const informaçoes = data.results;
       informaçoesApi(informaçoes);
     });
   });
- };
 
-window.onload = function onload() { 
-   interageApi();
+ window.onload = function onload() { 
+   meuLoading();
+   interageApi().then(deletaLoading);
    pegaDadosID();
    apagacart();
    somaTodosItens();
