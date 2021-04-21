@@ -1,4 +1,4 @@
-// os requisitos foram feitos com ajuda dos colegas Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos,Jonathan Fernandes,Nilson Ribeiro,Marília , Lucas Lara , e o Prof. Zezé e Jack !!
+// os requisitos foram feitos com ajuda dos colegas Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos,Jonathan Fernandes,Nilson Ribeiro,Marília , Lucas Lara ,Anderson Nascimento, Carlos Sá, Samuel e o Prof. Zezé e Jack !!
 const cartItems = '.cart__items';
 
 // cria a imagem do computador dentro da seção criada.
@@ -112,9 +112,23 @@ const productsInformation = (computerInfos) => {
   pegaOsDadosItem();
 };
 
+// colocar o texto loading enquanto carrega o api.
+const createLoadingSpan = () => {
+  const span = document.createElement('span');
+  span.className = 'loading';
+  span.innerText = 'loading...';
+  const sectionItens = document.querySelector('.items');
+  sectionItens.appendChild(span);
+  return span;
+};
+const deleteLoadingSpan = () => {
+  document.querySelector('.loading').remove();
+};
+// const loading = document.querySelector('.loading');
+// loading.innerText = 'loading...';
+
 // acessa o API do mercado livre com os dados da pesquisa.
-const searchComputerAPI = () => {
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+const searchComputerAPI = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
       response.json()
         .then((data) => {
@@ -122,9 +136,6 @@ const searchComputerAPI = () => {
           productsInformation(computerInfos);
         });
     });
-};
-
-// chamar ele dentro da criação e cart inte
 
 // cria o botão de esvaziar o carrinho.
 const allItems = () => {
@@ -140,7 +151,8 @@ const clearAllCart = () => {
 };
 
 window.onload = function onload() {
-  searchComputerAPI();
+  createLoadingSpan();
+  searchComputerAPI().then(deleteLoadingSpan);
   pegaOsDadosItem();
   clearAllCart();
   takeOnLocalStorage();
