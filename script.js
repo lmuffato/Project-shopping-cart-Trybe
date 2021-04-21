@@ -24,36 +24,69 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-const getAPI = async () => {
-  const fetchAPI = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
-  const products = await fetchAPI.json();
-  return products.results.forEach((product) => {
-    const items = { 
-    sku: product.id,
-    name: product.title,
-    image: product.thumbnail };
-    createProductItemElement(items);
-  });
-};
-
-getAPI();
-
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+const cartItemClickListener = (event) => {
+  const ol = document.querySelector('.cart__items');
+  return ol.removeChild(event.target);
+};
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  const ol = document.querySelector('.cart__items');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  ol.appendChild(li);
+  return li;
+}
+
+const getAPI = async () => {
+  const fetchAPI = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
+  const products = await fetchAPI.json();
+  const endProducts = await products.results;
+  return endProducts;
+};
+
+const requisiteProduct = async (product) => {
+  const fetchAPI = await fetch(`https://api.mercadolibre.com/items/${product}`);
+  const filteredItem = await fetchAPI.json();
+  return filteredItem;
+};
+
+const addProductScreen = async () => {
+    const arrayResults = await getAPI();
+    return arrayResults.forEach((element) => {
+      const items = { sku: element.id, name: element.title, image: element.thumbnail };
+      createProductItemElement(items);
+    });
+};
+
+const addEvent = async () => {
+  const buttons = document.querySelectorAll('.item__add');
+  return buttons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const idProduct = button.parentNode.children[0].innerHTML;
+      const objectAPI = await requisiteProduct(idProduct);
+      const product = { sku: objectAPI.id, name: objectAPI.title, salePrice: objectAPI.price };
+      return createCartItemElement(product);
+    });
+  });
+};
+
+const createPage = async () => {
+  try {
+    await addProductScreen();
+    await addEvent();
+  } catch (error) {
+    return 'error';
+  }
+};
 
 window.onload = function onload() { 
-  getAPI(); 
+  createPage();
 };
+
+// referências https://medium.com/jaguaribetech/dlskaddaldkslkdlskdlk-333dae8ef9b8
