@@ -53,7 +53,7 @@ function getSkuFromProductItem(item) { // => Requisito - 2
 function createCartItemElement({ sku, name, salePrice }) { // => Requisito - 2
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $ ${salePrice}`;
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   // li.addEventListener('click', cartItemClickListener);
   return li;
 }
