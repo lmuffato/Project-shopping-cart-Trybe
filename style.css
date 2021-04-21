@@ -182,8 +182,9 @@ main {
 
 .cart {
   display: flex;
+  flex-direction: column;
   flex-basis: 30%;
-  flex-flow: column wrap;
+  align-items: center;
 }
 
 .cart__title {
@@ -213,4 +214,9 @@ main {
 .cartItem__title,
 .carItem__preco {
   display: block;
+}
+
+.total-price-spanContainer {
+  color: rgb(255, 153, 0);
+  border: 1px solid black;
 }

@@ -1,7 +1,7 @@
 /* const fetch = require('node-fetch'); */
 
 // ------------------------------------------
-/* const shopCar = document.querySelector('section.cart'); */
+const cartList = document.querySelector('.cart__items');
 const carList = document.querySelector('ol.cart__items');
 
 function toReal(number) {
@@ -22,6 +22,12 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
+async function totalPrice(price, operator) {
+  const accPrice = document.querySelector('.total-price');
+  !operator ? accPrice.innerHTML = parseInt(accPrice.innerHTML) - parseInt(price) 
+    : accPrice.innerHTML = parseInt(accPrice.innerHTML) + parseInt(price); 
+}
+
 function removeCartElement(e) {
   (e.target).remove();
 }
@@ -35,8 +41,10 @@ function addCart(e) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', removeCartElement);
+  li.addEventListener('click', function() { totalPrice(price, false) });
 
   carList.appendChild(li);
+  totalPrice(price, true);
 }
 
 function createProductItemElement({ sku: id, name, image, price }) {
@@ -80,9 +88,5 @@ async function addDataList(QUERY) {
     marketSection.appendChild(item);
   });
 }
-
-/* function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-} */
 
 addDataList('computador');
