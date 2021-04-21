@@ -72,6 +72,7 @@ const clearItems = () => { // requisito 6
   butt.addEventListener('click', () => {
     const lis = document.querySelectorAll('.cart__item');
     lis.forEach((li) => li.remove());
+    showPrice(subPrice, totalPrices)
   });
 };
 
