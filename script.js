@@ -2,9 +2,14 @@
 // Nota mental para eu do Futuro: setItem salva, getItem coloca no localStorage
 
 const cartItemsTxt = '.cart__items';
-function SaveLocalStorage() {
+function saveLocalStorage() {
   localStorage.setItem('cartItens', document.querySelector(cartItemsTxt).innerHTML);
 }
+
+const localStorageGet = () => {
+  const ol = localStorage.getItem('cartItens');
+  document.querySelector(cartItemsTxt).innerHTML = ol;
+};
 
 // CART ITEM é os do Carrinho de compra!
 function cartItemClickListener(event) {
@@ -36,7 +41,7 @@ function productClickListener(event) {
       };
       const itemSelect = document.querySelector(cartItemsTxt);
       itemSelect.appendChild(createCartItemElement(skuEvent));
-      SaveLocalStorage();
+      saveLocalStorage();
       console.log(localStorage);
     });
 }
@@ -94,6 +99,7 @@ const fetchProducts = () => {
 window.onload = async () => {
   await fetchProducts();
   clearCart();
+  localStorageGet();
 };
 
 // Não foi necessário já que o projeto pede para fazer outro endpoint no futuro
