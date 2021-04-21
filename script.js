@@ -23,8 +23,8 @@ function createProductImageElement(imageSource) {
 
 async function totalPrice(price, operator) {
   const accPrice = document.querySelector('.total-price');
-  if (!operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML, 10) - parseInt(price, 10); }
-  if (operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML, 10) + parseInt(price, 10); }
+  if (!operator) { accPrice.innerHTML = parseFloat(accPrice.innerHTML) - parseFloat(price); }
+  if (operator) { accPrice.innerHTML = parseFloat(accPrice.innerHTML) + parseFloat(price); }
 }
 
 function removeCartElement(e) {
