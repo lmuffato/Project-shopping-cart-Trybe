@@ -197,8 +197,6 @@ const cleanItemsCart = () => {
 };
 
 window.onload = function onload() {
-  // loadding();
-  // fetchSearch('computador').then(endLoadding);
   fetchSearch('computador');
   fetchItemsListener();
   loadLocalStorage();
