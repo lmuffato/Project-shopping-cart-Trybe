@@ -78,8 +78,14 @@ const eventButt = () => { // requisito 2
   }));
 };
 
+const msgLoading = () => {
+  const h1 = document.querySelector('.loading');
+  h1.remove();
+}
+
 const addElement = async () => { // requisito 1 ajuda do Eduardo Costa e Andy
   const waitGetComputer = await getComputer();
+  msgLoading();
   waitGetComputer.forEach((item) => {
     const firstSection = document.querySelector('.items');
     firstSection.appendChild(createProductItemElement(item));
