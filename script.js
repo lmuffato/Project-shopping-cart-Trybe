@@ -81,25 +81,40 @@ function createCartItemElement({ id, title, price }) {
   return li;
 }
 
-const addProductToCart = () => {
+const addProductToCart = (product) => {
+  const ol = document.querySelector('.cart__items');
+  ol.appendChild(createCartItemElement(product));
+};
+const fetchNewApi = async (event) => {
+  if (event.target.className === 'item__add') {
+    const ids = event.target.parentNode.firstChild.innerText;
+    const product = await fetch(`https://api.mercadolibre.com/items/${ids}`)
+      .then((response) => response.json()
+        .then((data) => data));
+    //  console.log(product);
+    addProductToCart(product);
+    const newObject = {
+      id: product.id,
+      name: product.title,
+      price: product.price,
+    };
+    saveLocalStorage(newObject);
+  }
+};
+
+const addClickButton = () => {
   const section = document.querySelector('.items');
-  section.addEventListener('click', async (event) => {
-    if (event.target.className === 'item__add') {
-      const ids = event.target.parentNode.firstChild.innerText;
-      const product = await fetch(`https://api.mercadolibre.com/items/${ids}`)
-        .then((response) => response.json()
-          .then((data) => data));
-      //  console.log(product);
-      const newObject = {
-        id: product.id,
-        name: product.title,
-        price: product.price,
-      };
-      const ol = document.querySelector('.cart__items');
-      ol.appendChild(createCartItemElement(product));
-      saveLocalStorage(newObject);
-    }
-  });
+  section.addEventListener('click', fetchNewApi);
+};
+
+const getLocalStorage = () => {
+  const items = JSON.parse(localStorage.getItem('shop__cart'));
+  if (items !== null) {
+    items.forEach((obj) => {
+      const { id, name: title, price } = obj;
+      addProductToCart({ id, title, price });
+    });
+  }
 };
 
 const removeProductToCart = () => {
@@ -114,7 +129,8 @@ const removeProductToCart = () => {
 };
 
 window.onload = function onload() {
-  addProductToCart();
+  addClickButton();
+  getLocalStorage();
   removeProductToCart();
   infoLoading();
   setTimeout(() => {
