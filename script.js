@@ -78,10 +78,29 @@ const buscaItem = () => {
 // const clickAddCar = () => {
 //   const buttonEvent = document.querySelectorAll('.item__add');
 //   buttonEvent.forEach((button) => button.addEventListener('click', buscaItem));
-//   console.log(buttonEvent);
 // };
+
+// requisito 5 
+// const somaCar = async () => {
+
+// }
+
+const limparCar = () => {
+  const listCar = document.querySelector('ol');
+  if (listCar.length < 1){
+
+  }
+  listCar.remove('.cart_item');
+  console.log(listCar);
+}
+
+const eventButtonLimp = () => {
+  const buttonLimp = document.querySelector('.empty-cart');
+  buttonLimp.addEventListener('click', limparCar);
+}
 
 window.onload = function onload() {
   fetchProduto();
   buscaItem();
+  eventButtonLimp();
 };
