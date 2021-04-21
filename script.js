@@ -23,8 +23,8 @@ function createProductImageElement(imageSource) {
 
 async function totalPrice(price, operator) {
   const accPrice = document.querySelector('.total-price');
-  if (!operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML) - parseInt(price) }; 
-  if (!!operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML) + parseInt(price) }; 
+  if (!operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML, 10) - parseInt(price, 10); }
+  if (operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML, 10) + parseInt(price, 10); }
 }
 
 function removeCartElement(e) {
@@ -40,9 +40,9 @@ function addCart(e) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', removeCartElement);
-  li.addEventListener('click', function() { totalPrice (price, false); });
+  li.addEventListener('click', function () { totalPrice(price, false); });
 
-  carList.appendChild(li);
+  cartList.appendChild(li);
   totalPrice(price, true);
 }
 
