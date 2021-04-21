@@ -13,7 +13,7 @@ const buscaDadosProduto = async (addPont) => { // => Requisito - 2
   const { id, title, price } = data;
   const result = { sku: id, name: title, salePrice: price };
   return result;
-  // console.log(result);
+  //console.log(result);
 };
 
 function createProductImageElement(imageSource) { // => Requisito - 1
@@ -73,6 +73,14 @@ const addEventBotao = () => { // => Requisito - 2
   });
 };
 
+const limpaCarrinho = () => {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', () => {
+    const ol = document.querySelectorAll('.cart__item');
+    ol.forEach((li) => li.remove());
+  });
+};
+
 const adicionaElementos = async () => { // => Requisito - 1 : async e await ?
   const itensComputadores = await buscaComputadores();
   itensComputadores.forEach((item) => {
@@ -80,6 +88,7 @@ const adicionaElementos = async () => { // => Requisito - 1 : async e await ?
     elementos.appendChild(createProductItemElement(item));
   });
   addEventBotao(); // => Requisito - 2 : Para essa função funcionar ela teve que ser chamada dentro da mesma função que foi adicionado os Elementos
+  limpaCarrinho();
 };
 
 window.onload = function onload() { 
