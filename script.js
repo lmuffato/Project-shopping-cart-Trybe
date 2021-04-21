@@ -76,10 +76,19 @@ const addEvent = async () => {
   });
 };
 
+const removeItems = () => {
+  const button = document.querySelector('.empty-cart');
+  const listProducts = document.querySelector('.cart__items');
+  button.addEventListener('click', () => {
+  listProducts.innerHTML = '';  
+  });
+};
+
 const createPage = async () => {
   try {
     await addProductScreen();
     await addEvent();
+    removeItems();
   } catch (error) {
     return 'error';
   }
@@ -90,3 +99,4 @@ window.onload = function onload() {
 };
 
 // referências https://medium.com/jaguaribetech/dlskaddaldkslkdlskdlk-333dae8ef9b8
+// https://github.com/tryber/sd-010-a-project-shopping-cart/pull/30/commits/3f3791797ece0b2faf08c88a432028a7a2025687
