@@ -14,9 +14,7 @@ const getItem = async (idItem) => { // requisito 2
   const url = `https://api.mercadolibre.com/items/${idItem}`;
   const response = await fetch(url);
   const data = await response.json();
-  const { id, title, price } = data;
-  const result = { sku: id, name: title, salePrice: price }
-  return result;
+  return data;
 };
 
 function createProductImageElement(imageSource) { // requisito 1 ajuda do Eduardo Costa e Andy
@@ -53,7 +51,7 @@ function getSkuFromProductItem(item) { // requisito 2
   // coloque seu código aqui
 } */
 
-function createCartItemElement({ sku, name, salePrice }) { // requiito 2
+function createCartItemElement({ id: sku, title: name, price: salePrice }) { // requiito 2
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
