@@ -26,13 +26,14 @@ function createProductItemElement({ sku, name, image }) {
 
 async function computerResults() {
   const fetchLink = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-  .then((response) => response.json())
-  .then((response) => response.results);
+    .then((response) => response.json())
+    .then((response) => response.results);
   fetchLink.forEach((product) => {
-    const searchResult = createProductItemElement({ 
-      sku: product.id, 
-      name: product.title, 
-      image: product.thumbnail });
+    const searchResult = createProductItemElement({
+      sku: product.id,
+      name: product.title,
+      image: product.thumbnail,
+    });
     const fatherElement = document.querySelector('.items');
     fatherElement.appendChild(searchResult);
   });
@@ -46,14 +47,35 @@ async function computerResults() {
 //   // coloque seu código aqui
 // }
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+const itemGet = (itemId) =>
+  fetch(`https://api.mercadolibre.com/items/${itemId}`).then((response) => response.json());
+
+async function apShopCart(id) {
+  const parent = id.target.parentNode;
+  const myItem = parent.querySelector('span.item__sku').innerText;
+  const jsonConst = await itemGet(myItem);
+  const obj = {
+    sku: jsonConst.id,
+    name: jsonConst.title,
+    salePrice: jsonConst.price,
+  };
+  const cart = createCartItemElement(obj);
+  document.querySelector('.cart__items').appendChild(cart);
+}
+
+const eventListener = () => {
+  document.querySelector('.items').addEventListener('click', apShopCart);
+};
 
 window.onload = function onload() {
-      computerResults();
-    };
+  computerResults();
+  eventListener();
+};
