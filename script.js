@@ -1,4 +1,5 @@
 // os requisitos foram feitos com ajuda dos colegas Adelino Junior , Orlando Flores,Thiago souza ,Tiago santos,Jonathan Fernandes,Nilson Ribeiro,Marília , Lucas Lara , e o Prof. Zezé e Jack !!
+const cartItems = '.cart__items';
 
 // cria a imagem do computador dentro da seção criada.
 function createProductImageElement(imageSource) {
@@ -32,12 +33,19 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// salvar carrinho de compras no local storage 
+function toSaveOnLocal() {
+  const toSaveItens = document.querySelector(cartItems);
+  localStorage.setItem('cart Item', toSaveItens.innerText);
+  }
+
 // ao clicar no item no carrinho, remove ele da lista
 function cartItemClickListener(event) {
   const { target } = event;
   if (target.classList.contains('cart__item')) {
     target.remove('li');
   }
+  toSaveOnLocal();
 }
 
 // cria o item dentro da seção do carrinho de compras com as infos do produto.
@@ -46,6 +54,7 @@ function createCartItemElement({ id, title, price }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
+  toSaveOnLocal();
   return li;
 }
 
@@ -57,7 +66,7 @@ const searchItemId = (id) => {
         .then((data) => {
           const IDInfos = data;
           createCartItemElement(IDInfos);
-          document.querySelector('.cart__items').appendChild(createCartItemElement(IDInfos));
+          document.querySelector(cartItems).appendChild(createCartItemElement(IDInfos));
         });
     });
 };
@@ -94,13 +103,18 @@ const searchComputerAPI = () => {
     });
 };
 
+// soma o valor total 
+// const totalCart = () => {
+  // pega o valor do item , soma todas e  coloca o valor na pagina 
+// };
+
 // cria o botão de esvaziar o carrinho.
-
 const allItems = () => {
-  const itensOnCart = document.querySelector('.cart__items');
+  const itensOnCart = document.querySelector(cartItems);
   itensOnCart.innerHTML = '';
+  localStorage.clear();
 };
-
+// ao clicar no botão de esvaziar carrinho , limpa todo o conteudo do carrinho.
 const clearAllCart = () => {
   const buttonClearCart = document.querySelector('.empty-cart');
   buttonClearCart.addEventListener('click', allItems);
