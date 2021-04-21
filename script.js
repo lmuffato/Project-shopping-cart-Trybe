@@ -50,7 +50,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
+  // li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
@@ -67,14 +67,14 @@ const buscaItem = (event) => {
       document.querySelector('.cart__items').appendChild(createCartItemElement(produtCar));
     });
   });
-}
+};
 
 const clickAddCar = () => {
   const buttonEvent = document.querySelectorAll('.item__add');
   buttonEvent.forEach((button) => button.addEventListener('click', buscaItem));
 };
 
-window.onload = function onload () { 
+window.onload = function onload () {
   fetchProduto();
   clickAddCar();
 };
