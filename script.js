@@ -14,7 +14,9 @@ const getItem = async (idItem) => { // requisito 2
   const url = `https://api.mercadolibre.com/items/${idItem}`;
   const response = await fetch(url);
   const data = await response.json();
-  return data;
+  const { id, title, price } = data;
+  const result = { sku: id, name: title, salePrice: price };
+  return result;
 };
 
 function createProductImageElement(imageSource) { // requisito 1 ajuda do Eduardo Costa e Andy
@@ -47,8 +49,22 @@ function getSkuFromProductItem(item) { // requisito 2
   return item.querySelector('span.item__sku').innerText;
 }
 
+let totalPrices = 0;
+
+const subPrice = (price) => {
+  totalPrices -= price;
+  return totalPrices;
+};
+
+const showPrice = async (callback, price) => {
+  const spanPrice = document.querySelector('.total-price');
+  spanPrice.innerText = await callback(price);
+};
+
 function cartItemClickListener(event) { // requisito 3
+  const itemValue = event.target.innerHTML.split('$')[1];
   event.target.remove();
+  showPrice(subPrice, itemValue);
 }
 
 const clearItems = () => { // requisito 6
@@ -59,13 +75,18 @@ const clearItems = () => { // requisito 6
   });
 };
 
-function createCartItemElement({ id: sku, title: name, price: salePrice }) { // requiito 2
+function createCartItemElement({ sku, name, salePrice }) { // requiito 2
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const sumPrice = (price) => {
+  totalPrices += price;
+  return totalPrices;
+};
 
 const eventButt = () => { // requisito 2
   const buttons = document.querySelectorAll('.item__add');
@@ -75,6 +96,7 @@ const eventButt = () => { // requisito 2
     const dataProduct = await getItem(skuId);
     const cardItems = document.querySelector('.cart__items');
     cardItems.appendChild(createCartItemElement(dataProduct));
+    showPrice(sumPrice, dataProduct.salePrice);
   }));
 };
 
