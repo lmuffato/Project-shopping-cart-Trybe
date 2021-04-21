@@ -101,9 +101,9 @@ function limpaCarrinho() {
 }
 // ----------------------------------------------------------------------------------------------
 // Requisito 5:
+const carrinho = document.querySelectorAll('.cart__item');
 const totalAPagar = async () => {
   const total = document.querySelector('.total-price');
-  const carrinho = document.querySelectorAll('.cart__item');
   let sum = 0;
   for (let i = 0; i < carrinho.length; i += 1) {
     sum += parseFloat(carrinho[i].innerText.split('$')[1]);
@@ -117,7 +117,7 @@ const totalAPagar = async () => {
 window.onload = function onload() {
   criaLista();
   colocaItemNoCarrinho();
-  // save();
+  save();
   limpaCarrinho();
   totalAPagar();
 };
