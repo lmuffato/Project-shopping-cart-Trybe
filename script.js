@@ -1,6 +1,6 @@
 const api = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
 
-function getCartElement() {
+function getCartItems() {
   return document.querySelector('.cart__items');
 }
 
@@ -53,13 +53,32 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+async function sumPrices() {
+  const cart = document.querySelector('.cart');
+  const cartItems = getCartItems().childNodes;
+  let totalPrice = 0;
+
+  cartItems.forEach(({ innerText }) => {
+    const price = Number(innerText.split('$')[1]);
+    totalPrice += price;
+  }, 0);
+
+  if (document.querySelector('.total-price')) {
+    const actualPrice = document.querySelector('.total-price');
+    actualPrice.innerText = `${totalPrice}`;
+  } else {
+    cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
+  }
+}
+
 function cartItemClickListener(event) {
-  const cart = getCartElement();
+  const cartItems = getCartItems();
   const e = event.target;
   const itemId = e.textContent.split(' ')[1];
   
-  cart.removeChild(e);
+  cartItems.removeChild(e);
   removeStoragedItem(itemId);
+  sumPrices();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -81,13 +100,14 @@ async function getItem(itemUrl) {
 async function setItem(event) {
   try {
     const e = event.target;
-    const cart = getCartElement();
+    const cartItems = getCartItems();
     const itemId = getSkuFromProductItem(e.parentElement);
     const itemUrl = `https://api.mercadolibre.com/items/${itemId}`;
 
     const { id: sku, title: name, price: salePrice } = await getItem(itemUrl);
-    cart.appendChild(createCartItemElement({ sku, name, salePrice }));
+    cartItems.appendChild(createCartItemElement({ sku, name, salePrice }));
     setStoragedItem(sku);
+    await sumPrices();
   } catch (error) {
     alert(error);
   }
@@ -126,8 +146,7 @@ async function showProducts() {
 async function loadCart() {
   try {
     const storage = getStoragedCart();
-    const cart = getCartElement();
-
+    const cartItems = getCartItems();
     const items = await Promise.all(storage.map(async (itemId) => {
       const itemUrl = `https://api.mercadolibre.com/items/${itemId}`;
       const { id: sku, title: name, price: salePrice } = await getItem(itemUrl);
@@ -135,7 +154,8 @@ async function loadCart() {
     }));
 
     items.forEach(({ sku, name, salePrice }) => 
-    cart.appendChild(createCartItemElement({ sku, name, salePrice })));
+    cartItems.appendChild(createCartItemElement({ sku, name, salePrice })));
+    sumPrices();
   } catch (error) {
     alert(error);
   }
