@@ -1,4 +1,6 @@
 // Agradecimento especial ao Rafael Dorneles - T10 - Tribo A- por todo incentivo e auxílio neste projeto. :)
+const carrinho = document.querySelector('.cart__items').innerHTML;
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -31,8 +33,7 @@ function getSkuFromProductItem(item) {
 // Requisito 4:
 function save() {
   // eslint-disable-next-line sonarjs/no-duplicate-string
-  const carrinho = document.querySelector('.cart__items').innerHTML;
-  localStorage.setItem('cart', carrinho);
+    localStorage.setItem('cart', carrinho);
   }
   
 // ---------------------------------------------------------------------------------------------
@@ -84,7 +85,7 @@ function colocaItemNoCarrinho() {
             name: data.title,
             salePrice: data.price,     
           };
-        document.querySelector('.cart__items').appendChild(createCartItemElement(carObj));
+       carrinho.appendChild(createCartItemElement(carObj));
         save();
         });
       }
@@ -101,7 +102,7 @@ function limpaCarrinho() {
 }
 // ----------------------------------------------------------------------------------------------
 // Requisito 5:
-const carrinho = document.querySelectorAll('.cart__item');
+// const carrinho = document.querySelectorAll('.cart__item');
 const totalAPagar = async () => {
   const total = document.querySelector('.total-price');
   let sum = 0;
