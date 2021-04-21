@@ -65,6 +65,14 @@ const addItem = () => {
   }));
 };
 
+const clearButton = () => { // requisito 6
+  const buttonClear = document.querySelector('.empty-cart');
+  buttonClear.addEventListener('click', () => {
+    const itemsCart = document.querySelector('.cart__items');
+    itemsCart.innerHTML = '';
+  });
+};
+
 const createProductItemElement = async () => { // requisito 1
   const computers = await fetchAPI();
 
@@ -82,6 +90,7 @@ const createProductItemElement = async () => { // requisito 1
   });
 
   addItem();
+  clearButton();
 };
 
 window.onload = function onload() {
