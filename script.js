@@ -1,7 +1,9 @@
+const cart = () => document.querySelector('.cart__items');
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
-  img.className = imageSource.results.thumbnail_id;
-  img.src = imageSource.results.thumbnail;
+  img.className = 'item__image';
+  img.src = imageSource;
   return img;
 }
 
@@ -15,6 +17,8 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
+  const itemSet = document.querySelector('.items');
+  itemSet.appendChild(section);
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
@@ -32,22 +36,31 @@ async function returnAPI(query) {
        });
  });
  }
- returnAPI('computador');
- 
-/*
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
-}
-
-function cartItemClickListener(event) {
-  // coloque seu código aqui//
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
   return li;
 }
-*/
+
+const fetchId = () => {
+  const shoppingCart = cart();
+  const buttonAdd = document.querySelector('.items');
+    buttonAdd.addEventListener('click', async (e) => {
+      const itemId = getSkuFromProductItem(e.target.parentElement);
+      const fetchProduct = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
+      const itemReturned = await fetchProduct.json();
+        const { sku, name, salePrice } = itemReturned;
+          shoppingCart.appendChild(createCartItemElement({ sku, name, salePrice }));
+    });
+};
+
+window.onload = function onload() {
+  returnAPI();
+  fetchId();
+};
