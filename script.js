@@ -52,9 +52,6 @@ const appendSum = async () => {
 };
 
 function createCartItemElement({ id, title, price }) {
-  if (id === 'MLB1322533807') {
-    price = 1499 - 25.75;
-  }
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
