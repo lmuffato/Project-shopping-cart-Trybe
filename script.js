@@ -59,17 +59,8 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) { // 
   return li;
 }
 
-const addElement = async () => { // requisito 1 ajuda do Eduardo Costa e Andy
-  const waitGetComputer = await getComputer();
-  waitGetComputer.forEach((item) => {
-    const firstSection = document.querySelector('.items');
-    firstSection.appendChild(createProductItemElement(item));
-  });
-  eventButt();
-};
-
 const eventButt = () => { // requisito 2
-  const buttons =  document.querySelectorAll('.item__add');
+  const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((butt) => butt.addEventListener('click', async (event) => {
     const eventItem = event.target;
     const skuId = getSkuFromProductItem(eventItem.parentElement);
@@ -77,6 +68,15 @@ const eventButt = () => { // requisito 2
     const cardItems = document.querySelector('.cart__items');
     cardItems.appendChild(createCartItemElement(dataProduct));
   }));
+};
+
+const addElement = async () => { // requisito 1 ajuda do Eduardo Costa e Andy
+  const waitGetComputer = await getComputer();
+  waitGetComputer.forEach((item) => {
+    const firstSection = document.querySelector('.items');
+    firstSection.appendChild(createProductItemElement(item));
+  });
+  eventButt();
 };
 
 window.onload = function onload() {
