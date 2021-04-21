@@ -85,9 +85,9 @@ function createProductItemElement({ id: sku, title: name, thumbnail_id: thId }) 
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -98,6 +98,20 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 /// Minhas implementações
+
+// Implementação requisito 7
+const loadding = () => {
+  const elementLoading = document.createElement('p');
+  const body = document.querySelector('body');
+  elementLoading.classList.add('loading');
+  elementLoading.textContent = 'Loading';
+  // body.innerHTML = '';
+  body.appendChild(elementLoading);
+};
+
+const endLoadding = () => {
+  document.querySelector('.loading').remove();
+};
 
 // Implementação requisito 1: Criar uma lista de produtos
 async function verifiedFetchSearch(url, query) {
@@ -116,6 +130,7 @@ const createProductsList = (listProducts) => {
 };
 
 async function fetchSearch(query) {
+  loadding();
   await verifiedFetchSearch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`,
    query)
     .then((response) => {
@@ -123,6 +138,7 @@ async function fetchSearch(query) {
       createProductsList(listProducts);
     })
     .catch((err) => err);
+    endLoadding();
 }
 
 // Implementação requisito 2: Adicionar o produto ao carrinho de compras
@@ -142,6 +158,7 @@ const createCartItems = ({ id, title, price }) => {
     name: title,
     salePrice: price,
   };
+
   document.querySelector('.cart__items').appendChild(createCartItemElement(obj));
   addLocalStorage();
   sumPricesItemsCart();
@@ -149,14 +166,17 @@ const createCartItems = ({ id, title, price }) => {
 };
 
 async function fetchItems(event) {
+  loadding();
   if (event.target.classList.contains('item__add')) {
-    const itemId = event.target.parentNode.firstChild.textContent;
+    // const itemId = event.target.parentNode.firstChild.textContent;
+    const itemId = getSkuFromProductItem(event.target.parentNode);
     await verifiedFetchItems(`https://api.mercadolibre.com/items/${itemId}`, itemId)
     .then((response) => {
       createCartItems(response);
     })
     .catch((err) => err);
   }
+  endLoadding();
 }
 
 async function fetchItemsListener() {
@@ -172,11 +192,13 @@ const cleanItemsCart = () => {
       .forEach((cartItem) => {
         cartItem.remove();
       });
-    addLocalStorage();
+    localStorage.clear();
   });
 };
 
-window.onload = function onload() { 
+window.onload = function onload() {
+  // loadding();
+  // fetchSearch('computador').then(endLoadding);
   fetchSearch('computador');
   fetchItemsListener();
   loadLocalStorage();
