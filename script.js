@@ -1,5 +1,4 @@
 // const fetch = require('node-fetch');
-let cartList;
 
 const getData = () => (
   new Promise((resolve, reject) => {
@@ -41,14 +40,27 @@ function createProductItemElement({ id, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+const addToLocalStorage = (computerObject) => {
+  let list = [];
+  if (localStorage.getItem('cartList') != null) {
+    list = JSON.parse(localStorage.getItem('cartList'));
+  }
+  list.push(computerObject);
+  localStorage.setItem('cartList', JSON.stringify(list));
+};
+
+const removeFromLocalStorage = (element) => {
+  const parent = element.parentElement;
+  const listOfIndexes = Object.keys(parent.children); // Cria um array com os índices do html collection que são os itens da lista
+  const elementIndex = listOfIndexes.filter((index) => parent.children[index] === element); // Encontra qual o índice do elemento que foi removido do carrinho
+  const cartList = JSON.parse(localStorage.getItem('cartList'));
+  cartList.splice(elementIndex, 1); // Remove o item correspondente ao índice
+  localStorage.setItem('cartList', JSON.stringify(cartList));
+};
+
 function cartItemClickListener(event) {
   const item = event.target;
-  const parent = item.parentElement;
-  const cart = JSON.parse(localStorage.getItem('CartList'));
-  const arrOfIndex = Object.keys(parent.children);
-  const itemIndex = parseInt(arrOfIndex.find((index) => parent.children[index] === item), 10);
-  cart.splice(itemIndex, 1);
-  localStorage.setItem('CartList', JSON.stringify(cart));
+  removeFromLocalStorage(item);
   item.parentElement.removeChild(item);
 }
 
@@ -65,12 +77,7 @@ const addToCart = ({ sku }) => {
   .then((response) => ({ sku: response.id, name: response.title, salePrice: response.price }))
   .then((computerInfos) => {
     document.querySelector('.cart__items').appendChild(createCartItemElement(computerInfos));
-    let cart = [];
-    if (JSON.parse(localStorage.getItem('CartList')).length !== 0) {
-      cart = JSON.parse(localStorage.getItem('CartList'));
-    }
-    cart.push(computerInfos);
-    localStorage.setItem('CartList', JSON.stringify(cart));
+    addToLocalStorage(computerInfos);
   });
 };
 
@@ -87,15 +94,15 @@ const fillHtmlWithProducts = async () => {
   }
 };
 
-const loadCartItems = () => {
-  cartList = JSON.parse(localStorage.getItem('CartList'));
-  if (cartList.length !== 0) {
-    cartList.forEach((item) =>
-    document.querySelector('.cart__items').appendChild(createCartItemElement(item)));
+const loadCartList = () => {
+  if (JSON.parse(localStorage.getItem('cartList')) !== null) {
+    const cartList = JSON.parse(localStorage.getItem('cartList'));
+    const cartElement = document.querySelector('.cart__items');
+    cartList.forEach((item) => cartElement.appendChild(createCartItemElement(item)));
   }
 };
 
 window.onload = function onload() {
   fillHtmlWithProducts();
-  loadCartItems();
+  loadCartList();
 };
