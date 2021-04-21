@@ -81,6 +81,11 @@ const limpaCarrinho = () => {
   });
 };
 
+const loading = () => {
+  const title = document.querySelector('.loading');
+  title.remove();
+}
+
 const adicionaElementos = async () => { // => Requisito - 1 : async e await ?
   const itensComputadores = await buscaComputadores();
   itensComputadores.forEach((item) => {
@@ -88,6 +93,7 @@ const adicionaElementos = async () => { // => Requisito - 1 : async e await ?
     elementos.appendChild(createProductItemElement(item));
   });
   addEventBotao(); // => Requisito - 2 : Para essa função funcionar ela teve que ser chamada dentro da mesma função que foi adicionado os Elementos
+  loading();
   limpaCarrinho();
 };
 
