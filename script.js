@@ -1,7 +1,3 @@
-window.onload = function onload() { 
-  fetchProduto();
-}
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -40,7 +36,11 @@ const fetchProduto = () => {
       document.querySelector('.items').appendChild(createProductItemElement(objProduct));
     }));
   });
-}
+};
+
+window.onload = function onload() { 
+  fetchProduto();
+};
 
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
