@@ -1,9 +1,9 @@
 // Nota mental para eu do Futuro: usar Promise e tratar os dados em outra função async
 // Nota mental para eu do Futuro: setItem salva, getItem coloca no localStorage
 
+const cartItemsTxt = '.cart__items';
 function SaveLocalStorage() {
-  const literal3times = '.cart__items';
-  localStorage.setItem('cartItens', document.querySelector(literal3times).innerHTML);
+  localStorage.setItem('cartItens', document.querySelector(cartItemsTxt).innerHTML);
 }
 
 // CART ITEM é os do Carrinho de compra!
@@ -34,7 +34,7 @@ function productClickListener(event) {
         name: data.title,
         salePrice: data.price,
       };
-      const itemSelect = document.querySelector('.cart__items');
+      const itemSelect = document.querySelector(cartItemsTxt);
       itemSelect.appendChild(createCartItemElement(skuEvent));
       SaveLocalStorage();
       console.log(localStorage);
@@ -70,7 +70,7 @@ function createProductItemElement({ sku, name, image }) {
 function clearCart() {
   const clearBtn = document.querySelector('.empty-cart');
   clearBtn.addEventListener('click', () => {
-    const emptyCart = document.querySelector('.cart__items');
+    const emptyCart = document.querySelector(cartItemsTxt);
     emptyCart.innerHTML = '';
   });
 }
@@ -94,7 +94,6 @@ const fetchProducts = () => {
 window.onload = async () => {
   await fetchProducts();
   clearCart();
-  console.log(SaveLocalStorage());
 };
 
 // Não foi necessário já que o projeto pede para fazer outro endpoint no futuro
