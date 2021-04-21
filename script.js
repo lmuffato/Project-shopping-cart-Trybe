@@ -97,6 +97,8 @@ const apagacart = () => {
 
 // x----------------------requisito 7 ----------------------------x
 
+// agradecimento a Adelino Junior, Carlos sá, Anderson Nascimento, Murilo gonçalvez, Samuel Melo e Nathi Zebral
+
 const meuLoading = () => {
   const minhaDiv = document.createElement('div');
   minhaDiv.className = 'loading';
