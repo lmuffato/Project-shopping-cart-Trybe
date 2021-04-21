@@ -61,4 +61,5 @@ const getComputers = ({ results }) => {
 window.onload = function onload() {
   fetchComputer();
   fetchId();
+  getComputers();
 };
