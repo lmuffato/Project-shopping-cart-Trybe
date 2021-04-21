@@ -13,7 +13,7 @@ const buscaDadosProduto = async (addPont) => { // => Requisito - 2
   const { id, title, price } = data;
   const result = { sku: id, name: title, salePrice: price };
   return result;
-  //console.log(result);
+  // console.log(result);
 };
 
 function createProductImageElement(imageSource) { // => Requisito - 1
