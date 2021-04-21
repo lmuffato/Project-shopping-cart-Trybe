@@ -1,5 +1,6 @@
 const cartitems = '.cart__items';
 const additem = '.item__add';
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -32,18 +33,27 @@ function getSkuFromProductItem(item) {
 
 // x---------------------requisito 5 -------------------------x
 
+// requisito 5 feito com auxilio dos colegas Adelino junior e Rafael Medeiros
+
 const somaTodosItens = async () => {
   let total = 0;
   const meuvalor = [...document.querySelectorAll('.cart__item')]; 
   const minhadivida = meuvalor.map((li) => parseFloat(li.innerText.split('$')[1]));
   total = minhadivida.reduce((acc, current) => acc + current, 0);
-  console.log(minhadivida);
   document.querySelector('.total-price').innerText = total;
+};
+
+// x ------------parte do requisito 4 --------------x
+
+const savelocalstorage = () => {
+  const saveItem = document.querySelector(cartitems);
+  localStorage.setItem('cart item', saveItem.innerHTML);
 };
 
 function cartItemClickListener(event) {
   event.target.remove();
   somaTodosItens();
+  savelocalstorage();
 }
 
 function createCartItemElement({ id, title, price }) {
@@ -55,13 +65,29 @@ function createCartItemElement({ id, title, price }) {
   return li;
 }
 
-// x---------------------requisito 4--------------------------x
+// x---------------------requisito 4---------------------------x
+
+// requisito feito com ajuda dos colegas Adelino Junior, Nathi zebral e Rafael Medeiros
+
+const pegaNoLoading = () => {
+  const itemNoLocal = localStorage.getItem('cart item');
+  const ol = document.querySelector(cartitems);
+  ol.innerHTML = itemNoLocal;
+  const lista = document.querySelectorAll(cartitems);
+  lista.forEach((li) => {
+    li.addEventListener('click', cartItemClickListener);
+  });
+};
 
 // x-----------------------requisito 6 ------------------------x
+
+// requisito feito com ajuda do GUilherme de Prais e Vinicius rodrigues
 
 const addVazio = () => {
   const todasLi = document.querySelector(cartitems);
   todasLi.innerHTML = '';
+  somaTodosItens();
+  localStorage.clear();
 };
 
 const apagacart = () => {
@@ -69,9 +95,9 @@ const apagacart = () => {
    caminho.addEventListener('click', addVazio);
 };
 
-// requisito feito com ajuda do GUilherme de Prais e Vinicius rodrigues
-
 // x ----------------------requisito 2 ----------------------------x
+
+// com ajuda de Nathi zebral, Adelino Junior e outros amigos da sala de estudo consegui fazer o requisito 2
 
 const procuraId = (id) => {
   fetch(`https://api.mercadolibre.com/items/${id}`)
@@ -81,6 +107,7 @@ const procuraId = (id) => {
       const idinfo = data;
       document.querySelector(cartitems).appendChild(createCartItemElement(idinfo));
       somaTodosItens();
+      savelocalstorage();
     });
   });
 };
@@ -95,9 +122,9 @@ const pegaDadosID = () => {
   });
 };
 
-// com ajuda de Nathi zebral, Adelino Junior e outros amigos da sala de estudo consegui fazer o requisito 2
-
 // x------------------------requisito 1 --------------------------x
+
+// consegui fazer o requisito 1 com ajuda do Adelino Junior, Tiago santos, tiago souza,Nathi zebral, Lucas lara, Marilia e os instrutores.
 
 const informaçoesApi = (interageApi) => {
   interageApi.forEach((computer) => { 
@@ -105,6 +132,7 @@ const informaçoesApi = (interageApi) => {
     section.appendChild(createProductItemElement(computer));
   });
   pegaDadosID();
+  somaTodosItens();
 };
 
 const interageApi = () => {
@@ -116,9 +144,10 @@ const interageApi = () => {
   });
  };
 
-// consegui fazer o requisito 1 com ajuda do Adelino Junior, Tiago santos, tiago souza,Nathi zebral, Lucas lara, Marilia e os instrutores.
- window.onload = function onload() { 
+window.onload = function onload() { 
    interageApi();
    pegaDadosID();
    apagacart();
+   somaTodosItens();
+   pegaNoLoading();
 };
