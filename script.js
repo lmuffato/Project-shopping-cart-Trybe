@@ -30,7 +30,7 @@ const fetchComputer = async () => {
   return data;
 };
 
-const fetchComputer = async (id) => {
+const fetchId = async (id) => {
   const idResponse = await fetch(`https://api.mercadolibre.com/items/${id}`);
   const data = await idResponse.json();
   return data;
@@ -60,4 +60,5 @@ const getComputers = ({ results }) => {
 
 window.onload = function onload() {
   fetchComputer();
+  fetchId();
 };
