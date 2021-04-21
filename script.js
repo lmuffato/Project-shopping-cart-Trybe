@@ -50,10 +50,19 @@ fetchDataList();
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+const itens = () => document.querySelectorAll('.cart__items');
+
+const itensStorage = () => {
+  itens().forEach((element) => {
+  localStorage.setItem('CartItens', element.innerHTML);
+  });
+};
+
 function cartItemClickListener(event) {
   console.log(event);
   const clicar = event.target;
   clicar.remove();
+  itensStorage();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -63,6 +72,21 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const revomeItensStorage = () => {
+  itens().forEach((element) => {
+  element.addEventListener('click', cartItemClickListener);
+  });
+};
+
+const loadStorage = () => {
+  itens().forEach((element) => {
+  const item = element;
+  item.innerHTML = localStorage.getItem('CartItens');
+  });
+  revomeItensStorage();
+};
+
 const fetchAdicionar = (itemID) => new Promise((resolve, reject) => {
   fetch(`https://api.mercadolibre.com/items/${itemID}`)
   .then((response) => {
@@ -72,6 +96,7 @@ const fetchAdicionar = (itemID) => new Promise((resolve, reject) => {
         const salePrice = dados.price;
         const olElement = document.getElementsByClassName('cart__items')[0];
        olElement.appendChild(createCartItemElement({ sku, name, salePrice }));
+       itensStorage();
       resolve(dados);
     })
       .catch((erro) => {
@@ -84,7 +109,7 @@ function addEvento() {
    for (let index = 0; index < buttonElement.length; index += 1) {
     buttonElement[index].addEventListener('click', function (e) {
       const btnEle = e.target.parentNode.getElementsByClassName('item__sku')[0];
-      console.log(e.target.parentNode.getElementsByClassName('item__sku')[0]);
+    
       return fetchAdicionar(btnEle.innerText);
     });
     }
@@ -93,6 +118,7 @@ function addEvento() {
 const assicronas = async () => {
   createList(await fetchDataList());
   await addEvento();
+  await loadStorage();
 };
 
 window.onload = function onload() { 
