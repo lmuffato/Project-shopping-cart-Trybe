@@ -32,8 +32,7 @@ function getSkuFromProductItem(item) {
 //-------------------------------------------------------------------------------------------------
 // Requisito 4:
 function save() {
-  // eslint-disable-next-line sonarjs/no-duplicate-string
-    localStorage.setItem('cart', carrinho);
+   localStorage.setItem('cart', carrinho);
   }
   
 // ---------------------------------------------------------------------------------------------
