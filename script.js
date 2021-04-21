@@ -30,7 +30,7 @@ const fetchComputer = async () => {
   return data;
 };
 
-const fetchCart = async (id) => {
+const fetchComputer = async (id) => {
   const idResponse = await fetch(`https://api.mercadolibre.com/items/${id}`);
   const data = await idResponse.json();
   return data;
