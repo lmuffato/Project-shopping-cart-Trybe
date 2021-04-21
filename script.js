@@ -70,9 +70,8 @@ const buscaItem = () => {
             document.querySelector('.cart__items').appendChild(createCartItemElement(produtCar));
           });
         });
-      };
-    }
-  )
+      }
+    });
 };
 
 // const clickAddCar = () => {
