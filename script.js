@@ -34,11 +34,10 @@ const createList = (data) => {
 const fetchDataList = () => new Promise((resolve, reject) => {  
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
-      document.getElementsByClassName('loading')[0].innerText = 'loading...';
       response.json().then((data) => {
         resolve(data.results);
         console.log(data.results);
-        document.getElementsByClassName('loading')[0].innerText = '';
+        document.getElementsByClassName('loading')[0].remove();
       })
         .catch((erro) => {
           reject(erro);
