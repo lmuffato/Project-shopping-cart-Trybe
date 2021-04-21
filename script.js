@@ -22,7 +22,7 @@ async function sumPrices() {
   cartItemList.forEach((price) => {
     total += parseFloat(price.innerHTML.split('$')[1]);
   });
-    document.querySelector('.total-price').innerHTML = `Total: $${total}`;
+    document.querySelector('.total-price').innerHTML = `Total: $${Math.round(total * 100) / 100}`;
 }
 
 // CART ITEM é os do Carrinho de compra!
