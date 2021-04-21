@@ -45,7 +45,7 @@ function loadCart() {
   const itemOnCart = cart();
   itemOnCart.innerHTML = statusCart;
   itemOnCart.addEventListener('click', (e) => {
-    if (e.target.classLIst.contains('cart__item')) {
+    if (e.target.classList.contains('cart__item')) {
       cartItemClickListener(e);
     }
   });
@@ -95,6 +95,7 @@ const fetchId = () => {
       const fetchProduct = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
       const itemReturned = await fetchProduct.json();
         const { id, title, price } = itemReturned;
+          console.log(itemReturned);
           shoppingCart.appendChild(createCartItemElement({ id, title, price }));
           updateCart();
           checkout();
