@@ -45,6 +45,16 @@ function storageUnit() {
   localStorage.setItem('cart_info', saveInfo);
 }
 
+const deleteAllCart = () => {
+  const specElement = cart[0].children[2];
+  const size = specElement.children.length;
+  for (let index = 0; index < size; index += 1) {
+    specElement.lastChild.remove();
+  }
+  storageUnit();
+  sumPrices();
+};
+
 function cartItemClickListener(event) {
   for (let index = 0; index < allselecteditems.length; index += 1) {
     if (allselecteditems[index] === event.target) {
@@ -119,4 +129,5 @@ window.onload = function onload() {
   getInfo();
   savedInfo();
   sumPrices();
+  cart[0].children[1].addEventListener('click', deleteAllCart);
 };
