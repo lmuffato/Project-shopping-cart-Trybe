@@ -1,3 +1,5 @@
+const cartitems = '.cart__items';
+const additem = '.item__add';
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -28,28 +30,43 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// x---------------------requisito 5 -------------------------x
+
+const somaTodosItens = async () => {
+  let total = 0;
+  const meuvalor = [...document.querySelectorAll('.cart__item')]; 
+  const minhadivida = meuvalor.map((li) => parseFloat(li.innerText.split('$')[1]));
+  total = minhadivida.reduce((acc, current) => acc + current, 0);
+  console.log(minhadivida);
+  document.querySelector('.total-price').innerText = total;
+};
+
 function cartItemClickListener(event) {
   event.target.remove();
+  somaTodosItens();
 }
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
+  // console.log(price);
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
+// x---------------------requisito 4--------------------------x
+
 // x-----------------------requisito 6 ------------------------x
 
-const seila = () => {
-  const todasLi = document.querySelector('.cart__items');
+const addVazio = () => {
+  const todasLi = document.querySelector(cartitems);
   todasLi.innerHTML = '';
 };
 
 const apagacart = () => {
   const caminho = document.querySelector('.empty-cart');
-   caminho.addEventListener('click', seila);
+   caminho.addEventListener('click', addVazio);
 };
 
 // requisito feito com ajuda do GUilherme de Prais e Vinicius rodrigues
@@ -62,14 +79,14 @@ const procuraId = (id) => {
     response.json()
     .then((data) => {
       const idinfo = data;
-      createCartItemElement(idinfo);
-      document.querySelector('.cart__items').appendChild(createCartItemElement(idinfo));
+      document.querySelector(cartitems).appendChild(createCartItemElement(idinfo));
+      somaTodosItens();
     });
   });
 };
 
 const pegaDadosID = () => {
-  const caminho = document.querySelectorAll('.item__add');
+  const caminho = document.querySelectorAll(additem);
   caminho.forEach((button) => {
     button.addEventListener('click', (event) => {
        const idDoPc = getSkuFromProductItem(event.target.parentElement);
