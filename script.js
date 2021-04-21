@@ -76,8 +76,15 @@ const getEndPoint = (itemID) => fetch(`https://api.mercadolibre.com/items/${item
 // REQUISITO 1 (MONTAR)
 async function getInfo() {
   const elementListItem = document.querySelector('.items');
+  // REQUISITO 7
+  const loading = document.createElement('section');
+  loading.innerText = 'Loading...';
+  loading.className = 'loading';
+  elementListItem.appendChild(loading); // ATÉ AQUI E NA LINHA 91 PARA REMOVER. =) (Para finalizar o código, li o cód do colega Vinicius )
   const products = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador');
   const response = await products.json();
+  loading.parentElement.removeChild(loading);
+
   const res = response.results;
 
   res.forEach((infoItem) => {
