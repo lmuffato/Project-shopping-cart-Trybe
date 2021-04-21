@@ -69,8 +69,11 @@ const buscaItem = () => {
           };
             document.querySelector('.cart__items').appendChild(createCartItemElement(produtCar));
           });
-  })};
-})};
+        });
+      };
+    }
+  )
+};
 
 // const clickAddCar = () => {
 //   const buttonEvent = document.querySelectorAll('.item__add');
