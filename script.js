@@ -1,3 +1,7 @@
+// A Special Thanks to: Adelino Junior, Anderson Nascimento, Guilherme Dornelles,
+// Murilo Gonçalvez, Nathi Zebral, Nilson Ribeiro, Samuel Melo e demais participantes
+// das chamadas no Slack para ajuda mútua! Obrigado a todos pelas explicações!
+
 const classeItensNoCarrinho = '.cart__items';
 
 // #11 - Salvar os itens do carrinho de compras no LocalStorage
@@ -28,6 +32,16 @@ function recuperarLocalStorage() {
     li.addEventListener('click', cartItemClickListener);
   });
 }
+
+// #13 - Usar o botão para limpar o carrinho de compras
+const botaoLimpador = () => {
+  const limparCarrinho = document.querySelector('.empty-cart');
+  limparCarrinho.addEventListener('click', () => {
+    const itemGenerico = document.querySelector(classeItensNoCarrinho);
+    itemGenerico.innerHTML = '';
+    localStorage.clear();
+  });
+};
 
 // #9 - Recebe as informações de um único produto e coloca no carrinho de compras
 // informando apenas o ID, descrição e preço (Achei melhor utilizar esses termos). 
@@ -122,4 +136,5 @@ window.onload = function onload() {
   acessarAPI();
   resultadosAPI().then(() => clickButton());
   recuperarLocalStorage();
+  botaoLimpador();
 };
