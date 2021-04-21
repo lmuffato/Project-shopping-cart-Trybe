@@ -57,7 +57,7 @@ const clearItems = () => { // requisito 6
     const lis = document.querySelectorAll('.cart__item');
     lis.forEach((li) => li.remove());
   });
-}
+};
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) { // requiito 2
   const li = document.createElement('li');
