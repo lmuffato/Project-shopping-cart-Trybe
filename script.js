@@ -1,12 +1,12 @@
 const getProduct = () => {
   const myPromisse = new Promise((resolve) => {
-    fetch(`https://api.mercadolibre.com/sites/MLB/search?q=$computador`)
+    fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
       .then((response) => {
         response.json().then((data) => {
           resolve(data.results);
-        })
-      })
-  })
+        });
+      });
+  });
   return myPromisse;
 };
 
