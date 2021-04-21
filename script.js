@@ -2,7 +2,6 @@
 
 // ------------------------------------------
 const cartList = document.querySelector('.cart__items');
-const carList = document.querySelector('ol.cart__items');
 
 function toReal(number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(number);
@@ -24,8 +23,8 @@ function createProductImageElement(imageSource) {
 
 async function totalPrice(price, operator) {
   const accPrice = document.querySelector('.total-price');
-  !operator ? accPrice.innerHTML = parseInt(accPrice.innerHTML) - parseInt(price) 
-    : accPrice.innerHTML = parseInt(accPrice.innerHTML) + parseInt(price); 
+  if (!operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML) - parseInt(price) }; 
+  if (!!operator) { accPrice.innerHTML = parseInt(accPrice.innerHTML) + parseInt(price) }; 
 }
 
 function removeCartElement(e) {
@@ -41,7 +40,7 @@ function addCart(e) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', removeCartElement);
-  li.addEventListener('click', function() { totalPrice(price, false) });
+  li.addEventListener('click', function() { totalPrice (price, false); });
 
   carList.appendChild(li);
   totalPrice(price, true);
