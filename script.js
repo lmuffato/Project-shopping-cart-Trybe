@@ -100,23 +100,31 @@ function limpaCarrinho() {
 }
 // ----------------------------------------------------------------------------------------------
 // Requisito 5:
-const totalAPagar = async () => {
-  const total = document.querySelector('.total-price');
-  const carrinho = document.querySelectorAll('.cart__item');
-  let sum = 0;
-  for (let i = 0; i < carrinho.length; i += 1) {
-    sum += parseFloat(carrinho[i].innerText.split('$')[1]);
-  }
-  const totalFinal = Math.fround(sum).toFixed(2);
-  const result = `Valor à pagar: $ <strong>${totalFinal}</strong>`;
-  total.innerHTML = result;
-  //  
-};
-  
+function totalAPagar() {
+
+}
+
+ // -----------------------------------------------------------------------------------------------
+ // Requisito 7:
+ function loadingInit() {
+  const { body } = document;
+  const loading = document.createElement('h1');
+  loading.className = 'loading';
+  loading.innerHTML = 'loading...';
+  body.appendChild(loading);
+}
+
+function removeLoading() {
+  const { body } = document;
+  const loading = document.querySelector('.loading');
+  body.removeChild(loading);
+}
 window.onload = function onload() {
   criaLista();
   colocaItemNoCarrinho();
   save();
   limpaCarrinho();
   totalAPagar();
+  loadingInit();
+  removeLoading();
 };
