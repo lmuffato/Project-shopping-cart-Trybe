@@ -40,6 +40,20 @@ function createProductItemElement({ id, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+const setTotalPrice = (cartList, listExist) => {
+  const element = document.querySelector('.total-price');
+  if (listExist) {
+    const total = cartList.reduce((acc, item) => {
+      let value = acc;
+      value += item.salePrice;
+      return value;
+    }, 0);
+    element.firstElementChild.innerText = `Total: $${total}`;
+  } else {
+    element.firstElementChild.innerText = `Total: $${0}`;
+  }
+};
+
 const addToLocalStorage = (computerObject) => {
   let list = [];
   if (localStorage.getItem('cartList') != null) {
@@ -47,6 +61,7 @@ const addToLocalStorage = (computerObject) => {
   }
   list.push(computerObject);
   localStorage.setItem('cartList', JSON.stringify(list));
+  setTotalPrice(list, list.length > 0);
 };
 
 const removeFromLocalStorage = (element) => {
@@ -55,6 +70,7 @@ const removeFromLocalStorage = (element) => {
   const elementIndex = listOfIndexes.filter((index) => parent.children[index] === element); // Encontra qual o índice do elemento que foi removido do carrinho
   const cartList = JSON.parse(localStorage.getItem('cartList'));
   cartList.splice(elementIndex, 1); // Remove o item correspondente ao índice
+  setTotalPrice(cartList, cartList.length > 0);
   localStorage.setItem('cartList', JSON.stringify(cartList));
 };
 
@@ -71,6 +87,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
 const addToCart = ({ sku }) => {
   fetch(`https://api.mercadolibre.com/items/${sku}`)
   .then((response) => response.json())
@@ -99,6 +116,7 @@ const loadCartList = () => {
     const cartList = JSON.parse(localStorage.getItem('cartList'));
     const cartElement = document.querySelector('.cart__items');
     cartList.forEach((item) => cartElement.appendChild(createCartItemElement(item)));
+    setTotalPrice(cartList, cartList.length > 0);
   }
 };
 
