@@ -122,7 +122,7 @@ async function getProducts() {
   const productsJson = await productsApi.json();
   const products = productsJson.results;
   
-  if (productsJson.error) console.log(productsJson.message);
+  if (productsJson.error) return productsJson.message;
   return products;
 }
 
@@ -135,6 +135,8 @@ async function showProducts() {
   try {
     const products = await getProducts();
     const sectionItems = document.querySelector('.items');
+
+    sectionItems.firstChild.remove();
     products.forEach(({ id: sku, title: name, thumbnail_id: imageId }) => {
       // https://trybecourse.slack.com/archives/C01L16B9XC7/p1618509977348900
       const image = `https://http2.mlstatic.com/D_NQ_NP_${imageId}-O.webp`;
@@ -177,7 +179,13 @@ function cartButton() {
   button.addEventListener('click', emptyCart);
 }
 
+function loading() {
+  const items = document.querySelector('.items');
+  items.appendChild(createCustomElement('span', 'loading', 'loading...'));
+}
+
 window.onload = () => {
+  loading();
   showProducts();
   loadCart();
   cartButton();
