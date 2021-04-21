@@ -73,8 +73,15 @@ const clearButton = () => { // requisito 6
   });
 };
 
+// Ajuda de Murilo Gonçalves - Turma 10 - Tribo A
+const msgLoading = () => { // requisito 7
+  const loading = document.querySelector('.loading');
+  loading.remove();
+};
+
 const createProductItemElement = async () => { // requisito 1
   const computers = await fetchAPI();
+  msgLoading();
 
   computers.forEach(({ id, title, thumbnail }) => {
     const section = document.createElement('section');
