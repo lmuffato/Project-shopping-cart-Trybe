@@ -33,6 +33,15 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// soma o valor total 
+const totalCart = async () => {
+  let total = 0;
+  const lis = [...document.querySelectorAll('.cart__item')];
+  const arrayOfLiContent = lis.map((li) => parseFloat(li.innerText.split('$')[1]));
+  total = arrayOfLiContent.reduce((acc, current) => acc + current, 0);
+  document.querySelector('.total-price').innerText = total;
+};
+
 // salvar carrinho de compras no local storage 
 function toSaveOnLocal() {
   const toSaveItens = document.querySelector(cartItems);
@@ -45,6 +54,7 @@ function cartItemClickListener(event) {
   if (target.classList.contains('cart__item')) {
     target.remove('li');
   }
+  totalCart();
   toSaveOnLocal();
 }
 
@@ -76,6 +86,7 @@ const searchItemId = (id) => {
         .then((data) => {
           const IDInfos = data;
           document.querySelector(cartItems).appendChild(createCartItemElement(IDInfos));
+          totalCart();
           toSaveOnLocal();
         });
     });
@@ -113,16 +124,14 @@ const searchComputerAPI = () => {
     });
 };
 
-// soma o valor total 
-// const totalCart = () => {
-  // pega o valor do item , soma todas e  coloca o valor na pagina 
-// };
+// chamar ele dentro da criação e cart inte
 
 // cria o botão de esvaziar o carrinho.
 const allItems = () => {
   const itensOnCart = document.querySelector(cartItems);
   itensOnCart.innerHTML = '';
   localStorage.clear();
+  totalCart();
 };
 // ao clicar no botão de esvaziar carrinho , limpa todo o conteudo do carrinho.
 const clearAllCart = () => {
@@ -135,6 +144,7 @@ window.onload = function onload() {
   pegaOsDadosItem();
   clearAllCart();
   takeOnLocalStorage();
+  totalCart();
 };
 
 // localStorage 
