@@ -104,6 +104,25 @@ const fetchAdicionar = (itemID) => new Promise((resolve, reject) => {
     });
   });
  });
+
+ function excluirItem(element) {
+  const clicar = element;
+  clicar.remove();
+  itensStorage();
+}
+
+ function remove(e) {
+  const cartItem = e.target.parentNode.querySelectorAll('.cart__item');
+  cartItem.forEach((element) => {
+  excluirItem(element);
+});
+}
+  
+ const removeTodosItens = () => {
+  const buttonRemove = document.getElementsByClassName('empty-cart')[0];
+  buttonRemove.addEventListener('click', remove);
+};
+
 function addEvento() {
   const buttonElement = document.getElementsByClassName('item__add');
    for (let index = 0; index < buttonElement.length; index += 1) {
@@ -119,6 +138,8 @@ const assicronas = async () => {
   createList(await fetchDataList());
   await addEvento();
   await loadStorage();
+  // await buttonRemove();
+  await removeTodosItens();
 };
 
 window.onload = function onload() { 
