@@ -64,8 +64,8 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-async function returnAPI(query) {
-  await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`)
+async function returnAPI() {
+  await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
    .then((response) => response.json())
      .then((data) => {
        data.results.forEach((item) => {
@@ -96,6 +96,7 @@ const fetchId = () => {
         const { sku, name, salePrice } = itemReturned;
           shoppingCart.appendChild(createCartItemElement({ sku, name, salePrice }));
           updateCart();
+          checkout();
     });
 };
 
