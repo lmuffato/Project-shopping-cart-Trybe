@@ -52,14 +52,14 @@ function loadCart() {
  checkout();
 }
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
   const itemSet = document.querySelector('.items');
   itemSet.appendChild(section);
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
+  section.appendChild(createCustomElement('span', 'item__sku', id));
+  section.appendChild(createCustomElement('span', 'item__title', title));
+  section.appendChild(createProductImageElement(thumbnail));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
   return section;
 }
@@ -69,8 +69,9 @@ async function returnAPI() {
    .then((response) => response.json())
      .then((data) => {
        data.results.forEach((item) => {
-         const { sku, name, image } = item;
-         createProductItemElement({ sku, name, image });
+         const { id, title, thumbnail } = item;
+         console.log(item);
+         createProductItemElement({ id, title, thumbnail });
        });
  });
  }
@@ -79,10 +80,10 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: ${price}`;
   return li;
 }
 
@@ -93,8 +94,8 @@ const fetchId = () => {
       const itemId = getSkuFromProductItem(e.target.parentElement);
       const fetchProduct = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
       const itemReturned = await fetchProduct.json();
-        const { sku, name, salePrice } = itemReturned;
-          shoppingCart.appendChild(createCartItemElement({ sku, name, salePrice }));
+        const { id, title, price } = itemReturned;
+          shoppingCart.appendChild(createCartItemElement({ id, title, price }));
           updateCart();
           checkout();
     });
