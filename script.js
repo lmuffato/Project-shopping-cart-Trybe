@@ -51,6 +51,14 @@ function cartItemClickListener(event) { // requisito 3
   event.target.remove();
 }
 
+const clearItems = () => { // requisito 6
+  const butt = document.querySelector('.empty-cart');
+  butt.addEventListener('click', () => {
+    const lis = document.querySelectorAll('.cart__item');
+    lis.forEach((li) => li.remove());
+  });
+}
+
 function createCartItemElement({ id: sku, title: name, price: salePrice }) { // requiito 2
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -77,6 +85,7 @@ const addElement = async () => { // requisito 1 ajuda do Eduardo Costa e Andy
     firstSection.appendChild(createProductItemElement(item));
   });
   eventButt();
+  clearItems();
 };
 
 window.onload = function onload() {
