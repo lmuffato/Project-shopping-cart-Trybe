@@ -1,3 +1,12 @@
+const classeItensNoCarrinho = '.cart__items';
+
+// #11 - Salvar os itens do carrinho de compras no LocalStorage
+// Feito com a ajuda da aluna Nathi Zebral - turma 10 - tribo A
+const salvarLocalStorage = () => {
+  const item = document.querySelector(classeItensNoCarrinho);
+  localStorage.setItem('itensDoCarrinho', item.innerHTML);
+};
+
 // #10 - Ao clicar no item do carrinho de compras, verifica se o item clicado
 // possui a classe "cart__item", se tiver remove o conteúdo.
 function cartItemClickListener(event) {
@@ -5,6 +14,19 @@ function cartItemClickListener(event) {
   if (target.classList.contains('cart__item')) {
     target.remove('li');
   }
+  salvarLocalStorage();
+}
+
+// #12 - Recuperar os itens do carrinho de compras do LocalStorage
+// Feito com a ajuda da aluna Nathi Zebral - turma 10 - tribo A
+function recuperarLocalStorage() {
+  const item = localStorage.getItem('itensDoCarrinho');
+  const buscaListaItens = document.querySelector(classeItensNoCarrinho);
+  buscaListaItens.innerHTML = item;
+  const todosOsItens = document.querySelectorAll(classeItensNoCarrinho);
+  [...todosOsItens].forEach((li) => {
+    li.addEventListener('click', cartItemClickListener);
+  });
 }
 
 // #9 - Recebe as informações de um único produto e coloca no carrinho de compras
@@ -76,6 +98,7 @@ async function buscarItemNaAPI(ItemID) {
   const data = await response.json();
   createCartItemElement(data);
   document.querySelector('.cart__items').appendChild(createCartItemElement(data));
+  salvarLocalStorage();
 }
 
 // #7 - Identifica e retorna o ID (Sku) do produto para a "const computadorID".
@@ -98,4 +121,5 @@ const clickButton = () => {
 window.onload = function onload() {
   acessarAPI();
   resultadosAPI().then(() => clickButton());
+  recuperarLocalStorage();
 };
