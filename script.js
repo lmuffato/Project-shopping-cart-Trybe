@@ -1,3 +1,4 @@
+// Agradecimentos ao aluno Renzo Sevilha pela ajuda na implementação e refatoração do código!
 const getPrice = async () => {
   let result = 0;
   const value = [...document.querySelectorAll('.cart__item')];
