@@ -1,9 +1,24 @@
+// necessária a criação dessas contantes para o lint!
 const cartItem = '.cart__item';
 const cartItems = '.cart__items';
 
 const saveCart = () => {
   const cart = document.querySelector(cartItems).innerHTML;
   localStorage.setItem('cart', cart);
+};
+
+// https://trybecourse.slack.com/archives/C01A9A2N93R/p1608237982190300
+
+const totalCheckout = () => {
+  const cartPc = document.querySelectorAll(cartItem);
+  let amount = 0;
+  if (cartPc.length === 0) {
+    return;
+  }
+  cartPc.forEach((item) => {
+    amount += parseFloat(item.textContent.split('$')[1]);
+    document.querySelector('.total-price').innerHTML = amount.toFixed(2);
+  });
 };
 
 function createProductImageElement(imageSource) {
@@ -39,6 +54,7 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   const { parentElement } = event.target;
   parentElement.removeChild(event.target);
+  totalCheckout();
   saveCart();
 }
 
@@ -67,20 +83,20 @@ const searchComputers = () => fetch('https://api.mercadolibre.com/sites/MLB/sear
 const searchPcById = (mlb) => fetch(`https://api.mercadolibre.com/items/${mlb}`)
 .then((response) => response.json())
 .then(({ id, title, price }) => ({ id, title, price }));
-
+// requisito realizado com o auxílio de rafael medeiros, guilherme dornelles e gabriel pereira - turma 10 tribo A
 const addButton = () => {
 const buttons = document.querySelectorAll('.item button');
   buttons.forEach((btn) => {
       btn.addEventListener('click', async (event) => {
         const cartItens = document.querySelector(cartItems);
         const mlb = getSkuFromProductItem(event.target.parentElement);
-        const IEW = await searchPcById(mlb);
-        const getPc = createCartItemElement(IEW);
-        
+        const obj = await searchPcById(mlb);
+        const getPc = createCartItemElement(obj);
         cartItens.appendChild(getPc);
         saveCart();
+        totalCheckout();
       });
-  });
+    });
 };
 // https://trybecourse.slack.com/archives/C01A9A2N93R/p1608237982190300
 const loadCart = () => {
@@ -89,6 +105,7 @@ const loadCart = () => {
   lastList.innerHTML = lastCart;
   const carItemLocalStorage = document.querySelectorAll(cartItem);
   carItemLocalStorage.forEach((item) => item.addEventListener('click', cartItemClickListener));
+  totalCheckout();
 };
 
 window.onload = async function onload() { 
