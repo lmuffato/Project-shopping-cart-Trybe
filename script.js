@@ -1,3 +1,43 @@
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
+function cartItemClickListener(event) {
+  document.querySelector('.cart__items').removeChild(event.target);
+}
+
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+async function addToCart(itemId) {
+  const fetchItem = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
+  const data = await fetchItem.json();
+
+  const cartItem = {
+    sku: data.id,
+    name: data.title,
+    salePrice: data.price,
+  };
+  const createCartList = createCartItemElement(cartItem);
+  document.querySelector('.cart__items').appendChild(createCartList);
+}
+
+function addToCartClickListener(event) {
+  const getitemId = getSkuFromProductItem(event.target.parentNode);
+  addToCart(getitemId);
+}
+
+function ClickAddToCartButton() {
+  const addToCartButton = document.querySelectorAll('.item__add');
+  addToCartButton.forEach((button) =>
+    button.addEventListener('click', addToCartClickListener));
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -38,23 +78,8 @@ async function fetchItems() {
     const creatItem = createProductItemElement(item);
     document.querySelector('.items').appendChild(creatItem);
   });
+  ClickAddToCartButton();
 }
-
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
-
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
 
 window.onload = function onload() {
   fetchItems();
