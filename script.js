@@ -28,7 +28,10 @@ const listElements = () => document.querySelector('.cart__items');
 
 const setLocalStorage = () => localStorage.setItem('item', listElements().innerHTML);
 
-const cartItemClickListener = (event) => event.target.remove();
+const cartItemClickListener = (event) => {
+  event.target.remove();
+  setLocalStorage();
+};
 
 const getLocalStorage = () => {
   const elements = localStorage.getItem('item');
@@ -80,15 +83,13 @@ const addEvent = async () => {
   });
 };
 
-const removeLoading = () => {
-  const loading = document.querySelector('.loading');
-  loading.remove();
-};
+const removeLoading = () => document.querySelector('.loading').remove();
 
 const removeItems = () => {
   const button = document.querySelector('.empty-cart');
   return button.addEventListener('click', () => {
     listElements().innerHTML = '';
+    setLocalStorage();
   });
 };
 
@@ -97,8 +98,8 @@ const createPage = async () => {
     await addProductScreen();
     await addEvent();
     removeLoading();
-    removeItems();
     getLocalStorage();
+    removeItems();
   } catch (error) {
     return console.log('error2');
   }
