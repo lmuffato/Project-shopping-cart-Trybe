@@ -39,14 +39,31 @@ function dataTreatment(computersArray) {
   });
 }
 
+  // criar a funcao de add a frase loading antes da API carregar
+function addLoading() {
+  const loading = document.createElement('h3');  
+  loading.className = 'loading';
+  loading.innerHTML = 'loading...';
+
+  const elem = document.body;
+  elem.appendChild(loading);
+  }
+
+// criar a funcao de remover a frase loading depois da API carregar
+function removeLoading() {
+  document.querySelector('.loading').remove();
+}
+
 // Função que chama os dados do mercado livre e cria o array
 async function fetchItems() {
+  addLoading();
   return fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => {
       response.json()
       .then((computers) => {
         const computersArray = computers.results;
         dataTreatment(computersArray); // Linka a funcao com o proximo passo -tratamento
+        removeLoading();
       });
     });
 }
@@ -79,11 +96,13 @@ function addItem() {
   const cartItems = document.querySelector(classOl);
   items.addEventListener('click', async (event) => {
     const productSku = getSkuFromProductItem(event.target.parentNode);
-      fetch(`https://api.mercadolibre.com/items/${productSku}`)
+    addLoading();  
+    fetch(`https://api.mercadolibre.com/items/${productSku}`)
       .then((response) => response.json())
         .then((dataPrice) => {
           const price = { sku: productSku, name: dataPrice.title, salePrice: dataPrice.price };
           cartItems.appendChild(createCartItemElement(price));
+          removeLoading();
           saveList();
       });
     });
