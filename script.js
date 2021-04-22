@@ -1,9 +1,42 @@
+function storagedCartItems() {
+  if (localStorage.getItem('cartItems')) {
+    return JSON.parse(localStorage.getItem('cartItems'));
+  }
+  return [];
+}
+
+function setStorage(cartItemsArray) {
+  localStorage.setItem('cartItems', JSON.stringify(cartItemsArray));
+}
+
+function allCartItems() {
+  const cartItems = [...document.querySelectorAll('.cart__item')];
+  const allItems = cartItems.map((cartItem) => {
+    const item = cartItem.innerHTML
+      .match(/SKU: ([\S]+) \| NAME: ([\s\S]+) \| PRICE: \$([\s\S]+)/);
+    return {
+      sku: item[1],
+      name: item[2],
+      salePrice: item[3],
+    };
+  });
+  return allItems;
+}
+
+function updateStorage() {
+  const cartItems = allCartItems();
+  setStorage(cartItems);
+}
+// ****
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
 function cartItemClickListener(event) {
-  document.querySelector('.cart__items').removeChild(event.target);
+  const { target } = event;
+  target.remove();
+  updateStorage();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -15,6 +48,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 async function addToCart(itemId) {
+  const cartListLocation = document.querySelector('.cart__items');
   const fetchItem = await fetch(`https://api.mercadolibre.com/items/${itemId}`);
   const data = await fetchItem.json();
 
@@ -24,7 +58,8 @@ async function addToCart(itemId) {
     salePrice: data.price,
   };
   const createCartList = createCartItemElement(cartItem);
-  document.querySelector('.cart__items').appendChild(createCartList);
+  cartListLocation.appendChild(createCartList);
+  updateStorage();
 }
 
 function addToCartClickListener(event) {
@@ -36,6 +71,14 @@ function ClickAddToCartButton() {
   const addToCartButton = document.querySelectorAll('.item__add');
   addToCartButton.forEach((button) =>
     button.addEventListener('click', addToCartClickListener));
+}
+
+function populateCartFromStorage() {
+  const cartListLocation = document.querySelector('.cart__items');
+  const cartItems = storagedCartItems();
+  cartItems.forEach((cartItem) => {
+    cartListLocation.appendChild(createCartItemElement(cartItem));
+  });
 }
 
 function createProductImageElement(imageSource) {
@@ -83,4 +126,5 @@ async function fetchItems() {
 
 window.onload = function onload() {
   fetchItems();
+  populateCartFromStorage();
 };
