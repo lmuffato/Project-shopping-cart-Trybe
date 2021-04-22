@@ -69,9 +69,9 @@ function getSkuFromProductItem(item) {
 // requisito 5 
 const somaCar = async () => {
   let total = 0;
-  const lis = [...document.querySelectorAll('.cart__item')];
-  const arrayOfLiContent = lis.map((li) => parseFloat(li.innerText.split('$')[1]));
-  total = arrayOfLiContent.reduce((acc, current) => acc + current, 0);
+  const list = [...document.querySelectorAll('.cart__item')];
+  const arrayList = list.map((li) => parseFloat(li.innerText.split('$')[1]));
+  total = arrayList.reduce((acc, current) => acc + current, 0);
   document.querySelector('.total-price').innerText = total;
 };
 
