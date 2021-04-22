@@ -90,10 +90,18 @@ const addToCart = () => {
   });
 };
 
+const clearCart = () => {
+  const cartList = document.querySelector('ol');
+  if (cartList.length < 1) {
+    return;
+  } 
+  cartList.innerHTML = '';
+};
+
 window.onload = function onload() {
   computersList('computador')
   .then((result) => appendProducts(result));
   addToCart();
-  /* cartItemsList(); */
+  clearCart()
   fillingCart();
  }; 
