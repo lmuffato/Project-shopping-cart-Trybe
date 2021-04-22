@@ -99,8 +99,14 @@ function addItem() {
   });
   }
 
+  function clearCart() {
+    const ol = document.querySelector('.cart__items');
+    ol.innerHTML = '';
+  }
+
 window.onload = function onload() {
   fetchItems();
   addItem();
   getLocalStorage();
+  document.querySelector('.empty-cart').addEventListener('click', clearCart);
  };
