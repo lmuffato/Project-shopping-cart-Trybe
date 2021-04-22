@@ -87,17 +87,18 @@ const buscaItem = () => {
 
 const limparCar = () => {
   const listCar = document.querySelector('ol');
-  if (listCar.length < 1){
-
+  const filhoList = document.querySelector('li');
+  if (listCar.length < 1) {
+    return;
   }
-  listCar.remove('.cart_item');
-  console.log(listCar);
-}
+  listCar.innerHTML = '';
+  // console.log(listCar);
+};
 
 const eventButtonLimp = () => {
   const buttonLimp = document.querySelector('.empty-cart');
   buttonLimp.addEventListener('click', limparCar);
-}
+};
 
 window.onload = function onload() {
   fetchProduto();
