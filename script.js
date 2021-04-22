@@ -1,7 +1,7 @@
 const fetchMercadoLivre = () => {
   const apiUrl = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
   return new Promise((resolve) => {
-    fetch(api_Url)
+    fetch(apiUrl)
     .then((response) => {
       response.json().then((computado) => {
         resolve(computado);
@@ -31,8 +31,8 @@ function createProductImageElement(image) {
 
 function createCustomElement(element, classNam, innerTex) { 
   const e = document.createElement(element);
-  e.className = className;
-  e.innerText = innerTexT;
+  e.className = classNam;
+  e.innerText = innerTex;
   return e;
 }
 
@@ -58,7 +58,7 @@ const addi = () => {
   buttons.forEach((button) => button.addEventListener('click', async (event) => {
     const addEvent = event.target;
     const skulId = getSkuFromProductItem(addEvent.parentElement);
-    const data = await fetchItem(skulId);
+    const data = await buscarItem(skulId);
     const itemsCart = document.querySelector('.cart__items');
     itemsCart.appendChild(createCartItemElement(data));
   }));
@@ -78,7 +78,7 @@ const msgLoading = () => { // requisito 7
 };
 
 const createProductItemElement = async () => { // requisito 1
-  const computers = await fetchAPI();
+  const computers = await fetchMercadoLivre();
   msgLoading();
 
   computers.forEach(({ id, title, thumbnail }) => {
