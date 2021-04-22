@@ -25,6 +25,19 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+// Agradeço Nathi por explicaçao e visitei código dos colegas Luciano e VItor
+// REQUISITO 5 (MONTAR E USAR)
+const sumItens = async () => {
+  const sum = document.querySelector('.total-price');
+  const cartItems = await document.querySelectorAll('.cart__item');
+  let total = 0;
+  cartItems.forEach((item) => {
+    const itemSplit = item.innerHTML.split('$')[1];
+    total += parseFloat(itemSplit);
+  });
+  sum.innerHTML = total;
+};
+
 // REQUISITO 2 (USAR)
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
@@ -34,6 +47,7 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   const clear = event.target;
   clear.remove();
+  sumItens();
 }
 
 // REQUISITO 6 (USAR E MONTAR)
@@ -68,6 +82,7 @@ const getEndPoint = (itemID) => fetch(`https://api.mercadolibre.com/items/${item
   
   const insertInCart = createCartItemElement(arrObj);
   document.querySelector('.cart__items').appendChild(insertInCart);
+  sumItens();
 };
   const creatAddList = () => {
   document.querySelector('.items').addEventListener('click', cartInsert);
@@ -99,4 +114,5 @@ window.onload = async function onload() {
 await getInfo();
 await creatAddList();
 await pressBtn();
+await sumItens();
 };
