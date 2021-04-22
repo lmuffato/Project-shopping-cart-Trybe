@@ -103,5 +103,14 @@ async function addDataList(QUERY) {
   });
 }
 
+function clearCart() {
+  const ol = cartList;
+  cartList.innerHTML = '';
+  cartPrice.innerHTML = '';
+  saveCartList();
+}
+
+
 addDataList('computador');
 loadCartList();
+document.querySelector('.empty-cart').addEventListener('click', clearCart);
