@@ -1,4 +1,8 @@
 // Projeto feito com ajuda das colegas Heloísa Hackenhaar, Pollyana Oliveira
+// Referencias: https://github.com/tryber/sd-010-a-project-shopping-cart/pull/50
+// https://github.com/tryber/sd-010-a-project-shopping-cart/pull/26
+// https://github.com/tryber/sd-010-a-project-shopping-cart/pull/81
+// https://github.com/tryber/sd-010-a-project-shopping-cart/pull/88
 
 const cartContainer = () => document.querySelector('.cart__items');
 
