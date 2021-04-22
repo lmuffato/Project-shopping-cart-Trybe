@@ -32,7 +32,7 @@ function getSkuFromProductItem(item) {
 */
 function updateLocalStorage() {
   const seletor = document.querySelector('section .cart__items');
-  localStorage.produtos = seletor.innerHTML;
+  localStorage.brolySsj = seletor.innerHTML;
 }
 
 function cartItemClickListener(event) {
