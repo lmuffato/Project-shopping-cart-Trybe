@@ -43,15 +43,17 @@ async function computerResults() {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function addCartClickListener(event) {
+  const elementFather = document.querySelector('.cart__items');
+  const elementChild = event.target;
+  elementFather.removeChild(elementChild);
+}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', addCartClickListener);
   return li;
 }
 
