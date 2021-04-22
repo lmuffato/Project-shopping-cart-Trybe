@@ -104,12 +104,10 @@ async function addDataList(QUERY) {
 }
 
 function clearCart() {
-  const ol = cartList;
   cartList.innerHTML = '';
   cartPrice.innerHTML = '';
   saveCartList();
 }
-
 
 addDataList('computador');
 loadCartList();
