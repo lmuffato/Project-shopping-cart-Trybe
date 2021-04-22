@@ -113,5 +113,4 @@ window.onload = function onload() {
   }
   totalPrice();
   loadProducts();
-  loadLocalStorage();
 };
