@@ -1,14 +1,14 @@
 const API = {
-  _loading: null,
+  internalLoading: null,
   requestsInProgress: 0,
   // this getter idea is from Murilo
   get loading() {
-    if (this._loading === null) {
-      this._loading = document.createElement('p');
-      this._loading.innerText = 'loading...';
-      this._loading.classList.add('.loading');
+    if (this.internalLoading === null) {
+      this.internalLoading = document.createElement('p');
+      this.internalLoading.innerText = 'loading...';
+      this.internalLoading.classList.add('.loading');
     }
-    return this._loading;
+    return this.internalLoading;
   },
   appendMessage() {
     document.body.appendChild(this.loading);
@@ -18,9 +18,9 @@ const API = {
   },
   async fetch(url) {
     this.appendMessage();
-    this.requestsInProgress++;
+    this.requestsInProgress += 1;
     const data = await fetch(url);
-    this.requestsInProgress--;
+    this.requestsInProgress -= 1;
     if (this.requestsInProgress === 0) this.removeMessage();
     return data;
   },
@@ -28,19 +28,20 @@ const API = {
 // Not satisfied that this function fetches and processes the data 
 async function processItemInfo(itemID) {
   const data = await API.fetch(`https://api.mercadolibre.com/items/${itemID}`);
-  return { id, title, price } = await data.json();
-};
+  const { id, title, price } = await data.json();
+  return { id, title, price };
+}
 
 const cart = {
-  _section: null,
+  internalSection: null,
   separator: '|',
   get section() {
-    if (this._section === null) {
-      this._section = document.querySelector('.cart__items');
+    if (this.internalSection === null) {
+      this.internalSection = document.querySelector('.cart__items');
       const clearBtn = document.querySelector('.empty-cart');
       clearBtn.addEventListener('click', () => this.clear());
     }
-    return this._section;
+    return this.internalSection;
   },
   async loadStorage() {
     const data = localStorage.getItem('carList');
@@ -66,12 +67,14 @@ const cart = {
   },
   async fetchItems(data) {
     const items = data.split(this.separator);
-    const fetchItems = items.reduce((acc, cur) => acc.push(processItemInfo(cur)) ? acc : null, []);
+    const fetchItems = items.reduce((acc, cur) =>
+      (acc.push(processItemInfo(cur)) ? acc : null), []);
     return Promise.all(fetchItems);
   },
   async processItems(data) {
     const items = await this.fetchItems(data);
-    items.forEach(({ id: sku, title: name, price: salePrice }) => cart.add({ sku, name, salePrice }))
+    items.forEach(({ id: sku, title: name, price: salePrice }) =>
+      cart.add({ sku, name, salePrice }));
   },
   add(item) {
     this.section.appendChild(this.createCartItemElement(item));
@@ -96,27 +99,26 @@ const cart = {
     li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
     li.addEventListener('click', (event) => this.remove(event.target));
     return li;
-  }
+  },
 };
 
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
-};
+}
 
 const products = {
-  _section: null,
+  internalSection: null,
   get section() {
-    if (this._section === null) {
-      this._section = document.querySelector('.items');
-      this._section.addEventListener('click', this.tryAddToCart);
+    if (this.internalSection === null) {
+      this.internalSection = document.querySelector('.items');
+      this.internalSection.addEventListener('click', this.tryAddToCart);
     }
-    return this._section;
+    return this.internalSection;
   },
   async tryAddToCart({ target: { nodeName, parentElement } }) {
     if (nodeName !== 'BUTTON') return;
     const product = getSkuFromProductItem(parentElement);
-    const { id: sku, title: name, price: salePrice } =
-      await processItemInfo(product);
+    const { id: sku, title: name, price: salePrice } = await processItemInfo(product);
     cart.add({ sku, name, salePrice });
   },
   add({ id, title, thumbnail }) {
@@ -155,7 +157,6 @@ const products = {
     return section;
   },
 };
-
 // The async keyword is not needed here, since we are not awaiting anything
 window.onload = async function onload() {
   products.fetch();
