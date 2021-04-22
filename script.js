@@ -95,7 +95,7 @@ const pcFetch = async () => {
   return pcData;
 };
 
-const getPcs = ([results]) => {
+const getPcs = ({ results }) => {
   results.forEach((product) => {
     document.querySelector('.items').appendChild(createProductItemElement(product));
   });
