@@ -1,4 +1,4 @@
-const item = document.getElementsByClassName('items');
+const itemm = document.getElementsByClassName('items');
 const cartitens = document.getElementsByClassName('cart__items');
 const cart = document.getElementsByClassName('cart');
 const total = document.getElementsByClassName('total-price');
@@ -60,6 +60,8 @@ function cartItemClickListener(event) {
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart_item'
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
@@ -107,7 +109,7 @@ function createCartItemElement({ sku, name, salePrice }) {
         name: item.title,
         image: item.thumbnail,
       };
-    item[0].appendChild(createProductItemElement(infoExport));
+    itemm[0].appendChild(createProductItemElement(infoExport));
     });
   }
   
