@@ -71,10 +71,10 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 async function computerResults() {
-  const fetchlistnk = await fetch('https://api.mercadolistbre.com/sites/MLB/search?q=computador')
+  const myFetch = await fetch('https://api.mercadolistbre.com/sites/MLB/search?q=computador')
   .then((response) => response.json())
   .then((response) => response.results);
-  fetchlistnk.forEach((product) => {
+  myFetch.forEach((product) => {
     const searchResult = createProductItemElement({
       sku: product.id,
       name: product.title,
