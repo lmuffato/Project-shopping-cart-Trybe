@@ -70,11 +70,6 @@ const eventListener = () => {
   document.querySelector('.items').addEventListener('click', apShopCart);
 };
 
-const clearCart = document.querySelector('.empty-cart');
-clearCart.addEventListener('click', () => {
-  document.getElementsByClassName('cart__items')[0].innerHTML = '';
-});
-
 window.onload = function onload() {
   computerResults();
   eventListener();
