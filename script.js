@@ -81,6 +81,7 @@ function createProductItemElement({ sku: id, name, image, price }) {
 // ------- GET Data and Add market list --------
 
 async function getData(QUERY) {
+  createLoading();
   const URL = `https://api.mercadolibre.com/sites/MLB/search?q=${QUERY}`;
   const response = await fetch(URL);
   const data = await response.json();
@@ -101,6 +102,22 @@ async function addDataList(QUERY) {
 
     marketSection.appendChild(item);
   });
+  removeLoading();
+}
+
+// criar a funcao de add a frase loading anste do API carregar
+function createLoading() {
+  const loading = document.createElement('h3')
+  const main = document.querySelector('main')
+  loading.className = 'loading';
+  loading.innerHTML = 'loading...';
+  main.appendChild(loading);
+}
+
+// criar a funcao de remover a frase loading depois da API carregar
+function removeLoading() {
+  const loading = document.querySelector('.loading');
+  loading.remove();
 }
 
 function clearCart() {
@@ -109,6 +126,7 @@ function clearCart() {
   saveCartList();
 }
 
+// windows onload =
 addDataList('computador');
 loadCartList();
 document.querySelector('.empty-cart').addEventListener('click', clearCart);
