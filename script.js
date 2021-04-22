@@ -30,13 +30,13 @@ const req1 = () => {
     .then((response) => response.json())
     .then((data) => {
       const arrayData = data.results;
-      const ul = document.createElement('ul');
-      document.querySelector('.items').appendChild(ul);
+      // const ul = document.createElement('ul');
+      // document.querySelector('.items').appendChild(ul);
       arrayData.forEach((values) => {
-        const li = document.createElement('li');
-        li.style = 'list-style: none';
-        ul.appendChild(li);
-        li.appendChild(createProductItemElement(values));
+        // const li = document.createElement('li');
+        // li.style = 'list-style: none';
+        // ul.appendChild(li);
+        (createProductItemElement(values));
       });
     });
 };
