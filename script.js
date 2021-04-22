@@ -51,13 +51,6 @@ function cartItemClickListener(event) {
   elementFather.removeChild(elementChild);
 }
 
-function getItemsStorage() {
-  const cart = document.querySelector(cartItemsClass);
-  cart.innerHTML = localStorage.getItem('cart');
-  const cartItems = document.getElementsByClassName('cart__item');
-  [...cartItems].forEach((item) => item.addEventListener('click', cartItemClickListener));
-}
-
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -89,5 +82,4 @@ const eventListener = () => {
 window.onload = function onload() {
   computerResults();
   eventListener();
-  getItemsStorage();
 };
