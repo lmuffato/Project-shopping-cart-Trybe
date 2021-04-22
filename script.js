@@ -4,6 +4,21 @@
 const cartList = document.querySelector('.cart__items');
 const cartPrice = document.querySelector('.total-price');
 
+// criar a funcao de add a frase loading anste do API carregar
+function createLoading() {
+  const loading = document.createElement('h3');
+  const main = document.querySelector('main');
+  loading.className = 'loading';
+  loading.innerHTML = 'loading...';
+  main.appendChild(loading);
+}
+
+// criar a funcao de remover a frase loading depois da API carregar
+function removeLoading() {
+  const loading = document.querySelector('.loading');
+  loading.remove();
+}
+
 function loadCartList() {
   cartList.innerHTML = localStorage.getItem('cartList');
   if (localStorage.getItem('cartPrice')) {
@@ -103,21 +118,6 @@ async function addDataList(QUERY) {
     marketSection.appendChild(item);
   });
   removeLoading();
-}
-
-// criar a funcao de add a frase loading anste do API carregar
-function createLoading() {
-  const loading = document.createElement('h3')
-  const main = document.querySelector('main')
-  loading.className = 'loading';
-  loading.innerHTML = 'loading...';
-  main.appendChild(loading);
-}
-
-// criar a funcao de remover a frase loading depois da API carregar
-function removeLoading() {
-  const loading = document.querySelector('.loading');
-  loading.remove();
 }
 
 function clearCart() {
