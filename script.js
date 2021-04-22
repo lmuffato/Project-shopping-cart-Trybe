@@ -4,7 +4,7 @@ const getPrice = async () => {
   const priceCart = value.map((element) => parseFloat(element.innerText.split('$')[1]));
   result = priceCart.reduce((acc, curValue) => acc + curValue, 0);
   const totalPrice = document.querySelector('.total-price');
-  totalPrice.innerText = `preço total: ${result}`;
+  totalPrice.innerText = `preço total: ` + result;
 };
 
 const saveCart = async () => {
