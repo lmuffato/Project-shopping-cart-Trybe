@@ -48,7 +48,7 @@ const deleteAllCart = () => {
   storageUnit();
   sumPrices();
 };
-/*
+
 function cartItemClickListener(event) {
   for (let index = 0; index < selecteditens.length; index += 1) {
     if (selecteditens[index] === event.target) {
@@ -116,7 +116,7 @@ function createCartItemElement({ sku, name, salePrice }) {
     cartitens[0].insertAdjacentHTML('afterbegin', saved);
     cartitens[0].addEventListener('click', cartItemClickListener);
   };
-  */
+  
   window.onload = function onload() {
     getInfo();
     savedInfo();
