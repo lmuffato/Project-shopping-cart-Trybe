@@ -17,12 +17,10 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const section = document.createElement('section');
   section.className = 'item';
-  
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-  
   const onScreem = document.querySelector('.items');
   onScreem.appendChild(section);
   return section;
@@ -32,7 +30,14 @@ const req1 = () => {
     .then((response) => response.json())
     .then((data) => {
       const arrayData = data.results;
-      arrayData.forEach((values) => createProductItemElement(values));
+      const ul = document.createElement('ul');
+      document.querySelector('.items').appendChild(ul);
+      arrayData.forEach((values) => {
+        const li = document.createElement('li');
+        li.style = 'list-style: none';
+        ul.appendChild(li);
+        li.appendChild(createProductItemElement(values));
+      });
     });
 };
 req1();
