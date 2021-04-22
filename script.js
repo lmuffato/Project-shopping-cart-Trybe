@@ -4,7 +4,7 @@ const fetchMercadoLivre = () => {
     fetch(endpoint)
     .then((response) => {
       response.json().then((computers) => {
-        resolve(computers.results)
+        resolve(computers.results);
       });
     });
   });
@@ -35,7 +35,7 @@ function createProductItemElement({ sku, name, image }) {
 
   return section;
 }
-
+/*
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -51,7 +51,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
-
+*/
 window.onload = function onload() {
   fetchMercadoLivre();
   createProductItemElement();
