@@ -94,7 +94,6 @@ const buscaItem = () => {
         });
       }
     });
-    // saveItens()
 };
 
 // const clickAddCar = () => {
