@@ -1,8 +1,13 @@
 const classCartItems = '.cart__items';
 
+// const uptadeCart = () => {
+//   const cartList = document.querySelector(classCartItems).innerHTML;
+//   localStorage.setItem('cartList', cartList);
+// };
+
 const uptadeCart = () => {
-  const cartList = document.querySelector(classCartItems).innerHTML;
-  localStorage.setItem('cartList', cartList);
+  localStorage.setItem('cart', document.querySelector(classCartItems).innerHTML);
+  localStorage.setItem('total price', document.querySelector('.total-price').innerHTML);
 };
 
 async function totalPrice() {
@@ -50,6 +55,14 @@ function cartItemClickListener(event) {
   totalPrice();
 }
 
+const loadLocalStorage = () => {
+  document.querySelector('.total-price').innerHTML = localStorage.getItem('total price');
+  document.querySelector(classCartItems).innerHTML = localStorage.getItem('cart items');
+  document
+    .querySelectorAll('.cart__item')
+    .forEach((e) => e.addEventListener('click', cartItemClickListener));
+};
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -81,7 +94,6 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// // Esta função faz o carregamento do produto na pagina, resgatando as informações na API do mercado livre
 async function loadProducts() {
   const loadText = document.createElement('section');
   loadText.innerText = 'Aguarde o carregamento dos produtos';
@@ -97,16 +109,12 @@ async function loadProducts() {
   });
 }
 
-// // Esta função é responsáve por esvaziar o conteúdo do carrinho de compras sempre que o botão 'esvaziar carrinho' for clicado
 // const emptyCartList = () => {
 //   document.querySelector('ol.cart__items').innerHTML = '';
 //   totalPrice();
 //   uptadeCart();
 // };
 
-// Alguns comandos e funções tiveram que ser colocados dentro do Onload pois dependiam da página estar completamente carregada
-// o lister no botão de esvaziar o carrinho por exemplo, não tem como ser criado antes da pagina ser carregada, assim como o
-// carregamento dos produtos e recuperação das informações arquivadas no browser.
 window.onload = function onload() { 
   // document.querySelector('.empty-cart').addEventListener('click', emptyCartList);
   const listCart = document.querySelector('.cart__items');
@@ -118,4 +126,5 @@ window.onload = function onload() {
   }
   totalPrice();
   loadProducts();
+  loadLocalStorage();
 };
