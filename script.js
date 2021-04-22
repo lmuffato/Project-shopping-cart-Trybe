@@ -38,13 +38,33 @@ const fetchProduto = () => {
   });
 };
 
+// requisito 4
+// função para salvar no localStorage
+// const saveItens = () => {
+//   const itemCar = document.querySelectorAll('.cart__item');
+//   const saveArray = [];
+//   itemCar.forEach((element) => saveArray.push(element.outerHTML));
+//   localStorage.setItem('itensList', saveArray);
+// };
+
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// requisito 5 
+const somaCar = async () => {
+  let total = 0;
+  const lis = [...document.querySelectorAll('.cart__item')];
+  const arrayOfLiContent = lis.map((li) => parseFloat(li.innerText.split('$')[1]));
+  total = arrayOfLiContent.reduce((acc, current) => acc + current, 0);
+  document.querySelector('.total-price').innerText = total;
+};
+
 function cartItemClickListener(event) {
   const removeItem = event.target;
   removeItem.remove(event.target);
+  somaCar();
+  // saveItens();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -69,21 +89,18 @@ const buscaItem = () => {
               salePrice: data.price,
           };
             document.querySelector('.cart__items').appendChild(createCartItemElement(produtCar));
+            somaCar();
           });
         });
       }
     });
+    // saveItens()
 };
 
 // const clickAddCar = () => {
 //   const buttonEvent = document.querySelectorAll('.item__add');
 //   buttonEvent.forEach((button) => button.addEventListener('click', buscaItem));
 // };
-
-// requisito 5 
-// const somaCar = async () => {
-
-// }
 
 const limparCar = () => {
   const listCar = document.querySelector('ol');
@@ -92,6 +109,7 @@ const limparCar = () => {
   }
   listCar.innerHTML = '';
   // console.log(listCar);
+  somaCar();
 };
 
 const eventButtonLimp = () => {
@@ -103,4 +121,5 @@ window.onload = function onload() {
   fetchProduto();
   buscaItem();
   eventButtonLimp();
+  somaCar();
 };
