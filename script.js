@@ -1,5 +1,6 @@
 function sumPrices() {
-  const cartItems = [...document.querySelectorAll('.cart__item')];
+  const classCartItem = '.cart__item';
+  const cartItems = [...document.querySelectorAll(classCartItem)];
   const prices = cartItems.map(({ innerHTML }) => innerHTML.match(/PRICE: \$([\s\S]+)/)[1]);
   console.log(prices);
   let sum = 0;
@@ -22,7 +23,8 @@ function setStorage(cartItemsArray) {
 }
 
 function allCartItems() {
-  const cartItems = [...document.querySelectorAll('.cart__item')];
+  const classCartItem = '.cart__item';
+  const cartItems = [...document.querySelectorAll(classCartItem)];
   const allItems = cartItems.map((cartItem) => {
     const item = cartItem.innerHTML
       .match(/SKU: ([\S]+) \| NAME: ([\s\S]+) \| PRICE: \$([\s\S]+)/);
@@ -139,8 +141,20 @@ async function fetchItems() {
   ClickAddToCartButton();
 }
 
+function clearCart() {
+  document.querySelector('ol.cart__items').innerHTML = '';
+  updateStorage();
+  sumPrices();
+}
+
+const clearCartClickListener = () => {
+  const clearButton = document.querySelector('.empty-cart');
+  clearButton.addEventListener('click', clearCart);
+};
+
 window.onload = function onload() {
   fetchItems();
   loadStorage();
   sumPrices();
+  clearCartClickListener();
 };
