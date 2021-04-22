@@ -34,12 +34,25 @@ function save() {
   localStorage.setItem('cart', carrinho);
   }
   
+  // Requisito 5:
+  async function totalAPagar() {
+    const calcResult = document.querySelector('.total-price');
+    const item = document.querySelectorAll('.cart__item');
+    let calc = 0;
+    for (let index = 0; index < item.length; index += 1) {
+      calc += parseFloat(item[index].innerText.split('$')[1]);
+    }
+    const valueResult = Math.fround(calc).toFixed(2);
+    const result = `Valor à pagar: $ <strong>${valueResult}</strong>`;
+    calcResult.innerHTML = result;
+  }
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
 function cartItemClickListener(event) {
 const elementoPai = event.target.parentElement;
 elementoPai.removeChild(event.target);  
  save();
+ totalAPagar();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -53,7 +66,13 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Adicione o elemento retornado da função createProductItemElement(product) como filho do elemento <section class="items">.
 
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
+ // Requisito 7:
+ function loadingInit() {
+  const items = document.querySelector('.items');
+  items.appendChild(createCustomElement('span', 'loading', 'loading...'));
+}
 
+//  
 // Requisito 1:
 function criaLista() {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
@@ -64,8 +83,9 @@ function criaLista() {
         name: produto.title,
         image: produto.thumbnail,
       };
-      document.querySelector('.items').appendChild(createProductItemElement(prodObj));
+         document.querySelector('.items').appendChild(createProductItemElement(prodObj));
     }));
+      // 
 }
 
 // --------------------------------------------------------------------------------------------
@@ -85,6 +105,7 @@ function colocaItemNoCarrinho() {
           };
         document.querySelector('.cart__items').appendChild(createCartItemElement(carObj));
         save();
+        totalAPagar();
         });
       }
     });
@@ -96,29 +117,17 @@ function limpaCarrinho() {
     document.querySelector('.empty-cart').addEventListener('click', () => {
     document.querySelector('.cart__items').innerHTML = '';
     save();
+    totalAPagar();
   });
 }
 // ----------------------------------------------------------------------------------------------
-// Requisito 5:
-function totalAPagar() {
-
-}
-
- // -----------------------------------------------------------------------------------------------
  // Requisito 7:
- function loadingInit() {
-  const { body } = document;
-  const loading = document.createElement('h1');
-  loading.className = 'loading';
-  loading.innerHTML = 'loading...';
-  body.appendChild(loading);
-}
+//  function loadingInit(onOff) {
+//       const items = document.querySelector('.items');
+//     items.appendChild(createCustomElement('span', 'loading', 'loading...'));
+//   }
+// }
 
-function removeLoading() {
-  const { body } = document;
-  const loading = document.querySelector('.loading');
-  body.removeChild(loading);
-}
 window.onload = function onload() {
   criaLista();
   colocaItemNoCarrinho();
@@ -126,5 +135,4 @@ window.onload = function onload() {
   limpaCarrinho();
   totalAPagar();
   loadingInit();
-  removeLoading();
 };
