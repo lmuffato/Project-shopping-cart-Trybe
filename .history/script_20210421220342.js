@@ -34,10 +34,10 @@ function cartItemClickListener() {
   // coloque seu código aqui
 }
 
-function createCartItemElement({ id, title, price }) {
+function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
@@ -63,14 +63,16 @@ const buscaId = async (id) => {
  const ids = await chamaId.json();
  return ids;
 };
-
+const arrayFds = [];
 const button = async (id) => {
   const iten = await buscaId(id);
-  const cart = createCartItemElement(iten);
+  const cart = await createCartItemElement(iten);
+  arrayFds.push(iten);
+  console.log(arrayFds);
   const novaOl = document.querySelector('.cart__items');
   novaOl.appendChild(cart);
 };
-const addCart = async () => {
+const addCart = () => {
   const botoes = document.querySelectorAll('.item__add');
   botoes.forEach((lemento) => {
     const produtoId = lemento.parentElement.children[0].innerText;
@@ -80,7 +82,7 @@ const addCart = async () => {
   });
 };
 
-window.onload = async function psipsiCarrega() {
-  await product();
-  await addCart();
+window.onload = function psipsiCarrega() {
+  product();
+  addCart();
 };
