@@ -110,3 +110,8 @@
     transform: rotateY(3600deg);
   }
 }
+
+.display-price {
+  display: flex;
+  flex-direction: row;
+}
