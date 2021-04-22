@@ -5,15 +5,6 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
-function cartProducts() {
-  const shopList = document.querySelector('.cart-items');
-  localStorage.setItem('cart', shopList.innerHTML);
-}
-function cartItemClickListener(event) {
-  event.target.remove();
-  cartProducts();
- }
-
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
@@ -36,6 +27,21 @@ function createProductItemElement({ id, title, thumbnail }) {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
+
+function cartProducts() {
+  const cartList = document.querySelector('ol.cart__items').innerHTML;
+  localStorage.setItem('cartProducts', cartList);
+}
+
+function fillingCart() {
+  const shopList = document.querySelector('ol.cart__items');
+  shopList.innerHTML = localStorage.getItem('cartProducts');
+}
+
+function cartItemClickListener(event) {
+  event.target.remove();
+  cartProducts();
+ }
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -88,4 +94,6 @@ window.onload = function onload() {
   computersList('computador')
   .then((result) => appendProducts(result));
   addToCart();
+  /* cartItemsList(); */
+  fillingCart();
  }; 
