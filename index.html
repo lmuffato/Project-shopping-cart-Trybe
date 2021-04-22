@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>CARRINHO DE COMPRAS</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/98a3aa01fd.js" crossorigin="anonymous"></script>
     <script src="script.js"></script>
   </head>
 
@@ -13,11 +14,17 @@
     <section class="container">
       <section class="items"></section>
       <section class="cart">
-        <span class="cart__title">Carrinho de compras</span>
-        <button class="empty-cart">Esvaziar carrinho</button>
+        <span class="cart__title">
+          <i class="fas fa-shopping-cart"></i>
+          Carrinho de compras
+        </span>
+        <button class="empty-cart">
+          <i class="fas fa-cart-arrow-down"></i>
+          Esvaziar carrinho
+        </button>
         <ol class="cart__items"></ol>
         <div>
-          Quantos rins: R$ <span class="total-price"></span>
+          <i class="fas fa-dollar-sign"></i> <span class="total-price"></span>
         </div>
       </section>
     </section>
