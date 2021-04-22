@@ -28,6 +28,12 @@ async function sumPrices() {
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
+  img.className = 'item__image';
+  img.src = imageSource;
+  return img;
+}
+
+function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
   e.innerText = innerText;
