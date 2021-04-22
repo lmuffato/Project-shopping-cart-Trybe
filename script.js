@@ -10,6 +10,7 @@ function createCustomElement(element, className, innerText) {
   e.innerText = innerText;
   return e;
 }
+
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -68,6 +69,12 @@ async function apShopCart(id) {
 const eventListener = () => {
   document.querySelector('.items').addEventListener('click', apShopCart);
 };
+
+const clearCart = document.querySelector('.empty-cart');
+clearCart.addEventListener('click', () => {
+  document.getElementsByClassName('cart__items')[0].innerHTML = '';
+});
+
 window.onload = function onload() {
   computerResults();
   eventListener();
