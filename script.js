@@ -47,7 +47,7 @@ function getSkuFromProductItem(item) { // => Requisito - 2
 let precoTotal = 0; // => Requisito 5
 
 const subtrair = (preco) => { // => Requisito 5
-  precoTotal -= preco ;
+  precoTotal -= preco;
   return precoTotal;
 };
 
@@ -72,7 +72,7 @@ function createCartItemElement({ sku, name, salePrice }) { // => Requisito - 2
 }
 
 const soma = (preco) => { // Requisito 5
-  precoTotal += preco ;
+  precoTotal += preco;
   return precoTotal;
 };
 
