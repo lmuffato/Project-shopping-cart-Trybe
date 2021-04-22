@@ -1,10 +1,9 @@
 const fetchMercadoLivre = () => {
-  const endpoint = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
   return new Promise((resolve) => {
-    fetch(endpoint)
+    fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
     .then((response) => {
-      response.json().then((computers) => {
-        resolve(computers.results);
+      response.json().then((computado) => {
+        resolve(computado);
       });
     });
   });
@@ -34,6 +33,7 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
+  return item.querySelector('span.item_sku').innerText;
 }
 /*
 function getSkuFromProductItem(item) {
