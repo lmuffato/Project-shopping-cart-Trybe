@@ -2,6 +2,17 @@
 
 // ------------------------------------------
 const cartList = document.querySelector('.cart__items');
+const cartPrice = document.querySelector('.total-price');
+
+function loadCartList() {
+  cartList.innerHTML = localStorage.getItem('cartList');
+  if (localStorage.getItem('cartPrice')) {  cartPrice.innerHTML = parseFloat(localStorage.getItem('cartPrice')); }
+}
+
+function saveCartList() {
+  localStorage.setItem('cartList', cartList.innerHTML);
+  localStorage.setItem('cartPrice', cartPrice.innerHTML);
+}
 
 function toReal(number) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(number);
@@ -29,6 +40,7 @@ async function totalPrice(price, operator) {
 
 function removeCartElement(e) {
   (e.target).remove();
+  saveCartList();
 }
 
 function addCart(e) {
@@ -44,6 +56,7 @@ function addCart(e) {
 
   cartList.appendChild(li);
   totalPrice(price, true);
+  saveCartList();
 }
 
 function createProductItemElement({ sku: id, name, image, price }) {
@@ -89,3 +102,4 @@ async function addDataList(QUERY) {
 }
 
 addDataList('computador');
+loadCartList();
