@@ -43,6 +43,21 @@ const botaoLimpador = () => {
   });
 };
 
+// #14 - Fazer aparecer a mensagem de "loading..."
+// Feito em grupo durante chamada no Slack
+const mostrarLoading = () => {
+  const mensagemLoading = document.createElement('div');
+  mensagemLoading.className = 'loading';
+  mensagemLoading.innerText = 'loading...';
+  document.querySelector('#loading').appendChild(mensagemLoading);
+};
+
+// #15 - Fazer desaparecer a mensagem de "loading..."
+// Feito em grupo durante chamada no Slack
+const desaparecerLoading = () => {
+  document.querySelector('.loading').remove();
+};
+
 // #9 - Recebe as informações de um único produto e coloca no carrinho de compras
 // informando apenas o ID, descrição e preço (Achei melhor utilizar esses termos). 
 function createCartItemElement({ id, title, price }) {
@@ -133,8 +148,9 @@ const clickButton = () => {
 };
 
 window.onload = function onload() {
-  acessarAPI();
+  acessarAPI().then(desaparecerLoading);
   resultadosAPI().then(() => clickButton());
   recuperarLocalStorage();
   botaoLimpador();
+  mostrarLoading();
 };
