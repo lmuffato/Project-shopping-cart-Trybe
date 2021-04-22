@@ -125,4 +125,5 @@ function createCartItemElement({ sku, name, salePrice }) {
     savedInfo();
     sumPrices();
     getLocalStorage();
+    document.querySelector('.empty-cart').addEventListener('click', clearCart);
   };
