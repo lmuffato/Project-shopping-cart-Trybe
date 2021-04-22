@@ -1,3 +1,15 @@
+// requisito 7
+const Loading = () => {
+  const minhaDiv = document.createElement('div');
+  minhaDiv.className = 'loading';
+  minhaDiv.innerText = 'loading...';
+  document.querySelector('#load').appendChild(minhaDiv);
+};
+
+const apagaLoading = () => {
+  document.querySelector('.loading').remove();
+};
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -25,6 +37,7 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 const fetchProduto = () => {
+  setTimeout(() =>{
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
   .then((response) => {
     response.json().then((data) => data.results.forEach((produto) => {
@@ -36,6 +49,8 @@ const fetchProduto = () => {
       document.querySelector('.items').appendChild(createProductItemElement(objProduct));
     }));
   });
+  apagaLoading();
+  }, 3000);
 };
 
 // requisito 4
@@ -117,6 +132,7 @@ const eventButtonLimp = () => {
 };
 
 window.onload = function onload() {
+  Loading();
   fetchProduto();
   buscaItem();
   eventButtonLimp();
