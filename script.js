@@ -87,7 +87,6 @@ const buscaItem = () => {
 
 const limparCar = () => {
   const listCar = document.querySelector('ol');
-  const filhoList = document.querySelector('li');
   if (listCar.length < 1) {
     return;
   }
