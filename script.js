@@ -22,12 +22,23 @@ const buscarItem = (idI) => {
   });
 };
 
-function createProductImageElement(imageSource) {
-  const img = document.createElement('img');
-  img.className = 'item__image';
-  img.src = imageSource;
-  return img;
-}
+const createProductItemElement = async () => { 
+  const computers = await fetchAPI();
+  msgLoading();
+
+  computers.forEach(({ id, title, thumbnail }) => {
+    const section = document.createElement('section');
+    const sectionItems = document.querySelector('.items');
+    section.className = 'item';
+
+    section.appendChild(createCustomElement('span', 'item__sku', id));
+    section.appendChild(createCustomElement('span', 'item__title', title));
+    section.appendChild(createProductImageElement(thumbnail));
+    section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+
+    sectionItems.appendChild(section);
+  });
+};
 
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
@@ -46,7 +57,7 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
-}
+};
 
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
@@ -66,7 +77,7 @@ const createCartItemElement = ({ id:sku, title:name, price:salePrice }) => {
   return li;
 };
 
-const addItem = () => {
+const adItem = () => {
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((button) => button.addEventListener('click', async (event) => {
     const addEvent = event.target;
@@ -77,42 +88,22 @@ const addItem = () => {
   }));
 };
 
-const clear = () => { // requisito 6
+adItem();
+
+const clear = () => { 
   const buttonClear = document.querySelector('.empty-cart');
   buttonClear.addEventListener('click', () => {
     const itemsCart = document.querySelector('.cart__items');
     itemsCart.innerHTML = '';
   });
 };
+clear();
 
-// Ajuda de Murilo Gonçalves - Turma 10 - Tribo A
-const msgLoading = () => { // requisito 7
+// Ajuda de Murilo 
+const msgLoading = () => {
   const loading = document.querySelector('.loading');
   loading.remove();
 };
-
-const createProductItemElement = async () => { // requisito 1
-  const computers = await fetchAPI();
-  msgLoading();
-
-  computers.forEach(({ id, title, thumbnail }) => {
-    const section = document.createElement('section');
-    const sectionItems = document.querySelector('.items');
-    section.className = 'item';
-
-    section.appendChild(createCustomElement('span', 'item__sku', id));
-    section.appendChild(createCustomElement('span', 'item__title', title));
-    section.appendChild(createProductImageElement(thumbnail));
-    section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
-    sectionItems.appendChild(section);
-  });
-
-  adItem();
-  clear();
-};
-
-
 
 window.onload = function onload() {
   fetchMercadoLivre();
