@@ -24,32 +24,25 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
 const listElements = () => document.querySelector('.cart__items');
 
-const cartItemClickListener = (event) => listElements().removeChild(event.target);
+const setLocalStorage = () => localStorage.setItem('item', listElements().innerHTML);
+
+const cartItemClickListener = (event) => event.target.remove();
+
+const getLocalStorage = () => {
+  const elements = localStorage.getItem('item');
+  const everyElements = document.querySelectorAll('.cart__items');
+  listElements().innerHTML = elements;
+  everyElements.forEach((element) => element.addEventListener('click', cartItemClickListener));
+};
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
-  const ol = document.querySelector('.cart__items');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
-  ol.appendChild(li);
-
-  // const sumPrices = async () => {
-  //   try {
-  //     await addEvent();
-  //     const element = document.querySelectorAll('.cart__item');
-  //     element.forEach((product) => console.log(product.innerHTML));
-  //   } catch (error) {
-  //     return console.log('error');
-  //   }
-  // };
-  // sumPrices();
+  listElements().appendChild(li);
   return li;
 }
 
@@ -81,10 +74,12 @@ const addEvent = async () => {
       const idProduct = button.parentNode.children[0].innerHTML;
       const objectAPI = await requisiteProduct(idProduct);
       const product = { sku: objectAPI.id, name: objectAPI.title, salePrice: objectAPI.price };
-      return createCartItemElement(product);
+      createCartItemElement(product);
+      setLocalStorage();
     });
   });
 };
+
 const removeLoading = () => {
   const loading = document.querySelector('.loading');
   loading.remove();
@@ -103,15 +98,16 @@ const createPage = async () => {
     await addEvent();
     removeLoading();
     removeItems();
-    // await sumPrices();
+    getLocalStorage();
   } catch (error) {
-    return console.log('error');
+    return console.log('error2');
   }
 };
 
 window.onload = function onload() { 
   createPage();
 };
-
-// referências https://medium.com/jaguaribetech/dlskaddaldkslkdlskdlk-333dae8ef9b8
+// Referêcias utilizadas para realização do projeto
+// https://medium.com/jaguaribetech/dlskaddaldkslkdlskdlk-333dae8ef9b8
 // https://github.com/tryber/sd-010-a-project-shopping-cart/pull/30/commits/3f3791797ece0b2faf08c88a432028a7a2025687
+// https://github.com/tryber/sd-010-a-project-shopping-cart/pull/81/commits/85a5fed09636eb93388ae6b8ab5981bf1fe65edb
