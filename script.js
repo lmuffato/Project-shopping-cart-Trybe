@@ -6,7 +6,9 @@ const cartPrice = document.querySelector('.total-price');
 
 function loadCartList() {
   cartList.innerHTML = localStorage.getItem('cartList');
-  if (localStorage.getItem('cartPrice')) {  cartPrice.innerHTML = parseFloat(localStorage.getItem('cartPrice')); }
+  if (localStorage.getItem('cartPrice')) {
+    cartPrice.innerHTML = parseFloat(localStorage.getItem('cartPrice'));
+  }
 }
 
 function saveCartList() {
