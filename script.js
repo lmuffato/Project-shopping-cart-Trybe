@@ -40,9 +40,18 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// Ajuda de Sérgio Martins - Turma 10 - Tribo A
+const saveItens = () => {
+  const itemCart = document.querySelectorAll('.cart__item');
+  const newArr = [];
+  itemCart.forEach((element) => newArr.push(element.outerHTML));
+  localStorage.setItem('itensList', newArr);
+};
+
 const cartItemClickListener = (event) => { // requisito 3
   const eventListItem = event.target;
   eventListItem.remove();
+  saveItens();
 };
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => { // requisito 2
@@ -62,6 +71,7 @@ const addItem = () => {
     const data = await fetchItem(skulId);
     const itemsCart = document.querySelector('.cart__items');
     itemsCart.appendChild(createCartItemElement(data));
+    saveItens();
   }));
 };
 
@@ -70,7 +80,27 @@ const clearButton = () => { // requisito 6
   buttonClear.addEventListener('click', () => {
     const itemsCart = document.querySelector('.cart__items');
     itemsCart.innerHTML = '';
+    saveItens();
   });
+};
+
+// Ajuda de Sérgio Martins - Turma 10 - Tribo A
+const addEventClickCart = () => {
+  const lis = document.querySelectorAll('.cart__item');
+  lis.forEach((elemento) => {
+    elemento.addEventListener('click', cartItemClickListener);
+  });
+};
+
+const getItens = () => {
+  if (localStorage.getItem('itensList')) {
+    const itemsCart = document.querySelector('ol');
+    const arrayStorage = localStorage.getItem('itensList').split(',');
+    arrayStorage.forEach((elemento) => {
+      itemsCart.innerHTML += elemento;
+    });
+    addEventClickCart();
+  }
 };
 
 // Ajuda de Murilo Gonçalves - Turma 10 - Tribo A
@@ -95,7 +125,6 @@ const createProductItemElement = async () => { // requisito 1
 
     sectionItems.appendChild(section);
   });
-
   addItem();
   clearButton();
 };
@@ -103,4 +132,5 @@ const createProductItemElement = async () => { // requisito 1
 window.onload = function onload() {
   fetchAPI();
   createProductItemElement();
+  getItens();
 };
