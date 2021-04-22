@@ -1,6 +1,17 @@
+const getPrice = async () => {
+  let result = 0;
+  const value = [...document.querySelectorAll('.cart__item')];
+  const priceCart = value.map((element) => parseFloat(element.innerText.split('$')[1]));
+  result = priceCart.reduce((acc, curValue) => acc + curValue, 0);
+  const totalPrice = document.querySelector('.total-price');
+  totalPrice.innerText = `preço total: ${result}`;
+};
+
 const saveCart = async () => {
   const cartItems = document.querySelector('ol');
   localStorage.setItem('savedlist', cartItems.innerHTML);
+  const totalPrice = document.querySelector('div');
+  localStorage.setItem('savedPrice', totalPrice.innerHTML);
 };
 
 function createProductImageElement(imageSource) {
@@ -36,6 +47,7 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  getPrice();
   saveCart();
 }
 
@@ -53,6 +65,7 @@ const btnClearCart = document.querySelector('.empty-cart');
 btnClearCart.addEventListener('click', () => {
   const cartItems = document.querySelector('ol');
   cartItems.innerText = '';
+  getPrice();
   saveCart();
 });
 }
@@ -60,6 +73,8 @@ btnClearCart.addEventListener('click', () => {
 const loadCart = () => {
   const cartItems = document.querySelector('.cart__items');
   cartItems.innerHTML = localStorage.getItem('savedlist');
+  const totalPrice = document.querySelector('.total-price');
+  totalPrice.innerHTML = localStorage.getItem('savedPrice');
 };
 
 function loadRemove() {
@@ -92,6 +107,7 @@ const btnAddCart = document.querySelectorAll('.item__add');
         try {
           const id = getSkuFromProductItem(element.parentNode);
           await fetchProductCart(id);
+          getPrice();
           saveCart();
         } catch (error) {
           console.log(error);
@@ -121,6 +137,7 @@ const fetchProductList = async () => {
 
 window.onload = function onload() {
   addCart();
+  getPrice();
   fetchProductList();
   clearCart();
   loadCart();
