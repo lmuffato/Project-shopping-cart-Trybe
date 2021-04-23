@@ -105,8 +105,19 @@ const loadCart = () => {
   totalCheckout();
 };
 
+const cartEmpty = () => {
+const emptyCart = document.querySelector('.empty-cart');
+console.log(emptyCart);
+emptyCart.addEventListener('click', () => {
+  document.querySelector('.cart__items').innerHTML = '';
+  totalCheckout();
+  saveCart();
+});
+};
+
 window.onload = async function onload() { 
   await searchComputers();
   addButton();
   loadCart();
+  cartEmpty();
 };
