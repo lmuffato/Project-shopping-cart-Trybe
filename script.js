@@ -1,5 +1,4 @@
 // const fetch = require('node-fetch');
-
 const getData = () => (
   new Promise((resolve, reject) => {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
@@ -40,7 +39,7 @@ function createProductItemElement({ id, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-const setTotalPrice = (cartList, listExist) => 
+const setTotalPrice = (listExist, cartList) => 
   new Promise((resolve) => {
     const element = document.querySelector('.total-price');
     if (listExist) {
@@ -55,7 +54,7 @@ const setTotalPrice = (cartList, listExist) =>
     }
   });
 
-// const setTotalPrice = (cartList, listExist) => {
+// const setTotalPrice = (listExist cartList) => {
 //   const element = document.querySelector('.total-price');
 //   if (listExist) {
 //     const total = cartList.reduce((acc, item) => {
@@ -76,7 +75,7 @@ const addToLocalStorage = (computerObject) => {
   }
   list.push(computerObject);
   localStorage.setItem('cartList', JSON.stringify(list));
-  setTotalPrice(list, list.length > 0);
+  setTotalPrice(list.length > 0, list);
 };
 
 const removeFromLocalStorage = (element) => {
@@ -85,7 +84,7 @@ const removeFromLocalStorage = (element) => {
   const elementIndex = listOfIndexes.filter((index) => parent.children[index] === element); // Encontra qual o índice do elemento que foi removido do carrinho
   const cartList = JSON.parse(localStorage.getItem('cartList'));
   cartList.splice(elementIndex, 1); // Remove o item correspondente ao índice
-  setTotalPrice(cartList, cartList.length > 0);
+  setTotalPrice(cartList.length > 0, cartList);
   localStorage.setItem('cartList', JSON.stringify(cartList));
 };
 
@@ -103,23 +102,23 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-const addToCart = ({ sku }) => {
+const addToCart = ({ sku }, cartElement) => {
   fetch(`https://api.mercadolibre.com/items/${sku}`)
   .then((response) => response.json())
   .then((response) => ({ sku: response.id, name: response.title, salePrice: response.price }))
   .then((computerInfos) => {
-    document.querySelector('.cart__items').appendChild(createCartItemElement(computerInfos));
+    cartElement.appendChild(createCartItemElement(computerInfos));
     addToLocalStorage(computerInfos);
   })
   .catch((err) => console.log(err));
 };
 
-const fillHtmlWithProducts = async () => {
+const fillHtmlWithProducts = async (cartElement) => {
   try {
   const computers = await getData();
   computers.forEach((computer) => {
     const item = createProductItemElement(computer);
-    item.lastElementChild.addEventListener('click', () => addToCart(computer));
+    item.lastElementChild.addEventListener('click', () => addToCart(computer, cartElement));
     document.querySelector('.items').appendChild(item);
   });
   } catch (err) {
@@ -127,16 +126,26 @@ const fillHtmlWithProducts = async () => {
   }
 };
 
-const loadCartList = () => {
+const loadCartList = (cartElement) => {
   if (JSON.parse(localStorage.getItem('cartList')) !== null) {
     const cartList = JSON.parse(localStorage.getItem('cartList'));
-    const cartElement = document.querySelector('.cart__items');
     cartList.forEach((item) => cartElement.appendChild(createCartItemElement(item)));
-    setTotalPrice(cartList, cartList.length > 0);
+    setTotalPrice(cartList.length > 0, cartList);
+  } else {
+    setTotalPrice(false);
   }
 };
 
+const clearCartList = (cartElement) => {
+  localStorage.removeItem('cartList');
+  const cart = cartElement;
+  cart.innerHTML = '';
+  setTotalPrice(false);
+};
+
 window.onload = function onload() {
-  fillHtmlWithProducts();
-  loadCartList();
+  const CartElement = document.querySelector('.cart__items');
+  fillHtmlWithProducts(CartElement);
+  loadCartList(CartElement);
+  document.querySelector('.empty-cart').addEventListener('click', () => clearCartList(CartElement));
 };
