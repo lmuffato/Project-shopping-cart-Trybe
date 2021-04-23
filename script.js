@@ -12,13 +12,10 @@ const saveCart = () => {
 const totalCheckout = () => {
   const cartPc = document.querySelectorAll(cartItem);
   let amount = 0;
-  if (cartPc.length === 0) {
-    return;
-  }
   cartPc.forEach((item) => {
-    amount += parseFloat(item.textContent.split('$')[1]);
-    document.querySelector('.total-price').innerHTML = amount.toFixed(2);
+  amount += parseFloat(item.textContent.split('$')[1]);
   });
+  document.querySelector('.total-price').innerHTML = parseFloat(amount.toFixed(2));
 };
 
 function createProductImageElement(imageSource) {
