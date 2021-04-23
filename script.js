@@ -3,7 +3,7 @@
     const li = document.createElement('li');
     li.className = 'cart__item';
     li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-    //li.addEventListener('click', cartItemClickListener);
+    // li.addEventListener('click', cartItemClickListener);
     return li;
   }
   
@@ -64,11 +64,11 @@
 
   async function inicioPagina() {
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
-    carregaPagina(dados)
+    carregaPagina(dados);
     // inicioPagina();
     adicionarItem(dados);
   }
-  
+
   window.onload = async function onload() {
     inicioPagina();
   };
