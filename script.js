@@ -39,7 +39,7 @@ const searchComputers = async () => {
     const computersArr = data.results;
     computersArr.forEach((computer) => {
       divItems.appendChild(createProductItemElement(computer));
-      //divItems.appendChild(createProductImageElement(computer.thumbnail));
+      // divItems.appendChild(createProductImageElement(computer.thumbnail));
    }); 
   } else {
     divItems.innerHTML = data.error;
@@ -51,18 +51,18 @@ const searchComputers = async () => {
 
 searchComputers();
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
+// function cartItemClickListener(event) {
+//   // coloque seu código aqui
+// }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
+// function createCartItemElement({ sku, name, salePrice }) {
+//   const li = document.createElement('li');
+//   li.className = 'cart__item';
+//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+//   li.addEventListener('click', cartItemClickListener);
+//   return li;
+// }
