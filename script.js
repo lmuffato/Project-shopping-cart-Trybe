@@ -51,7 +51,7 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  console.log(event);
+  event.target.remove();
 }
 
 function createCartItemElement({ id, title, price }) {
