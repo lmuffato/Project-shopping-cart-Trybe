@@ -114,9 +114,23 @@ emptyCart.addEventListener('click', () => {
   saveCart();
 });
 };
+// desenvolvimento da lógica da implementação das funções com auxílio de rafael medeiros e nilson .  turma 10 tribo A
+const loadingAlert = () => {
+  const load = document.createElement('span');
+  load.className = 'loading';
+  load.textContent = 'Loading...';
+  const loadIv = document.querySelector('.loadingContainer');
+  loadIv.appendChild(load);
+};
+
+const loadRemove = () => {
+document.querySelector('.loading').remove();
+};
 
 window.onload = async function onload() { 
+  loadingAlert();
   await searchComputers();
+  loadRemove();
   addButton();
   loadCart();
   cartEmpty();
