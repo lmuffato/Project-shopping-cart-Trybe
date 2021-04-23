@@ -1,3 +1,25 @@
+  // Requisito 2
+  function createCartItemElement({ id, title, price }) {
+    const li = document.createElement('li');
+    li.className = 'cart__item';
+    li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+    //li.addEventListener('click', cartItemClickListener);
+    return li;
+  }
+  
+  function adicionarItem(recebeData) {
+    const botoes = document.querySelectorAll('.item__add');
+    botoes.forEach((botao, index) => {
+        botao.addEventListener('click', () => {
+          const trasLi = createCartItemElement(recebeData.results[index]);
+          const ol = document.querySelector('.cart__items');
+          ol.appendChild(trasLi);
+        });
+    });
+  }
+  
+  // requisito 1
+  
   function createProductImageElement(imageSource) {
     const img = document.createElement('img');
     img.className = 'item__image';
@@ -40,13 +62,13 @@
    }); 
   } // 1 passo
 
-  /* async function inicioPagina() {
+  async function inicioPagina() {
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
     carregaPagina(dados)
-  } */
-
-  window.onload = async function onload() {
     // inicioPagina();
-    const dados = await fetchMercadoLivre(); // tem todos os dados da API, await aguarda o retorno da promise
-    carregaPagina(dados); 
+    adicionarItem(dados);
+  }
+  
+  window.onload = async function onload() {
+    inicioPagina();
   };
