@@ -61,9 +61,7 @@ function cartItemClickListener(event) {
 const fromStorage = () => {
   const storagedItems = localStorage.getItem('cart');
   cartOl.innerHTML = storagedItems;
-  const getLi = document.querySelectorAll('li');
-  console.log(getLi);
- cartOl.addEventListener('click', cartItemClickListener);
+  cartOl.addEventListener('click', cartItemClickListener);
 };
 
 function createCartItemElement({ id, title, price }) {
