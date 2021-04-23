@@ -4,12 +4,18 @@ const toStorage = () => {
   localStorage.setItem('cart', cartOl.innerHTML);
 };
 
-const loading = () => {
-  const createP = document.createElement('p');  
+const loading = (local) => {
+  if (local === cart) {
+  const createP = document.createElement('div');  
   createP.className = 'loading';
   createP.innerHTML = 'loading...';
-  cartOl.appendChild(createP);
-  };
+  cartOl.appendChild('h1');
+  } else { 
+    const createP = document.createElement('div');  
+    createP.className = 'loading';
+    createP.innerHTML = 'loading...';
+    body.appendChild('h1');
+  }
 
 const done = () => {
   document.querySelector('.loading').remove();
