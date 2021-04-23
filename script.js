@@ -1,13 +1,4 @@
 // const fetch = require('node-fetch');
-const getData = () => (
-  new Promise((resolve, reject) => {
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
-  .then((response) => response.json())
-    .then((products) => resolve(products.results.map((product) => 
-    ({ sku: product.id, name: product.title, image: product.thumbnail }))))
-  .catch((err) => reject(err));
-  })
-);
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -38,6 +29,30 @@ function createProductItemElement({ id, name, image }) {
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
+
+const loading = (isLoading) => {
+  const body = document.querySelector('body');
+  if (isLoading) {
+    body.appendChild(createCustomElement('h1', 'loading', 'loading...'));
+  } else {
+    body.removeChild(document.querySelector('.loading'));
+  }
+};
+
+const getData = () => {
+  loading(true);
+  return new Promise((resolve, reject) => {
+    fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
+    .then((response) => response.json())
+      .then((products) => {
+        resolve(products.results.map((product) => 
+      ({ sku: product.id, name: product.title, image: product.thumbnail })));
+      loading(false);
+    })
+        
+    .catch((err) => reject(err));
+    });
+};
 
 const setTotalPrice = (listExist, cartList) => 
   new Promise((resolve) => {
@@ -103,12 +118,14 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 
 const addToCart = ({ sku }, cartElement) => {
+  loading(true);
   fetch(`https://api.mercadolibre.com/items/${sku}`)
   .then((response) => response.json())
   .then((response) => ({ sku: response.id, name: response.title, salePrice: response.price }))
   .then((computerInfos) => {
     cartElement.appendChild(createCartItemElement(computerInfos));
     addToLocalStorage(computerInfos);
+    loading(false);
   })
   .catch((err) => console.log(err));
 };
@@ -116,6 +133,7 @@ const addToCart = ({ sku }, cartElement) => {
 const fillHtmlWithProducts = async (cartElement) => {
   try {
   const computers = await getData();
+  // loading(false);
   computers.forEach((computer) => {
     const item = createProductItemElement(computer);
     item.lastElementChild.addEventListener('click', () => addToCart(computer, cartElement));
