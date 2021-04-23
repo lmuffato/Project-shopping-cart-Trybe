@@ -1,4 +1,4 @@
-window.onload = function onload() { };
+const divItems = document.querySelector('.items');
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -13,8 +13,6 @@ function createCustomElement(element, className, innerText) {
   e.innerText = innerText;
   return e;
 }
-
-const divItems = document.querySelector('.items');
 
 function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
@@ -39,8 +37,7 @@ const searchComputers = async () => {
     const computersArr = data.results;
     computersArr.forEach((computer) => {
       divItems.appendChild(createProductItemElement(computer));
-      // divItems.appendChild(createProductImageElement(computer.thumbnail));
-   }); 
+  }); 
   } else {
     divItems.innerHTML = data.error;
        } 
@@ -49,20 +46,37 @@ const searchComputers = async () => {
   }
 };
 
-searchComputers();
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+}
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function createCartItemElement({ id, title, price }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+const pushItem = () => {
+  const cartOl = document.querySelector('.cart__items');
+  divItems.addEventListener('click', async (event) => {
+    try {
+      const itemID = getSkuFromProductItem(event.target.parentNode);
+      const response = await fetch(`https://api.mercadolibre.com/items/${itemID}`);
+      const data = await response.json();
+      cartOl.appendChild(createCartItemElement(data));
+    } catch (err) {
+      console.log(err);
+    }
+  });
+}; 
+
+window.onload = function onload() {
+  searchComputers();
+  createCartItemElement();
+ };
