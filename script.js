@@ -4,6 +4,17 @@ const toStorage = () => {
   localStorage.setItem('cart', cartOl.innerHTML);
 };
 
+const loading = () => {
+  const createP = document.createElement('p');  
+  createP.className = 'loading';
+  createP.innerHTML = 'loading...';
+  cartOl.appendChild(createP);
+  };
+
+const done = () => {
+  document.querySelector('.loading').remove();
+};
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -34,19 +45,20 @@ function createProductItemElement({ id, title, thumbnail }) {
 
 const searchComputers = async () => {
   try {
-  const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
-  const data = await response.json();
-  if (data) {
-    const computersArr = data.results;
-    computersArr.forEach((computer) => {
-      divItems.appendChild(createProductItemElement(computer));
-  }); 
-  } else {
-    divItems.innerHTML = data.error;
-       } 
-      } catch (err) {
-    console.log(err);
-  }
+    loading();
+    const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
+    const data = await response.json();    
+      if (data) {        
+        const computersArr = data.results;
+        computersArr.forEach((computer) => {
+          divItems.appendChild(createProductItemElement(computer));
+      }); 
+      } else {
+        divItems.innerHTML = data.error;
+          } 
+          } catch (err) {
+        console.log(err);
+    }
 };
 
 function getSkuFromProductItem(item) {
@@ -76,8 +88,10 @@ const pushItem = () => {
   divItems.addEventListener('click', async (event) => {
     try {
       const itemID = getSkuFromProductItem(event.target.parentNode);
+      loading();
       const response = await fetch(`https://api.mercadolibre.com/items/${itemID}`);
       const data = await response.json();
+      done();
       cartOl.appendChild(createCartItemElement(data));
       toStorage();
     } catch (err) {
@@ -90,6 +104,7 @@ const toClear = () => {
   document.querySelector('.empty-cart')
     .addEventListener('click', () => {
       cartOl.innerHTML = '';
+      toStorage();
     });
 };
 
