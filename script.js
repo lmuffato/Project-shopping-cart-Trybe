@@ -1,27 +1,14 @@
 const API = {
-  internalLoading: null,
   requestsInProgress: 0,
-  // this getter idea is from Murilo
-  get loading() {
-    if (this.internalLoading === null) {
-      this.internalLoading = document.createElement('p');
-      this.internalLoading.innerText = 'loading...';
-      this.internalLoading.classList.add('.loading');
-    }
-    return this.internalLoading;
-  },
-  appendMessage() {
-    document.body.appendChild(this.loading);
-  },
-  removeMessage() {
-    document.body.removeChild(this.loading);
-  },
   async fetch(url) {
-    this.appendMessage();
+    const loading = document.createElement('p');
+    loading.className = 'loading';
+    loading.innerText = 'loading...';
+    document.body.appendChild(loading);
     this.requestsInProgress += 1;
     const data = await fetch(url);
     this.requestsInProgress -= 1;
-    if (this.requestsInProgress === 0) this.removeMessage();
+    if (this.requestsInProgress === 0) loading.remove();    
     return data;
   },
 };
@@ -35,6 +22,7 @@ async function processItemInfo(itemID) {
 const cart = {
   internalSection: null,
   separator: '|',
+  // getter idea from Murilo
   get section() {
     if (this.internalSection === null) {
       this.internalSection = document.querySelector('.cart__items');
@@ -126,7 +114,7 @@ const products = {
     this.section.appendChild(product);
   },
   async fetch() {
-    const data = await API.fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
+    const data = await API.fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');    
     const json = await data.json();
     json.results.forEach((item) => {
       products.add(item);
@@ -160,5 +148,5 @@ const products = {
 // The async keyword is not needed here, since we are not awaiting anything
 window.onload = async function onload() {
   products.fetch();
-  cart.loadStorage();
+  cart.loadStorage();  
 };
