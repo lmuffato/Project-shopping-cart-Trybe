@@ -14,9 +14,13 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+const divItems = document.querySelector('.items');
+
 function createProductItemElement({ id, title, thumbnail }) {
   const section = document.createElement('section');
   section.className = 'item';
+
+  divItems.appendChild(section);
 
   section.appendChild(createCustomElement('span', 'item__sku', id));
   section.appendChild(createCustomElement('span', 'item__title', title));
@@ -27,15 +31,15 @@ function createProductItemElement({ id, title, thumbnail }) {
 }
 
 const searchComputers = async () => {
-  const divItems = document.getElementsByClassName('items');
   try {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const data = await response.json();
   console.log(data.results);
-  if (data) {    
-   data.results.forEach((computer) => {
-     divItems.appendChild(createProductItemElement(computer));
-     divItems.appendChild(createProductImageElement(computer.thumbnail));
+  if (data) {
+    const computersArr = data.results;
+    computersArr.forEach((computer) => {
+      divItems.appendChild(createProductItemElement(computer));
+      //divItems.appendChild(createProductImageElement(computer.thumbnail));
    }); 
   } else {
     divItems.innerHTML = data.error;
