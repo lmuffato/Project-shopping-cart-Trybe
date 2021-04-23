@@ -55,7 +55,15 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   event.target.remove();
+  toStorage();
 }
+
+const fromStorage = () => {
+  const storagedItems = localStorage.getItem('cart');
+  cartOl.innerHTML = storagedItems;
+  const getLi = document.querySelectorAll('li');
+  getLi.addEventListener('click', cartItemClickListener);
+};
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
@@ -72,6 +80,7 @@ const pushItem = () => {
       const response = await fetch(`https://api.mercadolibre.com/items/${itemID}`);
       const data = await response.json();
       cartOl.appendChild(createCartItemElement(data));
+      toStorage();
     } catch (err) {
         console.log(err);
     }
@@ -81,4 +90,5 @@ const pushItem = () => {
 window.onload = function onload() {
   searchComputers();
   pushItem();
+  fromStorage();
  };
