@@ -31,10 +31,10 @@ const searchComputers = async () => {
   try {
   const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const data = await response.json();
-  console.log(data);
+  // console.log(data.results);
   if (data) {    
-    const computers = data.map((computer) => createProductItemElement(computer));
-    computers.forEach((computer) => createProductImageElement(computer.thumbnail));
+   data.results.forEach((computer) => createProductItemElement(computer));
+   data.results.forEach((computer) => createProductImageElement(computer.thumbnail));
   } else {
       divItens.innerHTML = data.error;
   }
