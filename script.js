@@ -1,14 +1,17 @@
 const API = {
   requestsInProgress: 0,
+  loading: null,
   async fetch(url) {
-    const loading = document.createElement('p');
-    loading.className = 'loading';
-    loading.innerText = 'loading...';
-    document.body.appendChild(loading);
+    if (this.loading === null) {
+      this.loading = document.createElement('p');
+      this.loading.className = 'loading';
+      this.loading.innerText = 'loading...';
+    }
+    if (this.requestsInProgress === 0) document.body.appendChild(this.loading);
     this.requestsInProgress += 1;
     const data = await fetch(url);
     this.requestsInProgress -= 1;
-    if (this.requestsInProgress === 0) loading.remove();    
+    if (this.requestsInProgress === 0) this.loading.remove();
     return data;
   },
 };
@@ -114,7 +117,7 @@ const products = {
     this.section.appendChild(product);
   },
   async fetch() {
-    const data = await API.fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');    
+    const data = await API.fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
     const json = await data.json();
     json.results.forEach((item) => {
       products.add(item);
@@ -148,5 +151,5 @@ const products = {
 // The async keyword is not needed here, since we are not awaiting anything
 window.onload = async function onload() {
   products.fetch();
-  cart.loadStorage();  
+  cart.loadStorage();
 };
