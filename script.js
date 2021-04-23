@@ -1,4 +1,4 @@
-const ul = document.querySelector('.cart_items');
+/* const ul = document.querySelector('.cart_items'); */
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -31,7 +31,8 @@ function getIdFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  const eventlist = event.target;
+  eventlist.remove();
 }
 
 function createCartItemElement({ id, title, price }) {
