@@ -52,7 +52,8 @@ const searchComputers = async () => {
         const computersArr = data.results;
         computersArr.forEach((computer) => {
           divItems.appendChild(createProductItemElement(computer));
-      }); 
+        }); 
+        done();
       } else {
         divItems.innerHTML = data.error;
           } 
