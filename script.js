@@ -86,8 +86,16 @@ const pushItem = () => {
   });
 }; 
 
+const toClear = () => {
+  document.querySelector('.empty-cart')
+    .addEventListener('click', () => {
+      cartOl.innerHTML = '';
+    });
+};
+
 window.onload = function onload() {
   searchComputers();
   pushItem();
   fromStorage();
+  toClear();
  };
