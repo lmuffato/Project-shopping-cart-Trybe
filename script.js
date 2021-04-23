@@ -62,6 +62,7 @@ const fromStorage = () => {
   const storagedItems = localStorage.getItem('cart');
   cartOl.innerHTML = storagedItems;
   const getLi = document.querySelectorAll('li');
+  console.log(getLi);
   getLi.addEventListener('click', cartItemClickListener);
 };
 
