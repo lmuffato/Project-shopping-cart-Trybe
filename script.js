@@ -63,7 +63,7 @@ const fromStorage = () => {
   cartOl.innerHTML = storagedItems;
   const getLi = document.querySelectorAll('li');
   console.log(getLi);
-  getLi.addEventListener('click', cartItemClickListener);
+ cartOl.addEventListener('click', cartItemClickListener);
 };
 
 function createCartItemElement({ id, title, price }) {
