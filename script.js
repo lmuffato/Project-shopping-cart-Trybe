@@ -66,18 +66,26 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// source: https://github.com/tryber/sd-010-a-project-shopping-cart/blob/scriptcamilo-project-shopping-cart/script.js
 const total = async () => {
-  // https://qastack.com.br/programming/2735067/how-to-convert-a-dom-node-list-to-an-array-in-javascript#:~:text=NodeList%5D%3B%20(%20como%20operador%20de,var%20array%20%3D%20%5B%5D.
-  // const array = [ ...nodeList ] // or Array.from(nodeList)
+  // captura a sessão
+  const cart = document.querySelector('.cart');
+  // pega nodelist
+  const cartItems = document.querySelector('.cart__items').childNodes;
+  let totalPrice = 0;
 
-  const cartPrice = [...document.querySelectorAll('.cart__item')];
-  
-  const reducer = (acc, curr, idx) => acc + parseFloat((curr.innerHTML
-    .split('$')[idx]) * 100) / 100;
-    
-  const sumArr = cartPrice.reduce(reducer, []);
-  
-  return sumArr;
+  cartItems.forEach(({ innerText }) => {
+    // https://www.w3schools.com/jsref/jsref_number.asp
+    const price = Number(innerText.split('$')[1]);
+    totalPrice += price;
+  }, 0);
+
+  if (document.querySelector('.total-price')) {
+    const actualPrice = document.querySelector('.total-price');
+    actualPrice.innerText = `${totalPrice}`;
+  } else {
+    cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
+  }
 };
 
 const cartItemClickListener = async (event) => {
