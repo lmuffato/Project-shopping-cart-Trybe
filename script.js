@@ -1,3 +1,5 @@
+const removeLoading = () => document.querySelector('.loading').remove();
+
 const elementos = () => {
   const ul = document.querySelector('.cart__items');
   const priceOne = document.querySelector('.total-price');
@@ -87,6 +89,7 @@ return json1.results;
 
 const addItem = async () => {
 const obj = await listagem();
+removeLoading();
 const items1 = document.querySelector('.items');
   obj.forEach((elemento) => {
   const filho = createProductItemElement(elemento);
@@ -127,26 +130,3 @@ window.onload = async function onload() {
  await recupera();
  limpCart();
  };
- 
-/* const bttonAddItem = () => {
-  const addInCart1 = [...document.querySelectorAll('.item__add')];
-  addInCart1.forEach((elemetButton) => {
-    elemetButton.addEventListener('click', (event) => {
-      const idOfComputer = getIdFromProductItem(event.target.parentElement);
-      apiCart(idOfComputer);
-    });
-  });
-}; */
- 
-/* const buttinClickCart = async () => {
-  const capTEdvent = document.querySelectorAll('.item__add');
-  capTEdvent.forEach((parametro) => parametro
-    .addEventListener('click', async () => {
-      try {
-        const data = await apiCart(getIdFromProductItem(getIdFromProductItem(parametro.parentNode));
-        ul.appendChild(createCartItemElement(data));
-        )
-      }
-    }))
-}
-*/
