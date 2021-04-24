@@ -66,9 +66,20 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+const total = async () => {
+  const cartPrice = document.querySelectorAll('.cart__item');
+  const sumArr = cartPrice.reduce((acc, curr, idx) => {
+    const totals = acc + parseFloat(curr.innerHTML.split('$')[idx]);
+    document.querySelector('.total-price').innerHTML = ((totals.round(totals * 100)) / 100);
+    return totals; 
+  });   
+  sumArr();
+  };
+
 function cartItemClickListener(event) {
   event.target.remove();
   toStorage();
+  total();
 }
 
 const fromStorage = () => {
@@ -94,7 +105,9 @@ const pushItem = () => {
       const data = await response.json();
       // done();
       cartOl.appendChild(createCartItemElement(data));
+      await total();
       toStorage();
+      
     } catch (err) {
         console.log(err);
     }
@@ -114,4 +127,5 @@ window.onload = function onload() {
   pushItem();
   fromStorage();
   toClear();
+  total();
 };
