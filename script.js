@@ -67,20 +67,24 @@ function getSkuFromProductItem(item) {
 }
 
 const total = async () => {
-  const cartPrice = document.querySelectorAll('.cart__item');
-  const sumArr = cartPrice.reduce((acc, curr, idx) => {
-    const totals = acc + parseFloat(curr.innerHTML.split('$')[idx]);
-    document.querySelector('.total-price').innerHTML = ((totals.round(totals * 100)) / 100);
-    return totals; 
-  });   
-  sumArr();
-  };
+  // https://qastack.com.br/programming/2735067/how-to-convert-a-dom-node-list-to-an-array-in-javascript#:~:text=NodeList%5D%3B%20(%20como%20operador%20de,var%20array%20%3D%20%5B%5D.
+  // const array = [ ...nodeList ] // or Array.from(nodeList)
 
-function cartItemClickListener(event) {
+  const cartPrice = [...document.querySelectorAll('.cart__item')];
+  
+  const reducer = (acc, curr, idx) => acc + parseFloat((curr.innerHTML
+    .split('$')[idx]) * 100) / 100;
+    
+  const sumArr = cartPrice.reduce(reducer, []);
+  
+  return sumArr;
+};
+
+const cartItemClickListener = async (event) => {
   event.target.remove();
-  toStorage();
-  total();
-}
+  await total();
+  toStorage();  
+};
 
 const fromStorage = () => {
   const storagedItems = localStorage.getItem('cart');
@@ -106,8 +110,7 @@ const pushItem = () => {
       // done();
       cartOl.appendChild(createCartItemElement(data));
       await total();
-      toStorage();
-      
+      toStorage();      
     } catch (err) {
         console.log(err);
     }
