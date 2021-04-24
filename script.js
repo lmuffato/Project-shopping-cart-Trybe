@@ -6,15 +6,10 @@ const toStorage = () => {
 
 const loading = (local) => {
   if (local) {
-  const createP = document.createElement('div');  
-  createP.className = 'loading';
-  createP.innerHTML = 'loading...';
-  cartOl.appendChild('h1');
-  } else { 
-    const createP = document.createElement('div');  
-    createP.className = 'loading';
-    createP.innerHTML = 'loading...';
-    document.body.appendChild('h1');
+  const createLoading = document.createElement('h2');  
+  createLoading.className = 'loading';
+  createLoading.innerHTML = 'loading...';
+  document.body.appendChild(createLoading);
   }
 };
 
@@ -52,7 +47,7 @@ function createProductItemElement({ id, title, thumbnail }) {
 
 const searchComputers = async () => {
   try {
-    // loading();
+    loading();
     const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
     const data = await response.json();    
       if (data) {        
