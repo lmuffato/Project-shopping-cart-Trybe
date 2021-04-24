@@ -5,7 +5,7 @@ const toStorage = () => {
 };
 
 const loading = (local) => {
-  if (local === cart) {
+  if (local) {
   const createP = document.createElement('div');  
   createP.className = 'loading';
   createP.innerHTML = 'loading...';
@@ -14,8 +14,9 @@ const loading = (local) => {
     const createP = document.createElement('div');  
     createP.className = 'loading';
     createP.innerHTML = 'loading...';
-    body.appendChild('h1');
+    document.body.appendChild('h1');
   }
+};
 
 const done = () => {
   document.querySelector('.loading').remove();
@@ -51,7 +52,7 @@ function createProductItemElement({ id, title, thumbnail }) {
 
 const searchComputers = async () => {
   try {
-    loading();
+    // loading();
     const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
     const data = await response.json();    
       if (data) {        
@@ -95,10 +96,10 @@ const pushItem = () => {
   divItems.addEventListener('click', async (event) => {
     try {
       const itemID = getSkuFromProductItem(event.target.parentNode);
-      loading();
+      // loading();
       const response = await fetch(`https://api.mercadolibre.com/items/${itemID}`);
       const data = await response.json();
-      done();
+      // done();
       cartOl.appendChild(createCartItemElement(data));
       toStorage();
     } catch (err) {
@@ -120,4 +121,4 @@ window.onload = function onload() {
   pushItem();
   fromStorage();
   toClear();
- };
+};
