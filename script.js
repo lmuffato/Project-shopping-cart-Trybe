@@ -4,13 +4,11 @@ const toStorage = () => {
   localStorage.setItem('cart', cartOl.innerHTML);
 };
 
-const loading = (local) => {
-  if (local) {
+const loading = () => {
   const createLoading = document.createElement('h2');  
   createLoading.className = 'loading';
   createLoading.innerHTML = 'loading...';
   document.body.appendChild(createLoading);
-  }
 };
 
 const done = () => {
