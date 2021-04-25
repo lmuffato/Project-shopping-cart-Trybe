@@ -52,6 +52,15 @@
       section.appendChild(item);
     });
   }
+
+  // REQUISITO 3
+
+  function esvaziaCarrinho() {
+    const limparCarrinho = document.querySelector('.cart__items');
+    limparCarrinho.innerHTML = '';
+  }
+  document.querySelector('.empty-cart').addEventListener('click', esvaziaCarrinho);
+  
   
   function fetchMercadoLivre() {
    return new Promise((resolve) => {
@@ -64,9 +73,10 @@
 
   async function inicioPagina() {
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
-    carregaPagina(dados);
+    carregaPagina(dados)
     // inicioPagina();
     adicionarItem(dados);
+    esvaziaCarrinho();
   }
 
   window.onload = async function onload() {
