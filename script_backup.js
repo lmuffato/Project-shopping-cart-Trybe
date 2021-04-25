@@ -106,7 +106,6 @@ const total = async (price) => {
 
 const cartItemClickListener = async (event) => {
   event.target.remove();
-  await total();
   toStorage();  
 };
 
