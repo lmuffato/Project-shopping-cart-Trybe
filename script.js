@@ -60,8 +60,12 @@
     limparCarrinho.innerHTML = '';
   }
   document.querySelector('.empty-cart').addEventListener('click', esvaziaCarrinho);
+
+  function cartItemClickListener(event) {
+    // coloque seu código aqui
+  }
   
-  
+  // _______________________________________________________________________
   function fetchMercadoLivre() {
    return new Promise((resolve) => {
      fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
@@ -69,7 +73,7 @@
          response.json().then((data) => resolve(data));
        });
    }); 
-  } // 1 passo
+  }; // 1 passo
 
   async function inicioPagina() {
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
