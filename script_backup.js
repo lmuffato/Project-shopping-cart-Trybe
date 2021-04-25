@@ -3,6 +3,7 @@ const cartOl = document.querySelector('.cart__items');
 const totalPriceDiv = document.querySelector('.total-price');
 const toStorage = () => {
   localStorage.setItem('cart', cartOl.innerHTML);
+  localStorage.setItem('total', totalPriceDiv.innerHTML);
 };
 
 const loading = () => {
@@ -89,15 +90,33 @@ function getSkuFromProductItem(item) {
 //   }
 // };
 
+let totalPrice = 0;
+
+const total = async (price) => {
+  // const cart = document.querySelector('.cart');
+  totalPrice += Number(price);
+  console.log(totalPrice);
+  if (document.querySelector('.total-price')) {
+    // totalPriceDiv.innerText = `${Math.round(totalPrice + price).toFixed(2)}`;
+    totalPriceDiv.innerText = `${Math.round((totalPrice) * 100) / 100}`;
+  } // else {
+    // cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
+  // }
+};
+
 const cartItemClickListener = async (event) => {
   event.target.remove();
-  // await total();
+  await total();
   toStorage();  
 };
 
 const fromStorage = () => {
   const storagedItems = localStorage.getItem('cart');
+  const storagedTotal = localStorage.getItem('total');
+
   cartOl.innerHTML = storagedItems;
+  totalPriceDiv.innerHTML = storagedTotal;
+  
   cartOl.addEventListener('click', cartItemClickListener);
 };
 
@@ -109,33 +128,14 @@ const fromStorage = () => {
 //   return li;
 // }
 
-let totalPrice = 0;
-
-const total = async (price) => {
-  // const cart = document.querySelector('.cart');
-  try {
-  totalPrice += Number(price);
-  console.log(totalPrice);
-
-  if (document.querySelector('.total-price')) {
-    // totalPriceDiv.innerText = `${Math.round(totalPrice + price).toFixed(2)}`;
-    totalPriceDiv.innerText = `${Math.round((totalPrice) * 100) / 100}`;
-  } // else {
-    // cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
-  // }
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const createCartItemElement = async ({ id, title, price }) => {
-  await total(price);
+function createCartItemElement({ id, title, price }) {
+  total(price);
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-};
+}
 
 const pushItem = () => {
   divItems.addEventListener('click', async (event) => {
