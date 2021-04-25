@@ -66,31 +66,31 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// source: https://github.com/tryber/sd-010-a-project-shopping-cart/blob/scriptcamilo-project-shopping-cart/script.js
-const total = async () => {
-  // captura a sessão
-  const cart = document.querySelector('.cart');
-  // pega nodelist
-  const cartItems = document.querySelector('.cart__items').childNodes;
-  let totalPrice = 0;
+// // source: https://github.com/tryber/sd-010-a-project-shopping-cart/blob/scriptcamilo-project-shopping-cart/script.js
+// const total = async () => {
+//   // captura a sessão
+//   const cart = document.querySelector('.cart');
+//   // pega nodelist
+//   const cartItems = document.querySelector('.cart__items').childNodes;
+//   let totalPrice = 0;
 
-  cartItems.forEach(({ innerText }) => {
-    // https://www.w3schools.com/jsref/jsref_number.asp
-    const price = Number(innerText.split('$')[1]);
-    totalPrice += price;
-  }, 0);
+//   cartItems.forEach(({ innerText }) => {
+//     // https://www.w3schools.com/jsref/jsref_number.asp
+//     const price = Number(innerText.split('$')[1]);
+//     totalPrice += price;
+//   }, 0);
 
-  if (document.querySelector('.total-price')) {
-    const actualPrice = document.querySelector('.total-price');
-    actualPrice.innerText = `${totalPrice}`;
-  } else {
-    cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
-  }
-};
+//   if (document.querySelector('.total-price')) {
+//     const actualPrice = document.querySelector('.total-price');
+//     actualPrice.innerText = `${totalPrice}`;
+//   } else {
+//     cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
+//   }
+// };
 
 const cartItemClickListener = async (event) => {
   event.target.remove();
-  await total();
+  // await total();
   toStorage();  
 };
 
@@ -100,7 +100,32 @@ const fromStorage = () => {
   cartOl.addEventListener('click', cartItemClickListener);
 };
 
+// function createCartItemElement({ id, title, price }) {
+//   const li = document.createElement('li');
+//   li.className = 'cart__item';
+//   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
+//   li.addEventListener('click', cartItemClickListener);
+//   return li;
+// }
+
+let totalPrice = 0;
+
+const total = async (price) => {
+  const cart = document.querySelector('.cart');
+
+  totalPrice += Number(price);
+  console.log(totalPrice);
+
+  if (document.querySelector('.total-price')) {
+    const actualPrice = document.querySelector('.total-price');
+    actualPrice.innerText = `Total: R$ ${Math.round(totalPrice + price).toFixed(2)}`;
+  } else {
+    cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
+  }
+};
+
 function createCartItemElement({ id, title, price }) {
+  total(price);
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
@@ -117,7 +142,7 @@ const pushItem = () => {
       const data = await response.json();
       // done();
       cartOl.appendChild(createCartItemElement(data));
-      await total();
+      // await total();
       toStorage();      
     } catch (err) {
         console.log(err);
@@ -128,6 +153,10 @@ const pushItem = () => {
 const toClear = () => {
   document.querySelector('.empty-cart')
     .addEventListener('click', () => {
+      if (document.querySelector('.total-price')) {
+        const actualPrice = document.querySelector('.total-price');
+        actualPrice.innerText = 'Carrinho Vazio';
+      }
       cartOl.innerHTML = '';
       toStorage();
     });
@@ -138,5 +167,5 @@ window.onload = function onload() {
   pushItem();
   fromStorage();
   toClear();
-  total();
+  // total();
 };
