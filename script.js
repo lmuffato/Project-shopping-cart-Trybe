@@ -118,7 +118,7 @@ const total = async (price) => {
   console.log(totalPrice);
 
   if (document.querySelector('.total-price')) {
-    totalPriceDiv.innerText = `Total: R$ ${Math.round(totalPrice + price).toFixed(2)}`;
+    totalPriceDiv.innerText = `${Math.round(totalPrice + price).toFixed(2)}`;
   } else {
     cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
   }
