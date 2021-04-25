@@ -154,7 +154,8 @@ const toClear = () => {
   document.querySelector('.empty-cart')
     .addEventListener('click', () => {
       if (totalPriceDiv) {
-        totalPriceDiv.innerText = 'Carrinho Vazio';
+        totalPriceDiv.innerText = 0;
+        totalPrice = 0;
       }
       cartOl.innerHTML = '';
       toStorage();
