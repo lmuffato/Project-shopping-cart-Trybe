@@ -54,8 +54,8 @@ const getData = () => {
     });
 };
 
-const setTotalPrice = (listExist, cartList) => 
-  new Promise((resolve) => {
+const setTotalPrice = async (listExist, cartList) => {
+  try {
     const element = document.querySelector('.total-price');
     if (listExist) {
       const total = cartList.reduce((acc, item) => {
@@ -63,11 +63,14 @@ const setTotalPrice = (listExist, cartList) =>
         value += item.salePrice;
         return value;
       }, 0);
-      resolve(element.firstElementChild.innerText = `Total: $${total}`);
+      element.firstElementChild.innerText = `Total: $${total}`;
     } else {
-      resolve(element.firstElementChild.innerText = `Total: $${0}`);
+      element.firstElementChild.innerText = `Total: $${0}`;
     }
-  });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 // const setTotalPrice = (listExist cartList) => {
 //   const element = document.querySelector('.total-price');
