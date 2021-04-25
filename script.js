@@ -62,7 +62,7 @@ const setTotalPrice = async (listExist, cartList) => {
       value += item.salePrice;
       return value;
     }, 0);
-    element.firstElementChild.innerText = Math.round(total);
+    element.firstElementChild.innerText = total;
   } else {
     element.firstElementChild.innerText = 0;
   }
