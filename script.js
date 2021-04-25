@@ -1,5 +1,6 @@
 const divItems = document.querySelector('.items');
 const cartOl = document.querySelector('.cart__items');
+const totalPriceDiv = document.querySelector('.total-price');
 const toStorage = () => {
   localStorage.setItem('cart', cartOl.innerHTML);
 };
@@ -117,8 +118,7 @@ const total = async (price) => {
   console.log(totalPrice);
 
   if (document.querySelector('.total-price')) {
-    const actualPrice = document.querySelector('.total-price');
-    actualPrice.innerText = `Total: R$ ${Math.round(totalPrice + price).toFixed(2)}`;
+    totalPriceDiv.innerText = `Total: R$ ${Math.round(totalPrice + price).toFixed(2)}`;
   } else {
     cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
   }
@@ -153,9 +153,8 @@ const pushItem = () => {
 const toClear = () => {
   document.querySelector('.empty-cart')
     .addEventListener('click', () => {
-      if (document.querySelector('.total-price')) {
-        const actualPrice = document.querySelector('.total-price');
-        actualPrice.innerText = 'Carrinho Vazio';
+      if (totalPriceDiv) {
+        totalPriceDiv.innerText = 'Carrinho Vazio';
       }
       cartOl.innerHTML = '';
       toStorage();
