@@ -60,11 +60,11 @@
     limparCarrinho.innerHTML = '';
   }
   document.querySelector('.empty-cart').addEventListener('click', esvaziaCarrinho);
-
+/*
   function cartItemClickListener(event) {
     // coloque seu código aqui
   }
-  
+  */
   // _______________________________________________________________________
   function fetchMercadoLivre() {
    return new Promise((resolve) => {
