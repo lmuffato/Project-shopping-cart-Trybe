@@ -62,9 +62,9 @@ const setTotalPrice = async (listExist, cartList) => {
       value += item.salePrice;
       return value;
     }, 0);
-    element.firstElementChild.innerText = `Total: $${total}`;
+    element.firstElementChild.innerText = total;
   } else {
-    element.firstElementChild.innerText = `Total: $${0}`;
+    element.firstElementChild.innerText = 0;
   }
 };
 
