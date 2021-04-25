@@ -128,14 +128,14 @@ const total = async (price) => {
   }
 };
 
-function createCartItemElement({ id, title, price }) {
-  total(price);
+const createCartItemElement = async ({ id, title, price }) => {
+  await total(price);
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-}
+};
 
 const pushItem = () => {
   divItems.addEventListener('click', async (event) => {
