@@ -73,7 +73,7 @@
          response.json().then((data) => resolve(data));
        });
    }); 
-  };
+  }
 // 1 passo
   async function inicioPagina() {
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
