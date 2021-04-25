@@ -1,6 +1,7 @@
 const divItems = document.querySelector('.items');
 const cartOl = document.querySelector('.cart__items');
-const totalPriceDiv = document.querySelector('.total-price');
+const priceClass = '.total-price';
+const totalPriceDiv = document.querySelector(priceClass);
 const toStorage = () => {
   localStorage.setItem('cart', cartOl.innerHTML);
   localStorage.setItem('total', totalPriceDiv.innerHTML);
@@ -96,7 +97,7 @@ const total = async (price) => {
   // const cart = document.querySelector('.cart');
   totalPrice += Number(price);
   console.log(totalPrice);
-  if (document.querySelector('.total-price')) {
+  if (document.querySelector(priceClass)) {
     // totalPriceDiv.innerText = `${Math.round(totalPrice + price).toFixed(2)}`;
     totalPriceDiv.innerText = `${Math.round((totalPrice) * 100) / 100}`;
   } // else {
@@ -112,7 +113,7 @@ const cartItemClickListener = async (event) => {
 document.querySelector('.cart__items').addEventListener('click', (event) => {
   totalPrice -= Number(event.target.innerText.split('$')[1]);
   console.log(Number(event.target.innerText.split('$')[1]));
-  if (document.querySelector('.total-price')) {
+  if (document.querySelector(priceClass)) {
     totalPriceDiv.innerText = `${Math.round((totalPrice) * 100) / 100}`;
   }
 });
