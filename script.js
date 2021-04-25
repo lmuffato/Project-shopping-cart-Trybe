@@ -112,17 +112,17 @@ const fromStorage = () => {
 let totalPrice = 0;
 
 const total = async (price) => {
-  const cart = document.querySelector('.cart');
+  // const cart = document.querySelector('.cart');
 
   totalPrice += Number(price);
   console.log(totalPrice);
 
   if (document.querySelector('.total-price')) {
     // totalPriceDiv.innerText = `${Math.round(totalPrice + price).toFixed(2)}`;
-    totalPriceDiv.innerText = `${Math.round((totalPrice + price) * 100) / 100}`;
-  } else {
-    cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
-  }
+    totalPriceDiv.innerText = `${Math.round((totalPrice) * 100) / 100}`;
+  } // else {
+    // cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
+  // }
 };
 
 function createCartItemElement({ id, title, price }) {
