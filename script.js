@@ -118,7 +118,8 @@ const total = async (price) => {
   console.log(totalPrice);
 
   if (document.querySelector('.total-price')) {
-    totalPriceDiv.innerText = `${Math.round(totalPrice + price).toFixed(2)}`;
+    // totalPriceDiv.innerText = `${Math.round(totalPrice + price).toFixed(2)}`;
+    totalPriceDiv.innerText = `${Math.round((totalPrice + price) * 100) / 100}`;
   } else {
     cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
   }
