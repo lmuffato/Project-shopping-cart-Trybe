@@ -106,8 +106,16 @@ const total = async (price) => {
 
 const cartItemClickListener = async (event) => {
   event.target.remove();
-  toStorage();  
+  toStorage(); 
 };
+
+document.querySelector('.cart__items').addEventListener('click', (event) => {
+  totalPrice -= Number(event.target.innerText.split('$')[1]);
+  console.log(Number(event.target.innerText.split('$')[1]));
+  if (document.querySelector('.total-price')) {
+    totalPriceDiv.innerText = `${Math.round((totalPrice) * 100) / 100}`;
+  }
+});
 
 const fromStorage = () => {
   const storagedItems = localStorage.getItem('cart');
