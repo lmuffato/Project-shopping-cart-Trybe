@@ -62,25 +62,11 @@ const setTotalPrice = async (listExist, cartList) => {
       value += item.salePrice;
       return value;
     }, 0);
-    element.firstElementChild.innerText = total;
+    element.firstElementChild.innerText = Math.round(total);
   } else {
     element.firstElementChild.innerText = 0;
   }
 };
-
-// const setTotalPrice = (listExist cartList) => {
-//   const element = document.querySelector('.total-price');
-//   if (listExist) {
-//     const total = cartList.reduce((acc, item) => {
-//       let value = acc;
-//       value += item.salePrice;
-//       return value;
-//     }, 0);
-//     element.firstElementChild.innerText = `Total: $${total}`;
-//   } else {
-//     element.firstElementChild.innerText = `Total: $${0}`;
-//   }
-// };
 
 const addToLocalStorage = (computerObject) => {
   let list = [];
