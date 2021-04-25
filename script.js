@@ -113,7 +113,7 @@ let totalPrice = 0;
 
 const total = async (price) => {
   // const cart = document.querySelector('.cart');
-
+  try {
   totalPrice += Number(price);
   console.log(totalPrice);
 
@@ -123,6 +123,9 @@ const total = async (price) => {
   } // else {
     // cart.appendChild(createCustomElement('span', 'total-price', `${totalPrice}`));
   // }
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 function createCartItemElement({ id, title, price }) {
