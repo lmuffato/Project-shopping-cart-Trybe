@@ -95,15 +95,14 @@ function cartItemClickListener(event) {
     });
   }
   // _______________________________________________________________________
-    
-  const criarLoading = () => {
-    const createText = document.createElement('h3');
-    const recupera = document.querySelector('.items');
-    recupera.appendChild(createText);
-    createText.innerHTML = 'loading...';
-    createText.classList.add('loading');
-  };
-  criarLoading();
+  
+  const display = (load) => {
+  if (!load) {
+    document.querySelector('.loading').outerHTML = '';
+  } else {
+    document.querySelector('.loading').style.display = 'block';
+  }
+};
     
   function fetchMercadoLivre() {
    return new Promise((resolve) => {
