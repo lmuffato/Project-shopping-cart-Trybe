@@ -41,7 +41,8 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  return console.log(event.target.remove());
+  event.target.remove();
+  return event.target.innerText;
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -56,6 +57,15 @@ const getIdProd = async (id) => {
   const objReturn = objId.json();
   return objReturn;
 };
+
+const lcStr = () => {
+  localStorage.clear();
+  const qtdLi = document.querySelectorAll('.cart__item').length;
+  const txtLi = Object.values(document.querySelectorAll('.cart__items'))
+    .find((text) => text).innerText;
+  localStorage.setItem(qtdLi, txtLi);
+};
+
 const addProdInCart = () => {
   document.querySelectorAll('.item__add')
     .forEach((eachProd) => eachProd.addEventListener('click', async (button) => {
@@ -63,10 +73,12 @@ const addProdInCart = () => {
       const sectionObj = await getIdProd(getSku);
       const crt = document.querySelector('.cart__items');
       crt.appendChild(createCartItemElement(sectionObj));
+      lcStr();
     }));
 };
 
 window.onload = async function onload() {
   await addProdList();
   await addProdInCart();
+  await localStorage.clear();
 };
