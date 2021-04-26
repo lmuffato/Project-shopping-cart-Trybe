@@ -33,17 +33,31 @@ const verifiedFetch = async (url) => {
   throw new Error('endpoint não existe');
 };
 
+const arrayOfValues = [];
+
 function cartItemClickListener(event) {
+  arrayOfValues.pop();
   event.target.remove(); // Descobri o remove() na intuição :O ... Nem acredito ,-,
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
+  arrayOfValues.push(salePrice);
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  // console.log(arrayOfValues);
   return li;
 }
+
+const createTotalValue = (price) => {
+  const limpa = document.querySelectorAll('.total-price');
+  limpa.forEach((element) => element.remove());
+  const totalPrice = document.createElement('div');
+  totalPrice.className = 'total-price';
+  totalPrice.innerText = `Preço total: ${price.toFixed(2)}`;
+  return totalPrice;
+};
 
 const cartItem0 = document.querySelector('.cart__items');
 const asd = async (selectedId) => {
@@ -51,9 +65,12 @@ const asd = async (selectedId) => {
   const product = await fetch(`https://api.mercadolibre.com/items/${selectedId}`)
     .then((r) => r.json())
     .then((r) => r);
-  cartItem.appendChild(createCartItemElement(product));
+    cartItem.appendChild(createCartItemElement(product));
   localStorage.cartItens = cartItem.innerHTML;
-  console.log(localStorage.cartItens);
+  let total = 0;
+  arrayOfValues.forEach((element) => { total += element; });
+  cartItem.appendChild(createTotalValue(total));
+  // console.log(test);
 };
 
 const sla = async () => {
@@ -78,8 +95,8 @@ const execute = async () => {
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
-
+// localStorage.clear();
 window.onload = function onload() {
   execute();
-  cartItem0.innerHTML = localStorage.cartItens;
+  cartItem0.innerHTML = (localStorage.cartItens) ? localStorage.cartItens : '';
 };
