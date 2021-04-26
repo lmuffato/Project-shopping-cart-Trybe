@@ -6,7 +6,7 @@ function loadd() {
   recuperaDiv.appendChild(criandoH);
 }
 
-const apaga() {
+function apaga() {
   document.querySelector('.loading').remove();
 }
 
