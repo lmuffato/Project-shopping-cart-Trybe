@@ -60,9 +60,15 @@ function cartItemClickListener(event) {
     });
   }
 
-  const mensagemLoading = () => {
-    const h3 = document.querySelector('.loading');
-    h3.remove();
+  const loading = () => {
+    const tag = document.createElement('h3');
+    tag.className = 'loading';
+    tag.innerText = 'loading...';
+    document.querySelector('.load').appendChild(tag);
+  };
+  
+  const apagaLoading = () => {
+    document.querySelector('.loading').remove();
   };
   
   // requisito 1
@@ -118,7 +124,7 @@ function cartItemClickListener(event) {
      clearButton();
      addHtml();
      await totalPrice();
-     mensagemLoading();
+     loading();;
   }
 
   window.onload = function onload() {
