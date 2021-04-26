@@ -59,7 +59,7 @@ function cartItemClickListener(event) {
         });
     });
   }
-
+/*
   const createdTextLoading = () => {
     const createText = document.createElement('h3');
     const recupera = document.querySelector('.items');
@@ -67,7 +67,7 @@ function cartItemClickListener(event) {
     createText.innerHTML = 'loading...';
     createText.classList.add('loading');
   };
-  
+  */
   // requisito 1
   
   function createProductImageElement(imageSource) {
@@ -121,7 +121,7 @@ function cartItemClickListener(event) {
      clearButton();
      addHtml();
      await totalPrice();
-     createdTextLoading();
+     // createdTextLoading();
      // document.querySelector('.loading').remove();
   }
 
