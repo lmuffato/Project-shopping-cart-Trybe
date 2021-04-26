@@ -92,6 +92,7 @@ function cartItemClickListener(event) {
   } 
  // 2 passo
   function carregaPagina(resultado) {
+    
     const recebArrayResults = resultado.results;
     recebArrayResults.forEach((element) => {
       const item = createProductItemElement(element); // criando o elemento
@@ -118,7 +119,7 @@ function cartItemClickListener(event) {
      clearButton();
      addHtml();
      await totalPrice();
-     msgLoading();
+     mensagemLoading();
   }
 
   window.onload = function onload() {
