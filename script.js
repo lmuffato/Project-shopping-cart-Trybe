@@ -80,5 +80,4 @@ const addProdInCart = () => {
 window.onload = async function onload() {
   await addProdList();
   await addProdInCart();
-  await localStorage.clear();
 };
