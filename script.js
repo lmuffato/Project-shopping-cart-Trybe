@@ -122,7 +122,7 @@ function cartItemClickListener(event) {
      addHtml();
      await totalPrice();
      createdTextLoading();
-     document.querySelector('.loading').remove();
+     // document.querySelector('.loading').remove();
   }
 
   window.onload = function onload() {
