@@ -1,7 +1,8 @@
 function loadd() {
-  const recuperaH = document.querySelector('.loading');
-  recuperaH.innerText = 'loading...';
-  console.log(recuperaH);
+  const criandoH = document.createElement('h3');
+  criandoH.innerText = 'loading...';
+  const recuperaDiv = document.querySelector('#div');
+  recuperaDiv.appendChild(criandoH);
 }
 
 // Função realizada com a ajuda o Igson.
