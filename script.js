@@ -1,6 +1,15 @@
 const cartItemsAll = document.querySelectorAll('.cart__items');
 const cartItem = document.querySelector('.cart__items');
 
+const emptyCartAll = () => {
+  const getClearAll = document.querySelector('.empty-cart');
+  getClearAll.addEventListener('click', () => {
+    const liAll = document.querySelectorAll('li');
+    liAll.forEach((e) => console.log(e.remove()));
+    localStorage.clear();
+  });
+};
+
 const lcStr = () => {
   const txtLi = Object.values(cartItemsAll)
     .find((text) => text).innerText;
@@ -63,7 +72,8 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   event.target.remove();
-  return upDateLcStr();
+  upDateLcStr();
+  return emptyCartAll();
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -85,30 +95,25 @@ const addProdInCart = () => {
       const getSku = getSkuFromProductItem(button.target.parentNode);
       const sectionObj = await getIdProd(getSku);
       cartItem.appendChild(createCartItemElement(sectionObj));
+      emptyCartAll();
       lcStr();
     }));
 };
 
 const onLoadCart = () => {
   const qtdLi = localStorage.getItem('1');
-  qtdLi.split('\n').forEach((e) => {
-    if (e !== '') {
-      const li = document.createElement('li');
-      li.innerText = e;
-      li.className = 'cart__item';
-      cartItem.appendChild(li);
-      li.addEventListener('click', cartItemClickListener);
-    }
-  });
-};
-
-const emptyCartAll = () => {
-  const getClearAll = document.querySelector('.empty-cart');
-  getClearAll.addEventListener('click', () => {
-    const liAll = document.querySelectorAll('li');
-    liAll.forEach((e) => console.log(e.remove()));
-    localStorage.clear();
-  });
+  if (qtdLi !== null) {
+    qtdLi.split('\n').forEach((e) => {
+      if (e !== null) {
+        const li = document.createElement('li');
+        li.innerText = e;
+        li.className = 'cart__item';
+        cartItem.appendChild(li);
+        li.addEventListener('click', cartItemClickListener);
+      }
+    });
+  }
+  return null;
 };
 
 window.onload = async function onload() {
