@@ -89,9 +89,14 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 async function loadProducts() {
+  const loadingMessage = document.createElement('p');
+  loadingMessage.innerText = 'loading...';
+  loadingMessage.className = 'loading';
+  document.querySelector('.items').appendChild(loadingMessage);
   const fetchedData = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-  .then((result) => result.json())
-  .then((result) => result.results);
+    .then((result) => result.json())
+    .then((result) => result.results);
+  loadingMessage.remove();
   fetchedData.forEach((object) => {
     const image = `https://http2.mlstatic.com/D_NQ_NP_${object.thumbnail_id}-O.webp`;
     const fetchedObject = { sku: object.id, name: object.title, image };
