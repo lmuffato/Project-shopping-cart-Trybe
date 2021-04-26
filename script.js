@@ -33,6 +33,18 @@ const verifiedFetch = async (url) => {
   throw new Error('endpoint não existe');
 };
 
+function cartItemClickListener(event) {
+  event.target.remove(); // Descobri o remove() na intuição :O ... Nem acredito ,-,
+}
+
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
 const asd = async (selectedId) => {
   const cartItem = document.querySelector('.cart__items');
   const product = await fetch(`https://api.mercadolibre.com/items/${selectedId}`)
@@ -60,21 +72,9 @@ const execute = async () => {
   sla();
 };
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
-
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
-
-function createCartItemElement({ id: sku, title: name, price: salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
 window.onload = function onload() {
   execute();
