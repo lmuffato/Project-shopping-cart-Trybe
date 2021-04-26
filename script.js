@@ -37,7 +37,7 @@ function getSkuFromProductItem(item) {
   for (let i = 0; i < item.length; i += 1) {
     calc += parseFloat(item[i].innerText.split('$')[1]);
   }
-  const valueResult = Math.round(calc).toFixed(2);
+  const valueResult = calc.toFixed(2);
   const result = valueResult;
   calcResult.innerHTML = result;
 } 
@@ -71,7 +71,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Requisito 7:
  function loadingInit() {
   const items = document.querySelector('.items');
-  items.appendChild(createCustomElement('span', 'loading', 'loading...'));
+  items.appendChild(createCustomElement('loading', 'loading...'));
 }
 
 //  
