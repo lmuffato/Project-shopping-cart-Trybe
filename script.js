@@ -1,4 +1,4 @@
-function loadd () {
+function loadd() {
   const recuperaH = document.querySelector('.loading');
   recuperaH.innerText = 'loading...';
   console.log(recuperaH);
