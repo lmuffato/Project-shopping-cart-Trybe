@@ -102,11 +102,11 @@ const onLoadCart = () => {
   });
 };
 
-const emptyCartAll = async () => {
-  const liAll = await document.querySelectorAll('li');
+const emptyCartAll = () => {
+  const liAll = document.querySelectorAll('li');
   const getClearAll = document.querySelector('.empty-cart');
   getClearAll.addEventListener('click', () => {
-    liAll.forEach((e) => e.remove());
+    liAll.forEach((e) => console.log(e.remove()));
     localStorage.clear();
   });
 };
