@@ -49,6 +49,8 @@ function clearButton() {
           const trasLi = createCartItemElement(recebeData.results[index]);
           const ol = document.querySelector('.cart__items');
           ol.appendChild(trasLi);
+          addLocalStorage();
+          totalPrice();
         });
     });
   }
