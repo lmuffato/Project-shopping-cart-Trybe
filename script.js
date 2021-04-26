@@ -34,10 +34,10 @@ function getSkuFromProductItem(item) {
   const calcResult = document.querySelector('.total-price');
   const item = document.querySelectorAll('.cart__item');
   let calc = 0;
-  for (let index = 0; index < item.length; index += 1) {
-    calc += parseFloat(item[index].innerText.split('$')[1]);
+  for (let i = 0; i < item.length; i += 1) {
+    calc += parseFloat(item[i].innerText.split('$')[1]);
   }
-  const valueResult = Math.fround(calc).toFixed(2);
+  const valueResult = Math.round(calc).toFixed(2);
   const result = valueResult;
   calcResult.innerHTML = result;
 } 
