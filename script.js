@@ -103,9 +103,9 @@ const onLoadCart = () => {
 };
 
 const emptyCartAll = () => {
-  const liAll = document.querySelectorAll('li');
   const getClearAll = document.querySelector('.empty-cart');
   getClearAll.addEventListener('click', () => {
+    const liAll = document.querySelectorAll('li');
     liAll.forEach((e) => console.log(e.remove()));
     localStorage.clear();
   });
@@ -116,5 +116,5 @@ window.onload = async function onload() {
   await addProdInCart();
   await onLoadCart();
   await lcStr();
-  emptyCartAll();
+  await emptyCartAll();
 };
