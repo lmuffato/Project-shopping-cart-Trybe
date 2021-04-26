@@ -97,9 +97,19 @@ const onLoadCart = () => {
   });
 };
 
+const emptyCartAll = async () => {
+  const liAll = await document.querySelectorAll('li');
+  const getClearAll = document.querySelector('.empty-cart');
+  getClearAll.addEventListener('click', () => {
+    liAll.forEach((e) => e.remove());
+    localStorage.clear();
+  });
+};
+
 window.onload = async function onload() {
   await addProdList();
   await addProdInCart();
   await onLoadCart();
   await lcStr();
+  emptyCartAll();
 };
