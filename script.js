@@ -28,6 +28,10 @@ function createCustomElement(element, className, innerText) {
 }
 
 const listProd = async () => {
+  const loading = document.createElement('div');
+  loading.classList.add('loading');
+  loading.innerHTML = 'loading...';
+  document.querySelector('.container').appendChild(loading);
   const api = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador');
   const objProd = await api.json();
   return objProd.results;
@@ -45,6 +49,8 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 const addProdList = async () => {
   const prods = await listProd();
   const items1 = document.querySelector('.items');
+  const loading = document.querySelector('.loading');
+  document.querySelector('.container').removeChild(loading);
   prods.forEach((eve) => {
     const sun = createProductItemElement(eve);
     items1.appendChild(sun);
@@ -78,7 +84,6 @@ const addProdInCart = () => {
     .forEach((eachProd) => eachProd.addEventListener('click', async (button) => {
       const getSku = getSkuFromProductItem(button.target.parentNode);
       const sectionObj = await getIdProd(getSku);
-      // const crt = document.querySelector('.cart__items');
       cartItem.appendChild(createCartItemElement(sectionObj));
       lcStr();
     }));
