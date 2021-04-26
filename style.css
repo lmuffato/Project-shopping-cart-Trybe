@@ -23,6 +23,10 @@
   width: 100%;
 }
 
+.loading {
+  display:inline;
+}
+
 .items {
   display: flex;
   flex-basis: 70%;
