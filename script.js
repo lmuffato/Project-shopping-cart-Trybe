@@ -115,9 +115,10 @@ function cartItemClickListener(event) {
 
 // 1 passo
   async function inicioPagina() {
+    display(true);
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
     carregaPagina(dados);
-    // inicioPagina();
+    display(false);
      adicionarItem(dados);
      clearButton();
      addHtml();
