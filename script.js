@@ -59,6 +59,11 @@ function cartItemClickListener(event) {
         });
     });
   }
+
+  const mensagemLoading = () => {
+    const h3 = document.querySelector('.loading');
+    h3.remove();
+  };
   
   // requisito 1
   
@@ -113,6 +118,7 @@ function cartItemClickListener(event) {
      clearButton();
      addHtml();
      await totalPrice();
+     msgLoading();
   }
 
   window.onload = function onload() {
