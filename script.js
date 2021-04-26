@@ -1,9 +1,11 @@
+const cartItems = '.cart__items';
+
 function saveCartOnLocalStorage() {
-  const cartList = document.querySelector('.cart__items').innerHTML;
+  const cartList = document.querySelector(cartItems).innerHTML;
   localStorage.setItem('cartList', cartList);
 }
 
-function cartTotalPrice() {
+async function cartTotalPrice() {
   const listedElements = document.querySelectorAll('li');
   let sum = 0;
   listedElements
@@ -11,7 +13,14 @@ function cartTotalPrice() {
       sum += parseFloat(currentElement.innerText.split('$')[1], 10);
     });
   const totalPrice = document.querySelector('.total-price');
-  if (sum > 0) totalPrice.innerText = sum;
+  totalPrice.innerText = sum;
+}
+
+function emptyCart() {
+  const listedElements = document.querySelector(cartItems);
+  listedElements.innerHTML = '';
+  saveCartOnLocalStorage();
+  cartTotalPrice();
 }
 
 function cartItemClickListener(event) {
@@ -21,7 +30,7 @@ function cartItemClickListener(event) {
 }
 
 function retrieveFromLocalStorage() {
-  const cartList = document.querySelector('.cart__items');
+  const cartList = document.querySelector(cartItems);
   const cartContent = localStorage.getItem('cartList');
   if (cartContent !== null) cartList.innerHTML = cartContent;
   const listedElements = document.querySelectorAll('li');
@@ -61,7 +70,7 @@ async function addToCart(event) {
     .then((result) => result.json());
   const cartObject = { sku, name: targetProduct.title, salePrice: targetProduct.price };
   const newCartItem = createCartItemElement(cartObject);
-  document.querySelector('ol.cart__items').appendChild(newCartItem);
+  document.querySelector(cartItems).appendChild(newCartItem);
   saveCartOnLocalStorage();
   cartTotalPrice();
 }
@@ -90,7 +99,10 @@ async function loadProducts() {
   });
 }
 
-window.onload = function onload() { 
+window.onload = function onload() {
+  const emptyButton = document.querySelector('.empty-cart');
+  emptyButton.addEventListener('click', emptyCart);
   loadProducts();
   retrieveFromLocalStorage();
+  cartTotalPrice();
 };
