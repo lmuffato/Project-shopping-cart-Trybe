@@ -1,8 +1,8 @@
-// eslint-disable-next-line sonarjs/no-duplicate-string
-const cartItems = document.querySelectorAll('.cart__items');
+const cartItemsAll = document.querySelectorAll('.cart__items');
+const cartItem = document.querySelector('.cart__items');
 
 const lcStr = () => {
-  const txtLi = Object.values(cartItems)
+  const txtLi = Object.values(cartItemsAll)
     .find((text) => text).innerText;
   localStorage.setItem('1', txtLi);
   return localStorage.getItem('1');
@@ -78,8 +78,8 @@ const addProdInCart = () => {
     .forEach((eachProd) => eachProd.addEventListener('click', async (button) => {
       const getSku = getSkuFromProductItem(button.target.parentNode);
       const sectionObj = await getIdProd(getSku);
-      const crt = document.querySelector('.cart__items');
-      crt.appendChild(createCartItemElement(sectionObj));
+      // const crt = document.querySelector('.cart__items');
+      cartItem.appendChild(createCartItemElement(sectionObj));
       lcStr();
     }));
 };
@@ -91,7 +91,7 @@ const onLoadCart = () => {
       const li = document.createElement('li');
       li.innerText = e;
       li.className = 'cart__item';
-      document.querySelector('.cart__items').appendChild(li);
+      cartItem.appendChild(li);
       li.addEventListener('click', cartItemClickListener);
     }
   });
