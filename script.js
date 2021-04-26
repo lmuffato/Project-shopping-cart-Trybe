@@ -103,6 +103,7 @@ function cartItemClickListener(event) {
     createText.innerHTML = 'loading...';
     createText.classList.add('loading');
   };
+  criarLoading();
     
   function fetchMercadoLivre() {
    return new Promise((resolve) => {
@@ -115,7 +116,6 @@ function cartItemClickListener(event) {
 
 // 1 passo
   async function inicioPagina() {
-    criarLoading();
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
     carregaPagina(dados);
     // inicioPagina();
