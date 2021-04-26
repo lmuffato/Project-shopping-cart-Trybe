@@ -62,8 +62,8 @@ function cartItemClickListener(event) {
 
   const createdTextLoading = () => {
     const createText = document.createElement('h3');
-    //const recupera = document.querySelector('.items');
-    section.appendChild(createText);
+    const recupera = document.querySelector('.items');
+    recupera.appendChild(createText);
     createText.innerHTML = 'loading...';
     createText.classList.add('loading');
   };
