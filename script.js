@@ -30,7 +30,7 @@ const fetchAPI = async () => {
   return response;
 };
 
-const getData = async () => {
+const createComputerList = async () => {
   const showData = await fetchAPI();
   const { results } = showData;
   results.forEach((element) => {
@@ -44,22 +44,55 @@ const getData = async () => {
   });
 };
   
-  // function getSkuFromProductItem(item) {
-  //   return item.querySelector('span.item__sku').innerText;
-  // }
+  function getSkuFromProductItem(item) {
+    return item.querySelector('span.item__sku').innerText;
+  }
   
   // function cartItemClickListener(event) {
-  //   // coloque seu código
+    
   // }
   
-  // function createCartItemElement({ sku, name, salePrice }) {
-  //   const li = document.createElement('li');
-  //   li.className = 'cart__item';
-  //   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  //   li.addEventListener('click', cartItemClickListener);
-  //   return li;
-  // }
+  function createCartItemElement({ sku, name, salePrice }) {
+    const li = document.createElement('li');
+    li.className = 'cart__item';
+    li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+    // li.addEventListener('click', cartItemClickListener);
+    return li;
+  }
+
+  const computerById = async (id = 'MLB1341706310') => {
+    const endpoint = await fetch(`https://api.mercadolibre.com/items/${id}`);
+    const response = endpoint.json();
+    return response;
+  };
+
+  const addTargetToCart = async () => {
+    const getButtons = [...document.querySelectorAll('.item__add')];
+    getButtons.forEach((element) => {
+      element.addEventListener('click', async (event) => {
+        const targetSection = event.target.parentNode;
+        const targetID = getSkuFromProductItem(targetSection);
+        const data = await computerById(targetID);
+        const getCartItems = document.querySelector('.cart__items');
+        const obj = {
+          sku: data.id,
+          name: data.title,
+          salePrice: data.price,
+        };
+        getCartItems.appendChild(createCartItemElement(obj));
+      });
+    });
+  };
+
+  const syncro = async () => {
+    try {
+      await createComputerList();
+      await addTargetToCart();
+    } catch (error) {
+      console.log('Error! Something is wrong!');
+    }
+  };
   
   window.onload = function onload() {
-    getData();
+    syncro();
    };
