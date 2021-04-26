@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/betrybe/sd-0x-block10-project-shopping-cart#readme",
   "dependencies": {
-    "cypress": "4.3.0",
     "cypress-multi-reporters": "1.2.4",
     "eslint": "6.8.0",
     "eslint-config-trybe-fundamentals": "1.1.0",
@@ -31,5 +30,8 @@
     "mochawesome-report-generator": "4.1.0",
     "stylelint": "13.8.0",
     "stylelint-config-standard": "20.0.0"
+  },
+  "devDependencies": {
+    "cypress": "^7.1.0"
   }
 }
