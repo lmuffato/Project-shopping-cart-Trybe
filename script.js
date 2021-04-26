@@ -1,8 +1,13 @@
 function loadd() {
   const criandoH = document.createElement('h3');
+  criandoH.classeName = 'loading';
   criandoH.innerText = 'loading...';
   const recuperaDiv = document.querySelector('.items');
   recuperaDiv.appendChild(criandoH);
+}
+
+const apaga() {
+  document.querySelector('.loading').remove();
 }
 
 // Função realizada com a ajuda o Igson.
@@ -121,6 +126,7 @@ function cartItemClickListener(event) {
      addHtml();
      await totalPrice();
      loadd();
+     apaga();
   }
 
   window.onload = function onload() {
