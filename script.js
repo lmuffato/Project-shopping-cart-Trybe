@@ -1,6 +1,4 @@
-
 // Função realizada com a ajuda o Igson.
-
 function totalPrice() {
   const list = document.querySelectorAll('li');
   const total = document.querySelector('.total-price');
@@ -27,7 +25,7 @@ function addHtml() {
 }
 
 function clearButton() {
-  const button = document.querySelector('.empty-cart');//recupera o botao esvazia carrnho
+  const button = document.querySelector('.empty-cart');// recupera o botao esvazia carrnho
   const ol = getOl();
   button.addEventListener('click', () => {
     ol.innerHTML = ' ';
