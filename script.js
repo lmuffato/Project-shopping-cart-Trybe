@@ -1,4 +1,41 @@
-  // Requisito 2
+
+// Função realizada com a ajuda o Igson.
+
+function totalPrice() {
+  const list = document.querySelectorAll('li');
+  const total = document.querySelector('.total-price');
+  let soma = 0;
+  list.forEach((item) => {
+    const price = item.innerText.split('$')[1];
+    soma += parseFloat(price);
+  });
+  total.innerText = soma;
+}
+
+function getOl() {
+  return document.querySelector('.cart__items');
+}
+
+function addLocalStorage() {
+  const ol = getOl();
+  localStorage.setItem('list', ol.innerHTML);
+}
+
+function addHtml() {
+  const ol = getOl();
+  ol.innerHTML = localStorage.getItem('list');
+}
+
+function clearButton() {
+  const button = document.querySelector('.empty-cart');//recupera o botao esvazia carrnho
+  const ol = getOl();
+  button.addEventListener('click', () => {
+    ol.innerHTML = ' ';
+    totalPrice();
+  });
+}
+
+ // Requisito 2
   function createCartItemElement({ id, title, price }) {
     const li = document.createElement('li');
     li.className = 'cart__item';
@@ -52,19 +89,6 @@
       section.appendChild(item);
     });
   }
-
-  // REQUISITO 3
-
-  function esvaziaCarrinho() {
-    const limparCarrinho = document.querySelector('.cart__items');
-    limparCarrinho.innerHTML = '';
-  }
-  document.querySelector('.empty-cart').addEventListener('click', esvaziaCarrinho);
-/*
-  function cartItemClickListener(event) {
-    // coloque seu código aqui
-  }
-  */
   // _______________________________________________________________________
   function fetchMercadoLivre() {
    return new Promise((resolve) => {
@@ -74,13 +98,16 @@
        });
    }); 
   }
+
 // 1 passo
   async function inicioPagina() {
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
     carregaPagina(dados);
     // inicioPagina();
-    adicionarItem(dados);
-    esvaziaCarrinho();
+     adicionarItem(dados);
+     clearButton();
+     addHtml();
+     await totalPrice();
   }
 
   window.onload = async function onload() {
