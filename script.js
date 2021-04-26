@@ -1,7 +1,7 @@
 function loadd() {
   const criandoH = document.createElement('h3');
   criandoH.innerText = 'loading...';
-  const recuperaDiv = document.querySelector('#div');
+  const recuperaDiv = document.querySelector('.items');
   recuperaDiv.appendChild(criandoH);
 }
 
