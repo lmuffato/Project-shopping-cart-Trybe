@@ -1,3 +1,18 @@
+// eslint-disable-next-line sonarjs/no-duplicate-string
+const cartItems = document.querySelectorAll('.cart__items');
+
+const lcStr = () => {
+  const txtLi = Object.values(cartItems)
+    .find((text) => text).innerText;
+  localStorage.setItem('1', txtLi);
+  return localStorage.getItem('1');
+};
+
+const upDateLcStr = async () => {
+  await localStorage.clear();
+  lcStr();
+};
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -42,7 +57,7 @@ function getSkuFromProductItem(item) {
 
 function cartItemClickListener(event) {
   event.target.remove();
-  return event.target.innerText;
+  return upDateLcStr();
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -58,14 +73,6 @@ const getIdProd = async (id) => {
   return objReturn;
 };
 
-const lcStr = () => {
-  localStorage.clear();
-  const qtdLi = document.querySelectorAll('.cart__item').length;
-  const txtLi = Object.values(document.querySelectorAll('.cart__items'))
-    .find((text) => text).innerText;
-  localStorage.setItem(qtdLi, txtLi);
-};
-
 const addProdInCart = () => {
   document.querySelectorAll('.item__add')
     .forEach((eachProd) => eachProd.addEventListener('click', async (button) => {
@@ -77,7 +84,22 @@ const addProdInCart = () => {
     }));
 };
 
+const onLoadCart = () => {
+  const qtdLi = localStorage.getItem('1');
+  qtdLi.split('\n').forEach((e) => {
+    if (e !== '') {
+      const li = document.createElement('li');
+      li.innerText = e;
+      li.className = 'cart__item';
+      document.querySelector('.cart__items').appendChild(li);
+      li.addEventListener('click', cartItemClickListener);
+    }
+  });
+};
+
 window.onload = async function onload() {
   await addProdList();
   await addProdInCart();
+  await onLoadCart();
+  await lcStr();
 };
