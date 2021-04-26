@@ -28,7 +28,7 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 //-------------------------------------------------------------------------------------------------
-const carrinho = document.querySelector('.cart__items');
+ 
  // Requisito 5:
  async function totalAPagar() {
   const calcResult = document.querySelector('.total-price');
@@ -43,14 +43,10 @@ const carrinho = document.querySelector('.cart__items');
 } 
 // Requisito 4:
 function save() {
-  const cart = carrinho.innerHTML;
-       localStorage.setItem('cart', cart);
+  const carrinho = document.getElementById('listaCarrinho').innerHTML;
+  localStorage.setItem('cart', carrinho);
   }
   
-  function getLocalStorage() {
-    const savedItens = localStorage.getItem('cart');
-    carrinho.innerHTML = savedItens;
-  }
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
 function cartItemClickListener(event) {
@@ -73,6 +69,10 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
 
 // Requisito 7:
+ function loadingInit() {
+  const items = document.querySelector('.items');
+  items.appendChild(createCustomElement('loading', 'loading...'));
+}
 
 //  
 // Requisito 1:
@@ -105,7 +105,7 @@ function colocaItemNoCarrinho() {
             name: data.title,
             salePrice: data.price,     
           };
-       carrinho.appendChild(createCartItemElement(carObj));
+        document.querySelector('.cart__items').appendChild(createCartItemElement(carObj));
         save();
         totalAPagar();
         });
@@ -136,5 +136,5 @@ window.onload = function onload() {
   save();
   limpaCarrinho();
   totalAPagar();
-  getLocalStorage();
+  loadingInit();
 };
