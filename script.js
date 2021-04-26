@@ -60,15 +60,12 @@ function cartItemClickListener(event) {
     });
   }
 
-  const loading = () => {
-    const tag = document.createElement('h3');
-    tag.className = 'loading';
-    tag.innerText = 'loading...';
-    document.querySelector('.load').appendChild(tag);
-  };
-  
-  const apagaLoading = () => {
-    document.querySelector('.loading').remove();
+  const createdTextLoading = () => {
+    const createText = document.createElement('h3');
+    //const recupera = document.querySelector('.items');
+    section.appendChild(createText);
+    createText.innerHTML = 'loading...';
+    createText.classList.add('loading');
   };
   
   // requisito 1
@@ -124,7 +121,8 @@ function cartItemClickListener(event) {
      clearButton();
      addHtml();
      await totalPrice();
-     loading();;
+     createdTextLoading();
+     document.querySelector('.loading').remove();
   }
 
   window.onload = function onload() {
