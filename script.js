@@ -28,24 +28,25 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 //-------------------------------------------------------------------------------------------------
+ 
+ // Requisito 5:
+ async function totalAPagar() {
+  const calcResult = document.querySelector('.total-price');
+  const item = document.querySelectorAll('.cart__item');
+  let calc = 0;
+  for (let index = 0; index < item.length; index += 1) {
+    calc += parseFloat(item[index].innerText.split('$')[1]);
+  }
+  const valueResult = Math.fround(calc).toFixed(2);
+  const result = valueResult;
+  calcResult.innerHTML = result;
+} 
 // Requisito 4:
 function save() {
   const carrinho = document.getElementById('listaCarrinho').innerHTML;
   localStorage.setItem('cart', carrinho);
   }
   
-  // Requisito 5:
-  async function totalAPagar() {
-    const calcResult = document.querySelector('.total-price');
-    const item = document.querySelectorAll('.cart__item');
-    let calc = 0;
-    for (let index = 0; index < item.length; index += 1) {
-      calc += parseFloat(item[index].innerText.split('$')[1]);
-    }
-    const valueResult = Math.fround(calc).toFixed(2);
-    const result = `Valor à pagar: $ <strong>${valueResult}</strong>`;
-    calcResult.innerHTML = result;
-  }
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
 function cartItemClickListener(event) {
@@ -66,7 +67,8 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Adicione o elemento retornado da função createProductItemElement(product) como filho do elemento <section class="items">.
 
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
- // Requisito 7:
+
+// Requisito 7:
  function loadingInit() {
   const items = document.querySelector('.items');
   items.appendChild(createCustomElement('span', 'loading', 'loading...'));
