@@ -43,10 +43,14 @@ function getSkuFromProductItem(item) {
 } 
 // Requisito 4:
 function save() {
-  const carrinho = document.getElementById('listaCarrinho').innerHTML;
-  localStorage.setItem('cart', carrinho);
+        localStorage.setItem('cart', document.getElementById('listaCarrinho').innerHTML);
   }
   
+  function getLocalStorage() {
+    const savedItens = localStorage.getItem('cart');
+    const savedCart = document.getElementById('listaCarrinho');
+    savedCart.innerHTML = savedItens;
+  }
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
 function cartItemClickListener(event) {
@@ -69,10 +73,6 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
 
 // Requisito 7:
- function loadingInit() {
-  const items = document.querySelector('.items');
-  items.appendChild(createCustomElement('loading', 'loading...'));
-}
 
 //  
 // Requisito 1:
@@ -136,5 +136,5 @@ window.onload = function onload() {
   save();
   limpaCarrinho();
   totalAPagar();
-  loadingInit();
+  getLocalStorage();
 };
