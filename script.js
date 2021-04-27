@@ -1,4 +1,5 @@
 // Agradecimento especial ao Rafael Dorneles - T10 - Tribo A- por todo incentivo e auxílio neste projeto. :)
+const carrinho = document.querySelector('.cart__items');
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -33,37 +34,26 @@ function getSkuFromProductItem(item) {
  async function totalAPagar() {
   const calcResult = document.querySelector('.total-price');
   const item = document.querySelectorAll('.cart__item');
-  let sum = 0;
+  let calc = 0;
   for (let i = 0; i < item.length; i += 1) {
-    sum += parseFloat(item[i].innerText.split('$')[1]);
+    calc += parseFloat(item[i].innerText.split('$')[1]);
   }
-  const valueResult = sum.toFixed(2);
+  const valueResult = Math.round(calc).toFixed(2);
   const result = valueResult;
   calcResult.innerHTML = result;
 } 
 // Requisito 4:
-function save() {
-  const cartItems = document.getElementById('lista__Carrinho').innerHTML;
+function saveInLocalStorage() {
+  const cartItems = carrinho.innerHTML;
   localStorage.setItem('cart', cartItems);
 }
-  
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
 function cartItemClickListener(event) {
 const elementoPai = event.target.parentElement;
 elementoPai.removeChild(event.target);  
- save();
  totalAPagar();
-}
-
-function loadFromLocalStorage() {
-  const cartList = document.getElementById('lista__Carrinho');
-  cartList.innerHTML = localStorage.getItem('cart');
-  cartList.addEventListener('click', ((event) => {
-    if (event.target.classList.contains('cart__item')) {
-      cartItemClickListener(event);
-    }
-  }));
+ saveInLocalStorage();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -79,6 +69,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
 
 // Requisito 7:
+
 //  
 // Requisito 1:
 function criaLista() {
@@ -91,9 +82,16 @@ function criaLista() {
         image: produto.thumbnail,
       };
          document.querySelector('.items').appendChild(createProductItemElement(prodObj));
-         save();
     }));
       // 
+}
+function loadFromLocalStorage() {
+ carrinho.innerHTML = localStorage.getItem('cart');
+  carrinho.addEventListener('click', ((event) => {
+    if (event.target.classList.contains('cart__item')) {
+      cartItemClickListener(event);
+    }
+  }));
 }
 
 // --------------------------------------------------------------------------------------------
@@ -112,7 +110,6 @@ function colocaItemNoCarrinho() {
             salePrice: data.price,     
           };
         document.querySelector('.cart__items').appendChild(createCartItemElement(carObj));
-        save();
         totalAPagar();
         });
       }
@@ -123,8 +120,7 @@ function colocaItemNoCarrinho() {
 // Requisito 6:
 function limpaCarrinho() {
     document.querySelector('.empty-cart').addEventListener('click', () => {
-    document.querySelector('.cart__items').innerHTML = '';
-    save();
+    carrinho.innerHTML = '';
     totalAPagar();
   });
 }
@@ -139,8 +135,7 @@ function limpaCarrinho() {
 window.onload = function onload() {
   criaLista();
   colocaItemNoCarrinho();
-  save();
   limpaCarrinho();
   totalAPagar();
   loadFromLocalStorage();
-};
+  };
