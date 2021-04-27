@@ -113,7 +113,6 @@ const getId = async () => {
     .previousElementSibling.innerText;
     // selectedId = id;
     addProduct(id);
-    // updatePrice();
   }));
 };
 
