@@ -150,3 +150,5 @@ window.onload = async function onload() {
   await emptyCartAll();
   await totalPrice();
 };
+
+// apoio e suporte: Renzo, Matheus Lima e Zezé.
