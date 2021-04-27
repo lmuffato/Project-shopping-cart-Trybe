@@ -33,17 +33,30 @@ const verifiedFetch = async (url) => {
   throw new Error('endpoint não existe');
 };
 
+const arrayOfValues = [];
+
 function cartItemClickListener(event) {
+  arrayOfValues.pop();
   event.target.remove(); // Descobri o remove() na intuição :O ... Nem acredito ,-,
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
+  arrayOfValues.push(salePrice);
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const createTotalValue = (price) => {
+  const limpa = document.querySelectorAll('.total-price');
+  limpa.forEach((element) => element.remove());
+  const totalPrice = document.createElement('div');
+  totalPrice.className = 'total-price';
+  totalPrice.innerText = price;
+  return totalPrice;
+};
 
 const cartItem0 = document.querySelector('.cart__items');
 const asd = async (selectedId) => {
@@ -53,7 +66,10 @@ const asd = async (selectedId) => {
     .then((r) => r);
   cartItem.appendChild(createCartItemElement(product));
   localStorage.cartItens = cartItem.innerHTML;
-  console.log(localStorage.cartItens);
+  let total = 0;
+  arrayOfValues.forEach((element) => { total += element; });
+  cartItem.appendChild(createTotalValue(total));
+  // console.log(localStorage.cartItens);
 };
 
 const sla = async () => {
@@ -78,9 +94,12 @@ const execute = async () => {
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
+
 const chamaStorage = () => {
 if (localStorage.cartItens) cartItem0.innerHTML = localStorage.cartItens;
 };
+
+// localStorage.clear();
 window.onload = function onload() {
   execute();
   chamaStorage();
