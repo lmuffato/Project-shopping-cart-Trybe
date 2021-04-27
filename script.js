@@ -1,5 +1,4 @@
 // Agradecimento especial ao Rafael Dorneles - T10 - Tribo A- por todo incentivo e auxílio neste projeto. :)
-const carrinho = document.querySelector('.cart__items');
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -44,7 +43,7 @@ function getSkuFromProductItem(item) {
 } 
 // Requisito 4:
 function saveInLocalStorage() {
-  const cartItems = carrinho.innerHTML;
+  const cartItems = document.querySelector('.cart__items').innerHTML;
   localStorage.setItem('cart', cartItems);
 }
 // ---------------------------------------------------------------------------------------------
@@ -86,8 +85,9 @@ function criaLista() {
       // 
 }
 function loadFromLocalStorage() {
- carrinho.innerHTML = localStorage.getItem('cart');
-  carrinho.addEventListener('click', ((event) => {
+  const cartList = document.querySelector('.cart__items');
+  cartList.innerHTML = localStorage.getItem('cart');
+  cartList.addEventListener('click', ((event) => {
     if (event.target.classList.contains('cart__item')) {
       cartItemClickListener(event);
     }
@@ -109,7 +109,7 @@ function colocaItemNoCarrinho() {
             name: data.title,
             salePrice: data.price,     
           };
-        document.querySelector('.cart__items').appendChild(createCartItemElement(carObj));
+        document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
         totalAPagar();
         });
       }
@@ -120,7 +120,7 @@ function colocaItemNoCarrinho() {
 // Requisito 6:
 function limpaCarrinho() {
     document.querySelector('.empty-cart').addEventListener('click', () => {
-    carrinho.innerHTML = '';
+    document.querySelector('.cart__items').innerHTML = '';
     totalAPagar();
   });
 }
