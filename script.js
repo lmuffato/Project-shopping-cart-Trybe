@@ -35,6 +35,13 @@ const verifiedFetch = async (url) => {
 
 const arrayOfValues = [];
 
+const createTotalValue = (price) => {
+  const totalPrice = document.querySelector('.total-price');
+  // totalPrice.remove();
+  totalPrice.innerText = price;
+  return totalPrice;
+};
+
 function cartItemClickListener(event) {
   arrayOfValues.pop();
   event.target.remove(); // Descobri o remove() na intuição :O ... Nem acredito ,-,
@@ -51,13 +58,6 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
-
-const createTotalValue = (price) => {
-  const totalPrice = document.querySelector('.total-price');
-  // totalPrice.remove();
-  totalPrice.innerText = price;
-  return totalPrice;
-};
 
 const cartItem0 = document.querySelector('.cart__items');
 const asd = async (selectedId) => {
