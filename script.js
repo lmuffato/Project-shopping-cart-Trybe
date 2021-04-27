@@ -1,15 +1,16 @@
-/* function loadd() {
+ function loadd() {
   const criandoH = document.createElement('div');
   criandoH.classeList.add('loading');
   criandoH.innerText = 'loading...';
   const recuperaDiv = document.querySelector('.container');
   recuperaDiv.appendChild(criandoH);
 }
-*/
+
+/*
 function apaga() {
   document.querySelector('.loading').remove();
 }
-
+*/
 // Função realizada com a ajuda o Igson.
 function totalPrice() {
   const list = document.querySelectorAll('li');
@@ -125,6 +126,7 @@ function cartItemClickListener(event) {
      clearButton();
      addHtml();
      await totalPrice();
+     loadd();
   }
 
   window.onload = function onload() {
