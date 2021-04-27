@@ -1,15 +1,8 @@
- function loadd() {
-  const criandoH = document.createElement('h4');
-  criandoH.classeList.add('loading');
-  criandoH.innerText = 'loading...';
-  const recuperaDiv = document.querySelector('body');
-  recuperaDiv.appendChild(criandoH);
-}
-/*
+ 
 function apaga() {
   document.querySelector('.loading').remove();
 }
-*/
+
 // Função realizada com a ajuda o Igson.
 function totalPrice() {
   const list = document.querySelectorAll('li');
@@ -115,13 +108,12 @@ function cartItemClickListener(event) {
             response.json().then((data) => resolve(data));
           });
       }); 
-     // apaga();
   }
-
+  
 // 1 passo
   async function inicioPagina() {
-    loadd();
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
+    apaga();
     carregaPagina(dados);
      adicionarItem(dados);
      clearButton();
