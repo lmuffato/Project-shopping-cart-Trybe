@@ -84,16 +84,6 @@ function criaLista() {
     }));
       // 
 }
-function loadFromLocalStorage() {
-  const cartList = document.getElementById('lista__Carrinho');
-  cartList.innerHTML = localStorage.getItem('cart');
-  cartList.addEventListener('click', ((event) => {
-    if (event.target.classList.contains('cart__item')) {
-      cartItemClickListener(event);
-    }
-  }));
-}
-
 // --------------------------------------------------------------------------------------------
 // Requisito 2:
 function colocaItemNoCarrinho() {
