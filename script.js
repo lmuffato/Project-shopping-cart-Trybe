@@ -5,11 +5,11 @@
   const recuperaDiv = document.querySelector('body');
   recuperaDiv.appendChild(criandoH);
 }
-
+/*
 function apaga() {
   document.querySelector('.loading').remove();
 }
-
+*/
 // Função realizada com a ajuda o Igson.
 function totalPrice() {
   const list = document.querySelectorAll('li');
