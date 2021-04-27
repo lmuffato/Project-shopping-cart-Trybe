@@ -46,25 +46,44 @@ btnClear.addEventListener('click', () => {
   arrayOfItens.forEach((element) => element.remove());
 });
 
-const arrayOfValues = [];
+// const arrayOfValues = [];
 
-const createTotalValue = async (price) => {
-  const totalPrice = await document.querySelector('.total-price');
+// const createTotalValue = async (price) => {
+//   const totalPrice = await document.querySelector('.total-price');
+//   if (!localStorage.price) { totalPrice.innerText += price; } else { totalPrice.innerText = price; }
+//   localStorage.price = totalPrice.innerText;
+//   return totalPrice;
+// };
+const totalPrice = document.querySelector('.total-price');
+const cartItem0 = document.querySelector('.cart__items');
+// utilizei do repositório do Renzo para as 2 funções seguintes. repositório : https://github.com/tryber/sd-010-a-project-shopping-cart/pull/58/commits/55251dbd95d243b83b26ba894ab6ce2560c2e543
+const sumPrices = (acc, element) => {
+  const arr = element.innerText.split('$');
+  const price = Number(arr[1]);
+  const total = acc + price;
+  return total;
+};
+
+const updatePrice = async () => {
+  const liArray = document.querySelectorAll('.cart__item');
+  // console.log(liArray);
+  const price = [...liArray].reduce(sumPrices, 0);
   totalPrice.innerText = price;
-  localStorage.price = totalPrice.innerText;
-  return totalPrice;
+  localStorage.totalPrice = totalPrice.innerText;
 };
 
 function cartItemClickListener(event) {
-  arrayOfValues.pop();
+  // arrayOfValues.pop();
   event.target.remove(); // Descobri o remove() na intuição :O ... Nem acredito ,-,
-  let total = 0;
-  arrayOfValues.forEach((element) => { total += element; });
-  createTotalValue(total);
+  localStorage.cartItens = cartItem0.innerHTML;
+  updatePrice();
+  // let total = 0;
+  // arrayOfValues.forEach((element) => { total += element; });
+  // createTotalValue(total);
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
-  arrayOfValues.push(salePrice);
+  // arrayOfValues.push(salePrice);
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
@@ -72,7 +91,6 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   return li;
 }
 
-const cartItem0 = document.querySelector('.cart__items');
 const asd = async (selectedId) => {
   const cartItem = document.querySelector('.cart__items');
   const product = await fetch(`https://api.mercadolibre.com/items/${selectedId}`)
@@ -80,20 +98,21 @@ const asd = async (selectedId) => {
     .then((r) => r);
   cartItem.appendChild(createCartItemElement(product));
   localStorage.cartItens = cartItem.innerHTML;
-  let total = 0;
-  arrayOfValues.forEach((element) => { total += element; });
-  createTotalValue(total);
+  // let total = 0;
+  // arrayOfValues.forEach((element) => { total += element; });
+  // createTotalValue(total);
   // console.log(localStorage.cartItens);
 };
 
 const sla = async () => {
   const a = document.querySelectorAll('.item__add');
-  let selectedId;
+  // let selectedId;
   a.forEach((element) => element.addEventListener('click', (e) => {
     const id = e.target.previousElementSibling.previousElementSibling
     .previousElementSibling.innerText;
-    selectedId = id;
-    asd(selectedId);
+    // selectedId = id;
+    asd(id);
+    updatePrice();
   }));
 };
 
@@ -109,13 +128,12 @@ const execute = async () => {
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
-
 const chamaStorage = () => {
 if (localStorage.cartItens) cartItem0.innerHTML = localStorage.cartItens;
 if (localStorage.price) document.querySelector('.total-price').innerText = localStorage.price;
+  updatePrice();
 };
 
-// localStorage.clear();
 window.onload = function onload() {
   execute();
   chamaStorage();
