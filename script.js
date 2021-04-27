@@ -33,19 +33,19 @@ function getSkuFromProductItem(item) {
  async function totalAPagar() {
   const calcResult = document.querySelector('.total-price');
   const item = document.querySelectorAll('.cart__item');
-  let calc = 0;
+  let sum = 0;
   for (let i = 0; i < item.length; i += 1) {
-    calc += parseFloat(item[i].innerText.split('$')[1]);
+    sum += parseFloat(item[i].innerText.split('$')[1]);
   }
-  const valueResult = calc.toFixed(2);
+  const valueResult = sum.toFixed(2);
   const result = valueResult;
   calcResult.innerHTML = result;
 } 
 // Requisito 4:
 function save() {
-  const carrinho = document.getElementById('listaCarrinho').innerHTML;
-  localStorage.setItem('cart', carrinho);
-  }
+  const cartItems = document.getElementById('lista__Carrinho').innerHTML;
+  localStorage.setItem('cart', cartItems);
+}
   
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
@@ -54,6 +54,16 @@ const elementoPai = event.target.parentElement;
 elementoPai.removeChild(event.target);  
  save();
  totalAPagar();
+}
+
+function loadFromLocalStorage() {
+  const cartList = document.getElementById('lista__Carrinho');
+  cartList.innerHTML = localStorage.getItem('cart');
+  cartList.addEventListener('click', ((event) => {
+    if (event.target.classList.contains('cart__item')) {
+      cartItemClickListener(event);
+    }
+  }));
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -69,11 +79,6 @@ function createCartItemElement({ sku, name, salePrice }) {
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
 
 // Requisito 7:
- function loadingInit() {
-  const items = document.querySelector('.items');
-  items.appendChild(createCustomElement('loading', 'loading...'));
-}
-
 //  
 // Requisito 1:
 function criaLista() {
@@ -86,6 +91,7 @@ function criaLista() {
         image: produto.thumbnail,
       };
          document.querySelector('.items').appendChild(createProductItemElement(prodObj));
+         save();
     }));
       // 
 }
@@ -136,5 +142,5 @@ window.onload = function onload() {
   save();
   limpaCarrinho();
   totalAPagar();
-  loadingInit();
+  loadFromLocalStorage();
 };
