@@ -109,24 +109,26 @@ function cartItemClickListener(event) {
   // _______________________________________________________________________
       
   function fetchMercadoLivre() {
-   return new Promise((resolve) => {
-     fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
-       .then((response) => {
-         response.json().then((data) => resolve(data));
-       });
-   }); 
+    setTimeout(() => {
+      return new Promise((resolve) => {
+        fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
+          .then((response) => {
+            response.json().then((data) => resolve(data));
+          });
+      }); 
+      apaga();
+    }, 3000);
   }
 
 // 1 passo
   async function inicioPagina() {
+    loadd();
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
     carregaPagina(dados);
      adicionarItem(dados);
      clearButton();
      addHtml();
      await totalPrice();
-     loadd();
-     apaga();
   }
 
   window.onload = function onload() {
