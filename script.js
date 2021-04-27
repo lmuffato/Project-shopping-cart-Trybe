@@ -20,7 +20,7 @@ const sum = () => {
 const totalPrice = async () => {
   const divTotal = await document.querySelector('.total-price');
   const total = sum();
-  divTotal.innerHTML = total;
+  divTotal.innerHTML = `Total Price: $${total}`;
   return divTotal;
 };
 
