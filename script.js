@@ -34,7 +34,11 @@ const verifiedFetch = async (url) => {
 };
 
 const btnClear = document.querySelector('.empty-cart');
-btnClear.addEventListener('click', () => localStorage.clear());
+btnClear.addEventListener('click', () => { 
+  localStorage.clear();
+  const arrayOfItens = document.querySelectorAll('.cart__item');
+  arrayOfItens.forEach((element) => element.remove());
+});
 
 const arrayOfValues = [];
 
