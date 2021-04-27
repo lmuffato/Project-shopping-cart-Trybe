@@ -33,6 +33,9 @@ const verifiedFetch = async (url) => {
   throw new Error('endpoint não existe');
 };
 
+const btnClear = document.querySelector('.empty-cart');
+btnClear.addEventListener('click', () => localStorage.clear());
+
 const arrayOfValues = [];
 
 const createTotalValue = async (price) => {
