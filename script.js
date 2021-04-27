@@ -1,5 +1,4 @@
- 
-function apaga() {
+ function apaga() {
   document.querySelector('.loading').remove();
 }
 
