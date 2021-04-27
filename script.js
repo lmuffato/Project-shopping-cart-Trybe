@@ -55,7 +55,7 @@ const createTotalValue = (price) => {
   limpa.forEach((element) => element.remove());
   const totalPrice = document.createElement('div');
   totalPrice.className = 'total-price';
-  totalPrice.innerText = `Preço total: ${price.toFixed(2)}`;
+  totalPrice.innerText = `Preço total: ${price}`;
   return totalPrice;
 };
 
