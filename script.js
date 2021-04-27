@@ -109,7 +109,6 @@ function cartItemClickListener(event) {
   // _______________________________________________________________________
       
   function fetchMercadoLivre() { 
-    loadd();
       return new Promise((resolve) => {
         fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
           .then((response) => {
@@ -121,6 +120,7 @@ function cartItemClickListener(event) {
 
 // 1 passo
   async function inicioPagina() {
+    loadd();
     const dados = await fetchMercadoLivre(); // tem todos os dados da API
     carregaPagina(dados);
      adicionarItem(dados);
