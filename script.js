@@ -95,8 +95,8 @@ const execute = async () => {
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
-// localStorage.clear();
+localStorage.clear();
 window.onload = function onload() {
   execute();
-  cartItem0.innerHTML = (localStorage.cartItens) ? localStorage.cartItens : '';
+  // cartItem0.innerHTML = localStorage.cartItens;
 };
