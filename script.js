@@ -38,6 +38,9 @@ const arrayOfValues = [];
 function cartItemClickListener(event) {
   arrayOfValues.pop();
   event.target.remove(); // Descobri o remove() na intuição :O ... Nem acredito ,-,
+  let total = 0;
+  arrayOfValues.forEach((element) => { total += element; });
+  createTotalValue(total);
 }
 
 function createCartItemElement({ id: sku, title: name, price: salePrice }) {
@@ -50,10 +53,8 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 }
 
 const createTotalValue = (price) => {
-  const limpa = document.querySelectorAll('.total-price');
-  limpa.forEach((element) => element.remove());
-  const totalPrice = document.createElement('div');
-  totalPrice.className = 'total-price';
+  const totalPrice = document.querySelector('.total-price');
+  // totalPrice.remove();
   totalPrice.innerText = price;
   return totalPrice;
 };
@@ -68,7 +69,7 @@ const asd = async (selectedId) => {
   localStorage.cartItens = cartItem.innerHTML;
   let total = 0;
   arrayOfValues.forEach((element) => { total += element; });
-  cartItem.appendChild(createTotalValue(total));
+  createTotalValue(total);
   // console.log(localStorage.cartItens);
 };
 
