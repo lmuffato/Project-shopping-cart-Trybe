@@ -127,5 +127,4 @@ window.onload = function onload() {
   colocaItemNoCarrinho();
   limpaCarrinho();
   totalAPagar();
-  loadFromLocalStorage();
   };
