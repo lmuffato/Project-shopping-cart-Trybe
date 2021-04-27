@@ -116,7 +116,7 @@ function cartItemClickListener(event) {
             response.json().then((data) => resolve(data));
           });
       }); 
-      apaga();
+     // apaga();
   }
 
 // 1 passo
