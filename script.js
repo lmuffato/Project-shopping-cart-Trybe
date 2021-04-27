@@ -35,10 +35,10 @@ const verifiedFetch = async (url) => {
 
 const arrayOfValues = [];
 
-const createTotalValue = (price) => {
-  const totalPrice = document.querySelector('.total-price');
-  // totalPrice.remove();
+const createTotalValue = async (price) => {
+  const totalPrice = await document.querySelector('.total-price');
   totalPrice.innerText = price;
+  localStorage.price = totalPrice.innerText;
   return totalPrice;
 };
 
@@ -98,6 +98,7 @@ const execute = async () => {
 
 const chamaStorage = () => {
 if (localStorage.cartItens) cartItem0.innerHTML = localStorage.cartItens;
+if (localStorage.price) document.querySelector('.total-price').innerText = localStorage.price;
 };
 
 // localStorage.clear();
