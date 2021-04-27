@@ -1,16 +1,15 @@
  function loadd() {
-  const criandoH = document.createElement('div');
+  const criandoH = document.createElement('h4');
   criandoH.classeList.add('loading');
   criandoH.innerText = 'loading...';
-  const recuperaDiv = document.querySelector('.container');
+  const recuperaDiv = document.querySelector('body');
   recuperaDiv.appendChild(criandoH);
 }
 
-/*
 function apaga() {
   document.querySelector('.loading').remove();
 }
-*/
+
 // Função realizada com a ajuda o Igson.
 function totalPrice() {
   const list = document.querySelectorAll('li');
@@ -109,13 +108,15 @@ function cartItemClickListener(event) {
   }
   // _______________________________________________________________________
       
-  function fetchMercadoLivre() {
+  function fetchMercadoLivre() { 
+    loadd();
       return new Promise((resolve) => {
         fetch('https://api.mercadolibre.com/sites/MLB/search?q=$computador')
           .then((response) => {
             response.json().then((data) => resolve(data));
           });
       }); 
+      apaga();
   }
 
 // 1 passo
@@ -126,7 +127,6 @@ function cartItemClickListener(event) {
      clearButton();
      addHtml();
      await totalPrice();
-     loadd();
   }
 
   window.onload = function onload() {
