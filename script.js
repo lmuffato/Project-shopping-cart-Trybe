@@ -24,11 +24,23 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+const itemsLocalStorage = [];
+
 // evento dentro do carrinho de compras
 function cartItemClickListener(event) {
-   const removeItem = event.target;
-   removeItem.remove();
+   const ItemCart = event.target;
+   const removeLocalStorage = ItemCart.innerText;
+   ItemCart.remove();
+   const getItemRemove = JSON.parse(localStorage.getItem('items'));
+   getItemRemove.splice(getItemRemove.indexOf(removeLocalStorage), 1);
+   localStorage.setItem('items', JSON.stringify(getItemRemove));
+   itemsLocalStorage.splice(itemsLocalStorage.indexOf(removeLocalStorage), 1);
 }
+
+const itemLocalStorage = (itemName) => {
+  itemsLocalStorage.push(itemName);
+  localStorage.setItem('items', JSON.stringify(itemsLocalStorage));
+};
 
 function createCartItemElement({ sku, name, salePrice }) {
   const getElementOl = document.querySelector('.cart__items');
@@ -36,6 +48,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   getElementOl.appendChild(li);
+  itemLocalStorage(`SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`);
   li.addEventListener('click', cartItemClickListener);
 
   return li;
@@ -74,6 +87,21 @@ const getItens = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=co
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+const onloadCart = () => {
+  const getItemsLocalStorage = JSON.parse(localStorage.getItem('items'));
+  const getElementOl = document.querySelector('.cart__items');
+  if (getItemsLocalStorage.length > 0) {
+    for (let index = 0; index < getItemsLocalStorage.length; index += 1) {
+      const li = document.createElement('li');
+      li.className = 'cart__item';
+      li.innerText = getItemsLocalStorage[index];
+      getElementOl.appendChild(li);
+      li.addEventListener('click', cartItemClickListener);
+    }
+  }
+};
+
 window.onload = function onload() {
   getItens();
+  onloadCart();
 };
