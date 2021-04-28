@@ -6,9 +6,17 @@ const listProducts = async () => {
   return data.results;
 };
 
+const clear = (itens) => {
+  
+  const vars = document.querySelector('.empty-cart')
+  vars.addEventListener('click', () => {
+  itens.forEach((current) => current.remove()); 
+  })
+
+}
+
 function cartItemClickListener(event) {
   const item = event.target;
-  // const clearItem = document.querySelector(item);
   item.remove();
  }
 
@@ -34,12 +42,16 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function total() {
+
+}
+
 async function eventClick(event) {
-  const produtos = await listProducts();
-  const filho = event.target;
-  const pai = filho.parentNode;
-  const sku = pai.querySelector('.item__sku').innerText;  
-  console.log(produtos);
+  const produtos = await listProducts(); // Pega todos os produtos
+  const filho = event.target; // classe clicada
+  const pai = filho.parentNode; // classe pai do filho
+  const sku = pai.querySelector('.item__sku').innerText; // classe que tem o ID do produto
+  
   produtos.forEach((element) => {
     if (element.id === sku) {
     const prods = {
@@ -47,8 +59,13 @@ async function eventClick(event) {
    name: element.title,
    salePrice: element.price,
    };
+   total(prods)
    const item = createCartItemElement(prods);
-   document.querySelector('.cart__items').appendChild(item); 
+   document.querySelector('.cart__items').appendChild(item);
+   
+   const itens = document.querySelectorAll('.cart__item')
+   clear(itens);
+   
   }
    });
 }
@@ -96,16 +113,19 @@ async function pushItem() {
   });
 }
 
-// const pushElement = () => {
-//   const button = document.querySelector('.item_add');
-//   button.addEventListener('click', (a) => {
-//     console.log(a.target);
-//   })
-// }
+const load = () => {
+  if (listProducts()) {
+    const loading = document.querySelector('.loading')
+    loading.remove();
+  }
+}
+
 
 window.onload = function onload() {
+  load();
   getProducts();
   listProducts();
   pushItem();
+  
   // pushElement();
 };
