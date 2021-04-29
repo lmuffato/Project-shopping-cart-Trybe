@@ -1,6 +1,18 @@
+//  -------------------------------------------REQUISITO5---------------------------------------------
+
+const cart = '.cart__items';// ----> atendendo os requisitos do lint, se criou uma constante para armazenar  a classe
+
+// REQUISITO5-1 .soma o valor total dos itens no carrinho.
+const totalBuy = async () => {
+  let total = 0;
+  const values = [...document.querySelectorAll('.cart__item')];
+  const arrayOfLiContent = values.map((li) => parseFloat(li.innerText.split('$')[1]));
+  total = arrayOfLiContent.reduce((acc, current) => acc + current, 0);
+  document.querySelector('.totalprice').innerText = total.toFixed(2);
+};
+
 //  -------------------------------------------REQUISITO4---------------------------------------------
 
-const cart = '.cart__items';
 // REQUISITO4-1 .salvar carrinho de compras no local storage 
 function saveCartList() {
   const savedItens = document.querySelector(cart);
@@ -15,6 +27,7 @@ function cartItemClickListener(event) {
   if (target.classList.contains('cart__item')) {
     target.remove('li');
     saveCartList();
+    totalBuy();
   }
 }
 
@@ -27,6 +40,7 @@ function loadCartSaved() {
   [...itemsList].forEach((li) => {
     li.addEventListener('click', cartItemClickListener);
   });
+  totalBuy();
 }
 
 //  -------------------------------------------REQUISITO2---------------------------------------------
@@ -54,6 +68,7 @@ const searchId = (id) => {
         const infoById = data;
         document.querySelector(cart).appendChild(createCartItemElement(infoById));
         saveCartList();
+        totalBuy();
       });
     });
 };
