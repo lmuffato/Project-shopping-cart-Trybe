@@ -12,6 +12,28 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  // li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+function addItemToCart(productInfo) {
+  const { id, title, price } = productInfo;
+  const cartItemList = document.getElementsByClassName('cart__items')[0];
+  const cartItem = createCartItemElement({ sku: id, name: title, salePrice: price });
+  cartItemList.appendChild(cartItem);
+}
+
+function fetchSingleItem(e) {
+  const idValue = e.target.parentNode.firstChild.textContent;
+  fetch(`https://api.mercadolibre.com/items/${idValue}`)
+  .then((response) => response.json())
+  .then((productObj) => addItemToCart(productObj));
+}
+
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -19,8 +41,10 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-  
+  const cartBtn = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  cartBtn.addEventListener('click', fetchSingleItem);
+  section.appendChild(cartBtn);
+
   return section;
 }
 
@@ -53,13 +77,5 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   // coloque seu código aqui
   // primeiro commit
-}
-
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
 }
 */
