@@ -70,11 +70,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   body.appendChild(loading);
 }
 
-function removeLoading() {
-  const { body } = document;
-  const loading = document.querySelector('.loading');
-  body.removeChild(loading);
-}
 // Requisito 1:
 function criaLista() {
   loadingPage();
@@ -87,10 +82,8 @@ function criaLista() {
         image: produto.thumbnail,
       };
          document.querySelector('.items').appendChild(createProductItemElement(prodObj));
-         removeLoading();
-    }));
-      // 
-}
+      }));
+    } 
 // --------------------------------------------------------------------------------------------
 // Requisito 2:
 function colocaItemNoCarrinho() {
