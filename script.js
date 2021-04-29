@@ -37,8 +37,8 @@ function getSkuFromProductItem(item) {
   for (let i = 0; i < item.length; i += 1) {
     calc += parseFloat(item[i].innerText.split('$')[1]);
   }
-  const valueResult = (calc).toFixed(2);
-  const result = valueResult;
+  // const valueResult = (calc).toFixed(2);
+  const result = Math.round(calc);
   calcResult.innerHTML = result;
 } 
 // ---------------------------------------------------------------------------------------------
