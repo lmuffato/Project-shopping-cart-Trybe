@@ -8,7 +8,7 @@ const totalBuy = async () => {
   const values = [...document.querySelectorAll('.cart__item')];
   const arrayOfLiContent = values.map((li) => parseFloat(li.innerText.split('$')[1]));
   total = arrayOfLiContent.reduce((acc, current) => acc + current, 0);
-  document.querySelector('.total-price').innerText = total.toFixed(2);
+  document.querySelector('.total-price').innerText = total;
 };
 
 //  -------------------------------------------REQUISITO6---------------------------------------------
@@ -97,6 +97,23 @@ const takeProductInfos = () => {
   });
 };
 
+//  -------------------------------------------REQUISITO7---------------------------------------------
+
+// REQUISITO7-1 .colocar o texto loading enquanto carrega o api.
+const createLoadingSpan = () => {
+  const span = document.createElement('span');
+  span.className = 'loading';
+  span.innerText = 'LOADING...';
+  const sectionItens = document.querySelector('.items');
+  sectionItens.appendChild(span);
+  return span;
+};
+
+// REQUISITO7-2 .deleta o span após o carregamento da API
+const deleteLoadingSpan = () => {
+  document.querySelector('.loading').remove();
+};
+
 //  -------------------------------------------REQUISITO1---------------------------------------------
 
 // REQUISITO1-3 .cria a imagem do computador dentro da seção criada. funcao necessaria para createProductItemElement()
@@ -149,9 +166,10 @@ const fetchProducts = (query) => fetch(`https://api.mercadolibre.com/sites/MLB/s
 //  ---------------------------------------------------------------------------------------------------------
 
 window.onload = function onload() {
-  fetchProducts(input);
+  fetchProducts(input).then(deleteLoadingSpan);
   takeProductInfos();
   loadCartSaved();
   saveCartList();
   removeAllItems();
+  createLoadingSpan();
 };
