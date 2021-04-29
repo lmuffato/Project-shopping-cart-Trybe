@@ -1,3 +1,12 @@
+//  -------------------------------------------REQUISITO4---------------------------------------------
+
+const cart = '.cart__items';
+// REQUISITO4-1 .salvar carrinho de compras no local storage 
+function saveCartList() {
+  const savedItens = document.querySelector(cart);
+  localStorage.setItem('onCart', savedItens.innerHTML);
+  }
+
 //  -------------------------------------------REQUISITO3---------------------------------------------
 
 // REQUISITO3-1 .ao clicar no item no carrinho, remove ele da lista
@@ -5,7 +14,19 @@ function cartItemClickListener(event) {
   const { target } = event;
   if (target.classList.contains('cart__item')) {
     target.remove('li');
+    saveCartList();
   }
+}
+
+// cont.requisito4-------->// REQUISITO4-2 .pegar dados no localStorage e aparecer na página 
+function loadCartSaved() {
+  const getCartSaved = localStorage.getItem('onCart');
+  const ol = document.querySelector(cart);
+  ol.innerHTML = getCartSaved;
+  const itemsList = document.querySelectorAll('.cart__item');
+  [...itemsList].forEach((li) => {
+    li.addEventListener('click', cartItemClickListener);
+  });
 }
 
 //  -------------------------------------------REQUISITO2---------------------------------------------
@@ -31,7 +52,8 @@ const searchId = (id) => {
       response.json()
       .then((data) => { 
         const infoById = data;
-        document.querySelector('.cart__items').appendChild(createCartItemElement(infoById));
+        document.querySelector(cart).appendChild(createCartItemElement(infoById));
+        saveCartList();
       });
     });
 };
@@ -101,4 +123,6 @@ const fetchProducts = (query) => fetch(`https://api.mercadolibre.com/sites/MLB/s
 window.onload = function onload() {
   fetchProducts(input);
   takeProductInfos();
+  loadCartSaved();
+  saveCartList();
 };
