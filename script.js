@@ -1,24 +1,66 @@
 
 window.onload = function onload() {
-  fetchApi();
+  createLanding();
+  document.body.addEventListener('click', addCartItem)
 };
 
-const fetchApi = () => {
-  const response =  fetch("https://api.mercadolibre.com/sites/MLB/search?q=$QUERY")
-    .then((response) => response.json() .then((data) => {
-      const conteiner = document.getElementById('main');
-        data.results.forEach((item) => {
-        const itemObj = {
-          sku: item.id,
-          name: item.title,
-          image: item.thumbnail,
-        }
-       conteiner.appendChild(createProductItemElement(itemObj));
-      }
-
-    )
-  }));
+function findItem (item) {
+  return fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${item}`);
 }
+
+function findItemById (id) {
+  return fetch(`https://api.mercadolibre.com/sites/MLB/search?ids=${id}`)
+}
+
+function getItem (item) {
+  return findItem(item).then((response) => response.json())
+  .then((data) => {
+    const result= [];
+    data.results.forEach((element) => {
+      const { id, title, thumbnail, price } = element;
+      result.push({ id, title, thumbnail, price });
+    });
+    return result;
+  })
+}
+
+const addCartItem = (event) => {
+  if (Object.values(event.target.classList).includes('item__add')){
+    const sku = Object.values(event.target.parentElement.children)
+    .map((element) => element.innerHTML)
+    .filter((element) => element.includes('MLB')).join();
+    const name = Object.values(event.target.parentElement.children)
+    .map((element) => element.innerHTML)[1]
+    getItem(name).then((response) => response.filter((element) => element.id === sku).shift())
+    .then((data) => {
+      const { id, price, title } = data;
+      const obj = {
+        sku: id,
+        name: title,
+        salePrice: price,
+      }
+      const cartItem = createCartItemElement(obj)
+      console.log(cartItem);
+      document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
+    });
+  }
+}
+
+const createLanding = () => {
+  getItem().then((response) => {
+    response.forEach((element) => {
+      const { id, title, thumbnail, price} = element;
+      const data = {
+        sku: id,
+        name: title,
+        image: thumbnail
+      }
+      const section = createProductItemElement(data);
+      document.getElementById('main').appendChild(section);
+    })
+  })
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -50,7 +92,8 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  console.log(Object.values(event.target.classList).includes('item__add'));
+  return (event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
