@@ -1,16 +1,8 @@
-const load = (items) => {
-  if (items) {
-    const loading = document.querySelector('.loading');
-    loading.remove();
-  }
-};
-
 const listProducts = async () => {
   const item = 'computador';
   const url = `https://api.mercadolibre.com/sites/MLB/search?q=${item}`;
   const response = await fetch(url);
   const data = await response.json();
-  load(data);
   return data.results;
 };
 
@@ -113,6 +105,14 @@ async function getProducts() {
     const item = createProductItemElement(prods);
     document.querySelector('.items').appendChild(item);
   });
+}
+
+async function load() {
+  const recebeList = await listProducts();
+  if (recebeList) {
+    const removeLoad = document.querySelector('.loading');
+    removeLoad.remove();
+  }
 }
 
 window.onload = function onload() {
