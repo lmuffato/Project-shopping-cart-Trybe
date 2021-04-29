@@ -57,6 +57,10 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+// Adicione o elemento retornado da função createProductItemElement(product) como filho do elemento <section class="items">.
+
+// Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
+
  // Requisito 7:
  function loadingPage() {
   const { body } = document;
@@ -71,11 +75,6 @@ function removeLoading() {
   const loading = document.querySelector('.loading');
   body.removeChild(loading);
 }
-// Adicione o elemento retornado da função createProductItemElement(product) como filho do elemento <section class="items">.
-
-// Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
-
-//  
 // Requisito 1:
 function criaLista() {
   loadingPage();
@@ -88,6 +87,7 @@ function criaLista() {
         image: produto.thumbnail,
       };
          document.querySelector('.items').appendChild(createProductItemElement(prodObj));
+         removeLoading();
     }));
       // 
 }
@@ -105,8 +105,7 @@ function colocaItemNoCarrinho() {
             name: data.title,
             salePrice: data.price,     
           };
-          removeLoading();
-        document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
+            document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
         document.querySelector('.loading').innerHTML = '';
         totalAPagar();
         });
