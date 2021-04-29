@@ -40,7 +40,6 @@ const addCartItem = (event) => {
         salePrice: price,
       }
       const cartItem = createCartItemElement(obj)
-      console.log(cartItem);
       document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
     });
   }
@@ -92,8 +91,10 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  console.log(Object.values(event.target.classList).includes('item__add'));
-  return (event.target);
+  if (event.target.outerHTML.includes('li')){
+    const element = event.target;
+    document.getElementById('list').removeChild(element);
+  }
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
