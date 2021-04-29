@@ -1,63 +1,17 @@
-
-window.onload = function onload() {
-  createLanding();
-  document.body.addEventListener('click', addCartItem)
-};
-
-function findItem (item) {
+function findItem(item) {
   return fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${item}`);
 }
 
-function findItemById (id) {
-  return fetch(`https://api.mercadolibre.com/sites/MLB/search?ids=${id}`)
-}
-
-function getItem (item) {
+function getItem(item) {
   return findItem(item).then((response) => response.json())
   .then((data) => {
-    const result= [];
+    const result = [];
     data.results.forEach((element) => {
       const { id, title, thumbnail, price } = element;
       result.push({ id, title, thumbnail, price });
     });
     return result;
-  })
-}
-
-const addCartItem = (event) => {
-  if (Object.values(event.target.classList).includes('item__add')){
-    const sku = Object.values(event.target.parentElement.children)
-    .map((element) => element.innerHTML)
-    .filter((element) => element.includes('MLB')).join();
-    const name = Object.values(event.target.parentElement.children)
-    .map((element) => element.innerHTML)[1]
-    getItem(name).then((response) => response.filter((element) => element.id === sku).shift())
-    .then((data) => {
-      const { id, price, title } = data;
-      const obj = {
-        sku: id,
-        name: title,
-        salePrice: price,
-      }
-      const cartItem = createCartItemElement(obj)
-      document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
-    });
-  }
-}
-
-const createLanding = () => {
-  getItem().then((response) => {
-    response.forEach((element) => {
-      const { id, title, thumbnail, price} = element;
-      const data = {
-        sku: id,
-        name: title,
-        image: thumbnail
-      }
-      const section = createProductItemElement(data);
-      document.getElementById('main').appendChild(section);
-    })
-  })
+  });
 }
 
 function createProductImageElement(imageSource) {
@@ -86,12 +40,12 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
 function cartItemClickListener(event) {
-  if (event.target.outerHTML.includes('li')){
+  if (event.target.outerHTML.includes('li')) {
     const element = event.target;
     document.getElementById('list').removeChild(element);
   }
@@ -104,3 +58,44 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const createLanding = () => {
+  getItem().then((response) => {
+    response.forEach((element) => {
+      const { id, title, thumbnail } = element;
+      const data = {
+        sku: id,
+        name: title,
+        image: thumbnail,
+      };
+      const section = createProductItemElement(data);
+      document.getElementById('main').appendChild(section);
+    });
+  });
+};
+
+const addCartItem = (event) => {
+  if (Object.values(event.target.classList).includes('item__add')) {
+    const sku = Object.values(event.target.parentElement.children)
+    .map((element) => element.innerHTML)
+    .filter((element) => element.includes('MLB')).join();
+    const name = Object.values(event.target.parentElement.children)
+    .map((element) => element.innerHTML)[1];
+    getItem(name).then((response) => response.filter((element) => element.id === sku).shift())
+    .then((data) => {
+      const { id, price, title } = data;
+      const obj = {
+        sku: id,
+        name: title,
+        salePrice: price,
+      };
+      const cartItem = createCartItemElement(obj);
+      document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
+    });
+  }
+};
+
+window.onload = function onload() {
+  createLanding();
+  document.body.addEventListener('click', addCartItem);
+};
