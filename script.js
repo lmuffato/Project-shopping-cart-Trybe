@@ -28,7 +28,7 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 //-------------------------------------------------------------------------------------------------
- 
+
  // Requisito 5:
  async function totalAPagar() {
   const calcResult = document.querySelector('.total-price');
@@ -37,22 +37,16 @@ function getSkuFromProductItem(item) {
   for (let i = 0; i < item.length; i += 1) {
     calc += parseFloat(item[i].innerText.split('$')[1]);
   }
-  const valueResult = Math.round(calc).toFixed(2);
+  const valueResult = (calc).toFixed(2);
   const result = valueResult;
   calcResult.innerHTML = result;
 } 
-// Requisito 4:
-function saveInLocalStorage() {
-  const cartItems = document.querySelector('.cart__items').innerHTML;
-  localStorage.setItem('cart', cartItems);
-}
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
 function cartItemClickListener(event) {
 const elementoPai = event.target.parentElement;
 elementoPai.removeChild(event.target);  
  totalAPagar();
- saveInLocalStorage();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -63,15 +57,28 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+ // Requisito 7:
+ function loadingPage() {
+  const { body } = document;
+  const loading = document.createElement('h1');
+  loading.className = 'loading';
+  loading.innerHTML = 'loading...';
+  body.appendChild(loading);
+}
+
+function removeLoading() {
+  const { body } = document;
+  const loading = document.querySelector('.loading');
+  body.removeChild(loading);
+}
 // Adicione o elemento retornado da função createProductItemElement(product) como filho do elemento <section class="items">.
 
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
 
-// Requisito 7:
-
 //  
 // Requisito 1:
 function criaLista() {
+  loadingPage();
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
     .then((data) => data.results.forEach((produto) => {
@@ -91,15 +98,16 @@ function colocaItemNoCarrinho() {
     (event) => {
        if (event.target.classList.contains('item__add')) {
         const sku = getSkuFromProductItem(event.target.parentElement);
-        fetch(`https://api.mercadolibre.com/items/${sku}`)
-        .then((response) => response.json())
+        fetch(`https://api.mercadolibre.com/items/${sku}`).then((response) => response.json())
         .then((data) => {
           const carObj = {
             sku: data.id,
             name: data.title,
             salePrice: data.price,     
           };
+          removeLoading();
         document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
+        document.querySelector('.loading').innerHTML = '';
         totalAPagar();
         });
       }
@@ -115,16 +123,10 @@ function limpaCarrinho() {
   });
 }
 // ----------------------------------------------------------------------------------------------
- // Requisito 7:
-//  function loadingInit(onOff) {
-//       const items = document.querySelector('.items');
-//     items.appendChild(createCustomElement('span', 'loading', 'loading...'));
-//   }
-// }
 
 window.onload = function onload() {
   criaLista();
   colocaItemNoCarrinho();
   limpaCarrinho();
   totalAPagar();
-  };
+};
