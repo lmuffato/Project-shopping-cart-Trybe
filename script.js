@@ -8,7 +8,20 @@ const totalBuy = async () => {
   const values = [...document.querySelectorAll('.cart__item')];
   const arrayOfLiContent = values.map((li) => parseFloat(li.innerText.split('$')[1]));
   total = arrayOfLiContent.reduce((acc, current) => acc + current, 0);
-  document.querySelector('.totalprice').innerText = total.toFixed(2);
+  document.querySelector('.total-price').innerText = total.toFixed(2);
+};
+
+//  -------------------------------------------REQUISITO6---------------------------------------------
+
+// REQUISITO6-1 .ao clicar no botão de esvaziar carrinho , limpa todo o conteudo do carrinho.
+const removeAllItems = () => {
+  const buttonClearCart = document.querySelector('.empty-cart');
+  buttonClearCart.addEventListener('click', () => {
+    const itensOnCart = document.querySelector('.cart__items');
+    itensOnCart.innerHTML = '';
+    localStorage.clear();
+    totalBuy();
+  });
 };
 
 //  -------------------------------------------REQUISITO4---------------------------------------------
@@ -140,4 +153,5 @@ window.onload = function onload() {
   takeProductInfos();
   loadCartSaved();
   saveCartList();
+  removeAllItems();
 };
