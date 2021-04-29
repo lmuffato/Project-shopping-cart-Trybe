@@ -7,13 +7,11 @@ const listProducts = async () => {
 };
 
 const clear = (itens) => {
-  
-  const vars = document.querySelector('.empty-cart')
+  const vars = document.querySelector('.empty-cart');
   vars.addEventListener('click', () => {
   itens.forEach((current) => current.remove()); 
-  })
-
-}
+  });
+};
 
 function cartItemClickListener(event) {
   const item = event.target;
@@ -42,9 +40,19 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function total() {
+// function total() {
 
-}
+// }
+
+// Cria o LocalStorage dos carrinhos
+
+const local = (prods) => {
+  window.localStorage.setItem('keys', JSON.stringify(prods));
+ const result = JSON.parse((window.localStorage.getItem('keys')));
+
+ const addCart = createCartItemElement(result); 
+ document.querySelector('.cart__items').appendChild(addCart);
+};
 
 async function eventClick(event) {
   const produtos = await listProducts(); // Pega todos os produtos
@@ -59,13 +67,9 @@ async function eventClick(event) {
    name: element.title,
    salePrice: element.price,
    };
-   total(prods)
-   const item = createCartItemElement(prods);
-   document.querySelector('.cart__items').appendChild(item);
-   
-   const itens = document.querySelectorAll('.cart__item')
-   clear(itens);
-   
+    local(prods);
+    const result = document.querySelectorAll('.cart__item');
+    clear(result);
   }
    });
 }
@@ -101,31 +105,19 @@ async function getProducts() {
   });
 }
 
-async function pushItem() {
-  const produtos = await listProducts();
-  produtos.forEach((element) => {
-    const prods = {
-      sku: element.id,
-      name: element.title,
-      salePrice: element.price,
-    };
-    createCartItemElement(prods);
-  });
-}
+// Cria o Loading
 
 const load = () => {
   if (listProducts()) {
-    const loading = document.querySelector('.loading')
+    const loading = document.querySelector('.loading');
     loading.remove();
   }
-}
-
+};
 
 window.onload = function onload() {
   load();
   getProducts();
   listProducts();
-  pushItem();
   
   // pushElement();
 };
