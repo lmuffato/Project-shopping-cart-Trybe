@@ -92,6 +92,15 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+// Cria o Loading
+
+const load = (items) => {
+  if (!items) {
+    const loading = document.querySelector('.loading');
+    loading.remove();
+  }
+};
+
 async function getProducts() {
   const produtos = await listProducts();
   produtos.forEach((element) => {
@@ -102,17 +111,9 @@ async function getProducts() {
     };
     const item = createProductItemElement(prods);
     document.querySelector('.items').appendChild(item);
+    load(item);
   });
 }
-
-// Cria o Loading
-
-const load = () => {
-  if (listProducts()) {
-    const loading = document.querySelector('.loading');
-    loading.remove();
-  }
-};
 
 window.onload = function onload() {
   load();
