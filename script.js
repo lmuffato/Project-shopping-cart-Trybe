@@ -1,3 +1,23 @@
+// a conclusão deste projeto só foi possivel gracas aos colegas e ao empenho dos professores:
+// {
+// Nathalia Zebral,
+// Adelino Junior, 
+// Orlando Flores,
+// Thiago Souza ,
+// Tiago Santos,
+// Jonathan Fernandes,
+// Nilson Ribeiro,
+// Marília , 
+// Lucas Lara ,
+// Anderson Nascimento, 
+// Carlos Sá, 
+// Samuel, 
+// Prof. Zezé,
+// e Prof. Jack
+// }
+// Meus agradecimentos a todos e a Trybe por disponibilizar aulas ao vivo e plantoes para dúvidas.
+// Obrigado!!!
+
 //  -------------------------------------------REQUISITO5---------------------------------------------
 
 const cart = '.cart__items';// ----> atendendo os requisitos do lint, se criou uma constante para armazenar  a classe
