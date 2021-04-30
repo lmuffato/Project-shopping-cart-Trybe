@@ -28,19 +28,19 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 //-------------------------------------------------------------------------------------------------
-
  // Requisito 5:
- async function totalAPagar() {
-  const calcResult = document.querySelector('.total-price');
-  const item = document.querySelectorAll('.cart__item');
-  let calc = 0;
-  for (let i = 0; i < item.length; i += 1) {
-    calc += parseFloat(item[i].innerText.split('$')[1]);
+   function totalAPagar() {
+     const carrinho = document.querySelectorAll('.cart__item');
+    let sum = 0;
+    for (let i = 0; i < carrinho.length; i += 1) {
+      sum += parseFloat(carrinho[i].innerText.split('$')[1]);
+    }
+    const totalFinal = (sum).toFixed(2);
+    console.log(totalFinal);
+    const result = `Valor à pagar: $ <strong>${totalFinal}</strong>`;
+    document.querySelector('.total-price').innerHTML = result;
   }
-  // const valueResult = (calc).toFixed(2);
-  const result = (calc).toFixed(2);
-  calcResult.innerHTML = result;
-} 
+      
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
 function cartItemClickListener(event) {
@@ -61,18 +61,8 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 // Obs: as variáveis sku, no código fornecido, se referem aos campos id retornados pela API.
 
- // Requisito 7:
- function loadingPage() {
-  const { body } = document;
-  const loading = document.createElement('h1');
-  loading.className = 'loading';
-  loading.innerHTML = 'loading...';
-  body.appendChild(loading);
-}
-
 // Requisito 1:
 function criaLista() {
-  loadingPage();
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
     .then((data) => data.results.forEach((produto) => {
@@ -98,8 +88,7 @@ function colocaItemNoCarrinho() {
             name: data.title,
             salePrice: data.price,     
           };
-            document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
-        document.querySelector('.loading').innerHTML = '';
+          document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
         totalAPagar();
         });
       }
