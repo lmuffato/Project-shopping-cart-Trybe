@@ -42,8 +42,10 @@ function startLoading() {
   const loading = document.createElement('h1');
   loading.classList.add('loading');
   loading.textContent = 'loading...';
-  const appendBody = document.body.appendChild(loading);
-  return appendBody;
+  const loader = document.createElement('div');
+  loader.className = 'loader';
+  document.body.appendChild(loading);
+  loading.appendChild(loader);
 }
 
 // Remove o elemento de classe .loading da página quando a requisição na API é feita
@@ -52,15 +54,15 @@ const stopLoading = async () => {
   loadingItem.remove();
 };
 
-// --> Para as funções somaItensDoCarrinho e precoTotal, foram utilizadas as soluções elaboradas pelo colega Wanderson Salles
+// --> Para as funções somaItensDoCarrinho e precoTotal, tomei como base as soluções elaboradas pelo colega Wanderson Salles
+// e refatorei utilizando o método reduce
+
 // Soma todo os itens adicionados ao carrinho
 const somaItensDoCarrinho = () => {
-  let soma = 0;
   const itensDoCarrinho = document.querySelectorAll('.cart__item');
-  [...itensDoCarrinho].forEach((item) => {
-    soma += parseFloat(item.innerText.substring(item.innerText.indexOf('PRICE') + 8));
-  });
-  return soma;
+  return [...itensDoCarrinho].reduce((sum, curr) => sum + parseFloat(curr.innerText.substr(
+      curr.innerText.indexOf('PRICE') + 8,
+  )), 0);
 };
 
 // Pega o container do carrinho de compras (o elemento HTML ol)
@@ -142,6 +144,56 @@ function eraseAll() {
   });
 }
 
+const iteraItensBuscados = (products) => {
+  const input = document.querySelector('.search-input');
+  products.forEach((product) => {
+    const image = `https://http2.mlstatic.com/D_NQ_NP_${product.thumbnail_id}-O.webp`;
+    const objt = { id: product.id, title: product.title, thumbnail: image };
+    createProductItemElement(objt);
+    input.value = '';
+   });
+};
+
+// Faz a requisição à API, com base numa busca digitada no campo input da página
+function onSearch() {
+  const input = document.querySelector('.search-input');
+  const sectionItems = document.querySelector('.items');
+  sectionItems.innerHTML = '';
+  let products;
+    startLoading();
+    return new Promise((resolve) => {
+      fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${input.value}`)
+      .then((response) => {
+        response.json().then((data) => {
+         stopLoading();
+         products = data.results;
+         resolve(products);
+         iteraItensBuscados(products);
+         localStorage.setItem('items', sectionItems.innerHTML);
+        addToMyCart(products);
+      });
+    });
+  });
+}
+
+// Adiciona evento de clique à requisição da função onSearch
+const clickEventToOnSearch = () => {
+  const button = document.querySelector('#search');
+  button.addEventListener('click', onSearch);
+};
+
+// Agrupa e estipula a ordem de execução das funções assíncronas
+const fetchSoughtProducts = async () => {
+  try {
+    const resposta = await clickEventToOnSearch();
+    iterandoMeusDados(resposta);
+    addToMyCart(resposta);
+    precoTotal();
+  } catch (error) {
+    console.log('failure');
+  }
+};
+
 // Faz a requisição dos dados - com auxílio do plantão do Eliezer Queiroz e do Jackson Pires
 const productPromise = (productName) => {
   startLoading();
@@ -171,6 +223,7 @@ const fetchProducts = async () => {
 
 window.onload = function onload() { 
   fetchProducts();
+  fetchSoughtProducts();
   eraseAll();
   getMyCart();
 };
@@ -187,3 +240,5 @@ window.onload = function onload() {
 // Para ajustes nas funções saveMyCart e getMyCart, foram consultadas as seguintes referências:
 // -- Livro: IEPSEN, Edécio Fernando. Lógica de programação e algoritmos com JavaScript. Ed. Novatec 2018 (cap. 8 - Persistência de dados com local Storage)
 // -- Meu repositório do projeto To Do List: https://github.com/anaventura1811/minhas-tarefas
+// Inspirada pela ideia da colega Elisa França, compartilhada no linkedin, implementei a função onSearch
+// que gera os itens na página a partir de uma busca enviada pelo campo input

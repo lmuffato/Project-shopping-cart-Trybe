@@ -1,3 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Muli&display=swap');
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  /* Variáveis - paleta de cores usada no projeto */
+  --white: #FFF;
+
+  --gray-50: #F7F8F9;
+  --gray-100: #e6e8eb;
+  --gray-200: #afb2b1;
+  --gray-500: #808080;
+  --gray-800: #494d4b;
+
+  --green-500: #04d361;
+  --green-50: #175a17;
+
+  --purple-300: #9f75ff;
+  --purple-400: #9164fa;
+  --purple-500: #8257e5;
+  --purple-800: #6f48c9;
+  --blue-200: #a5befa;
+  /* Variável - Para animação (loading) no browser Safari */
+  --webkit-animation: spin 2s linear infinite; 
+}
+
+body {
+  font-family: Muli, sans-serif;
+  font-size: 93.75%;
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(300deg, var(--blue-200), var(--white));
+}
+
+.loja-header {
+  background: linear-gradient(200deg, var(--blue-200), var(--white)); 
+  color: var(--gray-50);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: nowrap;
+}
+
 .top-bar {
   align-items: center;
   display: flex;
@@ -18,17 +67,60 @@
 }
 
 .loading {
-  font-family: Courier New, Courier, monospace;
-  display: flex;
-  justify-content: center;
   align-items: center;
   align-self: center;
+  color: var(--gray-500);
+  display: flex;
+  font-family: Muli, Courier New, Courier, monospace;
+  font-size: 2rem;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Código do loader retirado de: https://www.w3schools.com/howto/howto_css_loader.asp 
+Dica do colega Anderson Nascimento no slack: https://trybecourse.slack.com/archives/C01L16B9XC7/p1619037350420700 */
+.loader {
+  border: 16px solid var(--gray-100);
+  border-radius: 50%;
+  border-top: 16px solid var(--purple-300);
+  height: 120px;
+  width: 120px;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { --webkit-transform: rotate(0deg); }
+  100% { --webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.header-title, .loja-header {
+  text-align: center;
+}
+
+.header-title {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 15rem;
+  max-width: 25rem;
 }
 
 .container {
   display: flex;
   justify-content: space-around;
+  padding: 3rem;
   width: 100%;
+  width: 95vw;
+}
+
+.form-container {
+  display: flex;
+  justify-content: center;
 }
 
 .items {
@@ -39,9 +131,11 @@
 }
 
 .item {
-  border: 2px solid blue;
+  background-color: white;
+  border: 1px solid var(--gray-100);
   border-radius: 5px;
   box-sizing: border-box;
+  color: var(--gray-800);
   display: flex;
   flex-direction: column;
   height: auto;
@@ -64,29 +158,72 @@
 }
 
 .item .item__add {
-  background-color: green;
+  background-color: var( --purple-500);
   border: 0;
-  color: white;
+  color: var(--white);
   cursor: pointer;
   margin: 0;
   padding: 5px;
 }
 
+.item__add {
+  border: none;
+  font-weight: 500;
+  transform: filter 2s;
+}
+
+.item__add:hover{
+  filter: brightness(0.9);
+}
+
 .cart {
+  color: var(--gray-800);
   display: flex;
   flex-basis: 30%;
   flex-flow: column wrap;
+  margin-top: 2%;
 }
 
 .cart .cart__title {
+  color: var(--gray-800);
   flex-basis: 1;
   font-size: 16pt;
   text-align: center;
+  font-weight: 700;
 }
 
 .total-price {
+  align-content: center;
   display: flex;
   text-align: center;
   justify-content: center;
-  align-content: center;
+}
+
+.search-form-group {
+  align-items: space-between;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4%;
+}
+
+.search-form-group:last-child {
+  margin-left: 1rem;
+}
+
+#search {
+  border: none;
+  background: var(--purple-500);
+  color: var(--white);
+}
+
+.search-input {
+  background: var(--gray-50);
+}
+
+.empty-cart {
+  font-weight: 600;
+  margin-bottom: 0.875rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0.875rem;
 }
