@@ -80,7 +80,8 @@ function criaLista() {
         image: produto.thumbnail,
       };
       document.querySelector('.items').appendChild(createProductItemElement(prodObj));
-   }));
+  }));
+  document.querySelector('.loading').remove();
  } 
  
 // --------------------------------------------------------------------------------------------
