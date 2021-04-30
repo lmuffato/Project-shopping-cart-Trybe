@@ -27,19 +27,26 @@ function createProductItemElement({ sku, name, image }) {
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
-//-------------------------------------------------------------------------------------------------
- // Requisito 5:
-   function totalAPagar() {
-     const carrinho = document.querySelectorAll('.cart__item');
-    let sum = 0;
-    for (let i = 0; i < carrinho.length; i += 1) {
-      sum += parseFloat(carrinho[i].innerText.split('$')[1]);
-    }
-    const totalFinal = (sum).toFixed(2);
-    console.log(totalFinal);
-    const result = `Valor à pagar: $ <strong>${totalFinal}</strong>`;
-    document.querySelector('.total-price').innerHTML = result;
-  }
+// //-------------------------------------------------------------------------------------------------
+// Requisito 7
+function loadingPage() {
+  const { body } = document;
+  const loading = document.createElement('h1');
+  loading.className = 'loading';
+  loading.innerHTML = 'loading...';
+  body.appendChild(loading);
+}
+
+// Requisito 5:
+ const totalAPagar = async () => {
+  const listaCarrinho = document.querySelectorAll('li.cart__item');
+  const precoFinal = Array.from(listaCarrinho).reduce((total, item) => {
+    const priceIndex = item.innerText.lastIndexOf('PRICE');
+    return (total + Number(item.innerText.substr(priceIndex + 8)));
+  }, 0);
+  const priceSpan = document.querySelector('span.total-price');
+  priceSpan.innerText = precoFinal;
+};
       
 // ---------------------------------------------------------------------------------------------
 // Requisito 3:
@@ -63,6 +70,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 // Requisito 1:
 function criaLista() {
+  loadingPage();
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
     .then((data) => data.results.forEach((produto) => {
@@ -71,9 +79,10 @@ function criaLista() {
         name: produto.title,
         image: produto.thumbnail,
       };
-         document.querySelector('.items').appendChild(createProductItemElement(prodObj));
-      }));
-    } 
+      document.querySelector('.items').appendChild(createProductItemElement(prodObj));
+   }));
+ } 
+ 
 // --------------------------------------------------------------------------------------------
 // Requisito 2:
 function colocaItemNoCarrinho() {
