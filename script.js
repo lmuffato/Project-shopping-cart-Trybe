@@ -40,13 +40,10 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
-
 function cartItemClickListener(event) {
   if (event.target.outerHTML.includes('li')) {
     const element = event.target;
+    console.log(element);
     document.getElementById('list').removeChild(element);
   }
 }
@@ -74,28 +71,53 @@ const createLanding = () => {
   });
 };
 
+const addOrRemoveOfStorage = (event) => {
+  if (Object.values(event.target.classList).includes('item__add')) {
+    const entireList = Object.values(document.getElementById('list').children);
+    const outerList = [];
+    entireList.forEach((element) => outerList.push(element.outerHTML));
+    console.log(outerList);
+    localStorage.setItem('ShopCart', JSON.stringify(outerList));
+  }
+};
+
 const addCartItem = (event) => {
   if (Object.values(event.target.classList).includes('item__add')) {
     const sku = Object.values(event.target.parentElement.children)
-    .map((element) => element.innerHTML)
-    .filter((element) => element.includes('MLB')).join();
+    .map((element) => element.innerHTML).filter((element) => element.includes('MLB')).join();
     const name = Object.values(event.target.parentElement.children)
     .map((element) => element.innerHTML)[1];
     getItem(name).then((response) => response.filter((element) => element.id === sku).shift())
     .then((data) => {
       const { id, price, title } = data;
       const obj = {
-        sku: id,
+        sku: id, 
         name: title,
         salePrice: price,
       };
       const cartItem = createCartItemElement(obj);
       document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
+      addOrRemoveOfStorage(event);
+    });
+  }
+};
+
+const loadLocalStorage = () => {
+  let data = localStorage.getItem('ShopCart');
+  if (data !== (null && undefined)) {
+    const list = document.getElementById('list');
+    data = JSON.parse(data);
+    data.forEach((element) => {
+      const el = document.createElement('p');
+      el.innerHTML = element;
+      el.children[0].addEventListener('click', cartItemClickListener);
+      list.appendChild(el.children[0]);
     });
   }
 };
 
 window.onload = function onload() {
+  loadLocalStorage();
   createLanding();
   document.body.addEventListener('click', addCartItem);
 };
