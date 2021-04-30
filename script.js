@@ -28,14 +28,6 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 // //-------------------------------------------------------------------------------------------------
-// Requisito 7
-function loadingPage() {
-  const { body } = document;
-  const loading = document.createElement('h1');
-  loading.className = 'loading';
-  loading.innerHTML = 'loading...';
-  body.appendChild(loading);
-}
 
 // Requisito 5:
  const totalAPagar = async () => {
@@ -70,20 +62,22 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 // Requisito 1:
 function criaLista() {
-  loadingPage();
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
-    .then((data) => data.results.forEach((produto) => {
+    .then((data) => {
+    document.querySelector('.loading').remove();
+    data.results.forEach((produto) => {
       const prodObj = {
         sku: produto.id,
         name: produto.title,
         image: produto.thumbnail,
       };
       document.querySelector('.items').appendChild(createProductItemElement(prodObj));
-  }));
-  document.querySelector('.loading').remove();
- } 
+    });
+   });
+}
  
+// 
 // --------------------------------------------------------------------------------------------
 // Requisito 2:
 function colocaItemNoCarrinho() {
