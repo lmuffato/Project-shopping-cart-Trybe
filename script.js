@@ -24,23 +24,6 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-const consultAPI = (consult) => {
-  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${consult}`)
-    .then((response) => {
-      response.json().then((data) => {
-        data.results.forEach((computer) => {
-          const objectComputers = {
-            sku: computer.id,
-            name: computer.title,
-            image: computer.thumbnail,
-          };
-          const printComputer = createProductItemElement(objectComputers);
-          document.querySelector('.items').appendChild(printComputer);
-        });
-      });
-    });
-}
-
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
@@ -56,6 +39,46 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const addItemById = (sku) => {
+  fetch(`https://api.mercadolibre.com/items/${sku}`)
+  .then((response) => response.json())
+  .then((data) => {
+    const computerCart = {
+      sku: data.id,
+      name: data.title,
+      salePrice: data.price,
+    };
+    const itemAdd = createCartItemElement(computerCart);
+    document.querySelector('.cart__items').appendChild(itemAdd);
+  });
+};
+
+async function addItemButton(computer) {
+  computer.lastChild.addEventListener('click', (e) => {
+    const sku = e.target.parentNode.firstChild.innerText;
+
+    addItemById(sku);
+  });
+}
+
+const consultAPI = (consult) => {
+  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${consult}`)
+    .then((response) => {
+      response.json().then((data) => {
+        data.results.forEach((computer) => {
+          const objectComputers = {
+            sku: computer.id,
+            name: computer.title,
+            image: computer.thumbnail,
+          };
+          const printComputers = createProductItemElement(objectComputers);
+          document.querySelector('.items').appendChild(printComputers);
+          addItemButton(printComputers);
+        });
+      });
+    });
+};
 
 window.onload = function onload() {
   consultAPI('computador');
