@@ -1,5 +1,17 @@
 const olcart = 'ol.cart__items';
 
+function loading() {
+  const load = document.createElement('section');
+  load.innerHTML = 'Loading...';
+  load.className = 'loading';
+  document.querySelector('.items').appendChild(load);
+}
+
+function removeLoading() {
+  const load = document.querySelector('.loading');
+  load.remove();
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -118,9 +130,11 @@ const consultAPI = (consult) => {
         });
       });
     });
+    removeLoading();
 };
 
 window.onload = function onload() {
+  loading();
   consultAPI('computador');
   buttonClear();
   updateProduct();
