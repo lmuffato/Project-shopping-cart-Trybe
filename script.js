@@ -1,11 +1,3 @@
-// Funções carregadas quando a página é carregada
-window.onload = function onload() { 
-document.querySelector('.empty-cart').addEventListener('click', esvaziarCarrinho); // Adiciona o evento ao botão de esvaziar o carrinho
-carregarLocalStorage(); // carrega o local storage
-adicionarEventoAosItensDoCarrinho(); // Adiciona os eventos ao carrinho assim que a página é carregada
-somarItensDocarrinho(); // soma os itens do carrinho
-};
-
 // FUNCÃO ORIGINAL
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -22,50 +14,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-// REQUISIÇÃO DA API DO MERCADO LIVRE
-const pesquisarProduto = (produto) => {
-  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=computador}`) // Faz a requisição dos dados a API do mercado livre
-  .then((response) => { // pega a resposta em caso de sucesso
-    response.json() // organizar a resposta em json
-      .then((data) => { // pega a resposta organizada
-        listarProdutos(data); // aplica  aresposta organizada na função setAddress
-      });
-  });
-};
-
-pesquisarProduto(); // chama a função de requisitar a lista de produtos
-
-// Adiciona os produtos e os eventos dos produtos
-const listarProdutos = (data) => {
-  const sectionItens = document.querySelector('section.items'); // Captura o endereço do section.items no html
-  data.results.forEach((result, index) => { // HOF pra adicionar o evento a todos os elementos listados
-    sectionItens.appendChild( // Adiciona o elemento
-      createProductItemElement(result),
-    );
-    document.querySelectorAll('.item__add')[index] // recupera o endereço do item clicado
-    .addEventListener('click', AdicionarProdutoNoCarrinho) // Adiciona o evento no botão clicar em cada produto
-  });
-}
-
-const AdicionarProdutoNoCarrinho = async (produtoid) => {
-  const id = produtoid.target.parentNode.firstChild.innerText; // pega o id do produto clicado
-  const data = await fetch(`https://api.mercadolibre.com/items/${id}`); // consulta o id na api do mercado livre
-  const response = await data.json(); // transforma a requisção no formato json()
-  document.querySelector('.cart__items').appendChild(createCartItemElement(response)); // Adiciona o produto no carrinho
-  salvarNoLocalStorage();
-  somarItensDocarrinho();
-  // console.log(response); // Apenas pra teste
-};
-
-const salvarNoLocalStorage = () => {
-  const carrinho = document.querySelector('.cart__items'); // O endereço da ol
-  localStorage.setItem('itensCarrinho', carrinho.innerHTML);// Adiciona todo o html do ol no localStorage
-};
-
-function carregarLocalStorage() {
-  document.querySelector('.cart__items').innerHTML = localStorage.getItem('itensCarrinho');
-}
-
 // FUNCÃO ORIGINAL
 function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   // console.log(sku, name, image);
@@ -78,9 +26,36 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 }
 
+const itensDoCarrinhoDOM = '.cart__items';
+
+const salvarNoLocalStorage = () => {
+  const carrinho = document.querySelector(itensDoCarrinhoDOM); // O endereço da ol
+  localStorage.setItem('itensCarrinho', carrinho.innerHTML);// Adiciona todo o html do ol no localStorage
+};
+
+function carregarLocalStorage() {
+  document.querySelector(itensDoCarrinhoDOM).innerHTML = localStorage.getItem('itensCarrinho');
+}
+
 // FUNCÃO ORIGINAL
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
+
+async function somarItensDocarrinho() {
+const nodeListDeProdutos = document.querySelectorAll(itensDoCarrinhoDOM);
+const arrayDeProdutos = Array.from(nodeListDeProdutos);
+const stringToPrice = 8;
+let valorTotalDoCarrinho = 0;
+arrayDeProdutos.forEach((produto) => {
+  const lasIndex = produto.textContent.lastIndexOf('PRICE') + stringToPrice; // retorna o index do início da ultima ocorrênica do paramatro passado (string)
+  const preco = produto.textContent.substr(lasIndex); // retorna o restante da string após um determinado numero de caracteres
+  valorTotalDoCarrinho += preco * 100;
+});
+const valorTotalDoCarrinhoFormatado = valorTotalDoCarrinho / 100;
+document.querySelector('span.total-price span') // Captura o endereço onde o valor será colocado
+.innerText = `$${valorTotalDoCarrinhoFormatado}`; // Insere o valor no span indicado
+console.log(valorTotalDoCarrinhoFormatado); // Apenas teste - Valor total do carrinho
 }
 
 // FUNCÃO ORIGINAL - Remove o item ao clicar no produto dentro do carrinho
@@ -90,19 +65,13 @@ function cartItemClickListener(event) {
   somarItensDocarrinho(); // Atualiza a soma do carrinho
 }
 
-function adicionarEventoAosItensDoCarrinho () {
-  const itensDoCarrinho = document.querySelectorAll('.cart__item')
-  itensDoCarrinho.forEach((item) => { item.addEventListener('click', cartItemClickListener) })
-}
-
-function esvaziarCarrinho() {
-  document.querySelector('.cart__items').innerHTML = '';
-  salvarNoLocalStorage();
-  somarItensDocarrinho();
+function adicionarEventoAosItensDoCarrinho() {
+  const itensDoCarrinho = document.querySelectorAll(itensDoCarrinhoDOM);
+  itensDoCarrinho.forEach((item) => { item.addEventListener('click', cartItemClickListener); });
 }
 
 // FUNCÃO ORIGINAL
-function createCartItemElement({ id:sku, title:name, price:salePrice }) {
+function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   // console.log(sku, name, salePrice);
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -111,21 +80,54 @@ function createCartItemElement({ id:sku, title:name, price:salePrice }) {
   return li;
 }
 
-async function somarItensDocarrinho() {
-const nodeListDeProdutos = document.querySelectorAll('.cart__item');
-const arrayDeProdutos = Array.from(nodeListDeProdutos);
-const stringToPrice = 8;
-let valorTotalDoCarrinho = 0;
-arrayDeProdutos.forEach((produto)=>{
-  let lasIndex = produto.textContent.lastIndexOf('PRICE') + stringToPrice; // retorna o index do início da ultima ocorrênica do paramatro passado (string)
-  let preco = produto.textContent.substr(lasIndex); // retorna o restante da string após um determinado numero de caracteres
-  valorTotalDoCarrinho += preco*100
-});
-valorTotalDoCarrinho = valorTotalDoCarrinho / 100;
-document.querySelector('span.total-price span') // Captura o endereço onde o valor será colocado
-.innerText=`$${valorTotalDoCarrinho}`; // Insere o valor no span indicado
-console.log(valorTotalDoCarrinho); // Apenas teste - Valor total do carrinho
+function esvaziarCarrinho() {
+  document.querySelector('.cart__items').innerHTML = '';
+  salvarNoLocalStorage();
+  somarItensDocarrinho();
 }
+
+const AdicionarProdutoNoCarrinho = async (produtoid) => {
+  const id = produtoid.target.parentNode.firstChild.innerText; // pega o id do produto clicado
+  const data = await fetch(`https://api.mercadolibre.com/items/${id}`); // consulta o id na api do mercado livre
+  const response = await data.json(); // transforma a requisção no formato json()
+  document.querySelector(itensDoCarrinhoDOM).appendChild(createCartItemElement(response)); // Adiciona o produto no carrinho
+  salvarNoLocalStorage();
+  somarItensDocarrinho();
+  // console.log(response); // Apenas pra teste
+};
+
+// Adiciona os produtos e os eventos dos produtos
+const listarProdutos = (data) => {
+  const sectionItens = document.querySelector('section.items'); // Captura o endereço do section.items no html
+  data.results.forEach((result, index) => { // HOF pra adicionar o evento a todos os elementos listados
+    sectionItens.appendChild( // Adiciona o elemento
+      createProductItemElement(result),
+    );
+    document.querySelectorAll('.item__add')[index] // recupera o endereço do item clicado
+    .addEventListener('click', AdicionarProdutoNoCarrinho);// Adiciona o evento no botão clicar em cada produto
+  });
+};
+
+// REQUISIÇÃO DA API DO MERCADO LIVRE
+const pesquisarProduto = () => {
+  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador}') // Faz a requisição dos dados a API do mercado livre
+  .then((response) => { // pega a resposta em caso de sucesso
+    response.json() // organizar a resposta em json
+      .then((data) => { // pega a resposta organizada
+        listarProdutos(data); // aplica  aresposta organizada na função setAddress
+      });
+  });
+};
+
+pesquisarProduto(); // chama a função de requisitar a lista de produtos
+
+// Funções carregadas quando a página é carregada
+window.onload = function onload() { 
+  document.querySelector('.empty-cart').addEventListener('click', esvaziarCarrinho); // Adiciona o evento ao botão de esvaziar o carrinho
+  carregarLocalStorage(); // carrega o local storage
+  adicionarEventoAosItensDoCarrinho(); // Adiciona os eventos ao carrinho assim que a página é carregada
+  somarItensDocarrinho(); // soma os itens do carrinho
+  };
 
 // REQUISITO 1
 // 1. fetch -> dados -> array -> forEach (tratamento do arrat -> createProductItemElement() )
