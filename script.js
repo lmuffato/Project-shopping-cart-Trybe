@@ -1,3 +1,5 @@
+// Todo o desenvolvimento tive o auxílio do Anderson Silva
+
 const getItem = (idItem) => {
   const storageUrl = `https://api.mercadolibre.com/items/${idItem}`;
   return new Promise((resolve) => {
@@ -29,15 +31,24 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// function cartItemClickListener(event) {
-  // coloque seu código aqui
-// }
+const saveItens = () => {
+  const itemCart = document.querySelectorAll('.cart__item');
+  const newArr = [];
+  itemCart.forEach((element) => newArr.push(element.outerHTML));
+  localStorage.setItem('itensList', newArr);
+};
+
+function cartItemClickListener(event) {
+  const eventListItem = event.target;
+  eventListItem.remove();
+  saveItens();
+}
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  // li.addEventListener('click', cartItemClickListener);
+  li.addEventListener('click', cartItemClickListener);
   return li;
 }
 
