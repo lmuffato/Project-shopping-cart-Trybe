@@ -28,6 +28,14 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+const shoppingCartPrice = async () => {
+  let updatePrice = 0;
+  const listPrice = [...document.querySelectorAll('.cart__item')];
+  const arrayPrice = listPrice.map((li) => parseFloat(li.innerText.split('$')[1]));
+  updatePrice = arrayPrice.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  document.querySelector('.total-price').innerText = updatePrice;
+};
+
 const shoppingCartSave = () => {
   const cartList = document.querySelector('ol.cart__items').innerHTML;
   localStorage.setItem('shoppingCartSave', cartList);
