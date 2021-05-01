@@ -43,7 +43,6 @@ function createProductItemElement({ sku, name, image }) {
 function cartItemClickListener(event) {
   if (event.target.outerHTML.includes('li')) {
     const element = event.target;
-    console.log(element);
     document.getElementById('list').removeChild(element);
   }
 }
@@ -54,6 +53,28 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
+}
+
+const addOnPriceElement = (index, price) => {
+  const el = document.getElementById('priceElement');
+  el.innerText = `TOTAL ${index} $${price}`;
+};
+
+function sumPrices() {
+  const list = Object.values(document.getElementsByClassName('cart__item'));
+  return new Promise(() => {
+    if (list !== ([] && undefined)) {
+    let totalPrice = 0;
+    list.forEach((element) => {
+      const el = element.outerText.split('|')
+      .filter((stretch) => stretch.includes('PRICE')).shift()
+      .split('$');
+      const [index, price] = el;
+      totalPrice += parseFloat(price);
+      addOnPriceElement(index, totalPrice.toFixed(2));
+    });
+  } 
+  });
 }
 
 const createLanding = () => {
@@ -72,11 +93,10 @@ const createLanding = () => {
 };
 
 const addOrRemoveOfStorage = (event) => {
-  if (Object.values(event.target.classList).includes('item__add')) {
+  if (Object.values(event.target.classList).includes('item__add' || 'priceElement')) {
     const entireList = Object.values(document.getElementById('list').children);
     const outerList = [];
     entireList.forEach((element) => outerList.push(element.outerHTML));
-    console.log(outerList);
     localStorage.setItem('ShopCart', JSON.stringify(outerList));
   }
 };
@@ -90,14 +110,13 @@ const addCartItem = (event) => {
     getItem(name).then((response) => response.filter((element) => element.id === sku).shift())
     .then((data) => {
       const { id, price, title } = data;
-      const obj = {
-        sku: id, 
-        name: title,
-        salePrice: price,
-      };
+      const obj = { sku: id, name: title, salePrice: price };
       const cartItem = createCartItemElement(obj);
       document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
       addOrRemoveOfStorage(event);
+      sumPrices().then((response) => {
+        console.log(response);
+      });
     });
   }
 };
