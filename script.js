@@ -44,14 +44,26 @@ function createCustomElement(element, className, innerText) {
 
 // }
 
-// Cria o LocalStorage dos carrinhos
+// Cria o LocalStorage dos itens do carrinho
+
+const prodsItems = [];
 
 const local = (prods) => {
-  window.localStorage.setItem('keys', JSON.stringify(prods));
- const result = JSON.parse((window.localStorage.getItem('keys')));
+  prodsItems.push(prods);
 
- const addCart = createCartItemElement(result); 
- document.querySelector('.cart__items').appendChild(addCart);
+  window.localStorage.setItem('keys', JSON.stringify(prodsItems));
+  const elementos = createCartItemElement(prods);
+  document.querySelector('.cart__items').appendChild(elementos);
+};
+
+const get = () => {
+  const result = JSON.parse((window.localStorage.getItem('keys')));
+   if (result) {
+    result.forEach((value) => {
+    const elementos = createCartItemElement(value);
+    document.querySelector('.cart__items').appendChild(elementos);
+    });
+  }
 };
 
 async function eventClick(event) {
@@ -67,8 +79,9 @@ async function eventClick(event) {
    name: element.title,
    salePrice: element.price,
    };
-    local(prods);
-    const result = document.querySelectorAll('.cart__item');
+   local(prods);
+
+   const result = document.querySelectorAll('.cart__item');
     clear(result);
   }
    });
@@ -115,8 +128,15 @@ async function load() {
   }
 }
 
+// const verifyGet = () => {
+//   const verify = localStorage.getItem('keys');
+//   return verify;
+// };
+
 window.onload = function onload() {
   load();
   getProducts();
   listProducts();
+  get();
+   // verifyGet();
 };
