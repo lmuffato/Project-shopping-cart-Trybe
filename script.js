@@ -39,8 +39,8 @@ const saveItens = () => {
 };
 
 function cartItemClickListener(event) {
-  const eventListItem = event.target;
-  eventListItem.remove();
+  const eventCartListItem = event.target;
+  eventCartListItem.remove();
   saveItens();
 }
 
@@ -60,7 +60,41 @@ const insertCart = () => {
     const storageItem = await getItem(getDone);
     const seasonEntries = document.querySelector('.cart__items');
     seasonEntries.appendChild(createCartItemElement(storageItem));
+    saveItens();
   }));
+};
+
+const clearButton = () => { // requisito 6
+  const buttonClear = document.querySelector('.empty-cart');
+  buttonClear.addEventListener('click', () => {
+    const itemsCart = document.querySelector('.cart__items');
+    itemsCart.innerHTML = '';
+    saveItens();
+  });
+};
+
+const addEventClickCart = () => {
+  const lis = document.querySelectorAll('.cart__item');
+  lis.forEach((elemento) => {
+    elemento.addEventListener('click', cartItemClickListener);
+  });
+};
+
+const getItens = () => {
+  if (localStorage.getItem('itensList')) {
+    const itemsCart = document.querySelector('ol');
+    const arrayStorage = localStorage.getItem('itensList').split(',');
+    arrayStorage.forEach((elemento) => {
+      itemsCart.innerHTML += elemento;
+    });
+    addEventClickCart();
+  }
+};
+
+// Ajuda de Murilo Gonçalves - Turma 10 - Tribo A
+const msgLoading = () => { // requisito 7
+  const loading = document.querySelector('.loading');
+  loading.remove();
 };
 
 const createProductItemElement = (result) => {
@@ -76,6 +110,8 @@ const createProductItemElement = (result) => {
     sectionClass.appendChild(section);
   });
   insertCart();
+  clearButton();
+  msgLoading();
 };
 
 const getData = async () => {
@@ -85,4 +121,4 @@ const getData = async () => {
   .then((newData) => createProductItemElement(newData.results));
 };
 
-window.onload = function onload() { getData(); getItem(); };
+window.onload = function onload() { getData(); getItem(); getItens(); };
