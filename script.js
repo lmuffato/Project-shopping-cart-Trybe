@@ -46,6 +46,26 @@ function createCustomElement(element, className, innerText) {
 
 // Cria o LocalStorage dos itens do carrinho
 
+const valueZero = [];
+
+const price = (valor) => {
+  valueZero.push(valor); 
+
+  const p = document.querySelector('p');
+  const total = valueZero.reduce((val, currentElement) =>
+  val + currentElement);
+  p.innerText = total;
+  window.localStorage.setItem('price', JSON.stringify(total));  
+};
+
+async function getValue() {
+  const result = await JSON.parse((window.localStorage.getItem('price')));
+   if (result) {
+    const p = document.querySelector('p');
+    p.innerText = result;
+  }
+}
+
 const prodsItems = [];
 
 const local = (prods) => {
@@ -80,7 +100,7 @@ async function eventClick(event) {
    salePrice: element.price,
    };
    local(prods);
-
+   price(prods.salePrice);
    const result = document.querySelectorAll('.cart__item');
     clear(result);
   }
@@ -128,15 +148,10 @@ async function load() {
   }
 }
 
-// const verifyGet = () => {
-//   const verify = localStorage.getItem('keys');
-//   return verify;
-// };
-
 window.onload = function onload() {
   load();
   getProducts();
   listProducts();
   get();
-   // verifyGet();
+  getValue();
 };
