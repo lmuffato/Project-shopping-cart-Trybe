@@ -1,5 +1,12 @@
-window.onload = function onload() { };
+// Funções carregadas quando a página é carregada
+window.onload = function onload() { 
+document.querySelector('.empty-cart').addEventListener('click', esvaziarCarrinho); // Adiciona o evento ao botão de esvaziar o carrinho
+carregarLocalStorage(); // carrega o local storage
+adicionarEventoAosItensDoCarrinho(); // Adiciona os eventos ao carrinho assim que a página é carregada
+somarItensDocarrinho(); // soma os itens do carrinho
+};
 
+// FUNCÃO ORIGINAL
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -7,6 +14,7 @@ function createProductImageElement(imageSource) {
   return img;
 }
 
+// FUNCÃO ORIGINAL
 function createCustomElement(element, className, innerText) {
   const e = document.createElement(element);
   e.className = className;
@@ -14,30 +22,130 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+// REQUISIÇÃO DA API DO MERCADO LIVRE
+const pesquisarProduto = (produto) => {
+  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=computador}`) // Faz a requisição dos dados a API do mercado livre
+  .then((response) => { // pega a resposta em caso de sucesso
+    response.json() // organizar a resposta em json
+      .then((data) => { // pega a resposta organizada
+        listarProdutos(data); // aplica  aresposta organizada na função setAddress
+      });
+  });
+};
+
+pesquisarProduto(); // chama a função de requisitar a lista de produtos
+
+// Adiciona os produtos e os eventos dos produtos
+const listarProdutos = (data) => {
+  const sectionItens = document.querySelector('section.items'); // Captura o endereço do section.items no html
+  data.results.forEach((result, index) => { // HOF pra adicionar o evento a todos os elementos listados
+    sectionItens.appendChild( // Adiciona o elemento
+      createProductItemElement(result),
+    );
+    document.querySelectorAll('.item__add')[index] // recupera o endereço do item clicado
+    .addEventListener('click', AdicionarProdutoNoCarrinho) // Adiciona o evento no botão clicar em cada produto
+  });
+}
+
+const AdicionarProdutoNoCarrinho = async (produtoid) => {
+  const id = produtoid.target.parentNode.firstChild.innerText; // pega o id do produto clicado
+  const data = await fetch(`https://api.mercadolibre.com/items/${id}`); // consulta o id na api do mercado livre
+  const response = await data.json(); // transforma a requisção no formato json()
+  document.querySelector('.cart__items').appendChild(createCartItemElement(response)); // Adiciona o produto no carrinho
+  salvarNoLocalStorage();
+  somarItensDocarrinho();
+  // console.log(response); // Apenas pra teste
+};
+
+const salvarNoLocalStorage = () => {
+  const carrinho = document.querySelector('.cart__items'); // O endereço da ol
+  localStorage.setItem('itensCarrinho', carrinho.innerHTML);// Adiciona todo o html do ol no localStorage
+};
+
+function carregarLocalStorage() {
+  document.querySelector('.cart__items').innerHTML = localStorage.getItem('itensCarrinho');
+}
+
+// FUNCÃO ORIGINAL
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
+  // console.log(sku, name, image);
   const section = document.createElement('section');
   section.className = 'item';
-
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
   return section;
 }
 
+// FUNCÃO ORIGINAL
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// FUNCÃO ORIGINAL - Remove o item ao clicar no produto dentro do carrinho
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  event.target.remove();
+  salvarNoLocalStorage(); // Salva no local Storage
+  somarItensDocarrinho(); // Atualiza a soma do carrinho
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function adicionarEventoAosItensDoCarrinho () {
+  const itensDoCarrinho = document.querySelectorAll('.cart__item')
+  itensDoCarrinho.forEach((item) => { item.addEventListener('click', cartItemClickListener) })
+}
+
+function esvaziarCarrinho() {
+  document.querySelector('.cart__items').innerHTML = '';
+  salvarNoLocalStorage();
+  somarItensDocarrinho();
+}
+
+// FUNCÃO ORIGINAL
+function createCartItemElement({ id:sku, title:name, price:salePrice }) {
+  // console.log(sku, name, salePrice);
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+async function somarItensDocarrinho() {
+const nodeListDeProdutos = document.querySelectorAll('.cart__item');
+const arrayDeProdutos = Array.from(nodeListDeProdutos);
+const stringToPrice = 8;
+let valorTotalDoCarrinho = 0;
+arrayDeProdutos.forEach((produto)=>{
+  let lasIndex = produto.textContent.lastIndexOf('PRICE') + stringToPrice; // retorna o index do início da ultima ocorrênica do paramatro passado (string)
+  let preco = produto.textContent.substr(lasIndex); // retorna o restante da string após um determinado numero de caracteres
+  valorTotalDoCarrinho += preco*100
+});
+valorTotalDoCarrinho = valorTotalDoCarrinho / 100;
+document.querySelector('span.total-price span') // Captura o endereço onde o valor será colocado
+.innerText=`$${valorTotalDoCarrinho}`; // Insere o valor no span indicado
+console.log(valorTotalDoCarrinho); // Apenas teste - Valor total do carrinho
+}
+
+// REQUISITO 1
+// 1. fetch -> dados -> array -> forEach (tratamento do arrat -> createProductItemElement() )
+
+  // Requisito 2
+  // 1. addEventListner - > identificar o item clicado -> captura as informações
+  //  -> pega o ID -> fecth -> tratar objeto -> createCartItemElement(obejto)
+
+  // Requisito 3
+  // 1. addEventListner - > identificar o item clicado -> excluir da lista
+
+  // Requisito 4
+  // Salvar carrinho no localStorage e atualizar em cada evento
+
+  // Requisito 5
+  // Usar métodos assincronos para o somar o valor
+
+  // Requisito 6
+  // botão pra excluir os li
+
+  // Requisito 7
+  // Adicionar texto de load durante a requisição da api
+  // Esperar a página inteira
