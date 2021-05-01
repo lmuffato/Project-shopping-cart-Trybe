@@ -55,9 +55,9 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-const addOnPriceElement = (index, price) => {
+const addOnPriceElement = (price) => {
   const el = document.getElementById('priceElement');
-  el.innerText = `TOTAL ${index} $${price}`;
+  el.innerText = price;
 };
 
 function sumPrices() {
@@ -69,9 +69,9 @@ function sumPrices() {
       const el = element.outerText.split('|')
       .filter((stretch) => stretch.includes('PRICE')).shift()
       .split('$');
-      const [index, price] = el;
+      const price = el[1];
       totalPrice += parseFloat(price);
-      addOnPriceElement(index, totalPrice.toFixed(2));
+      addOnPriceElement(totalPrice.toFixed(2));
     });
   } 
   });
