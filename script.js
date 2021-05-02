@@ -1,4 +1,12 @@
 // Agradecimento especial ao Rafael Dorneles - T10 - Tribo A- por todo incentivo e auxílio neste projeto. :)
+const carrinho = '.cart__items';
+
+function save() {
+  // const carrinho = '.cart__items';
+  const cartItems = document.querySelector(carrinho).innerHTML;
+  localStorage.setItem('cart', cartItems);
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -41,11 +49,13 @@ function getSkuFromProductItem(item) {
 };
       
 // ---------------------------------------------------------------------------------------------
+
 // Requisito 3:
 function cartItemClickListener(event) {
-const elementoPai = event.target.parentElement;
-elementoPai.removeChild(event.target);  
- totalAPagar();
+  const elementoPai = event.target.parentElement;
+  elementoPai.removeChild(event.target);
+  totalAPagar();
+  save();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -65,36 +75,37 @@ function criaLista() {
   fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
     .then((response) => response.json())
     .then((data) => {
-    document.querySelector('.loading').remove();
-    data.results.forEach((produto) => {
-      const prodObj = {
-        sku: produto.id,
-        name: produto.title,
-        image: produto.thumbnail,
-      };
-      document.querySelector('.items').appendChild(createProductItemElement(prodObj));
+      document.querySelector('.loading').remove();
+      data.results.forEach((produto) => {
+        const prodObj = {
+          sku: produto.id,
+          name: produto.title,
+          image: produto.thumbnail,
+        };
+        document.querySelector('.items').appendChild(createProductItemElement(prodObj));
+        save();
+      });
     });
-   });
 }
  
-// 
 // --------------------------------------------------------------------------------------------
 // Requisito 2:
 function colocaItemNoCarrinho() {
-  document.querySelector('.items').addEventListener('click', 
+  document.querySelector('.items').addEventListener('click',
     (event) => {
-       if (event.target.classList.contains('item__add')) {
+      if (event.target.classList.contains('item__add')) {
         const sku = getSkuFromProductItem(event.target.parentElement);
         fetch(`https://api.mercadolibre.com/items/${sku}`).then((response) => response.json())
-        .then((data) => {
-          const carObj = {
-            sku: data.id,
-            name: data.title,
-            salePrice: data.price,     
-          };
-          document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
-        totalAPagar();
-        });
+          .then((data) => {
+            const carObj = {
+              sku: data.id,
+              name: data.title,
+              salePrice: data.price,
+            };
+            document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
+            totalAPagar();
+            save();
+          });
       }
     });
 }
@@ -103,13 +114,27 @@ function colocaItemNoCarrinho() {
 // Requisito 6:
 function limpaCarrinho() {
     document.querySelector('.empty-cart').addEventListener('click', () => {
-    document.querySelector('.cart__items').innerHTML = '';
+    document.querySelector(carrinho).innerHTML = '';
     totalAPagar();
+    save();
   });
 }
-// ----------------------------------------------------------------------------------------------
+
+// const getCartItems = () => document.querySelector('ol.cart__items');
+
+// ---------------------------------------------------------------------------------------------
+function recarregaLocal() {
+ // const carrinho = document.querySelector('.cart__items');
+ carrinho.innerHTML = localStorage.getItem('cart');
+  carrinho.addEventListener('click', ((event) => {
+    if (event.target.classList.contains('cart__item')) {
+      cartItemClickListener(event);
+    }
+  }));
+}
 
 window.onload = function onload() {
+  recarregaLocal();
   criaLista();
   colocaItemNoCarrinho();
   limpaCarrinho();
