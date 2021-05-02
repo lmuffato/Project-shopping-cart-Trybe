@@ -43,8 +43,8 @@ function carregarLocalStorage() {
 // }
 
 async function somarItensDocarrinho() {
-const nodeListDeProdutos = document.querySelectorAll(itensDoCarrinhoDOM);
-const arrayDeProdutos = Array.from(nodeListDeProdutos);
+const nodeListDeProdutos = document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
+const arrayDeProdutos = Array.from(nodeListDeProdutos);// Converte a nodeList em um array iterável
 const stringToPrice = 8;
 let valorTotalDoCarrinho = 0;
 arrayDeProdutos.forEach((produto) => {
@@ -114,6 +114,7 @@ const pesquisarProduto = () => {
   .then((response) => { // pega a resposta em caso de sucesso
     response.json() // organizar a resposta em json
       .then((data) => { // pega a resposta organizada
+        document.querySelector('span.loading').remove(); // Remove o texto de loading
         listarProdutos(data); // aplica  aresposta organizada na função setAddress
       });
   });
