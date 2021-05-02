@@ -37,7 +37,7 @@ function carregarLocalStorage() {
   document.querySelector(itensDoCarrinhoDOM).innerHTML = localStorage.getItem('itensCarrinho');
 }
 
-// FUNCÃO ORIGINAL
+// // FUNCÃO ORIGINAL, PORÉM NÃO UTILIZADA
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
@@ -45,9 +45,9 @@ function carregarLocalStorage() {
 async function somarItensDocarrinho() {
 const nodeListDeProdutos = await document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
 const arrayDeProdutos = await Array.from(nodeListDeProdutos);// Converte a nodeList em um array iterável
-const stringToPrice = 8;
-let valorTotalDoCarrinho = 0;
-arrayDeProdutos.forEach((produto) => {
+const stringToPrice = 8; // caracters do início de price até onde tem os numeros com o preço do protudo
+let valorTotalDoCarrinho = 0; // valor inicial do produto
+arrayDeProdutos.forEach((produto) => { // soma todos os produtos recuperando o valor numerico do preço de cada um
   const lasIndex = produto.textContent.lastIndexOf('PRICE') + stringToPrice; // retorna o index do início da ultima ocorrênica do paramatro passado (string)
   const preco = produto.textContent.substr(lasIndex); // retorna o restante da string após um determinado numero de caracteres
   valorTotalDoCarrinho += preco * 100;
