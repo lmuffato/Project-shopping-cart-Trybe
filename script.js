@@ -43,8 +43,8 @@ function carregarLocalStorage() {
 // }
 
 async function somarItensDocarrinho() {
-const nodeListDeProdutos = document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
-const arrayDeProdutos = Array.from(nodeListDeProdutos);// Converte a nodeList em um array iterável
+const nodeListDeProdutos = await document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
+const arrayDeProdutos = await Array.from(nodeListDeProdutos);// Converte a nodeList em um array iterável
 const stringToPrice = 8;
 let valorTotalDoCarrinho = 0;
 arrayDeProdutos.forEach((produto) => {
@@ -87,7 +87,7 @@ function esvaziarCarrinho() {
 }
 
 const AdicionarProdutoNoCarrinho = async (produtoid) => {
-  const id = produtoid.target.parentNode.firstChild.innerText; // pega o id do produto clicado
+  const id = await produtoid.target.parentNode.firstChild.innerText; // pega o id do produto clicado
   const data = await fetch(`https://api.mercadolibre.com/items/${id}`); // consulta o id na api do mercado livre
   const response = await data.json(); // transforma a requisção no formato json()
   document.querySelector(itensDoCarrinhoDOM).appendChild(createCartItemElement(response)); // Adiciona o produto no carrinho
@@ -109,16 +109,12 @@ const listarProdutos = (data) => {
 };
 
 // REQUISIÇÃO DA API DO MERCADO LIVRE
-const pesquisarProduto = () => {
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador}') // Faz a requisição dos dados a API do mercado livre
-  .then((response) => { // pega a resposta em caso de sucesso
-    response.json() // organizar a resposta em json
-      .then((data) => { // pega a resposta organizada
-        document.querySelector('span.loading').remove(); // Remove o texto de loading
-        listarProdutos(data); // aplica  aresposta organizada na função setAddress
-      });
-  });
-};
+async function pesquisarProduto() {
+const response = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador}');// Faz a requisição dos dados a API do mercado livre
+const listaDeProdutos = await response.json();
+document.querySelector('span.loading').remove(); // Remove o texto de loading
+listarProdutos(listaDeProdutos); // aplica  aresposta organizada na função setAddress
+}
 
 pesquisarProduto(); // chama a função de requisitar a lista de produtos
 
