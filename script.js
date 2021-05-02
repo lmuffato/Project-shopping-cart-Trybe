@@ -2,14 +2,13 @@ const olcart = 'ol.cart__items';
 
 const loadingThePage = () => {
   const loadingPage = document.createElement('section');
-  loadingPage.innerHTML = 'Loading...';
   loadingPage.className = 'loading';
+  loadingPage.innerHTML = 'Loading...';
   document.querySelector('.items').appendChild(loadingPage);
 };
 
 const loadingRemove = () => {
-  const load = document.querySelector('.loading');
-  load.remove();
+  document.querySelector('.loading').remove();
 };
 
 function createProductImageElement(imageSource) {
@@ -77,6 +76,7 @@ function cartItemClickListener(event) {
   event.target.remove();
   const removeItem = document.querySelector(olcart).innerHTML;
   localStorage.setItem('shoppingCartSave', removeItem);
+  shoppingCartPrice();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -103,30 +103,32 @@ const addItemById = (sku) => {
   });
 };
 
-async function addItemButton(computer) {
+const addItemButton = async (computer) => {
   computer.lastChild.addEventListener('click', (e) => {
     const sku = e.target.parentNode.firstChild.innerText;
     addItemById(sku);
   });
-}
+};
 
 const consultAPI = (consult) => {
-  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${consult}`)
-    .then((response) => {
-      response.json().then((data) => {
-        data.results.forEach((computer) => {
-          const objectComputers = {
-            sku: computer.id,
-            name: computer.title,
-            image: computer.thumbnail,
-          };
-          const printComputers = createProductItemElement(objectComputers);
-          document.querySelector('.items').appendChild(printComputers);
-          addItemButton(printComputers);
+  setTimeout(() => {
+    fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${consult}`)
+      .then((response) => {
+        response.json().then((data) => {
+          data.results.forEach((computer) => {
+            const objectComputers = {
+              sku: computer.id,
+              name: computer.title,
+              image: computer.thumbnail,
+            };
+            const printComputers = createProductItemElement(objectComputers);
+            document.querySelector('.items').appendChild(printComputers);
+            addItemButton(printComputers);
+          });
         });
       });
-    });
-    loadingRemove();
+      loadingRemove();
+    }, 3000);
 };
 
 window.onload = function onload() {
