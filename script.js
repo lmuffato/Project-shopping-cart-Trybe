@@ -1,9 +1,4 @@
 // Agradecimento especial ao Rafael Dorneles - T10 - Tribo A- por todo incentivo e auxílio neste projeto. :)
-function save() {
-  const cartItems = document.querySelectorAll('#cart__items').innerHTML;
-  localStorage.setItem('cart', cartItems);
-}
-
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -46,7 +41,11 @@ function getSkuFromProductItem(item) {
 };
       
 // ---------------------------------------------------------------------------------------------
-
+const getCartItems = () => document.querySelector('ol.cart__items');
+const save = () => {
+  localStorage.setItem('cart', getCartItems().innerHTML);
+  totalAPagar();
+};
 // Requisito 3:
 function cartItemClickListener(event) {
   const elementoPai = event.target.parentElement;
@@ -99,7 +98,7 @@ function colocaItemNoCarrinho() {
               name: data.title,
               salePrice: data.price,
             };
-            document.getElementById('lista__Carrinho').appendChild(createCartItemElement(carObj));
+            document.querySelector('ol.cart__items').appendChild(createCartItemElement(carObj));
             totalAPagar();
             save();
           });
@@ -108,30 +107,26 @@ function colocaItemNoCarrinho() {
 }
 
 //---------------------------------------------------------------------------------------------
+
 // Requisito 6:
 function limpaCarrinho() {
+  const cart = document.querySelector('.cart__items');
   document.querySelector('.empty-cart').addEventListener('click', () => {
-    document.querySelector('.cart__items').innerHTML = '';
+    cart.innerHTML = '';
     totalAPagar();
     save();
   });
 }
 
-// const getCartItems = () => document.querySelector('ol.cart__items');
-
-// ---------------------------------------------------------------------------------------------
-function recarregaLocal() {
- const carrinho = document.querySelector('.cart__items');
- carrinho.innerHTML = localStorage.getItem('cart');
-  carrinho.addEventListener('click', ((event) => {
-    if (event.target.classList.contains('cart__item')) {
-      cartItemClickListener(event);
-    }
-  }));
+function load() {
+  const localStorageCart = localStorage.getItem('cart'); 
+  document.querySelector('.cart__items').innerHTML = localStorageCart;
 }
 
+// // ---------------------------------------------------------------------------------------------
+
 window.onload = function onload() {
-  recarregaLocal();
+ load();
   criaLista();
   colocaItemNoCarrinho();
   limpaCarrinho();
