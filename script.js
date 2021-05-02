@@ -60,14 +60,14 @@ console.log(valorTotalDoCarrinhoFormatado); // Apenas teste - Valor total do car
 
 // FUNCÃO ORIGINAL - Remove o item ao clicar no produto dentro do carrinho
 function cartItemClickListener(event) {
-  event.target.remove();
+  event.target.remove(); // Remove o item clicado
   salvarNoLocalStorage(); // Salva no local Storage
   somarItensDocarrinho(); // Atualiza a soma do carrinho
 }
 
 function adicionarEventoAosItensDoCarrinho() {
-  const itensDoCarrinho = document.querySelectorAll(itensDoCarrinhoDOM);
-  itensDoCarrinho.forEach((item) => { item.addEventListener('click', cartItemClickListener); });
+  const itensDoCarrinho = document.querySelectorAll(itensDoCarrinhoDOM); // pega o array de elementos da lista
+  itensDoCarrinho.forEach((item) => { item.addEventListener('click', cartItemClickListener); }); // adiciona evento a todos os elementos do array
 }
 
 // FUNCÃO ORIGINAL
@@ -81,12 +81,12 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 }
 
 function esvaziarCarrinho() {
-  document.querySelector('.cart__items').innerHTML = '';
+  document.querySelector('.cart__items').innerHTML = ''; // anula o HTML dos itens (mesmo efeito de remover)
   salvarNoLocalStorage();
   somarItensDocarrinho();
 }
 
-const AdicionarProdutoNoCarrinho = async (produtoid) => {
+async function AdicionarProdutoNoCarrinho(produtoid) {
   const id = await produtoid.target.parentNode.firstChild.innerText; // pega o id do produto clicado
   const data = await fetch(`https://api.mercadolibre.com/items/${id}`); // consulta o id na api do mercado livre
   const response = await data.json(); // transforma a requisção no formato json()
@@ -94,7 +94,7 @@ const AdicionarProdutoNoCarrinho = async (produtoid) => {
   salvarNoLocalStorage();
   somarItensDocarrinho();
   // console.log(response); // Apenas pra teste
-};
+}
 
 // Adiciona os produtos e os eventos dos produtos
 const listarProdutos = (data) => {
