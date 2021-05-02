@@ -1,9 +1,6 @@
 // Agradecimento especial ao Rafael Dorneles - T10 - Tribo A- por todo incentivo e auxílio neste projeto. :)
-const carrinho = '.cart__items';
-
 function save() {
-  // const carrinho = '.cart__items';
-  const cartItems = document.querySelector(carrinho).innerHTML;
+  const cartItems = document.querySelectorAll('#cart__items').innerHTML;
   localStorage.setItem('cart', cartItems);
 }
 
@@ -113,8 +110,8 @@ function colocaItemNoCarrinho() {
 //---------------------------------------------------------------------------------------------
 // Requisito 6:
 function limpaCarrinho() {
-    document.querySelector('.empty-cart').addEventListener('click', () => {
-    document.querySelector(carrinho).innerHTML = '';
+  document.querySelector('.empty-cart').addEventListener('click', () => {
+    document.querySelector('.cart__items').innerHTML = '';
     totalAPagar();
     save();
   });
@@ -124,7 +121,7 @@ function limpaCarrinho() {
 
 // ---------------------------------------------------------------------------------------------
 function recarregaLocal() {
- // const carrinho = document.querySelector('.cart__items');
+ const carrinho = document.querySelector('.cart__items');
  carrinho.innerHTML = localStorage.getItem('cart');
   carrinho.addEventListener('click', ((event) => {
     if (event.target.classList.contains('cart__item')) {
