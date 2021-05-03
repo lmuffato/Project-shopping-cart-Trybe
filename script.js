@@ -1,5 +1,7 @@
 // Todo o desenvolvimento tive o auxílio do Anderson Silva
 
+let totalPrices = 0;
+
 const getItem = (idItem) => {
   const storageUrl = `https://api.mercadolibre.com/items/${idItem}`;
   return new Promise((resolve) => {
@@ -12,7 +14,21 @@ const getItem = (idItem) => {
   });
 };
 
-// console.log(getItem());
+const itensSum = async (price) => {
+  totalPrices += price;
+  return totalPrices;
+};
+
+const itensSub = async (price) => {
+  totalPrices -= price;
+  return totalPrices;
+};
+
+const showPrice = async (callback, price) => {
+  const spanPrice = document.querySelector('.total-price');
+  spanPrice.innerText = await callback(price);
+};
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -39,8 +55,10 @@ const saveItens = () => {
 };
 
 function cartItemClickListener(event) {
+  const value = Number(event.target.innerHTML.split('PRICE: $')[1]);
   const eventCartListItem = event.target;
   eventCartListItem.remove();
+  showPrice(itensSub, value);
   saveItens();
 }
 
@@ -60,15 +78,17 @@ const insertCart = () => {
     const storageItem = await getItem(getDone);
     const seasonEntries = document.querySelector('.cart__items');
     seasonEntries.appendChild(createCartItemElement(storageItem));
+    showPrice(itensSum, storageItem.price);
     saveItens();
   }));
 };
 
-const clearButton = () => { // requisito 6
+const clearButton = () => {
   const buttonClear = document.querySelector('.empty-cart');
   buttonClear.addEventListener('click', () => {
     const itemsCart = document.querySelector('.cart__items');
     itemsCart.innerHTML = '';
+    showPrice(itensSub, totalPrices);
     saveItens();
   });
 };
@@ -91,8 +111,7 @@ const getItens = () => {
   }
 };
 
-// Ajuda de Murilo Gonçalves - Turma 10 - Tribo A
-const msgLoading = () => { // requisito 7
+const msgLoading = () => {
   const loading = document.querySelector('.loading');
   loading.remove();
 };
@@ -112,7 +131,7 @@ const createProductItemElement = (result) => {
   insertCart();
   clearButton();
   msgLoading();
-};
+  };
 
 const getData = async () => {
   const storageUrl = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
