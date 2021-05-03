@@ -71,7 +71,7 @@ function sumPrices() {
       .split('$');
       const price = el[1];
       totalPrice += parseFloat(price);
-      addOnPriceElement(totalPrice.toFixed());
+      addOnPriceElement(Math.round(totalPrice * 100) / 100);
     });
   } 
   });
