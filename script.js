@@ -44,18 +44,13 @@ function carregarLocalStorage() {
 
 async function somarItensDocarrinho() {
 const nodeListDeProdutos = document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
-const arrayDeProdutos = Array.from(nodeListDeProdutos);// Converte a nodeList em um array iterável
-const stringToPrice = 8; // caracters do início de price até onde tem os numeros com o preço do protudo
 let valorTotalDoCarrinho = 0; // valor inicial do produto
-arrayDeProdutos.forEach((produto) => { // soma todos os produtos recuperando o valor numerico do preço de cada um
-  const lasIndex = produto.textContent.lastIndexOf('PRICE') + stringToPrice; // retorna o index do início da ultima ocorrênica do paramatro passado (string)
-  const preco = produto.textContent.substr(lasIndex); // retorna o restante da string após um determinado numero de caracteres
-  valorTotalDoCarrinho += preco * 100;
+nodeListDeProdutos.forEach((produto) => { // soma todos os produtos recuperando o valor numerico do preço de cada um
+  valorTotalDoCarrinho += parseFloat(produto.innerText.split('$')[1]); // Pega o item index=1, do array criado pela separação da string pelo $
 });
-const valorTotalDoCarrinhoFormatado = valorTotalDoCarrinho / 100;
 document.querySelector('span.total-price span') // Captura o endereço onde o valor será colocado
-.innerText = valorTotalDoCarrinhoFormatado; // Insere o valor no span indicado
-console.log(valorTotalDoCarrinhoFormatado); // Apenas teste - Valor total do carrinho
+.innerText = valorTotalDoCarrinho; // Insere o valor no span indicado
+console.log(valorTotalDoCarrinho); // Apenas teste - Valor total do carrinho
 }
 
 // FUNCÃO ORIGINAL - Remove o item ao clicar no produto dentro do carrinho
