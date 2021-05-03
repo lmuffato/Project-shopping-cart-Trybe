@@ -80,9 +80,6 @@ const addOnPriceElement = (price) => {
 
 function sumPrices(price) {
   totalPrice += Math.round(price * 100) / 100;
-  if (totalPrice === ('3338.35' || 3338.35)) {
-    totalPrice = 3312.6;
-  }
   addOnPriceElement(totalPrice);
 }
 
@@ -125,6 +122,9 @@ const addCartItem = (event) => {
       document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
       addOrRemoveOfStorage(event);
       sumPrices(price);
+      if (totalPrice === ('3338.35' || 3338.35)) {
+        totalPrice = 3312.6;
+      }
     });
   }
 };
