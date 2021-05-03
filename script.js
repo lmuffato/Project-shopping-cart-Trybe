@@ -42,11 +42,13 @@ function clearStorage() {
 }
 
 const shoppingCartPrice = async () => {
-  let updatePrice = 0;
-  const listPrice = [...document.querySelectorAll('.cart__items')];
-  const arrayPrice = listPrice.map((li) => parseFloat(li.innerText.split('$')[1]));
-  updatePrice = arrayPrice.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-  document.querySelector('.total-price').innerText = updatePrice;
+  const updatePrice = document.querySelectorAll('li.cart__item');
+  const priceAll = Array.from(updatePrice).reduce((acc, current) => {
+    const support = current.innerText.lastIndexOf('PRICE');
+    return (acc + Number(current.innerText.substr(support + 8)));
+  }, 0);
+  const totalItem = document.querySelector('span.total-price');
+  totalItem.innerText = priceAll;
 };
 
 const buttonClear = () => {
@@ -57,7 +59,6 @@ const buttonClear = () => {
     shoppingCartPrice();
     clearStorage();
   });
-  clearStorage();
 };
 
 const shoppingCartSave = () => {
