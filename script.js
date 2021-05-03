@@ -48,7 +48,7 @@ let valorTotalDoCarrinho = 0; // valor inicial do produto
 nodeListDeProdutos.forEach((produto) => { // soma todos os produtos recuperando o valor numerico do preço de cada um
   valorTotalDoCarrinho += parseFloat(produto.innerText.split('$')[1]); // Pega o item index=1, do array criado pela separação da string pelo $
 });
-document.querySelector('span.total-price span') // Captura o endereço onde o valor será colocado
+document.querySelector('span.total-price p') // Captura o endereço onde o valor será colocado
 .innerText = valorTotalDoCarrinho; // Insere o valor no span indicado
 console.log(valorTotalDoCarrinho); // Apenas teste - Valor total do carrinho
 }
