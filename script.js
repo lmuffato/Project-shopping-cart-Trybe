@@ -43,7 +43,7 @@ function carregarLocalStorage() {
 // }
 
 async function exibirValorTotalDocarrinho(valorTotalSomado) {
-  document.querySelector('span.total-price p') // Captura o endereço onde o valor será colocado
+  document.querySelector('.total-price') // Captura o endereço onde o valor será colocado
   .innerText = valorTotalSomado; // Insere o valor no span indicado
   console.log(valorTotalSomado); // Apenas teste - Valor total do carrinho
 }
