@@ -54,7 +54,7 @@ arrayDeProdutos.forEach((produto) => { // soma todos os produtos recuperando o v
 });
 const valorTotalDoCarrinhoFormatado = valorTotalDoCarrinho / 100;
 document.querySelector('span.total-price span') // Captura o endereço onde o valor será colocado
-.innerText = `$${valorTotalDoCarrinhoFormatado}`; // Insere o valor no span indicado
+.innerText = valorTotalDoCarrinhoFormatado; // Insere o valor no span indicado
 console.log(valorTotalDoCarrinhoFormatado); // Apenas teste - Valor total do carrinho
 }
 
