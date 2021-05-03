@@ -44,8 +44,10 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-function cartItemClickListener() {
-  // coloque seu código aqui
+function cartItemClickListener(event) {
+  const itemsCart = document.getElementsByClassName('cart__items');
+  // Como remover elementos filhos de um elemento principal: https://www.w3schools.com/jsref/met_node_removechild.asp#:~:text=The%20removeChild()%20method%20removes,longer%20part%20of%20the%20DOM.
+  itemsCart[0].removeChild(event.target);
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
