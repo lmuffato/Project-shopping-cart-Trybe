@@ -5,8 +5,7 @@ function findItem(item) {
 
 const loading = () => {
   const load = document.getElementById('load');
-  const msg = document.getElementById('msg');
-  load.removeChild(msg);
+  load.remove();
 };
 
 function getItem(item) {
