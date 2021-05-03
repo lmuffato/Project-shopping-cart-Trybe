@@ -95,9 +95,8 @@ header h1 {
   text-align: center;
 }
 
-#loading { 
-  text-align: center;
-  align-items: center;
+.loading { 
+  justify-self: center;
   font-size: 20px;
   font-family: fantasy;
 }
