@@ -43,8 +43,8 @@ function carregarLocalStorage() {
 // }
 
 async function somarItensDocarrinho() {
-const nodeListDeProdutos = await document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
-const arrayDeProdutos = await Array.from(nodeListDeProdutos);// Converte a nodeList em um array iterável
+const nodeListDeProdutos = document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
+const arrayDeProdutos = Array.from(nodeListDeProdutos);// Converte a nodeList em um array iterável
 const stringToPrice = 8; // caracters do início de price até onde tem os numeros com o preço do protudo
 let valorTotalDoCarrinho = 0; // valor inicial do produto
 arrayDeProdutos.forEach((produto) => { // soma todos os produtos recuperando o valor numerico do preço de cada um
