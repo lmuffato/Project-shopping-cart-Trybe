@@ -3,6 +3,12 @@ function findItem(item) {
   return fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${item}`);
 }
 
+const loading = () => {
+  const load = document.getElementById('loading');
+  const msg = document.getElementById('msg');
+  load.removeChild(msg);
+};
+
 function getItem(item) {
   return findItem(item).then((response) => response.json())
   .then((data) => {
@@ -91,6 +97,7 @@ function sumPrices() {
 
 const createLanding = () => {
   getItem().then((response) => {
+    loading();
     response.forEach((element) => {
       const { id, title, thumbnail } = element;
       const data = {
@@ -126,9 +133,7 @@ const addCartItem = (event) => {
       const cartItem = createCartItemElement(obj);
       document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
       addOrRemoveOfStorage(event);
-      sumPrices().then((response) => {
-        console.log(response);
-      });
+      sumPrices();
     });
   }
 };
