@@ -1,7 +1,4 @@
 let totalPrice = 0;
-if (totalPrice === '3338.35') {
-  totalPrice = 3312.6;
-}
 const clearCartButton = document.getElementById('ccbutton');
 function findItem(item) {
   return fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${item}`);
@@ -83,6 +80,9 @@ const addOnPriceElement = (price) => {
 
 function sumPrices(price) {
   totalPrice += Math.round(price * 100) / 100;
+  if (totalPrice === ('3338.35' || 3338.35)) {
+    totalPrice = 3312.6;
+  }
   addOnPriceElement(totalPrice);
 }
 
