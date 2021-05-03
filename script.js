@@ -20,6 +20,14 @@ const searchComputers = () => (new Promise((resolve) => {
   })
 );
 
+const addComputers = (id) => (new Promise((resolve) => {
+  // Como recuperar dados de uma API usando promises no javascript: https://www.youtube.com/watch?v=v9JVA6tVmcg&ab_channel=EmersonBroga
+    fetch(`https://api.mercadolibre.com/items/${id}`)
+      .then((response) => response.json())
+      .then((data) => resolve(data));
+  })
+);
+
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -36,33 +44,53 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener() {
+  // coloque seu código aqui
+}
 
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
+
+const addComputerCartClick = (event) => {
+  // Como recuperar o elemento pai do elemento que eu estou usando: w3schools.com/jsref/prop_node_parentnode.asp
+  const computerSelected = event.target.parentNode;
+  const itemsCart = document.getElementsByClassName('cart__items');
+  // Como recuperar os elementos filhos de um elemento principal: https://www.w3schools.com/jsref/prop_node_childnodes.asp
+  addComputers(computerSelected.childNodes[0].innerText)
+    .then((computers) => {
+        const item = createCartItemElement({
+          sku: computers.id, 
+          name: computers.title, 
+          salePrice: computers.price,
+        });
+        itemsCart[0].appendChild(item);
+      });
+};
 
 window.onload = function onload() { 
   const sectionItems = document.getElementsByClassName('items');
-  console.log(sectionItems);
-  (searchComputers()
-    .then((computers) => {
-      computers.forEach((computer) => {
-        const item = createProductItemElement({
-          sku: computer.id, 
-          name: computer.title, 
-          image: computer.thumbnail,
+    (searchComputers()
+      .then((computers) => {
+        computers.forEach((computer) => {
+          const item = createProductItemElement({
+            sku: computer.id, 
+            name: computer.title, 
+            image: computer.thumbnail,
+          });
+          sectionItems[0].appendChild(item);
         });
-        sectionItems[0].appendChild(item);
-      });
-    })
-  );
+        const buttons = document.getElementsByClassName('item__add');
+        for (let index = 0; index < buttons.length; index += 1) {
+          const button = buttons[index];
+          button.addEventListener('click', addComputerCartClick);
+        }
+      })
+    );
 };
 
 // Referências:
