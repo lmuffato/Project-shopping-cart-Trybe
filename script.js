@@ -1,3 +1,4 @@
+let totalPrice = 0;
 const clearCartButton = document.getElementById('ccbutton');
 function findItem(item) {
   return fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${item}`);
@@ -27,8 +28,8 @@ const clearShopcart = () => {
       cart.removeChild(element);
   });
   localStorage.removeItem('ShopCart');
-  const totalPrice = document.getElementById('priceElement');
-  document.getElementById('cartId').removeChild(totalPrice);
+  const priceElement = document.getElementById('priceElement');
+  document.getElementById('cartId').removeChild(priceElement);
 };
 
 function createProductImageElement(imageSource) {
@@ -77,21 +78,23 @@ const addOnPriceElement = (price) => {
   el.innerText = price;
 };
 
-function sumPrices() {
-  const list = Object.values(document.getElementsByClassName('cart__item'));
-  return new Promise(() => {
-    if (list !== ([] && undefined)) {
-    let totalPrice = 0;
-    list.forEach((element) => {
-      const el = element.outerText.split('|')
-      .filter((stretch) => stretch.includes('PRICE')).shift()
-      .split('$');
-      const price = parseFloat(el[1]);
-      totalPrice += price;
-      addOnPriceElement(totalPrice);
-    });
-  } 
-  });
+function sumPrices(price) {
+  // const list = Object.values(document.getElementsByClassName('cart__item'));
+  // return new Promise(() => {
+  //   if (list !== ([] && undefined)) {
+  //   let totalPrice = 0;
+  //   list.forEach((element) => {
+  //     const el = element.outerText.split('|')
+  //     .filter((stretch) => stretch.includes('PRICE')).shift()
+  //     .split('$');
+  //     const price = parseFloat(el[1]);
+  //     totalPrice += price;
+  //     addOnPriceElement(totalPrice);
+  //   });
+  // } 
+  // });
+  totalPrice += price;
+  addOnPriceElement(totalPrice);
 }
 
 const createLanding = () => {
@@ -132,7 +135,7 @@ const addCartItem = (event) => {
       const cartItem = createCartItemElement(obj);
       document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
       addOrRemoveOfStorage(event);
-      sumPrices();
+      sumPrices(price);
     });
   }
 };
