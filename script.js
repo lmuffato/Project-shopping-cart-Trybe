@@ -81,8 +81,8 @@ function sumPrices() {
       const el = element.outerText.split('|')
       .filter((stretch) => stretch.includes('PRICE')).shift()
       .split('$');
-      const price = el[1];
-      totalPrice += parseFloat(price);
+      const price = parseFloat(el[1]);
+      totalPrice += price;
       addOnPriceElement(totalPrice);
     });
   } 
