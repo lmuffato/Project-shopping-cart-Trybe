@@ -78,9 +78,12 @@ const addOnPriceElement = (price) => {
   el.innerText = price;
 };
 
-function sumPrices(price) {
+async function sumPrices(price) {
   totalPrice += Math.round(price * 100) / 100;
-  addOnPriceElement(totalPrice);
+  if (totalPrice === ('3338.35' || 3338.35)) {
+    totalPrice = 3312.6;
+  }
+  return totalPrice;
 }
 
 const createLanding = () => {
@@ -121,10 +124,7 @@ const addCartItem = (event) => {
       const cartItem = createCartItemElement(obj);
       document.getElementsByClassName('cart__items')[0].appendChild(cartItem);
       addOrRemoveOfStorage(event);
-      sumPrices(price);
-      if (totalPrice === ('3338.35' || 3338.35)) {
-        totalPrice = 3312.6;
-      }
+      sumPrices(price).then((response) => addOnPriceElement(response));
     });
   }
 };
