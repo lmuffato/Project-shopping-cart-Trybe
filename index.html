@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
   </head>
   <body>
     <header>
@@ -15,12 +14,13 @@
     <section class="container">
       <section class="items" id='main'>
       </section>
-      <section class="cart">
+      <section class="cart" id='cartId'>
         <span class="cart__title">Carrinho de compras</span>
-        <button class="empty-cart">Esvaziar carrinho</button>
+        <button class="empty-cart" id='ccbutton'>Esvaziar carrinho</button>
         <ol class="cart__items" id='list'></ol>
         <p id='priceElement' class='total-price'></p>
       </section>
     </section>
+    <script src="script.js"></script>
   </body>
 </html>

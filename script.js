@@ -1,3 +1,4 @@
+const clearCartButton = document.getElementById('ccbutton');
 function findItem(item) {
   return fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${item}`);
 }
@@ -13,6 +14,17 @@ function getItem(item) {
     return result;
   });
 }
+
+const clearShopcart = () => {
+  const cart = document.getElementById('list');
+  const cartItems = Object.values(document.getElementById('list').children);
+  cartItems.forEach((element) => {
+      cart.removeChild(element);
+  });
+  localStorage.removeItem('ShopCart');
+  const totalPrice = document.getElementById('priceElement');
+  document.getElementById('cartId').removeChild(totalPrice);
+};
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -138,5 +150,6 @@ const loadLocalStorage = () => {
 window.onload = function onload() {
   loadLocalStorage();
   createLanding();
+  clearCartButton.addEventListener('click', clearShopcart);
   document.body.addEventListener('click', addCartItem);
 };
