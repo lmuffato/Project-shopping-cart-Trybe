@@ -116,11 +116,12 @@ document.querySelector('span.loading').remove(); // Remove o texto de loading
 listarProdutos(listaDeProdutos); // aplica  aresposta organizada na função setAddress
 }
 
-pesquisarProduto(); // chama a função de requisitar a lista de produtos
+// pesquisarProduto(); // chama a função de requisitar a lista de produtos
 
 // Funções carregadas quando a página é carregada
 window.onload = function onload() { 
   document.querySelector('.empty-cart').addEventListener('click', esvaziarCarrinho); // Adiciona o evento ao botão de esvaziar o carrinho
+  pesquisarProduto();
   carregarLocalStorage(); // carrega o local storage
   adicionarEventoAosItensDoCarrinho(); // Adiciona os eventos ao carrinho assim que a página é carregada
   somarItensDocarrinho(); // soma os itens do carrinho
