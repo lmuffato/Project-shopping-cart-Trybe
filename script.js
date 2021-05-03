@@ -115,11 +115,11 @@ listarProdutos(listaDeProdutos); // aplica  aresposta organizada na função set
 
 // Funções carregadas quando a página é carregada
 window.onload = function onload() { 
+  carregarLocalStorage(); // carrega o local storage
+  somarItensDocarrinho();
+  adicionarEventoAosItensDoCarrinho(); // Adiciona os eventos ao carrinho assim que a página é carregada
   document.querySelector('.empty-cart').addEventListener('click', esvaziarCarrinho); // Adiciona o evento ao botão de esvaziar o carrinho
   pesquisarProduto();
-  carregarLocalStorage(); // carrega o local storage
-  adicionarEventoAosItensDoCarrinho(); // Adiciona os eventos ao carrinho assim que a página é carregada
-  somarItensDocarrinho(); // soma os itens do carrinho
   };
 
 // REQUISITO 1
