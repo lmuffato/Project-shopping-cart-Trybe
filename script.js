@@ -42,15 +42,19 @@ function carregarLocalStorage() {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+async function exibirValorTotalDocarrinho(valorTotalSomado) {
+  document.querySelector('span.total-price p') // Captura o endereço onde o valor será colocado
+  .innerText = valorTotalSomado; // Insere o valor no span indicado
+  console.log(valorTotalSomado); // Apenas teste - Valor total do carrinho
+}
+
 async function somarItensDocarrinho() {
-const nodeListDeProdutos = document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
+const nodeListDeProdutos = await document.querySelectorAll('.cart__items li');// nodeList com o array de produtos do carrinho
 let valorTotalDoCarrinho = 0; // valor inicial do produto
 nodeListDeProdutos.forEach((produto) => { // soma todos os produtos recuperando o valor numerico do preço de cada um
   valorTotalDoCarrinho += parseFloat(produto.innerText.split('$')[1]); // Pega o item index=1, do array criado pela separação da string pelo $
 });
-document.querySelector('span.total-price p') // Captura o endereço onde o valor será colocado
-.innerText = valorTotalDoCarrinho; // Insere o valor no span indicado
-console.log(valorTotalDoCarrinho); // Apenas teste - Valor total do carrinho
+exibirValorTotalDocarrinho(valorTotalDoCarrinho);
 }
 
 // FUNCÃO ORIGINAL - Remove o item ao clicar no produto dentro do carrinho
