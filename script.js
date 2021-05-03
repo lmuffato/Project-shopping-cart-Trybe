@@ -93,7 +93,7 @@ function sumPrices(price) {
   //   });
   // } 
   // });
-  totalPrice += price;
+  totalPrice += Math.round(price * 100) / 100;
   addOnPriceElement(totalPrice);
 }
 
