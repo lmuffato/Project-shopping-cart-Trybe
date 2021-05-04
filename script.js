@@ -20,7 +20,7 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(
-    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!')
+    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
   );
 
   return section;
@@ -31,7 +31,6 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
   event.target.remove();
 }
 
@@ -51,11 +50,20 @@ const pegarLista = async () => {
 };
 
 const pegarItemPeloID = async (id) => {
-  // const itemID = requestIten()
   const url = `https://api.mercadolibre.com/items/${id}`;
   const response = await fetch(url);
   const data = await response.json();
   return data;
+};
+
+const salvarCarrinhoLocalStorage = async () => {
+  const listaDeItemDoCarrinho = document.querySelector('ol.cart__items');
+  await localStorage.setItem('carrinho', listaDeItemDoCarrinho.innerHTML);
+};
+
+const regatarItemCarrinho = async () => {
+  const listaDeItemDoCarrinho = document.querySelector('.cart__items');
+  listaDeItemDoCarrinho.innerHTML = localStorage.getItem('carrinho');
 };
 
 const adcionarItemNoCarrinho = async (even) => {
@@ -64,6 +72,7 @@ const adcionarItemNoCarrinho = async (even) => {
   const elementoDoCarrinho = createCartItemElement(dadosItem);
   const listaDoCarrinho = document.querySelector('.cart__items');
   listaDoCarrinho.appendChild(elementoDoCarrinho);
+  salvarCarrinhoLocalStorage();
 };
 
 const addEventButton = () => {
@@ -85,4 +94,5 @@ async function mostrarLista() {
 window.onload = function onload() {
   pegarLista();
   mostrarLista();
+  regatarItemCarrinho();
 };
