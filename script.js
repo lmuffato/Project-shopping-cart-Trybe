@@ -72,6 +72,20 @@ const fetchItemInfos = (id) => {
   });
 };
 
+async function sum(itemId) {
+  const htmlPrice = document.querySelector('.total-price');
+  await fetchItemInfos(itemId)
+  .then((result) => {
+    const productPrice = parseFloat(result.price);
+    const currentPrice = parseFloat(htmlPrice.innerText);
+    htmlPrice.innerText = currentPrice + productPrice;
+  });
+}
+
+// async function sub() {
+
+// }
+
 function tookElements() {
   fetchApiElements('computador')
   .then((result) => {
@@ -115,19 +129,7 @@ function emptyCart() {
   });
 }
 
-async function sum(itemId) {
-  let htmlPrice = document.querySelector('.total-price');
-  await fetchItemInfos(itemId)
-  .then((result) => {
-    let productPrice = parseFloat(result.price);
-    let currentPrice = parseFloat(htmlPrice.innerText);
-    htmlPrice.innerText = currentPrice + productPrice;
-  });
-}
 
-async function sub() {
-
-}
 
 window.onload = function onload() {
   tookElements();
