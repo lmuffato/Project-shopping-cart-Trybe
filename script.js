@@ -20,13 +20,24 @@ const searchComputers = () => (new Promise((resolve) => {
   })
 );
 
-const addComputers = (id) => (new Promise((resolve) => {
-  // Como recuperar dados de uma API usando promises no javascript: https://www.youtube.com/watch?v=v9JVA6tVmcg&ab_channel=EmersonBroga
+const addComputers = (id) => {
+  const container = document.querySelector('.cart');
+  const span = document.createElement('span');
+  span.className = 'loading';
+  container.appendChild(span);
+  span.innerText = 'loading...';
+  const loading = document.querySelector('.loading');
+
+  return new Promise((resolve) => {
+    // Como recuperar dados de uma API usando promises no javascript: https://www.youtube.com/watch?v=v9JVA6tVmcg&ab_channel=EmersonBroga
     fetch(`https://api.mercadolibre.com/items/${id}`)
       .then((response) => response.json())
-      .then((data) => resolve(data));
-  })
-);
+      .then((data) => {
+        container.removeChild(loading);
+        resolve(data);
+      });
+  });
+};
 
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
