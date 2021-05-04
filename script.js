@@ -9,12 +9,12 @@ const listProducts = async () => {
 const clear = (itens) => {
   const vars = document.querySelector('.empty-cart');
   vars.addEventListener('click', () => {
-  itens.forEach((current) => current.remove()); 
+  itens.forEach((current) => current.remove());
   });
 };
 
 function cartItemClickListener(event) {
-  const item = event.target;
+  const item = event.target
   item.remove();
  }
 
@@ -40,22 +40,28 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-// function total() {
-
-// }
-
 // Cria o LocalStorage dos itens do carrinho
 
 const valueZero = [];
 
-const price = (valor) => {
-  valueZero.push(valor); 
+const price = () => {
+  const itemsTotal = document.querySelectorAll('.cart__item');
+  const filtro = itemsTotal.innerText;
+  console.log(itemsTotal);
+  const obj = [];
+  itemsTotal.forEach((atual, index) => {
+    const live = atual.innerText
+    // const parseObj = JSON.parse(live);
+    // obj.push(parseObj)
+    console.log(live)  
+    })
+    console.log(obj);
 
-  const p = document.querySelector('p');
-  const total = valueZero.reduce((val, currentElement) =>
-  val + currentElement);
-  p.innerText = total;
-  window.localStorage.setItem('price', JSON.stringify(total));  
+  // const p = document.querySelector('p');
+  // const total = valueZero.reduce((val, currentElement) =>
+  // val + currentElement);
+  // p.innerText = total;
+  // window.localStorage.setItem('price', JSON.stringify(total));
 };
 
 async function getValue() {
@@ -69,17 +75,20 @@ async function getValue() {
 const prodsItems = [];
 
 const local = (prods) => {
-  prodsItems.push(prods);
-
-  window.localStorage.setItem('keys', JSON.stringify(prodsItems));
+  // const valorsChave = `SKU: ${prods.sku} | NAME: ${prods.name} | PRICE: $${prods.salePrice}`
+  prodsItems.push(prods)
+  
+  localStorage.setItem("keys", JSON.stringify(prodsItems));
   const elementos = createCartItemElement(prods);
-  document.querySelector('.cart__items').appendChild(elementos);
+  document.querySelector('.cart__items').appendChild(elementos);  
 };
 
 const get = () => {
-  const result = JSON.parse((window.localStorage.getItem('keys')));
+   const result = JSON.parse(localStorage.getItem('keys'));
+  console.log('resultado ', result);
    if (result) {
     result.forEach((value) => {
+    prodsItems.push(value);
     const elementos = createCartItemElement(value);
     document.querySelector('.cart__items').appendChild(elementos);
     });
@@ -91,20 +100,20 @@ async function eventClick(event) {
   const filho = event.target; // classe clicada
   const pai = filho.parentNode; // classe pai do filho
   const sku = pai.querySelector('.item__sku').innerText; // classe que tem o ID do produto
-  
-  produtos.forEach((element) => {
+  var prods;
+   produtos.forEach((element) => {
     if (element.id === sku) {
-    const prods = {
+    prods = {
    sku: element.id,
    name: element.title,
    salePrice: element.price,
-   };
+    } }
+  });
    local(prods);
-   price(prods.salePrice);
-   const result = document.querySelectorAll('.cart__item');
-    clear(result);
-  }
-   });
+   // console.log('prods' , prods)
+   // price(prods.salePrice);
+   // const result = document.querySelectorAll('.cart__item');
+    // clear(result);
 }
 
 function createProductItemElement({ sku, name, image }) {
@@ -150,8 +159,9 @@ async function load() {
 
 window.onload = function onload() {
   load();
+  get();
   getProducts();
   listProducts();
-  get();
   getValue();
+  price();
 };
