@@ -27,7 +27,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   return list;
 }
 async function createItemCart(id) {
-  const getData = await fetch(`https://api.mercadolistbre.com/items/${id}`)
+  const getData = await fetch(`https://api.mercadolibre.com/items/${id}`)
     .then((response) => response.json())
     .then((response) => response);
   const createItem = createCartItemElement({
