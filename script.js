@@ -53,7 +53,7 @@ const fetchCurrency = () => {
 
 const fetchCurrencyAsyncAwait = async () => {
   const data = await fetchCurrency();
-  data.forEach(object => {
+  data.forEach((object) => {
     const productElement = createProductItemElement(
       object.id, object.title, object.thumbnail);
       document.querySelector('.items').appendChild(productElement);
