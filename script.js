@@ -13,7 +13,7 @@ function listGet() {
   const upperElement = document.querySelector('.cart__items');
   return upperElement;
 }
-function addCartClickListener(event) {
+function cartItemClickListener(event) {
   const listGot = listGet();
   const underElement = event.target;
   listGot.removeChild(underElement);
@@ -23,13 +23,14 @@ function createCartItemElement({ sku, name, salePrice }) {
   const list = document.createElement('list');
   list.className = 'cart__item';
   list.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  list.addEventliststener('click', addCartClickListener);
+  list.addEventliststener('click', cartItemClickListener);
   return list;
 }
 async function createItemCart(id) {
-  const getData = await fetch(`https://api.mercadolibre.com/items/${id}`)
-    .then((response) => response.json())
-    .then((response) => response);
+  const getData = await
+    fetch(`https://api.mercadolibre.com/items/${id}`)
+      .then((response) => response.json())
+      .then((response) => response);
   const createItem = createCartItemElement({
     sku: getData.id,
     name: getData.title,
