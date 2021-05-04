@@ -123,11 +123,23 @@ const fetchCurrencyAsyncAwait = async () => {
   totalPrice();
 };
 
+const loading = () => {
+const div = document.createElement('div');
+div.className = '.loading';
+div.innerText = 'loading...';
+};
+
+const removeLoading = () => {
+  document.querySelector('.loading').remove();
+};
+
 window.onload = async function onload() {
+  loading();
   await fetchCurrencyAsyncAwait();
   pickCar();
   saveCartListen();
   saveCartListenContinue();
   totalPrice();
-  removeAllCart2()
+  removeAllCart2();
+  await removeLoading();
 };
