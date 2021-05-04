@@ -98,7 +98,9 @@ function addToCart() {
   items.forEach((button) => {
     button.addEventListener('click', function (event) {
       const itemId = getSkuFromProductItem(event.target.parentNode);
-      fetchElementId(itemId);
+      if (event.target.className === 'item__add') {
+        fetchElementId(itemId);
+      }
     });
   });
 }
