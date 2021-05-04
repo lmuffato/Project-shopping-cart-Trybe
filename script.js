@@ -1,5 +1,5 @@
 function sumCart() {
-  const itemSum = document.querySelector('.total-price'); 
+  const itemSum = document.querySelector('.total-price');
   const list = document.querySelectorAll('.cart__item');
   let sum = 0;
   for (let i = 0; i < list.length; i += 1) {
@@ -28,8 +28,8 @@ function createCartItemElement({ sku, name, salePrice }) {
 }
 async function createItemCart(id) {
   const getData = await fetch(`https://api.mercadolistbre.com/items/${id}`)
-  .then((response) => response.json())
-  .then((response) => response);
+    .then((response) => response.json())
+    .then((response) => response);
   const createItem = createCartItemElement({
     sku: getData.id,
     name: getData.title,
@@ -71,9 +71,9 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 async function computerResults() {
-  const myFetch = await fetch('https://api.mercadolistbre.com/sites/MLB/search?q=computador')
-  .then((response) => response.json())
-  .then((response) => response.results);
+  const myFetch = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+    .then((response) => response.json())
+    .then((response) => response.results);
   myFetch.forEach((product) => {
     const searchResult = createProductItemElement({
       sku: product.id,
@@ -93,7 +93,7 @@ function cartCleanBtn() {
   const buttonClean = document.querySelector('.empty-cart');
   buttonClean.addEventliststener('click', cleanShoppingCart);
 }
-window.onload = function onload() { 
+window.onload = function onload() {
   computerResults();
   cartCleanBtn();
 };
