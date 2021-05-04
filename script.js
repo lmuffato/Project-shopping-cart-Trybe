@@ -32,13 +32,33 @@ function cartItemClickListener(event) {
   // coloque seu código aqui
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
 }
+
+const fetchId = (id) => {
+  fetch(`https://api.mercadolibre.com/items/${id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      const setId = data;
+      const cartItem = '.cart__items';
+      document.querySelector(cartItem).appendChild(createCartItemElement(setId));
+    });
+};
+
+const pickCar = () => {
+  const buttonAddPickCar = document.querySelectorAll('.item__add');
+  buttonAddPickCar.forEach((button) => {
+    button.addEventListener('click', (event) => {
+      const getId = getSkuFromProductItem(event.target.parentElement);
+      fetchId(getId);
+    });
+  });
+};
 
 const fetchCurrency = () => {
   const endPoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
@@ -47,7 +67,10 @@ const fetchCurrency = () => {
       .then((response) => response.json())
       .then((object) => {
         resolve(object.results);
-      }).catch((error) => window.alert(error));
+        if (object.results.error) {
+          throw new Error(object.results.error);
+        }
+      }).catch((error) => reject(window.alert(error)));
   });
 };
 
@@ -55,11 +78,13 @@ const fetchCurrencyAsyncAwait = async () => {
   const data = await fetchCurrency();
   data.forEach((object) => {
     const productElement = createProductItemElement(
-      object.id, object.title, object.thumbnail);
-      document.querySelector('.items').appendChild(productElement);
+      object.id, object.title, object.thumbnail,
+    );
+    document.querySelector('.items').appendChild(productElement);
   });
 };
 
-window.onload = function onload() {
-  fetchCurrencyAsyncAwait();
+window.onload = async function onload() {
+  await fetchCurrencyAsyncAwait();
+  pickCar();
 };
