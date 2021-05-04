@@ -46,8 +46,9 @@ function createCartItemElement({ sku, name, salePrice }) {
 // MY CODE
 
 const fetchApiElements = search => {
+  const urlApi = `https://api.mercadolibre.com/sites/MLB/search?q=${search}`
   return new Promise((resolve) => {
-    fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${search}`)
+    fetch(urlApi)
     .then((response) => { 
       response.json().then((data) => {
         const result = data.results;
@@ -58,8 +59,9 @@ const fetchApiElements = search => {
 };
 
 const fetchItemInfos = id => {
+  const urlApi = `https://api.mercadolibre.com/items/${id}`
   return new Promise((resolve) => {
-    fetch(`https://api.mercadolibre.com/items/${id}`)
+    fetch(urlApi)
     .then((response) => {
       response.json().then((data) => {
         const result = data;
