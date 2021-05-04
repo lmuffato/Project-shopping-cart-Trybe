@@ -20,7 +20,7 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(
-    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'),
+    createCustomElement('button', 'item__add', 'Adicionar ao carrinho!')
   );
 
   return section;
@@ -91,8 +91,20 @@ async function mostrarLista() {
   addEventButton();
 }
 
+const limparCarrinho = () => {
+  const itens = document.querySelectorAll('.cart__item');
+  itens.forEach((item) => item.remove());
+};
+
+const onclickLimparCarrinho = () => {
+  document
+    .querySelector('.empty-cart')
+    .addEventListener('click', limparCarrinho);
+};
+
 window.onload = function onload() {
   pegarLista();
   mostrarLista();
   regatarItemCarrinho();
+  onclickLimparCarrinho();
 };
