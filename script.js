@@ -1,3 +1,5 @@
+const cartItem = '.cart__items';
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -28,9 +30,25 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+function saveCartListen() {
+  const setItem = document.querySelector(cartItem);
+    localStorage.setItem('key', setItem.innerHTML);
+}
+
 function cartItemClickListener(event) {
   event.target.remove('li');
+  saveCartListen();
 }
+
+function saveCartListenContinue() {
+  const cartItemStorage = localStorage.getItem('key'); 
+  const olCaminho = document.querySelector(cartItem);
+  olCaminho.innerHTML = cartItemStorage;
+  const listaOl = document.querySelectorAll(cartItem);
+  listaOl.forEach((li) => {
+    li.addEventListener('click', cartItemClickListener);
+  });
+} 
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
@@ -45,8 +63,8 @@ const fetchId = (id) => {
     .then((response) => response.json())
     .then((data) => {
       const setId = data;
-      const cartItem = '.cart__items';
       document.querySelector(cartItem).appendChild(createCartItemElement(setId));
+      saveCartListen(); 
     });
 };
 
@@ -87,4 +105,6 @@ const fetchCurrencyAsyncAwait = async () => {
 window.onload = async function onload() {
   await fetchCurrencyAsyncAwait();
   pickCar();
+  saveCartListen();
+  saveCartListenContinue();
 };
