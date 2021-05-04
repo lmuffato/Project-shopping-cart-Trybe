@@ -38,6 +38,16 @@ const totalPrice = async () => {
   document.querySelector('.total-price').innerText = total;
 };
 
+function removerAllCart() {
+const li = document.querySelector(cartItem);
+li.innerHTML = '';
+
+}
+function removeAllCart2() {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', removerAllCart);
+}
+
 function saveCartListen() {
   const setItem = document.querySelector(cartItem);
     localStorage.setItem('key', setItem.innerHTML);
@@ -119,4 +129,5 @@ window.onload = async function onload() {
   saveCartListen();
   saveCartListenContinue();
   totalPrice();
+  removeAllCart2()
 };
