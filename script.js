@@ -45,7 +45,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 // MY CODE
 
-const fetchApiElements = search => {
+const fetchApiElements = (search) => {
   const urlApi = `https://api.mercadolibre.com/sites/MLB/search?q=${search}`;
   return new Promise((resolve) => {
     fetch(urlApi)
@@ -58,7 +58,7 @@ const fetchApiElements = search => {
   });
 };
 
-const fetchItemInfos = id => {
+const fetchItemInfos = (id) => {
   const urlApi = `https://api.mercadolibre.com/items/${id}`;
   return new Promise((resolve) => {
     fetch(urlApi)
