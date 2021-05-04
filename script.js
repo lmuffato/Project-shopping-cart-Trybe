@@ -55,7 +55,7 @@ const fetchApiElements = search => {
       });
     });
   });
-}
+};
 
 const fetchItemInfos = id => {
   return new Promise ((resolve) => {
@@ -67,7 +67,7 @@ const fetchItemInfos = id => {
       });
     });
   });
-}
+};
 
 function tookElements() {
   fetchApiElements('computador')
@@ -105,8 +105,7 @@ function emptyCart() {
   const cartButton = document.querySelector('.empty-cart');
   cartButton.addEventListener('click', function () {
     const cart = document.querySelector('.cart__items');
-    cart.innerText = "";
-    showPrice(Sub, totalPrices);
+    cart.innerText = '';
   });
 }
 
