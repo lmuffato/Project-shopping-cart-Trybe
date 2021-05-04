@@ -48,6 +48,16 @@ function cartItemClickListener(event) {
   const itemsCart = document.getElementsByClassName('cart__items');
   // Como remover elementos filhos de um elemento principal: https://www.w3schools.com/jsref/met_node_removechild.asp#:~:text=The%20removeChild()%20method%20removes,longer%20part%20of%20the%20DOM.
   itemsCart[0].removeChild(event.target);
+
+  const variavel = JSON.parse(localStorage.getItem('listCar'));
+  const itemSelected = (event.target).innerText;
+  const atualCar = variavel.filter((elementRemove) => {
+    if (!itemSelected.includes(elementRemove.sku)) {
+     return true;
+    }
+    return false;
+  });
+  localStorage.setItem('listCar', JSON.stringify(atualCar));
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -65,16 +75,37 @@ const addComputerCartClick = (event) => {
   // Como recuperar os elementos filhos de um elemento principal: https://www.w3schools.com/jsref/prop_node_childnodes.asp
   addComputers(computerSelected.childNodes[0].innerText)
     .then((computers) => {
-        const item = createCartItemElement({
-          sku: computers.id, 
-          name: computers.title, 
-          salePrice: computers.price,
-        });
-        itemsCart[0].appendChild(item);
-      });
+      const newItem = { sku: computers.id, name: computers.title, salePrice: computers.price,
+      };
+      const item = createCartItemElement(newItem);
+      itemsCart[0].appendChild(item);
+      const variavel = JSON.parse(localStorage.getItem('listCar'));
+      if (variavel !== null) {
+        variavel.push(newItem);
+        localStorage.setItem('listCar', JSON.stringify(variavel));
+      } else {
+        localStorage.setItem('listCar', JSON.stringify([newItem]));
+      }      
+    });
 };
 
-window.onload = function onload() { 
+function refreshCar() {
+  const itemCar = JSON.parse(localStorage.getItem('listCar'));
+  const sectionCart = document.getElementsByClassName('cart__items');
+
+  if (itemCar != null) {
+    itemCar.forEach((computer) => {
+      const item = createCartItemElement({
+        sku: computer.sku, 
+        name: computer.name, 
+        salePrice: computer.salePrice,
+      });
+    sectionCart[0].appendChild(item);
+    });
+  }
+}
+
+function includeComputerCar() {
   const sectionItems = document.getElementsByClassName('items');
     (searchComputers()
       .then((computers) => {
@@ -93,6 +124,11 @@ window.onload = function onload() {
         }
       })
     );
+}
+
+window.onload = function onload() { 
+  refreshCar();
+  includeComputerCar();
 };
 
 // Referências:
