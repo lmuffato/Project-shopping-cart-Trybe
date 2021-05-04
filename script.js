@@ -126,9 +126,20 @@ function includeComputerCar() {
     );
 }
 
+function clearCar() {
+  const listCar = document.querySelector('.cart__items');
+  // Como deletar todos os filhos do elemento de uma vez: https://stackoverflow.com/questions/3955229/remove-all-child-elements-of-a-dom-node-in-javascript
+  while (listCar.firstChild) {
+    listCar.removeChild(listCar.lastChild);
+  }
+  localStorage.clear();
+}
+
 window.onload = function onload() { 
   refreshCar();
   includeComputerCar();
+  const btn = document.querySelector('.empty-cart');
+  btn.addEventListener('click', clearCar);
 };
 
 // Referências:
