@@ -46,7 +46,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 // MY CODE
 
 const fetchApiElements = search => {
-  return new Promise ((resolve) => {
+  return new Promise((resolve) => {
     fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${search}`)
     .then((response) => { 
       response.json().then((data) => {
@@ -58,7 +58,7 @@ const fetchApiElements = search => {
 };
 
 const fetchItemInfos = id => {
-  return new Promise ((resolve) => {
+  return new Promise((resolve) => {
     fetch(`https://api.mercadolibre.com/items/${id}`)
     .then((response) => {
       response.json().then((data) => {
@@ -108,11 +108,6 @@ function emptyCart() {
     cart.innerText = '';
   });
 }
-
-const showPrice = async (callback, price) => {
-  const spanPrice = document.querySelector('.total-price');
-  spanPrice.innerText = await callback(price);
-};
 
 window.onload = function onload() {
   tookElements();
