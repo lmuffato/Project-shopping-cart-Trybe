@@ -13,10 +13,10 @@ const clear = (itens) => {
   });
 };
 
-function cartItemClickListener(event) {
-  const item = event.target
+function cartItemClickListener(event) {  
+  const item = event.target;
   item.remove();
- }
+}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
@@ -40,52 +40,18 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-// Cria o LocalStorage dos itens do carrinho
-
-const valueZero = [];
-
-const price = () => {
-  const itemsTotal = document.querySelectorAll('.cart__item');
-  const filtro = itemsTotal.innerText;
-  console.log(itemsTotal);
-  const obj = [];
-  itemsTotal.forEach((atual, index) => {
-    const live = atual.innerText
-    // const parseObj = JSON.parse(live);
-    // obj.push(parseObj)
-    console.log(live)  
-    })
-    console.log(obj);
-
-  // const p = document.querySelector('p');
-  // const total = valueZero.reduce((val, currentElement) =>
-  // val + currentElement);
-  // p.innerText = total;
-  // window.localStorage.setItem('price', JSON.stringify(total));
-};
-
-async function getValue() {
-  const result = await JSON.parse((window.localStorage.getItem('price')));
-   if (result) {
-    const p = document.querySelector('p');
-    p.innerText = result;
-  }
-}
-
 const prodsItems = [];
 
 const local = (prods) => {
-  // const valorsChave = `SKU: ${prods.sku} | NAME: ${prods.name} | PRICE: $${prods.salePrice}`
-  prodsItems.push(prods)
+  prodsItems.push(prods);
   
-  localStorage.setItem("keys", JSON.stringify(prodsItems));
+  localStorage.setItem('keys', JSON.stringify(prodsItems));
   const elementos = createCartItemElement(prods);
   document.querySelector('.cart__items').appendChild(elementos);  
 };
 
 const get = () => {
    const result = JSON.parse(localStorage.getItem('keys'));
-  console.log('resultado ', result);
    if (result) {
     result.forEach((value) => {
     prodsItems.push(value);
@@ -95,25 +61,34 @@ const get = () => {
   }
 };
 
+async function price() {
+  const elementsGet = await JSON.parse(localStorage.getItem('keys'));
+  const p = document.querySelector('p');
+  p.innerText = elementsGet.reduce((acc, elemento) => {
+    let i = acc;
+    i += elemento.salePrice;
+    return i;
+  }, 0);
+}
+
 async function eventClick(event) {
   const produtos = await listProducts(); // Pega todos os produtos
   const filho = event.target; // classe clicada
   const pai = filho.parentNode; // classe pai do filho
   const sku = pai.querySelector('.item__sku').innerText; // classe que tem o ID do produto
-  var prods;
+  let prods;
    produtos.forEach((element) => {
     if (element.id === sku) {
     prods = {
    sku: element.id,
    name: element.title,
    salePrice: element.price,
-    } }
-  });
-   local(prods);
-   // console.log('prods' , prods)
-   // price(prods.salePrice);
-   // const result = document.querySelectorAll('.cart__item');
-    // clear(result);
+  };
+  } 
+});
+  local(prods);
+  const result = document.querySelectorAll('.cart__item');
+  clear(result);
 }
 
 function createProductItemElement({ sku, name, image }) {
@@ -162,6 +137,5 @@ window.onload = function onload() {
   get();
   getProducts();
   listProducts();
-  getValue();
   price();
 };
