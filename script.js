@@ -45,7 +45,7 @@ function createCartItemElement({ sku, name, salePrice }) {
 
 // MY CODE
 
-const fetchApiElements = (search) => {
+const fetchApiElements = search => {
   return new Promise ((resolve) => {
     fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${search}`)
     .then((response) => { 
@@ -72,7 +72,7 @@ const fetchItemInfos = id => {
 function tookElements() {
   fetchApiElements('computador')
   .then((result) => {
-    result.forEach(current => {
+    result.forEach((current) => {
       const { id: sku, title: name, thumbnail: image } = current;
       const elementFrame = createProductItemElement({ sku, name, image });
       const itemLocation = document.querySelector('.items');
@@ -84,20 +84,18 @@ function tookElements() {
 function fetchElementId(item) {
   fetchItemInfos(item)
     .then((result) => {
-      const { id: sku, title: name, base_price: salePrice } = result
-      const cartElementFrame = createCartItemElement({ sku, name, salePrice })
-      const itemLocation = document.querySelector('.cart__items')
-      itemLocation.appendChild(cartElementFrame)
+      const { id: sku, title: name, base_price: salePrice } = result;
+      const cartElementFrame = createCartItemElement({ sku, name, salePrice });
+      const itemLocation = document.querySelector('.cart__items');
+      itemLocation.appendChild(cartElementFrame);
     });
 }
 
 function addToCart() {
   const items = document.querySelectorAll('.items');
-  console.log(items)
   items.forEach((button) => {
     button.addEventListener('click', function (event) {
       const itemId = getSkuFromProductItem(event.target.parentNode);
-      console.log(event.target.parentNode)
       fetchElementId(itemId);
     });
   });
@@ -106,7 +104,7 @@ function addToCart() {
 function emptyCart() {
   const cartButton = document.querySelector('.empty-cart');
   cartButton.addEventListener('click', function () {
-    const cart = document.querySelector('.cart__items')
+    const cart = document.querySelector('.cart__items');
     cart.innerText = "";
     showPrice(Sub, totalPrices);
   });
