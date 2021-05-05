@@ -189,6 +189,7 @@ window.onload = function onload() {
 };
 
 // Referências:
+// Colaboração e explicações também do meu esposo, que é programador
 // Repositórios consultados para entender como usar as promisses e fazer o requisito 1: 
 // https://github.com/tryber/sd-010-a-project-shopping-cart/pull/119/commits/6a52ec57dbfc0d5f2ba34bb96c7090f692fd0e5d
 // https://github.com/tryber/sd-010-a-project-shopping-cart/pull/104/commits/2426adac2d023b4ff5e5634dd51d4f86ae02cfb0
