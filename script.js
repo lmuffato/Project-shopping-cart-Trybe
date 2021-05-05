@@ -12,13 +12,24 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-const searchComputers = () => (new Promise((resolve) => {
+const searchComputers = () => {
+  const container = document.querySelector('.items');
+  const span = document.createElement('span');
+  span.className = 'loading';
+  container.appendChild(span);
+  span.innerText = 'loading...';
+  const loading = document.querySelector('.loading');
+
+  return new Promise((resolve) => {
   // Como recuperar dados de uma API usando promises no javascript: https://www.youtube.com/watch?v=v9JVA6tVmcg&ab_channel=EmersonBroga
     fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
       .then((response) => response.json())
-      .then((data) => resolve(data.results));
-  })
-);
+      .then((data) => {
+        container.removeChild(loading);
+        resolve(data.results);
+      });
+  });
+};
 
 const addComputers = (id) => {
   const container = document.querySelector('.cart__items');
@@ -72,12 +83,16 @@ async function displayPrices() {
   let totalPrice = document.querySelector('.total-price');
   const price = await sumPrices();
   if (totalPrice === null) {
+    const textTotalPrice = document.createElement('section');
+    textTotalPrice.className = 'display-total-price';
+    textTotalPrice.innerHTML = 'Preço total: $ ';
+    listCar.appendChild(textTotalPrice);
     totalPrice = document.createElement('span');
     totalPrice.className = 'total-price';
-    totalPrice.innerHTML = `Preço total: $ ${price}`;
-    listCar.appendChild(totalPrice);
+    totalPrice.innerHTML = price;
+    textTotalPrice.appendChild(totalPrice);
   } else {
-    totalPrice.innerHTML = `Preço total: $ ${price}`;
+    totalPrice.innerHTML = price;
   }
 }
 
