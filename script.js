@@ -1,4 +1,12 @@
-window.onload = function onload() { };
+function createKeys({ id, title, thumbnail }) {
+  const askedKeys = {
+    sku: id,
+    name: title,
+    image: thumbnail,
+  };
+
+  return askedKeys;
+}
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -14,7 +22,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
+const createProductItemElement = ({ sku, name, image }) => {
   const section = document.createElement('section');
   section.className = 'item';
 
@@ -24,20 +32,36 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
   return section;
-}
+};
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
+// function cartItemClickListener(event) {
+//   // coloque seu código aqui
+// }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
+// function createCartItemElement({ sku, name, salePrice }) {
+//   const li = document.createElement('li');
+//   li.className = 'cart__item';
+//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+//   li.addEventListener('click', cartItemClickListener);
+//   return li;
+// }
+
+const getDataProducts = (product) => {
+  fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${product}`)
+    .then((data) => data.json())
+    .then((data) => data.results)
+    .then((results) => {
+      results.forEach((iten) => {
+        const info = createKeys(iten);
+        document.querySelector('.items').appendChild(createProductItemElement(info));
+      });
+    });
+};
+
+window.onload = function onload() {
+  getDataProducts('computador');
+};
