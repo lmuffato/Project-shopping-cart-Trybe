@@ -108,35 +108,41 @@ const loading = () => {
 };
 
 const removeLoading = () => {
-  const loadingRem = document.querySelector('.loading');
-  loadingRem.remove(); 
-};
+  document.querySelector('.loading').remove();
+}; 
 
-const fetchCurrency = () => {
-  loading();
+const fetchCurrency = async () => {
   const endPoint = 'https://api.mercadolibre.com/sites/MLB/search?q=computador';
-  return fetch(endPoint)
-    .then((response) => response.json())
-    .then((object) => (object.results));
-};
+  return new Promise((resolve, reject) => {
+    fetch(endPoint)
+      .then((response) => response.json())
+      .then((object) => {
+        resolve(object.results);
+        if (object.results.error) {
+          throw new Error(object.results.error);
+        }
+      }).catch((error) => reject(error));
+      removeLoading();
+    });
+  };
 
 const fetchCurrencyAsyncAwait = async () => {
-  await fetchCurrency().then((data) => {
-    data.forEach((object) => {
-      const productElement = createProductItemElement(
-        object.id, object.title, object.thumbnail,
+  loading(); 
+  const data = await fetchCurrency();
+  data.forEach((object) => {
+    const productElement = createProductItemElement(
+      object.id, object.title, object.thumbnail,
       );
       document.querySelector('.items').appendChild(productElement);
     });
-    removeLoading();
-  });
-  totalPrice(); 
+    totalPrice();
 };
 
 window.onload = async function onload() {
-  loading();
   saveCartListenContinue();
+  loading();
   await fetchCurrencyAsyncAwait();
+  removeLoading();
   pickCar();
   saveCartListen();
   totalPrice();
