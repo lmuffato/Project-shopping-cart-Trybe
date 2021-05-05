@@ -21,7 +21,7 @@ const searchComputers = () => (new Promise((resolve) => {
 );
 
 const addComputers = (id) => {
-  const container = document.querySelector('.cart');
+  const container = document.querySelector('.cart__items');
   const span = document.createElement('span');
   span.className = 'loading';
   container.appendChild(span);
@@ -55,6 +55,32 @@ function createProductItemElement({ sku, name, image }) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
+async function sumPrices() {
+  const allPrices = JSON.parse(localStorage.getItem('listCar'));
+  let price = 0;
+  if (allPrices === null) {
+    return price;
+  }
+  allPrices.forEach((element) => {
+    price += element.salePrice;
+  });
+  return price;
+}
+
+async function displayPrices() {
+  const listCar = document.querySelector('.cart');
+  let totalPrice = document.querySelector('.total-price');
+  const price = await sumPrices();
+  if (totalPrice === null) {
+    totalPrice = document.createElement('span');
+    totalPrice.className = 'total-price';
+    totalPrice.innerHTML = `Preço total: $ ${price}`;
+    listCar.appendChild(totalPrice);
+  } else {
+    totalPrice.innerHTML = `Preço total: $ ${price}`;
+  }
+}
+
 function cartItemClickListener(event) {
   const itemsCart = document.getElementsByClassName('cart__items');
   // Como remover elementos filhos de um elemento principal: https://www.w3schools.com/jsref/met_node_removechild.asp#:~:text=The%20removeChild()%20method%20removes,longer%20part%20of%20the%20DOM.
@@ -69,6 +95,7 @@ function cartItemClickListener(event) {
     return false;
   });
   localStorage.setItem('listCar', JSON.stringify(atualCar));
+  displayPrices();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -79,24 +106,30 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+function addComputerCart(computers) {
+  const itemsCart = document.getElementsByClassName('cart__items');
+  const newItem = { sku: computers.id, name: computers.title, salePrice: computers.price,
+  };
+  const item = createCartItemElement(newItem);
+  itemsCart[0].appendChild(item);
+  const variavel = JSON.parse(localStorage.getItem('listCar'));
+  if (variavel !== null) {
+    variavel.push(newItem);
+    localStorage.setItem('listCar', JSON.stringify(variavel));
+  } else {
+    localStorage.setItem('listCar', JSON.stringify([newItem]));
+  }
+}
+
 const addComputerCartClick = (event) => {
   // Como recuperar o elemento pai do elemento que eu estou usando: w3schools.com/jsref/prop_node_parentnode.asp
-  const computerSelected = event.target.parentNode;
-  const itemsCart = document.getElementsByClassName('cart__items');
+  const computerSelected = event.target.parentNode; 
   // Como recuperar os elementos filhos de um elemento principal: https://www.w3schools.com/jsref/prop_node_childnodes.asp
   addComputers(computerSelected.childNodes[0].innerText)
     .then((computers) => {
-      const newItem = { sku: computers.id, name: computers.title, salePrice: computers.price,
-      };
-      const item = createCartItemElement(newItem);
-      itemsCart[0].appendChild(item);
-      const variavel = JSON.parse(localStorage.getItem('listCar'));
-      if (variavel !== null) {
-        variavel.push(newItem);
-        localStorage.setItem('listCar', JSON.stringify(variavel));
-      } else {
-        localStorage.setItem('listCar', JSON.stringify([newItem]));
-      }      
+      addComputerCart(computers);
+      sumPrices();
+      displayPrices();
     });
 };
 
@@ -144,9 +177,11 @@ function clearCar() {
     listCar.removeChild(listCar.lastChild);
   }
   localStorage.clear();
+  displayPrices();
 }
 
 window.onload = function onload() { 
+  displayPrices();
   refreshCar();
   includeComputerCar();
   const btn = document.querySelector('.empty-cart');
