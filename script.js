@@ -20,16 +20,16 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function createProductItemElement({ sku, name, image }) {
-  const section = document.createElement('section');
-  section.className = 'item';
+// function createProductItemElement({ sku, name, image }) {
+  // const section = document.createElement('section');
+  // section.className = 'item';
 
-  section.appendChild(createCustomElement('span', 'item__sku', sku));
-  section.appendChild(createCustomElement('span', 'item__title', name));
-  section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  // section.appendChild(createCustomElement('span', 'item__sku', sku));
+  // section.appendChild(createCustomElement('span', 'item__title', name));
+  // section.appendChild(createProductImageElement(image));
+  // section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
 
-  return section;
+  // return section;
 }
 
 // function getSkuFromProductItem(item) {
