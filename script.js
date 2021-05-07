@@ -48,9 +48,10 @@ const saveItens = () => { // requisito 4
   localStorage.setItem('itensList', newArr);
 };
 
+// Feito com ajuda de Lucas Pedroso - turma 10 - Tribo A
 const sumPrices = () => {
-  const xablau = document.querySelectorAll('.price');
-  const precoTotal = [...xablau].reduce((acc, actual) => 
+  const areaPrice = document.querySelectorAll('.price');
+  const precoTotal = [...areaPrice].reduce((acc, actual) => 
   acc + parseFloat(parseFloat(actual.innerText).toFixed(2)), 0);
   document.querySelector('.total-price').innerText = precoTotal;
 };
