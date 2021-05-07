@@ -1,4 +1,4 @@
-const fetchAPI = () => {
+const fetchAPI = () => { // requisito 1
   const endpoint = 'https://api.mercadolibre.com/sites/MLB/search?q=$computador';
   return new Promise((resolve) => {
     fetch(endpoint)
@@ -10,7 +10,7 @@ const fetchAPI = () => {
   });
 };
 
-const fetchItem = (idItem) => {
+const fetchItem = (idItem) => { // requisito 2
   const endpointItem = `https://api.mercadolibre.com/items/${idItem}`;
   return new Promise((resolve) => {
     fetch(endpointItem)
@@ -36,34 +36,46 @@ function createCustomElement(element, className, innerText) { // requisito 1
   return e;
 }
 
-function getSkuFromProductItem(item) {
+function getSkuFromProductItem(item) { // requisito 2
   return item.querySelector('span.item__sku').innerText;
 }
 
 // Ajuda de Sérgio Martins - Turma 10 - Tribo A
-const saveItens = () => {
+const saveItens = () => { // requisito 4
   const itemCart = document.querySelectorAll('.cart__item');
   const newArr = [];
   itemCart.forEach((element) => newArr.push(element.outerHTML));
   localStorage.setItem('itensList', newArr);
 };
 
+const sumPrices = () => {
+  const xablau = document.querySelectorAll('.price');
+  const precoTotal = [...xablau].reduce((acc, actual) => 
+  acc + parseFloat(parseFloat(actual.innerText).toFixed(2)), 0);
+  document.querySelector('.total-price').innerText = precoTotal;
+};
+
 const cartItemClickListener = (event) => { // requisito 3
-  const eventListItem = event.target;
+  let eventListItem = event.target;
+  console.log(eventListItem.tagName);
+  
+  if (eventListItem.tagName === 'SPAN') eventListItem = eventListItem.parentNode;
+
   eventListItem.remove();
-  saveItens();
+  saveItens(); // requisito 4
+  sumPrices();
 };
 
 const createCartItemElement = ({ id: sku, title: name, price: salePrice }) => { // requisito 2
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerHTML = `SKU: ${sku} | NAME: ${name} | PRICE: $<span class="price">${salePrice}</span>`;
   li.addEventListener('click', cartItemClickListener); // requisito 3
   return li;
 };
 
 // Ajuda de Eduardo Costa e Douglas Santana (Ambos Turma 10 - Tribo A)
-const addItem = () => {
+const addItem = () => { // requisito 2
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((button) => button.addEventListener('click', async (event) => {
     const addEvent = event.target;
@@ -71,7 +83,8 @@ const addItem = () => {
     const data = await fetchItem(skulId);
     const itemsCart = document.querySelector('.cart__items');
     itemsCart.appendChild(createCartItemElement(data));
-    saveItens();
+    saveItens(); // requisito 4
+    sumPrices(); // requisito
   }));
 };
 
@@ -80,19 +93,20 @@ const clearButton = () => { // requisito 6
   buttonClear.addEventListener('click', () => {
     const itemsCart = document.querySelector('.cart__items');
     itemsCart.innerHTML = '';
-    saveItens();
+    saveItens(); // requisito 4
+    sumPrices();
   });
 };
 
 // Ajuda de Sérgio Martins - Turma 10 - Tribo A
-const addEventClickCart = () => {
+const addEventClickCart = () => { // requisito 4
   const lis = document.querySelectorAll('.cart__item');
   lis.forEach((elemento) => {
     elemento.addEventListener('click', cartItemClickListener);
   });
 };
 
-const getItens = () => {
+const getItens = () => { // requisito 4
   if (localStorage.getItem('itensList')) {
     const itemsCart = document.querySelector('ol');
     const arrayStorage = localStorage.getItem('itensList').split(',');
@@ -111,7 +125,7 @@ const msgLoading = () => { // requisito 7
 
 const createProductItemElement = async () => { // requisito 1
   const computers = await fetchAPI();
-  msgLoading();
+  msgLoading(); // requisito 7
 
   computers.forEach(({ id, title, thumbnail }) => {
     const section = document.createElement('section');
@@ -125,12 +139,12 @@ const createProductItemElement = async () => { // requisito 1
 
     sectionItems.appendChild(section);
   });
-  addItem();
-  clearButton();
+  addItem(); // requisito 2
+  clearButton(); // requisito 6
 };
 
 window.onload = function onload() {
-  fetchAPI();
-  createProductItemElement();
-  getItens();
+  fetchAPI(); // requisito 1
+  createProductItemElement(); // requisito 1
+  getItens(); // requisito 4
 };
