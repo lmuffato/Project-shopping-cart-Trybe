@@ -50,8 +50,10 @@ async function listOfProducts() {
 
 async function makeProduct() {
   const computadores = await listOfProducts();
-  computadores.forEach((computador) =>
-  createProductItemElement(computador));
+  computadores.forEach((computador) => {
+    const item = createProductItemElement(computador);
+    document.querySelector('.items').appendChild(item);
+  });
 }
 
 window.onload = async function onload() {
