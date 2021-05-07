@@ -1,3 +1,5 @@
+let prodsItems = [];
+
 const listProducts = async () => {
   const item = 'computador';
   const url = `https://api.mercadolibre.com/sites/MLB/search?q=${item}`;
@@ -6,6 +8,17 @@ const listProducts = async () => {
   return data.results;
 };
 
+function price(prodsItem) {
+  const p = document.querySelector('.total-price');
+  p.innerText = prodsItem.reduce((acc, elemento) => {
+    let i = acc;
+    i += elemento.salePrice;
+    return i;
+  }, 0);
+
+  localStorage.setItem('price', JSON.stringify(p.innerText));
+}
+
 const clear = (itens) => {
   const vars = document.querySelector('.empty-cart');
   vars.addEventListener('click', () => {
@@ -13,9 +26,18 @@ const clear = (itens) => {
   });
 };
 
+function cartItemClickListener(event) {
+  const separe = event.target;
+  prodsItems = prodsItems.filter((current) => current.sku !== separe.id); 
+  separe.remove();
+  price(prodsItems);
+  localStorage.setItem('keys', JSON.stringify(prodsItems));
+}
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
+  li.id = sku; 
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
@@ -34,8 +56,6 @@ function createCustomElement(element, className, innerText) {
   e.innerText = innerText;
   return e;
 }
-
-const prodsItems = [];
 
 const local = (prods) => {
   prodsItems.push(prods);
@@ -58,28 +78,6 @@ const get = () => {
     });
   }
 };
-
-function cartItemClickListener(event) {
-  const separe = event.target;
-  separe.remove();
-  // console.log(separe.substring(separe.length - 4));
-  // const removeText = separe.substring(90)
-  // const novo = removeText.replace(/\D/gim, '');
-  // console.log(novo);
-
-}
-
-function price(prodsItems) {
-
-  const p = document.querySelector('p');
-  p.innerText = prodsItems.reduce((acc, elemento) => {
-    let i = acc;
-    i += elemento.salePrice;
-    return i;
-  }, 0);
-
-  localStorage.setItem('price', JSON.stringify(p.innerText));
-}
 
 const getPrice = () => {
   const result = JSON.parse(localStorage.getItem('price'));
