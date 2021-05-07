@@ -45,10 +45,10 @@ const sumPriceTotal = () => {
   if (getPriceLocalStorage.length > 0) {
     getPriceLocalStorage.forEach((price) => {
       result += price;
-      getElementSpan.innerText = `Preço total: $${result}`;
+      getElementSpan.innerText = `${result}`;
     });
  } else {
-   getElementSpan.innerText = `Preço total: $${result}`;
+   getElementSpan.innerText = `${result}`;
  }
 };
 
@@ -122,10 +122,10 @@ const onloadCartPrice = () => {
   if (getPriceLocalStorage.length > 0) {
     for (let index = 0; index < getPriceLocalStorage.length; index += 1) {
       result += getPriceLocalStorage[index];
-      getElementSpan.innerText = `Preço total: $${result}`;
+      getElementSpan.innerText = `${result}`;
     }
   } else {
-    getElementSpan.innerText = `Preço total: $${result}`;
+    getElementSpan.innerText = `${result}`;
   }
 };
 
