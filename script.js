@@ -27,14 +27,14 @@ function createProductItemElement({ sku, name, image }) {
 let itemsLocalStorage = [];
 let priceLocalStorage = [];
 
-const sumPriceTotal = async () => {
+const sumPriceTotal = () => {
   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
   const getElementSpan = document.querySelector('.total-price');
   let result = 0;
   if (getPriceLocalStorage.length > 0) {
     getPriceLocalStorage.forEach((price) => {
-      result += Math.round(price * 100) / 100;
-      getElementSpan.innerText = `${result}`;
+      result += price;
+      getElementSpan.innerText = `${Math.round(result * 100) / 100}`;
     });
  } else {
    getElementSpan.innerText = `${result}`;
@@ -65,6 +65,7 @@ const itemLocalStorage = (itemName, salePrice) => {
   sumPriceTotal();
 };
 
+// Remove item do carrinho e do localstorage
 function cartItemClickListener(event) {
   const itemCart = event.target;
   const removeLocalStorage = itemCart.innerText;
@@ -101,7 +102,13 @@ const getElements = (event) => {
 };
 
 const onloadCartItem = () => {
+  const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
+  localStorage.setItem('price', JSON.stringify(getPriceLocalStorage));
+  priceLocalStorage = getPriceLocalStorage;
+  sumPriceTotal();
   const getItemsLocalStorage = JSON.parse(localStorage.getItem('items'));
+  localStorage.setItem('items', JSON.stringify(getItemsLocalStorage));
+  itemsLocalStorage = getItemsLocalStorage;
   const getElementOl = document.querySelector('.cart__items');
   if (getItemsLocalStorage.length > 0) {
     for (let index = 0; index < getItemsLocalStorage.length; index += 1) {
@@ -109,12 +116,10 @@ const onloadCartItem = () => {
       li.className = 'cart__item';
       li.innerText = getItemsLocalStorage[index];
       getElementOl.appendChild(li);
-      sumPriceTotal();
       li.addEventListener('click', cartItemClickListener);
       li.addEventListener('click', totalPriceCart);
     }
   }
-  sumPriceTotal();
 };
 
 const btnEmptyCart = () => {
@@ -122,9 +127,9 @@ const btnEmptyCart = () => {
   priceLocalStorage = [];
   localStorage.setItem('items', JSON.stringify(itemsLocalStorage));
   localStorage.setItem('price', JSON.stringify(priceLocalStorage));
-  sumPriceTotal();
   const getListItem = document.querySelectorAll('.cart__item');
   getListItem.forEach((item) => item.remove());
+  sumPriceTotal();
 };
 
 const loaderPage = () => {
