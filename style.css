@@ -74,3 +74,11 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.loading {
+  visibility: hidden;
+}
+
+.visible {
+  visibility: visible;
+}

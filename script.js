@@ -124,6 +124,15 @@ const btnEmptyCart = () => {
   getListItem.forEach((item) => item.remove());
 };
 
+const loaderPage = () => {
+  const loaderText = document.querySelector('.loading');
+  loaderText.classList.add('visible');
+};
+
+const hiddenLoader = () => {
+  const loaderText = document.querySelector('.loading');
+  loaderText.classList.remove('visible');
+};
 // const getBtnEmptyCart = document.querySelector('.empty-cart');
 // console.log(getBtnEmptyCart);
 // getBtnEmptyCart.addEventListener('click', btnEmptyCart);
@@ -144,9 +153,12 @@ const btnEmptyCart = () => {
 
 // const onloadCartPrice = () => sumPriceTotal();
 
-const getItens = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+const getItens = () =>
+  loaderPage();
+  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
   .then((response) => response.json()
   .then((data) => {
+    hiddenLoader();
     const { results } = data;
     results.forEach((result) => {
       const getElement = document.querySelector('.items');
