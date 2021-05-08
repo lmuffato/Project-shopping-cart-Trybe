@@ -60,28 +60,28 @@ const interectAPI = () => {
  };
 
 // -------------------------------------------------------------------------------
- const searchID = (id) => {
+const searchId = (id) => {
   fetch(`https://api.mercadolibre.com/items/${id}`)
   .then((response) => {
     response.json()
     .then((data) => {
-      const infoID = data;
-      createCartItemElement(infoID);
-      document.querySelector('.cart__items').appendChild(createCartItemElement(infoID));
+      const infoId = data;
+      createCartItemElement(infoId);
+      document.querySelector('.cart__items').appendChild(createCartItemElement(infoId));
     });
   });
 };
 
-const searchDataId = () => {
+const takeIdData = () => {
   const route = document.querySelectorAll('.item__add');
   route.forEach((button) => {
     button.addEventListener('click', (event) => {
-      const idPC = getSkuFromProductItem(event.target.parentElement);
-      searchID(idPC);
+      const pcId = getSkuFromProductItem(event.target.parentElement);
+      seacrhId(pcId);
     });
   });
 };
  window.onload = function onload() { 
    interectAPI(); 
-   searchDataId();
+   takeIdData();
  };
