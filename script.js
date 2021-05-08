@@ -77,7 +77,7 @@ const takeIdData = () => {
   route.forEach((button) => {
     button.addEventListener('click', (event) => {
       const pcId = getSkuFromProductItem(event.target.parentElement);
-      seacrhId(pcId);
+      searchId(pcId);
     });
   });
 };
