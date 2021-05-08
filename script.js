@@ -38,7 +38,7 @@ function createProductItemElement({ sku, name, image }) {
    const li = document.createElement('li');
    li.className = 'cart__item';
    li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-   li.addEventListener('click', cartItemClickListener);
+  //  li.addEventListener('click', cartItemClickListener);
    return li;
  }
 
@@ -77,7 +77,7 @@ const searchDataId = () => {
   route.forEach((button) => {
     button.addEventListener('click', (event) => {
       const idPC = getSkuFromProductItem(event.target.parentElement);
-      procuraId(idPC);
+      searchID(idPC);
     });
   });
 };
