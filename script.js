@@ -83,4 +83,5 @@ const searchDataId = () => {
 };
  window.onload = function onload() { 
    interectAPI(); 
+   searchDataId();
  };
