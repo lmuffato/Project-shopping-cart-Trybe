@@ -76,9 +76,5 @@
 }
 
 .loading {
-  visibility: hidden;
-}
-
-.visible {
   visibility: visible;
 }

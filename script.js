@@ -125,13 +125,18 @@ const btnEmptyCart = () => {
 };
 
 const loaderPage = () => {
-  const loaderText = document.querySelector('.loading');
-  loaderText.classList.add('visible');
+  const getSection = document.querySelector('.container');
+  const createDiv = document.createElement('div');
+  const div = getSection.appendChild(createDiv);
+  div.classList = 'loading';
+  div.innerText = 'Loading...';
+  // const loaderText = document.querySelector('.loading');
+  // loaderText.classList.add('visible');
 };
 
 const hiddenLoader = () => {
   const loaderText = document.querySelector('.loading');
-  loaderText.classList.remove('visible');
+  loaderText.remove();
 };
 // const getBtnEmptyCart = document.querySelector('.empty-cart');
 // console.log(getBtnEmptyCart);
