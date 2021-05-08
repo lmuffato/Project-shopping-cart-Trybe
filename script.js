@@ -60,4 +60,5 @@ const interectAPI = () => {
  };
 
  window.onload = function onload() { 
-   interectAPI();
+   interectAPI() 
+ }
