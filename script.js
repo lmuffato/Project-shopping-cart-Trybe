@@ -27,13 +27,13 @@ function createProductItemElement({ sku, name, image }) {
 let itemsLocalStorage = [];
 let priceLocalStorage = [];
 
-const sumPriceTotal = () => {
+const sumPriceTotal = async () => {
   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
   const getElementSpan = document.querySelector('.total-price');
   let result = 0;
   if (getPriceLocalStorage.length > 0) {
     getPriceLocalStorage.forEach((price) => {
-      result += price;
+      result += Math.round(price * 100) / 100;
       getElementSpan.innerText = `${result}`;
     });
  } else {
@@ -114,6 +114,7 @@ const onloadCartItem = () => {
       li.addEventListener('click', totalPriceCart);
     }
   }
+  sumPriceTotal();
 };
 
 const btnEmptyCart = () => {
