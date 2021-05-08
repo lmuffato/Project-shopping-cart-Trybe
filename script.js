@@ -34,7 +34,7 @@ const sumPriceTotal = () => {
   if (getPriceLocalStorage.length > 0) {
     getPriceLocalStorage.forEach((price) => {
       result += price;
-      getElementSpan.innerText = `${result.toPrecision(6)}`;
+      getElementSpan.innerText = `${result}`;
     });
  } else {
    getElementSpan.innerText = `${result}`;
@@ -130,8 +130,6 @@ const loaderPage = () => {
   const div = getSection.appendChild(createDiv);
   div.classList = 'loading';
   div.innerText = 'Loading...';
-  // const loaderText = document.querySelector('.loading');
-  // loaderText.classList.add('visible');
 };
 
 const hiddenLoader = () => {
