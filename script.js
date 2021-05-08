@@ -153,11 +153,8 @@ const hiddenLoader = () => {
 
 // const onloadCartPrice = () => sumPriceTotal();
 
-const getItens = () =>
-  loaderPage();
-  fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
-  .then((response) => response.json()
-  .then((data) => {
+const getItens = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
+  .then((response) => response.json().then((data) => {
     hiddenLoader();
     const { results } = data;
     results.forEach((result) => {
@@ -182,5 +179,6 @@ const getItens = () =>
 // }
 
 window.onload = function onload() {
+  loaderPage();
   getItens();
 };
