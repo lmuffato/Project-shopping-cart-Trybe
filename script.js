@@ -24,8 +24,8 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-const itemsLocalStorage = [];
-const priceLocalStorage = [];
+let itemsLocalStorage = [];
+let priceLocalStorage = [];
 
 const sumPriceTotal = () => {
   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
@@ -109,16 +109,18 @@ const onloadCartItem = () => {
       li.className = 'cart__item';
       li.innerText = getItemsLocalStorage[index];
       getElementOl.appendChild(li);
+      sumPriceTotal();
       li.addEventListener('click', cartItemClickListener);
+      li.addEventListener('click', totalPriceCart);
     }
   }
 };
 
 const btnEmptyCart = () => {
-  const itemsEmpty = [];
-  const priceEmpty = [];
-  localStorage.setItem('items', JSON.stringify(itemsEmpty));
-  localStorage.setItem('price', JSON.stringify(priceEmpty));
+  itemsLocalStorage = [];
+  priceLocalStorage = [];
+  localStorage.setItem('items', JSON.stringify(itemsLocalStorage));
+  localStorage.setItem('price', JSON.stringify(priceLocalStorage));
   sumPriceTotal();
   const getListItem = document.querySelectorAll('.cart__item');
   getListItem.forEach((item) => item.remove());
@@ -174,7 +176,6 @@ const getItens = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=co
       const getBtnEmptyCart = document.querySelector('.empty-cart');
       getBtnEmptyCart.addEventListener('click', btnEmptyCart);
       onloadCartItem();
-      sumPriceTotal();
   }));
 
 // function getSkuFromProductItem(item) {
