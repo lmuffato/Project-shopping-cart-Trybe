@@ -27,17 +27,6 @@ function createProductItemElement({ sku, name, image }) {
 const itemsLocalStorage = [];
 const priceLocalStorage = [];
 
-// evento dentro do carrinho de compras
-function cartItemClickListener(event) {
-   const itemCart = event.target;
-   const removeLocalStorage = itemCart.innerText;
-   itemCart.remove();
-   const getItemRemove = JSON.parse(localStorage.getItem('items'));
-   getItemRemove.splice(getItemRemove.indexOf(removeLocalStorage), 1);
-   localStorage.setItem('items', JSON.stringify(getItemRemove));
-   itemsLocalStorage.splice(itemsLocalStorage.indexOf(removeLocalStorage), 1);
-}
-
 const sumPriceTotal = () => {
   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
   const getElementSpan = document.querySelector('.total-price');
@@ -45,7 +34,7 @@ const sumPriceTotal = () => {
   if (getPriceLocalStorage.length > 0) {
     getPriceLocalStorage.forEach((price) => {
       result += price;
-      getElementSpan.innerText = `${result}`;
+      getElementSpan.innerText = `${result.toPrecision(6)}`;
     });
  } else {
    getElementSpan.innerText = `${result}`;
@@ -75,6 +64,16 @@ const itemLocalStorage = (itemName, salePrice) => {
   localStorage.setItem('price', JSON.stringify(priceLocalStorage));
   sumPriceTotal();
 };
+
+function cartItemClickListener(event) {
+  const itemCart = event.target;
+  const removeLocalStorage = itemCart.innerText;
+  itemCart.remove();
+  const getItemRemove = JSON.parse(localStorage.getItem('items'));
+  getItemRemove.splice(getItemRemove.indexOf(removeLocalStorage), 1);
+  localStorage.setItem('items', JSON.stringify(getItemRemove));
+  itemsLocalStorage.splice(itemsLocalStorage.indexOf(removeLocalStorage), 1);
+}
 
 function createCartItemElement({ sku, name, salePrice }) {
   const getElementOl = document.querySelector('.cart__items');
@@ -115,19 +114,35 @@ const onloadCartItem = () => {
   }
 };
 
-const onloadCartPrice = () => {
-  const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
-  const getElementSpan = document.querySelector('.total-price');
-  let result = 0;
-  if (getPriceLocalStorage.length > 0) {
-    for (let index = 0; index < getPriceLocalStorage.length; index += 1) {
-      result += getPriceLocalStorage[index];
-      getElementSpan.innerText = `${result}`;
-    }
-  } else {
-    getElementSpan.innerText = `${result}`;
-  }
+const btnEmptyCart = () => {
+  const itemsEmpty = [];
+  const priceEmpty = [];
+  localStorage.setItem('items', JSON.stringify(itemsEmpty));
+  localStorage.setItem('price', JSON.stringify(priceEmpty));
+  sumPriceTotal();
+  const getListItem = document.querySelectorAll('.cart__item');
+  getListItem.forEach((item) => item.remove());
 };
+
+// const getBtnEmptyCart = document.querySelector('.empty-cart');
+// console.log(getBtnEmptyCart);
+// getBtnEmptyCart.addEventListener('click', btnEmptyCart);
+
+// const onloadCartPrice = () => {
+//   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
+//   const getElementSpan = document.querySelector('.total-price');
+//   let result = 0;
+//   if (getPriceLocalStorage.length > 0) {
+//     getPriceLocalStorage.forEach((price) => {
+//       result += price;
+//       getElementSpan.innerText = `${result}`;
+//     });
+//   } else {
+//     getElementSpan.innerText = `${result}`;
+//   }
+// };
+
+// const onloadCartPrice = () => sumPriceTotal();
 
 const getItens = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
   .then((response) => response.json()
@@ -144,8 +159,10 @@ const getItens = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=co
     const btnAddItemCart = document.querySelectorAll('.item__add');
     btnAddItemCart.forEach((value) => 
       value.addEventListener('click', (event) => getElements(event)));
+      const getBtnEmptyCart = document.querySelector('.empty-cart');
+      getBtnEmptyCart.addEventListener('click', btnEmptyCart);
       onloadCartItem();
-      onloadCartPrice();
+      sumPriceTotal();
   }));
 
 // function getSkuFromProductItem(item) {
