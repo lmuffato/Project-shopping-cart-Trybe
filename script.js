@@ -48,10 +48,24 @@ const createComputerList = async () => {
     return item.querySelector('span.item__sku').innerText;
   }
   
+  const putCartItemsIntoLocalStorage = () => {
+    const getCartList = [...document.querySelectorAll('.cart__item')];
+    const cartObjArr = getCartList.map((cartElement, index) => {
+      const getElementContent = cartElement.innerHTML;
+      const cartObj = {
+        [index]: getElementContent,
+      };
+      return cartObj;
+    });
+    cartObjArr.forEach((cartObj, index) =>
+      localStorage.setItem(`cartItem${[index + 1]}`, JSON.stringify(cartObj)));
+  };
+  
   function cartItemClickListener(event) {
-    console.log(event.target);
     const elementToBeRemoved = event.target;
-    return elementToBeRemoved.parentNode.removeChild(elementToBeRemoved);
+    elementToBeRemoved.parentNode.removeChild(elementToBeRemoved);
+    localStorage.clear();
+    return putCartItemsIntoLocalStorage();
   }
   
   function createCartItemElement({ sku, name, salePrice }) {
@@ -82,8 +96,27 @@ const createComputerList = async () => {
           salePrice: data.price,
         };
         getCartItems.appendChild(createCartItemElement(obj));
+        putCartItemsIntoLocalStorage();
       });
     });
+  };
+
+  const getLocalStorage = () => {
+    for (let index = 1; index <= localStorage.length; index += 1) {
+      const retrieveCartItem = localStorage.getItem(`cartItem${index}`);
+      const cartItemToObj = JSON.parse(retrieveCartItem);
+      const splitItemStr = cartItemToObj[index - 1].split(' | ');
+      const skuValue = splitItemStr[0].split('SKU: ')[1];
+      const nameValue = splitItemStr[1].split('NAME: ')[1];
+      const priceValue = splitItemStr[2].split('$')[1];
+      const cartList = document.querySelector('.cart__items');
+      const obj = {
+        sku: skuValue,
+        name: nameValue,
+        salePrice: priceValue,
+      };
+      cartList.appendChild(createCartItemElement(obj));
+    }
   };
 
   const syncro = async () => {
@@ -97,4 +130,5 @@ const createComputerList = async () => {
   
   window.onload = function onload() {
     syncro();
+    getLocalStorage();
    };
