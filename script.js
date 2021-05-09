@@ -43,30 +43,41 @@ const createComputerList = async () => {
     itemsSection.appendChild(createProductItemElement(obj));
   });
 };
-  
-  function getSkuFromProductItem(item) {
-    return item.querySelector('span.item__sku').innerText;
-  }
-  
-  const putCartItemsIntoLocalStorage = () => {
-    const getCartList = [...document.querySelectorAll('.cart__item')];
-    const cartObjArr = getCartList.map((cartElement, index) => {
-      const getElementContent = cartElement.innerHTML;
-      const cartObj = {
-        [index]: getElementContent,
-      };
-      return cartObj;
-    });
-    cartObjArr.forEach((cartObj, index) =>
-      localStorage.setItem(`cartItem${[index + 1]}`, JSON.stringify(cartObj)));
-  };
-  
-  function cartItemClickListener(event) {
-    const elementToBeRemoved = event.target;
-    elementToBeRemoved.parentNode.removeChild(elementToBeRemoved);
-    localStorage.clear();
-    return putCartItemsIntoLocalStorage();
-  }
+
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
+const putCartItemsIntoLocalStorage = () => {
+  const getCartList = [...document.querySelectorAll('.cart__item')];
+  const cartObjArr = getCartList.map((cartElement, index) => {
+    const getElementContent = cartElement.innerHTML;
+    const cartObj = {
+      [index]: getElementContent,
+    };
+    return cartObj;
+  });
+  cartObjArr.forEach((cartObj, index) =>
+  localStorage.setItem(`cartItem${[index + 1]}`, JSON.stringify(cartObj)));
+};
+
+const sumPrices = async () => {
+  let total = 0;
+  const getPriceElement = document.querySelector('.total-price');
+  const cartItems = [...document.querySelectorAll('.cart__item')];
+  const getItemsPrices = cartItems.map((listItem) => parseFloat(listItem.innerText.split('$')[1]));
+  const getSum = getItemsPrices.reduce((accumulation, currValue) => (accumulation + currValue), 0);
+  total = parseFloat(getSum.toFixed(2));
+  getPriceElement.innerText = total;
+};
+
+function cartItemClickListener(event) {
+  const elementToBeRemoved = event.target;
+  elementToBeRemoved.parentNode.removeChild(elementToBeRemoved);
+  localStorage.clear();
+  sumPrices();
+  putCartItemsIntoLocalStorage();
+}
   
   function createCartItemElement({ sku, name, salePrice }) {
     const li = document.createElement('li');
@@ -102,6 +113,7 @@ const createComputerList = async () => {
         };
         getCartItems.appendChild(createCartItemElement(obj));
         putCartItemsIntoLocalStorage();
+        sumPrices();
       });
     });
   };
@@ -130,6 +142,7 @@ const createComputerList = async () => {
       const cartList = document.querySelector('ol');
       cartList.innerHTML = '';
       localStorage.clear();
+      sumPrices();
     });
   };
 
@@ -138,6 +151,7 @@ const createComputerList = async () => {
       await createComputerList();
       await addTargetToCart();
       removeLoading();
+      await sumPrices();
     } catch (error) {
       console.log('Error! Something is wrong!');
     }
