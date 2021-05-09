@@ -100,31 +100,10 @@ const getElements = (event) => {
   }));
 };
 
-// const onloadCartItem = () => {
-//   const getItemsLocalStorage = JSON.parse(localStorage.getItem('items'));
-//   const getElementOl = document.querySelector('.cart__items');
-//   sumPriceTotal();
-//   if (getItemsLocalStorage.length > 0) {
-//     for (let index = 0; index < getItemsLocalStorage.length; index += 1) {
-//       const li = document.createElement('li');
-//       li.className = 'cart__item';
-//       li.innerText = getItemsLocalStorage[index];
-//       getElementOl.appendChild(li);
-//       li.addEventListener('click', cartItemClickListener);
-//       li.addEventListener('click', totalPriceCart);
-//     }
-//   }
-// };
-
 const onloadCartItem = () => {
-  const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
-  localStorage.setItem('price', JSON.stringify(getPriceLocalStorage));
-  priceLocalStorage = getPriceLocalStorage;
-  sumPriceTotal();
   const getItemsLocalStorage = JSON.parse(localStorage.getItem('items'));
-  localStorage.setItem('items', JSON.stringify(getItemsLocalStorage));
-  itemsLocalStorage = getItemsLocalStorage;
   const getElementOl = document.querySelector('.cart__items');
+  sumPriceTotal();
   if (getItemsLocalStorage.length > 0) {
     for (let index = 0; index < getItemsLocalStorage.length; index += 1) {
       const li = document.createElement('li');
