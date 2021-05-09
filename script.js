@@ -1,5 +1,5 @@
 async function sumValues() {
-  const values = document.querySelectorAll('.cart__item');
+  const values = await document.querySelectorAll('.cart__item');
   const valuesToArray = [...values];
   const x = valuesToArray.map((liValue) => {
     const searchIndex = liValue.innerText.indexOf('$');
