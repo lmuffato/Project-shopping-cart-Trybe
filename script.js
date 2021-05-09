@@ -76,6 +76,11 @@ const createComputerList = async () => {
     return li;
   }
 
+  const removeLoading = () => {
+    const getLoadingElement = document.querySelector('.loading');
+    getLoadingElement.remove();
+  };
+
   const computerById = async (id = 'MLB1341706310') => {
     const endpoint = await fetch(`https://api.mercadolibre.com/items/${id}`);
     const response = endpoint.json();
@@ -132,6 +137,7 @@ const createComputerList = async () => {
     try {
       await createComputerList();
       await addTargetToCart();
+      removeLoading();
     } catch (error) {
       console.log('Error! Something is wrong!');
     }
