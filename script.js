@@ -109,7 +109,7 @@ const createComputerList = async () => {
       const skuValue = splitItemStr[0].split('SKU: ')[1];
       const nameValue = splitItemStr[1].split('NAME: ')[1];
       const priceValue = splitItemStr[2].split('$')[1];
-      const cartList = document.querySelector('.cart__items');
+      const cartList = document.querySelector('ol');
       const obj = {
         sku: skuValue,
         name: nameValue,
@@ -117,6 +117,15 @@ const createComputerList = async () => {
       };
       cartList.appendChild(createCartItemElement(obj));
     }
+  };
+
+  const clearButton = () => {
+    const getClearBtn = document.querySelector('.empty-cart');
+    getClearBtn.addEventListener('click', () => {
+      const cartList = document.querySelector('ol');
+      cartList.innerHTML = '';
+      localStorage.clear();
+    });
   };
 
   const syncro = async () => {
@@ -131,4 +140,5 @@ const createComputerList = async () => {
   window.onload = function onload() {
     syncro();
     getLocalStorage();
+    clearButton();
    };
