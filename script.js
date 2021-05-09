@@ -59,7 +59,7 @@ function addItemNoCartAoClicar(event) {
   removeItemDoStorage(itemId);
 }
 
-function criaElementoNoCarrinho ({ sku, name, salePrice }) {
+function criaElementoNoCarrinho({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
@@ -83,7 +83,7 @@ async function defineItem(event) {
     const itemUrl = `https://api.mercadolibre.com/items/${itemId}`;
 
     const { id: sku, title: name, price: salePrice } = await obtemItem(itemUrl);
-    cart.appendChild(criaElementoNoCarrinho ({ sku, name, salePrice }));
+    cart.appendChild(criaElementoNoCarrinho({ sku, name, salePrice }));
     defineStoregeDoCart(sku);
   } catch (error) {
     alert(error);
@@ -102,7 +102,7 @@ async function poeNoCarrinho() {
     }));
 
     items.forEach(({ sku, name, salePrice }) => 
-    cart.appendChild(criaElementoNoCarrinho ({ sku, name, salePrice })));
+    cart.appendChild(criaElementoNoCarrinho({ sku, name, salePrice })));
   } catch (error) {
     alert(error);
   }
