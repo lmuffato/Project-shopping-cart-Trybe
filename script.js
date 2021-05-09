@@ -27,7 +27,7 @@ function createProductItemElement({ sku, name, image }) {
 let itemsLocalStorage = [];
 let priceLocalStorage = [];
 
-const sumPriceTotal = () => {
+const sumPriceTotal = async () => {
   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
   const getElementSpan = document.querySelector('.total-price');
   let result = 0;
@@ -65,7 +65,6 @@ const itemLocalStorage = (itemName, salePrice) => {
   sumPriceTotal();
 };
 
-// Remove item do carrinho e do localstorage
 function cartItemClickListener(event) {
   const itemCart = event.target;
   const removeLocalStorage = itemCart.innerText;
@@ -101,6 +100,22 @@ const getElements = (event) => {
   }));
 };
 
+// const onloadCartItem = () => {
+//   const getItemsLocalStorage = JSON.parse(localStorage.getItem('items'));
+//   const getElementOl = document.querySelector('.cart__items');
+//   sumPriceTotal();
+//   if (getItemsLocalStorage.length > 0) {
+//     for (let index = 0; index < getItemsLocalStorage.length; index += 1) {
+//       const li = document.createElement('li');
+//       li.className = 'cart__item';
+//       li.innerText = getItemsLocalStorage[index];
+//       getElementOl.appendChild(li);
+//       li.addEventListener('click', cartItemClickListener);
+//       li.addEventListener('click', totalPriceCart);
+//     }
+//   }
+// };
+
 const onloadCartItem = () => {
   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
   localStorage.setItem('price', JSON.stringify(getPriceLocalStorage));
@@ -127,9 +142,9 @@ const btnEmptyCart = () => {
   priceLocalStorage = [];
   localStorage.setItem('items', JSON.stringify(itemsLocalStorage));
   localStorage.setItem('price', JSON.stringify(priceLocalStorage));
+  sumPriceTotal();
   const getListItem = document.querySelectorAll('.cart__item');
   getListItem.forEach((item) => item.remove());
-  sumPriceTotal();
 };
 
 const loaderPage = () => {
@@ -181,14 +196,15 @@ const getItens = () => fetch('https://api.mercadolibre.com/sites/MLB/search?q=co
       value.addEventListener('click', (event) => getElements(event)));
       const getBtnEmptyCart = document.querySelector('.empty-cart');
       getBtnEmptyCart.addEventListener('click', btnEmptyCart);
-      onloadCartItem();
+      // onloadCartItem();
   }));
 
 // function getSkuFromProductItem(item) {
 //   return item.querySelector('span.item__sku').innerText;
 // }
 
-window.onload = function onload() {
-  loaderPage();
-  getItens();
+window.onload = async function onload() {
+  await loaderPage();
+  await getItens();
+  await onloadCartItem();
 };
