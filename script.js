@@ -116,11 +116,23 @@ const getProductById = () => {
   });
 };
 
+// R6
+
+const emptyCart = () => {
+  const empty = document.querySelector('.empty-cart');
+  empty.addEventListener('click', () => {
+    document.querySelector(cartItems).innerHTML = [];
+    cartLocalStorage();
+    totalPrice();
+  });
+};
+
 window.onload = function onload() { 
   loadingLocalStorage();
   getData();
   getProductById();
   totalPrice();
+  emptyCart();
 };
 
 // Requisitos 1 e 2 realizados com a ajuda dos vídeos:
