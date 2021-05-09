@@ -36,9 +36,20 @@ const cartLocalStorage = () => {
   localStorage.setItem('cart', cartList);
 };
 
+// R5
+
+const totalPrice = async () => {
+  let result = 0;
+  const cartList = [...document.querySelectorAll('.cart__item')];
+  const prices = cartList.map((price) => parseFloat(price.innerText.split('$')[1]));
+  result = prices.reduce((acc, current) => acc + current, 0);
+  document.querySelector('.total-price').innerText = result;
+};
+
   function cartItemClickListener(event) {
   event.target.remove();
   cartLocalStorage();
+  totalPrice();
  }
 
  const loadingLocalStorage = () => {
@@ -85,6 +96,7 @@ const showCart = (productById) => {
   const cartList = document.querySelector(cartItems);
   cartList.appendChild(createCartItemElement(productById));
   cartLocalStorage();
+  totalPrice();
   };
 
 const getProductById = () => {
@@ -108,6 +120,7 @@ window.onload = function onload() {
   loadingLocalStorage();
   getData();
   getProductById();
+  totalPrice();
 };
 
 // Requisitos 1 e 2 realizados com a ajuda dos vídeos:
