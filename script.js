@@ -27,7 +27,7 @@ function createProductItemElement({ sku, name, image }) {
 let itemsLocalStorage = [];
 let priceLocalStorage = [];
 
-const sumPriceTotal = async () => {
+const sumPriceTotal = () => {
   const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
   const getElementSpan = document.querySelector('.total-price');
   let result = 0;
@@ -67,12 +67,16 @@ const itemLocalStorage = (itemName, salePrice) => {
 
 function cartItemClickListener(event) {
   const itemCart = event.target;
-  const removeLocalStorage = itemCart.innerText;
+  const removeLocalStorage = itemCart.innerText.slice(0, 18);
   itemCart.remove();
   const getItemRemove = JSON.parse(localStorage.getItem('items'));
-  getItemRemove.splice(getItemRemove.indexOf(removeLocalStorage), 1);
-  localStorage.setItem('items', JSON.stringify(getItemRemove));
-  itemsLocalStorage.splice(itemsLocalStorage.indexOf(removeLocalStorage), 1);
+  for (let index = 0; index < getItemRemove.length; index += 1) {
+    if (getItemRemove[index].slice(0, 18) === removeLocalStorage) {
+      getItemRemove.splice(index, 1);
+      localStorage.setItem('items', JSON.stringify(getItemRemove));
+      itemsLocalStorage.splice(index, 1);
+    }
+  }  
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -100,10 +104,19 @@ const getElements = (event) => {
   }));
 };
 
+const onloadLocalStorage = () => {
+  const getPriceLocalStorage = JSON.parse(localStorage.getItem('price'));
+  localStorage.setItem('price', JSON.stringify(getPriceLocalStorage));
+  priceLocalStorage = getPriceLocalStorage;
+  sumPriceTotal();
+  const getItemsLocalStorage = JSON.parse(localStorage.getItem('items'));
+  localStorage.setItem('items', JSON.stringify(getItemsLocalStorage));
+  itemsLocalStorage = getItemsLocalStorage;
+};
+
 const onloadCartItem = () => {
   const getItemsLocalStorage = JSON.parse(localStorage.getItem('items'));
   const getElementOl = document.querySelector('.cart__items');
-  sumPriceTotal();
   if (getItemsLocalStorage.length > 0) {
     for (let index = 0; index < getItemsLocalStorage.length; index += 1) {
       const li = document.createElement('li');
@@ -186,4 +199,5 @@ window.onload = async function onload() {
   await loaderPage();
   await getItens();
   await onloadCartItem();
+  await onloadLocalStorage();
 };
