@@ -103,6 +103,8 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
 async function getDataAPIML(query) {
   const fetcH = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
   const fetchedObj = await fetcH.json();
+  const load = document.querySelector('.loading');
+  load.style = 'display: inline';
   const itemList = document.querySelector('.items');
   fetchedObj.results.forEach((item) => {
     const newItem = createProductItemElement(item);
@@ -170,8 +172,8 @@ switch (option) {
 window.onload = async function onload() {
  loading('inicio');
  limparCarrinho();
- loading('fim');
  getDataAPIML('computador');
+ loading('fim');
  await loadCart();
  await loadingCart();
 };
