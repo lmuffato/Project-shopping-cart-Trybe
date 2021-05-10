@@ -75,8 +75,7 @@ const listMercadoLivre = (product) => {
 };
 
 window.onload = function onload() {
-  listMercadoLivre();
-  getObjectItems().then(() => {
+  listMercadoLivre().then(() => {
     handleCartAddClick();
   });
 };
