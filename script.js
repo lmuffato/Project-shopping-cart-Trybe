@@ -73,13 +73,6 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function loading() {
-  const l = document.createElement('l');
-  l.className = 'loading';
-  l.innerText = 'loading...';
-  document.body.appendChild(l);
-}
-
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -90,6 +83,13 @@ function createProductItemElement({ sku, name, image }) {
   btn.addEventListener('click', getItemId);
   section.appendChild(btn);
   return section;
+}
+
+function loading() {
+  const l = document.createElement('l');
+  l.className = 'loading';
+  l.innerText = 'loading...';
+  document.body.appendChild(l);
 }
 
 async function computerResults() {
