@@ -85,6 +85,7 @@ const getData = () => {
   .then((response) => {
     response.json()
     .then((data) => {
+      document.querySelector('.loading').remove();
       showProducts(data);
     });
   });
@@ -135,6 +136,6 @@ window.onload = function onload() {
   emptyCart();
 };
 
-// Requisitos 1 e 2 realizados com a ajuda dos vídeos:
+// Requisitos realizados com a ajuda dos vídeos:
 // https://app.betrybe.com/course/live-lectures/sd-cohort-10-a#content-review-bloco-9-dia-93
 // https://trybecourse.slack.com/files/U01AYN59Y2J/F01HW4TF02U/1-4.mp4
