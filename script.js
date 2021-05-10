@@ -22,10 +22,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-function cartItemClickListener(event) {
-  event.target.remove();
-}
-
 const getItemId = async (event) => {
   const id = event.target.parentNode;
   const fetcH = await fetch(`https://api.mercadolibre.com/items/${id.dataset.id}`);
@@ -51,6 +47,10 @@ function createProductItemElement({ sku, name, image }) {
 /* function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 } */
+
+function cartItemClickListener(event) {
+  event.target.remove();
+}
 
 // Criadas por mim |>
 
