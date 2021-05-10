@@ -19,10 +19,14 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   const element = event.target;
   const sku = element.classList[1];
-
   element.remove();
 
-  localStorage.removeItem(sku);
+  for (let i = 0; i < localStorage.length; i += 1) {
+    if (sku === localStorage.getItem(localStorage.key(i))) {
+      localStorage.removeItem(localStorage.key(i));
+      break;
+    }
+  }
 
   return element;
 }
@@ -44,7 +48,9 @@ function addItemToCart(productInfo) {
 }
 
 function setToLocalStorage(id) {
-  localStorage.setItem(id, id);
+  const random = Math.round(Math.random() * 1000);
+
+  localStorage.setItem(random, id);
 }
 
 function fetchSingleItem(id) {  
