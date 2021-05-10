@@ -37,7 +37,7 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
-function cartItemClickListener(event) {
+async function cartItemClickListener(event) {
   const { id } = event.target.dataset;
   event.target.remove();
   removeLStorage(id);
