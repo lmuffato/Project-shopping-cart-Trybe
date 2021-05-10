@@ -150,9 +150,27 @@ const limparCarrinho = () => {
   });
 };
 
+const loading = (option) => {
+  const Items = document.querySelector('.items');
+  const Loading = document.querySelector('.container-loading');
+  const classItems = document.querySelector('.items');
+switch (option) {
+  case 'inicio':
+    Items.style = 'display: none';
+    break;
+  case 'fim': 
+    Loading.remove();
+    classItems.style = 'display: ';
+    break;
+  default:
+  }
+};
+
 window.onload = async function onload() {
+ loading('inicio');
  limparCarrinho();
  getDataAPIML('computador');
+ loading('fim');
  await loadCart();
  await loadingCart();
 };
