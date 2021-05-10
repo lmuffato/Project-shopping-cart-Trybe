@@ -119,9 +119,22 @@ function loadStorage() {
 // const setClick = document.querySelectorAll('cart__item');
 // setClick.forEach((li) => li.addEventListener('click', cartItemClickListener));
 
+function getEmpty() {
+  const cartItems = document.querySelectorAll('.cart__item');
+  cartItems.forEach((item) => item.remove());
+  sumPrices();
+  toStorage();
+}
+
+function emptyButton() {
+const button = document.querySelector('.empty-cart');
+button.addEventListener('click', getEmpty);
+}
+
 window.onload = function onload() {
   getDataProducts('computador');
   loadStorage();
+  emptyButton();
   // window.localStorage.removeItem('cart');
 };
 
