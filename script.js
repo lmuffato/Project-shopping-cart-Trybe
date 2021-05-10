@@ -9,6 +9,11 @@ async function sumValues() {
     .innerText = x.reduce((a, b) => parseFloat(a) + parseFloat(b), 0);
 }
 
+function addLocalStorage() {
+  const a = document.querySelector('.cart__items').innerHTML;
+  localStorage.setItem('items', a);
+}
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -41,6 +46,7 @@ function getSkuFromProductItem(item) {
 
  function cartItemClickListener(event) {
   event.target.remove();
+  addLocalStorage();
   sumValues();
 }
 
@@ -50,6 +56,11 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
+}
+
+function createLoading() {
+  const spanLoading = document.querySelector('.items');
+  spanLoading.appendChild(createCustomElement('span', 'loading', 'Loading...'));
 }
 
 async function listOfProducts() {
@@ -73,17 +84,37 @@ async function addToCart(event) {
   const li = createCartItemElement(x);
   document.querySelector('.cart__items').appendChild(li);
   sumValues();
+  addLocalStorage();
 }
 
 async function makeProduct() {
   const computadores = await listOfProducts();
+  document.querySelector('.loading').remove();
   computadores.forEach((computador) => {
     const item = createProductItemElement(computador);
     item.addEventListener('click', addToCart);
     document.querySelector('.items').appendChild(item);
   });
 }
+function ButtonRemoveCart() {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', function () {
+    document.querySelector('.cart__items').innerHTML = '';
+    addLocalStorage();
+    sumValues();
+  });
+}
+
+function getLocalStorage() {
+  const items = localStorage.getItem('items');
+  document.querySelector('.cart__items').innerHTML = items;
+
+}
 
 window.onload = async function onload() {
+  createLoading();
   makeProduct();
+  ButtonRemoveCart();
+  getLocalStorage();
+  sumValues();
 };
