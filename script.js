@@ -19,6 +19,7 @@ function getSkuFromProductItem(item) {
 function cartItemClickListener(event) {
   const element = event.target;
   const sku = element.classList[1];
+
   element.remove();
 
   for (let i = 0; i < localStorage.length; i += 1) {
@@ -56,7 +57,9 @@ function setToLocalStorage(id) {
 function fetchSingleItem(id) {  
   fetch(`https://api.mercadolibre.com/items/${id}`)
   .then((response) => response.json())
-  .then((productObj) => addItemToCart(productObj));
+  .then(async (productObj) => {
+    addItemToCart(productObj);
+  });
 }
 
 function fetchItemFromClick(e) {
