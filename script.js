@@ -1,3 +1,5 @@
+// Já tava aqui quando cheguei |>
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -19,17 +21,19 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  const button = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
+  button.addEventListener('click', getItemId);
+  section.appendChild(button);
 
   return section;
 }
 
-/*  function getSkuFromProductItem(item) {
+/* function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
-}
+} */
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  event.target.remove();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -38,7 +42,9 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-} */
+}
+
+// Criadas por mim |>
 
 async function getDataAPIML(query) {
   const fetcH = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
@@ -51,9 +57,13 @@ async function getDataAPIML(query) {
   });
 }
 
-function getItemId() {
-  
-}
+const getItemId = async (event) => {
+  const id = event.target.parentNode;
+  const fetcH = await fetch(`https://api.mercadolibre.com/items/${id.dataset.id}`)
+  const dataItem = fetcH.json();
+  const cartItem = document.querySelector('.cart__items');
+  cartItem.appendChild(createCartItemElement(dataItem));
+};
 
 window.onload = function onload() {
  getDataAPIML('computador');
