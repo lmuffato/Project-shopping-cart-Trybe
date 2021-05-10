@@ -10,7 +10,7 @@ async function sumValues() {
 }
 
 function addLocalStorage() {
-  const a = document.querySelector('.cart__items').innerHTML;
+  const a = document.querySelector('.cart__items2').innerHTML;
   localStorage.setItem('items', a);
 }
 
@@ -82,7 +82,7 @@ async function addToCart(event) {
   const idProduct = getSkuFromProductItem(event.target.parentNode);
   const x = await itemForItemCart(idProduct);
   const li = createCartItemElement(x);
-  document.querySelector('.cart__items').appendChild(li);
+  document.querySelector('.cart__items2').appendChild(li);
   sumValues();
   addLocalStorage();
 }
@@ -108,7 +108,6 @@ function ButtonRemoveCart() {
 function getLocalStorage() {
   const items = localStorage.getItem('items');
   document.querySelector('.cart__items').innerHTML = items;
-
 }
 
 window.onload = async function onload() {
