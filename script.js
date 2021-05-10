@@ -16,6 +16,17 @@ function cartKeys({ id, title, price }) {
   };  
 }
 
+const sumPrices = () => {
+  const getCartItems = document.querySelectorAll('.cart__item');
+  const getTotalPrice = document.querySelector('.total-price');
+  let total = 0;
+  getCartItems.forEach((iten) => {
+    const split = iten.innerText.split('$')[1];
+    total += parseFloat(split);
+  });
+  getTotalPrice.innerText = total;
+};
+
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -54,6 +65,7 @@ function toStorage() {
 function cartItemClickListener(event) {
   event.target.remove();
   toStorage();
+  sumPrices();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
@@ -72,8 +84,8 @@ const addToCart = async (event) => {
       const itemCart = createCartItemElement(cartKeys(data));
       getCart().appendChild(itemCart);
     });
-
   toStorage();
+  sumPrices();
   return request;
 };
 
@@ -88,7 +100,7 @@ const getDataProducts = (product) => {
         const eachProduct = createProductItemElement(productInfo);
         eachProduct.querySelector('.item__add').addEventListener('click', addToCart);
         getBoard.appendChild(eachProduct);
-      }); // adicionar aqui a funçao de carregar o storage
+      });
     });
 };
 
@@ -101,6 +113,7 @@ function loadStorage() {
       cartItemClickListener(li);
     }
   });
+  sumPrices();
 }
 // const setClick = document.querySelectorAll('cart__item');
 // setClick.forEach((li) => li.addEventListener('click', cartItemClickListener));
@@ -110,3 +123,5 @@ window.onload = function onload() {
   loadStorage();
   // window.localStorage.removeItem('cart');
 };
+
+// https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/String/split
