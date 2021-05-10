@@ -12,16 +12,24 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
+
 function cartItemClickListener(event) {
   const element = event.target;
+  const sku = element.classList[1];
+
   element.remove();
+
+  localStorage.removeItem(sku);
 
   return element;
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
+  const li = document.createElement('li');  
+  li.className = `cart__item ${sku}`;
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
@@ -32,15 +40,31 @@ function addItemToCart(productInfo) {
   const cartItemList = document.getElementsByClassName('cart__items')[0];
   const cartItem = createCartItemElement({ sku: id, name: title, salePrice: price });
   cartItemList.appendChild(cartItem);
-
   return cartItem;
 }
 
-function fetchSingleItem(e) {
-  const idValue = e.target.parentNode.firstChild.textContent;
-  fetch(`https://api.mercadolibre.com/items/${idValue}`)
+function setToLocalStorage(id) {
+  localStorage.setItem(id, id);
+}
+
+function fetchSingleItem(id) {  
+  fetch(`https://api.mercadolibre.com/items/${id}`)
   .then((response) => response.json())
   .then((productObj) => addItemToCart(productObj));
+}
+
+function fetchItemFromClick(e) {
+  const thisElement = e.target.parentNode;
+  const idValue = getSkuFromProductItem(thisElement);
+  setToLocalStorage(idValue);
+  fetchSingleItem(idValue);
+}
+
+function fetchItemsFromLocalStorage() {
+  const ids = Object.values(localStorage);
+  ids.forEach((id) => {
+    fetchSingleItem(id);
+  });
 }
 
 function createProductItemElement({ sku, name, image }) {
@@ -51,7 +75,7 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   const cartBtn = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
-  cartBtn.addEventListener('click', fetchSingleItem);
+  cartBtn.addEventListener('click', fetchItemFromClick);
   section.appendChild(cartBtn);
 
   return section;
@@ -75,11 +99,6 @@ window.onload = function onload() {
   .then((data) => {
     const { results } = data;
     renderEachProduct(results);
+    fetchItemsFromLocalStorage();
   });
 };
-
-/*
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
-*/
