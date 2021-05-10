@@ -24,6 +24,28 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
+let resultSum;
+
+const sumPrice = (salePrice) => {
+  const getElementTotalPrice = document.querySelector('#price');
+  if (getElementTotalPrice.innerText === '0') {
+    resultSum = 0;
+  } else {
+    resultSum = parseFloat(getElementTotalPrice.innerText);
+  } 
+  resultSum += salePrice;
+  const result = Math.round(resultSum * 100) / 100;
+  getElementTotalPrice.innerText = result.toString();
+};
+
+const subPrice = (getPrice) => {
+  const getElementTotalPrice = document.querySelector('#price');
+  resultSum = parseFloat(getElementTotalPrice.innerText);
+  resultSum -= parseFloat(getPrice);
+  const result = Math.round(resultSum * 100) / 100;
+  getElementTotalPrice.innerText = result.toString();
+};
+
 let itemsLocalStorage = [];
 let priceLocalStorage = [];
 
@@ -54,7 +76,8 @@ const totalPriceCart = (event) => {
    getPriceRemove.splice(getPriceRemove.indexOf(parseFloat(getPrice)), 1);
    localStorage.setItem('price', JSON.stringify(getPriceRemove));
    priceLocalStorage.splice(priceLocalStorage.indexOf(getPrice), 1);
-   sumPriceTotal();
+  //  sumPriceTotal();
+  subPrice(getPrice);
 };
 
 const itemLocalStorage = (itemName, salePrice) => {
@@ -62,7 +85,8 @@ const itemLocalStorage = (itemName, salePrice) => {
   priceLocalStorage.push(salePrice);
   localStorage.setItem('items', JSON.stringify(itemsLocalStorage));
   localStorage.setItem('price', JSON.stringify(priceLocalStorage));
-  sumPriceTotal();
+  // sumPriceTotal();
+  sumPrice(salePrice);
 };
 
 function cartItemClickListener(event) {
