@@ -24,7 +24,7 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-/*function getSkuFromProductItem(item) {
+/*  function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
@@ -38,7 +38,7 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
-}*/
+} */
 
 async function getDataAPIML(query) {
   const fetcH = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
@@ -47,7 +47,7 @@ async function getDataAPIML(query) {
   fetchedObj.results.forEach((item) => {
     const { id: sku, title: name, thumbnail: image } = item;
     const newItem = createProductItemElement({ sku, name, image });
-    itemList.appendChild(item);
+    itemList.appendChild(newItem);
   });
 }
 
