@@ -163,6 +163,7 @@ switch (option) {
     classItems.style = 'display: ';
     break;
   default:
+    break;
   }
 };
 
