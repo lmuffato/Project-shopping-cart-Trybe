@@ -1,7 +1,6 @@
 async function fetchUrl(url) {
-  const resp = await fetch(url);
-  const finalFetch = await resp.json();
-  return finalFetch;
+  const resposta = await fetch(url).then((resp) => resp.json());
+    return resposta;
 }
 
 function fetchComputers() {
@@ -17,22 +16,21 @@ function fetchItemsById(ItemID) {
 const cart = document.querySelector('.cart__items');
 const price = document.querySelector('.total-price');
 
-function saveLocal() {
-  localStorage.setItem('salvaCarrinho', cart.innerHTML);
-  localStorage.setItem('price', price.innerHTML);
-}
-
 async function priceSum() {
   let sum = 0;
-  const cartOl = document.querySelectorAll('.cart__item');
-  await cartOl.forEach((cartItem) => {
+  const cartList = document.querySelectorAll('.cart__item');
+  await cartList.forEach((cartItem) => {
     const index = cartItem.innerText.lastIndexOf('$');
     const value = cartItem.innerText.substr(index + 1);
     sum += Number(value);
   });
-  const totalPriceSpan = document.querySelector('.total-price');
-  totalPriceSpan.innerText = sum;
+  price.innerText = sum;
   return sum;
+}
+
+function saveLocal() {
+  localStorage.setItem('salvaCarrinho', cart.innerHTML);
+  localStorage.setItem('price', price.innerHTML);
 }
 
 function createProductImageElement(imageSource) {
@@ -91,9 +89,9 @@ function removeSavedItems() {
   });
 }
 
-function fetchProducts() {
+async function fetchProducts() {
   const mainItems = document.querySelector('.items');
-  fetchComputers().then((data) => {
+  await fetchComputers().then((data) => {
     data.results.forEach((computador) => {
       const { id: sku, title: name, thumbnail: image } = computador;
       const itemList = createProductItemElement({ sku, name, image });
@@ -102,15 +100,15 @@ function fetchProducts() {
 });
 }
 
-async function addItemsToCart() {
+function addItemsToCart() {
   const bttn = document.querySelectorAll('.item__add');
   bttn.forEach((id) => id.addEventListener('click', async function (retorno) {    
       const ids = getSkuFromProductItem(retorno.target.parentNode);
       const data = await fetchItemsById(ids);
       const { id: sku, title: name, price: salePrice } = data;
       cart.appendChild(createCartItemElement({ sku, name, salePrice }));
-      await saveLocal();
-      await priceSum();
+       saveLocal();
+       priceSum();
     }));
 }
 
@@ -125,11 +123,15 @@ function emptyCart() {
   });
 }
 
+async function getAllFuncs() {
+  await fetchProducts();
+  await emptyCart();
+  await removeSavedItems();
+  await addItemsToCart();
+}
+
 window.onload = function onload() {
-  fetchProducts();
-  emptyCart();
-  setTimeout(() => removeSavedItems(), 300);
-  setTimeout(() => addItemsToCart(), 100);
+  getAllFuncs();
   cart.innerHTML = localStorage.getItem('salvaCarrinho');
   price.innerHTML = localStorage.getItem('price');
  };
