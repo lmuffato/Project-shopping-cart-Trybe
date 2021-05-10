@@ -24,9 +24,9 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
 //   3° Task
 
@@ -74,7 +74,13 @@ const fetchProduct = () => {
  };
 
 async function creatItensList() {
+  const loading = document.createElement('p');
+  loading.className = 'loading';
+  loading.innerText = 'loading...';
+  const body = document.querySelector('.container');
+  body.appendChild(loading);
   const itens = await fetchProduct();
+  loading.remove();
   itens.forEach(({ id, thumbnail, title }) => {
     document.querySelector('.items')
       .appendChild(createProductItemElement({ sku: id, name: title, image: thumbnail }));
