@@ -46,7 +46,7 @@ async function getDataAPIML(query) {
   const itemList = document.querySelector('.items');
   fetchedObj.results.forEach((item) => {
     const { id: sku, title: name, thumbnail: image } = item;
-    const item = createProductItemElement({ sku, name, image });
+    const newItem = createProductItemElement({ sku, name, image });
     itemList.appendChild(item);
   });
 }
