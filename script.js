@@ -15,9 +15,9 @@ function getOrdList() {
 }
 
 function cartItemClickListener(event) {
-  const gotOrdList = getOrdList();
+  const gotOrdList0 = getOrdList();
   const elementChild = event.target;
-  gotOrdList.removeChild(elementChild);
+  gotOrdList0.removeChild(elementChild);
   sumCart();
 }
 
@@ -27,6 +27,11 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
   return li;
+}
+
+function addStorage() {
+  const gotOrdList1 = getOrdList();
+  gotOrdList1.innerHTML = localStorage.getItem('Product');
 }
 
 async function createItemCart(id) {
@@ -41,6 +46,7 @@ async function createItemCart(id) {
   const gotOrdList2 = getOrdList();
   gotOrdList2.appendChild(createItem);
   sumCart();
+  localStorage.setItem('Product', gotOrdList2.innerHTML);
 }
 
 function getSkuFromProductItem(item) {
@@ -67,6 +73,13 @@ function createCustomElement(element, className, innerText) {
   return e;
 }
 
+function loading() {
+  const l = document.createElement('l');
+  l.className = 'loading';
+  l.innerText = 'loading...';
+  document.body.appendChild(l);
+}
+
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
@@ -80,9 +93,11 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 async function computerResults() {
+  loading();
   const myFetch = await fetch('https://api.mercadolibre.com/sites/MLB/search?q=computador')
       .then((response) => response.json())
       .then((response) => response.results);
+  document.querySelector('.loading').remove();
   myFetch.forEach((product) => {
       const createProduct = createProductItemElement({
           sku: product.id,
@@ -98,6 +113,7 @@ function cleanShoppingCart() {
   const gotOrdList3 = getOrdList();
   const lis = document.querySelectorAll('.cart__item');
   lis.forEach((li) => gotOrdList3.removeChild(li));
+  sumCart();
 }
 
 function cleanCartBtn() {
@@ -108,4 +124,5 @@ function cleanCartBtn() {
 window.onload = function onload() {
   computerResults();
   cleanCartBtn();
+  addStorage();
 };
