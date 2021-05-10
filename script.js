@@ -130,11 +130,11 @@ const loadingCart = async () => {
     const carro = carrinho.map((id) => dataItem);
       await Promise.all(carro).then((itens) => {
         itens.forEach((item) => {
-          const total = parseFloat(getPrice.innerText) + item.price;
+          const total = parseFloat(spanPrice.innerText) + item.price;
           spanPrice.innerText = total;
         });
       });
-    }getPrice
+    }
 };
 
 window.onload = async function onload() {
