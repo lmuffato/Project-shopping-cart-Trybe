@@ -139,7 +139,7 @@ const loadingCart = async () => {
     }getPrice
 };
 
-window.onload = function onload() {
+window.onload = async function onload() {
  getDataAPIML('computador');
  await loadCart();
  await loadingCart();
