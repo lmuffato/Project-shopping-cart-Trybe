@@ -34,8 +34,9 @@ const getItemId = async (event) => {
   cartItem.appendChild(createCartItemElement(dataItem));
 };
 
-function createProductItemElement({ sku, name, image }) {
+function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   const section = document.createElement('section');
+  section.dataset.id = sku;
   section.className = 'item';
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
