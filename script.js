@@ -170,8 +170,8 @@ switch (option) {
 window.onload = async function onload() {
  loading('inicio');
  limparCarrinho();
- getDataAPIML('computador');
  loading('fim');
+ getDataAPIML('computador');
  await loadCart();
  await loadingCart();
 };
