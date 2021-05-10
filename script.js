@@ -76,6 +76,9 @@ const listMercadoLivre = (product) => {
 
 window.onload = function onload() {
   listMercadoLivre();
+  getObjectItems().then(() => {
+    handleCartAddClick();
+  });
 };
 
 // ....snumoc sarvalap òs oãs oãn snoitcnuF ooZ
