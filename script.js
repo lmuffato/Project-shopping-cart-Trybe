@@ -1,5 +1,12 @@
 const spanPrice = document.querySelector('.price');
 const chave = 'key';
+const apiRe = 'https://api.mercadolibre.com/items/';
+
+const apiRequest = async (item) => {
+  const response = await fetch(`${apiRe}${item}`);
+  const data = await response.json();
+  return data;
+};
 
 const aumentarPreço = async (price) => {
   spanPrice.innerText = (parseFloat(spanPrice.innerText) + price).toFixed(2);
@@ -51,9 +58,7 @@ async function cartItemClickListener(event) {
   const { id } = event.target.dataset;
   event.target.remove();
   removeLStorage(id);
-  const fetcH = await fetch(`https://api.mercadolibre.com/items/${id}`);
-  const data = await fetcH.json();
-  const dataItem = await data;
+  const dataItem = await apiRequest(id);
   diminuirPreço(dataItem.price);
 }
 
@@ -68,9 +73,7 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 
 const getItemId = async (event) => {
   const id = event.target.parentNode;
-  const fetcH = await fetch(`https://api.mercadolibre.com/items/${id.dataset.id}`);
-  const data = await fetcH.json();
-  const dataItem = await data;
+  const dataItem = await apiRequest(id.dataset.id);
   const cartItem = document.querySelector('.cart__items');
   cartItem.appendChild(createCartItemElement(dataItem));
   await addLStorage(id.dataset.id);
@@ -108,10 +111,8 @@ async function getDataAPIML(query) {
 
 const loadCart = async () => {
   const carrinho = await JSON.parse(localStorage.getItem(chave));
-  if (carrinho !== null) { 
-    const fetcH = await fetch(`https://api.mercadolibre.com/items/${element}`);
-    const data = await fetcH.json();
-    const dataItem = await data;
+  if (carrinho !== null) {
+    const dataItem = await apiRequest(element);
     const carro = carrinho.map((id) => dataItem);
     await Promise.all(carro).then((itens) => {
       itens.forEach((item) => {
@@ -124,10 +125,8 @@ const loadCart = async () => {
 
 const loadingCart = async () => {
   const carrinho = await JSON.parse(localStorage.getItem(chave));
-  if (carrinho !== null) { 
-    const fetcH = await fetch(`https://api.mercadolibre.com/items/${id}`);
-    const data = await fetcH.json();
-    const dataItem = await data;
+  if (carrinho !== null) {
+    const dataItem = await apiRequest(id);
     const carro = carrinho.map((id) => dataItem);
       await Promise.all(carro).then((itens) => {
         itens.forEach((item) => {
