@@ -9,11 +9,11 @@ const apiRequest = async (item) => {
 };
 
 const aumentarPreço = async (price) => {
-  spanPrice.innerText = (parseFloat(spanPrice.innerText) + price).toFixed(2);
+  spanPrice.innerText = (parseFloat(spanPrice.innerText) + price);
 };
 
 const diminuirPreço = async (price) => {
-  spanPrice.innerText = (parseFloat(spanPrice.innerText) - price).toFixed(2);
+  spanPrice.innerText = (parseFloat(spanPrice.innerText) - price);
 };
 
 const addLStorage = async (item) => {
