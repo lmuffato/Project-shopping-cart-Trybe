@@ -112,8 +112,7 @@ async function getDataAPIML(query) {
 const loadCart = async () => {
   const carrinho = await JSON.parse(localStorage.getItem(chave));
   if (carrinho !== null) {
-    const dataItem = await apiRequest(id);
-    const carro = carrinho.map((id) => dataItem);
+    const carro = carrinho.map((id) => apiRequest(id));
     await Promise.all(carro).then((itens) => {
       itens.forEach((item) => {
         const cartItem = document.querySelector('.cart__items');
@@ -126,15 +125,14 @@ const loadCart = async () => {
 const loadingCart = async () => {
   const carrinho = await JSON.parse(localStorage.getItem(chave));
   if (carrinho !== null) {
-    const dataItem = await apiRequest(id);
-    const carro = carrinho.map((id) => dataItem);
+    const carro = carrinho.map((id) => apiRequest(id));
       await Promise.all(carro).then((itens) => {
         itens.forEach((item) => {
           const total = parseFloat(spanPrice.innerText) + item.price;
           spanPrice.innerText = total;
         });
       });
-    };
+    }
 };
 
 window.onload = async function onload() {
