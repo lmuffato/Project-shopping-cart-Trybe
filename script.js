@@ -1,4 +1,3 @@
-const spanPrice = document.querySelector('.price');
 const chave = 'key';
 const apiRe = 'https://api.mercadolibre.com/items/';
 
@@ -9,10 +8,12 @@ const apiRequest = async (item) => {
 };
 
 const aumentarPreço = async (price) => {
+  const spanPrice = document.querySelector('.price');
   spanPrice.innerText = (parseFloat(spanPrice.innerText) + price);
 };
 
 const diminuirPreço = async (price) => {
+  const spanPrice = document.querySelector('.price');
   spanPrice.innerText = (parseFloat(spanPrice.innerText) - price);
 };
 
@@ -74,7 +75,7 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 const getItemId = async (event) => {
   const id = event.target.parentNode;
   const dataItem = await apiRequest(id.dataset.id);
-  const cartItem = document.getElementsByClassName('.cart__items');
+  const cartItem = document.getElementsByClassName('cart__items');
   cartItem[0].appendChild(createCartItemElement(dataItem));
   await addLStorage(id.dataset.id);
   aumentarPreço(dataItem.price);
@@ -128,6 +129,7 @@ const loadingCart = async () => {
     const carro = carrinho.map((id) => apiRequest(id));
       await Promise.all(carro).then((itens) => {
         itens.forEach((item) => {
+          const spanPrice = document.querySelector('.price');
           const total = parseFloat(spanPrice.innerText) + item.price;
           spanPrice.innerText = total;
         });
@@ -143,6 +145,7 @@ const limparCarrinho = () => {
       cartItem.removeChild(cartItem.firstChild);
     }
     localStorage.removeItem(chave);
+    const spanPrice = document.querySelector('.price');
     spanPrice.innerText = 0;
   });
 };
