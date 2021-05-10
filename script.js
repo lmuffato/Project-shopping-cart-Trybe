@@ -104,15 +104,15 @@ const getDataAPIML = async (query) => {
   const fetcH = await fetch(`https://api.mercadolibre.com/sites/MLB/search?q=${query}`);
   const fetchedObj = await fetcH.json();
   return fetchedObj.results;
-}
+};
 
 const getDataAPIML2 = (data) => {
   const itemList = document.querySelector('.items');
-  data.forEach( async (item) => {
+  data.forEach(async (item) => {
     const newItem = await createProductItemElement(item);
     itemList.appendChild(newItem);
   });
-}
+};
 
 const loadCart = async () => {
   const carrinho = await JSON.parse(localStorage.getItem(chave));
