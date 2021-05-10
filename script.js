@@ -52,7 +52,7 @@ function toStorage() {
 }
 
 function cartItemClickListener(event) {
-  getCart().removeChild(event.target);
+  event.target.remove();
   toStorage();
 }
 
