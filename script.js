@@ -9,6 +9,16 @@ const diminuirPreço = async (price) => {
   spanPrice.innerText = (parseFloat(spanPrice.innerText) - price).toFixed(2);
 };
 
+const addLStorage = async (item) => {
+  let carrinho = await JSON.parse(localStorage.getItem(chave));
+  if (carrinho !== null) {
+    carrinho.push(item);
+  } else {
+    carrinho = [item];
+  }
+  localStorage.setItem(chave, JSON.stringify(carrinho));
+};
+
 const removeLStorage = async (item) => {
   let carrinho = await JSON.parse(localStorage.getItem(chave));
   if (carrinho !== null) {
@@ -82,17 +92,6 @@ function createProductItemElement({ id: sku, title: name, thumbnail: image }) {
   return section;
 }
 
-const addLStorage = async (item) => {
-  let carrinho = await JSON.parse(localStorage.getItem(chave));
-  if (carrinho !== null) {
-    carrinho.push(item);
-  } else {
-    carrinho = [item];
-  }
-  localStorage.setItem(chave, JSON.stringify(carrinho));
-};
-
-
 /* function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 } */
@@ -110,7 +109,7 @@ async function getDataAPIML(query) {
 const loadCart = async () => {
   const carrinho = await JSON.parse(localStorage.getItem(chave));
   if (carrinho !== null) { 
-    const fetcH = await fetch(`https://api.mercadolibre.com/items/${id}`);
+    const fetcH = await fetch(`https://api.mercadolibre.com/items/${element}`);
     const data = await fetcH.json();
     const dataItem = await data;
     const carro = carrinho.map((id) => dataItem);
