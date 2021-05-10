@@ -74,8 +74,8 @@ function createCartItemElement({ id: sku, title: name, price: salePrice }) {
 const getItemId = async (event) => {
   const id = event.target.parentNode;
   const dataItem = await apiRequest(id.dataset.id);
-  const cartItem = document.querySelector('.cart__items');
-  cartItem.appendChild(createCartItemElement(dataItem));
+  const cartItem = document.getElementsByClassName('.cart__items');
+  cartItem[0].appendChild(createCartItemElement(dataItem));
   await addLStorage(id.dataset.id);
   aumentarPreço(dataItem.price);
 };
@@ -135,7 +135,7 @@ const loadingCart = async () => {
     }
 };
 
-const clearCart = () => {
+const limparCarrinho = () => {
   const button = document.querySelector('.empty-cart');
   button.addEventListener('click', () => {
     const cartItem = document.querySelector('.cart__items');
@@ -148,6 +148,7 @@ const clearCart = () => {
 };
 
 window.onload = async function onload() {
+ limparCarrinho();
  getDataAPIML('computador');
  await loadCart();
  await loadingCart();
