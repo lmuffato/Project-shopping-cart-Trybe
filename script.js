@@ -39,20 +39,37 @@ function sumValue() {
   });
 }
 
-function saveCart() {
-  const cartList = document.getElementsByClassName('cart__items');
-  const totalValue = document.querySelector('.total-price');
-  localStorage.setItem('cart', cartList.innerHTML);
+// function saveCart() {
+//   const cartList = document.getElementsByClassName('cart__items');
+//   const totalValue = document.querySelector('.total-price');
+//   localStorage.setItem('cart', cartList.innerHTML);
   
-  localStorage.setItem('value', totalValue.innerHTML);
-}
+//   localStorage.setItem('value', totalValue.innerHTML);
+// }
 
-function cartItemClickListener(event) {
-  event.target.remove();
+// function cartItemClickListener(event) {
+//   event.target.remove();
   
+//   sumValue();
+//   saveCart();
+// }
+
+const saveCart = () => {
+  const price = document.querySelectorAll('.price');
+  const precoTotal = [...price].reduce((acc, actual) =>
+  acc + parseFloat(parseFloat(actual.innerHTML).toFixed(2)), 0);
+  document.querySelector('.total-price').innerText = precoTotal;
+};
+
+const cartItemClickListener = (event) => {
+  let eventListItem = event.target;
+  console.log(eventListItem.tagName);
+
+  if (eventListItem.tagName === 'SPAN') eventListItem = eventListItem.parentNode;
+
   sumValue();
   saveCart();
-}
+};
 
 function loadCart() {
   const cartList = document.getElementsByClassName('cart__items');
