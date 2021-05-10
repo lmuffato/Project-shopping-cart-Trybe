@@ -135,6 +135,18 @@ const loadingCart = async () => {
     }
 };
 
+const clearCart = () => {
+  const button = document.querySelector('.empty-cart');
+  button.addEventListener('click', () => {
+    const cartItem = document.querySelector('.cart__items');
+    while (cartItem.firstChild) {
+      cartItem.removeChild(cartItem.firstChild);
+    }
+    localStorage.removeItem(chave);
+    spanPrice.innerText = 0;
+  });
+};
+
 window.onload = async function onload() {
  getDataAPIML('computador');
  await loadCart();
