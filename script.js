@@ -137,7 +137,6 @@ const getObjectItems = async () => {
   const objectJson = await endPoint.json();
   p.remove();
   const items = objectJson.results;
-
   items.forEach((item) => {
     const newObject = {
       sku: item.id,
