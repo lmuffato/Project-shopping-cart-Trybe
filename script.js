@@ -79,6 +79,18 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
+const clearCart = () => {
+  const emptyButton = document.querySelector('.empty-cart');
+  const ol = document.querySelector('#cartList');
+  emptyButton.addEventListener('click', () => {
+    while (ol.hasChildNodes()) { 
+      ol.removeChild(ol.lastChild);
+    }
+    updateCartValue();
+    localStorage.removeItem('cartItens');
+  });
+};
+
 const chargeLocalStorage = () => {
   const products = JSON.parse(localStorage.getItem('cartItens'));
   products.forEach((product) => {
@@ -140,6 +152,7 @@ window.onload = function onload() {
   chargeLocalStorage();
   createTotalItem();
   updateCartValue();
+  clearCart();
 };
 
 // ....snumoc sarvalap òs oãs oãn snoitcnuF ooZ
